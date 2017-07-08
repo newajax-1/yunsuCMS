@@ -1,0 +1,59 @@
+// default color
+$blue = #148aed
+$dark = #383d41
+$black = #333743
+$yellow = #f4ce2c
+$green = #50a347
+$black-light = #333333
+$gray = #999999
+$white = #e5e5e5
+$red = #ff4949
+$gf = #ffffff
+
+
+$border-default = 1px solid $white
+
+.btn
+    display inline-block
+    width 120px
+    height 40px
+    margin 0
+    padding 0
+    color $black
+    line-height 40px
+    text-align center
+    border-radius 0
+    border-width 1px
+    border-style solid 
+    border-color transparent
+    background-color $gf
+    white-space nowrap
+    cursor pointer
+    &.btn-save
+        color $green
+        border-color $green
+        &:hover
+        &.active
+            color $gf
+            background-color $green
+    &.btn-close
+        color $blue
+        border-color $blue
+        &:hover
+        &.active
+            color $gf
+            background-color $blue
+    &.btn-edit
+        color $yellow
+        border-color $yellow
+        &:hover,
+        &.active
+            color $gf
+            background-color $yellow
+    &.btn-publish
+        color $red
+        border-color $red
+        &:hover
+        &.active
+            color $gf
+            background-color $red
