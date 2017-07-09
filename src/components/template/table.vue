@@ -106,9 +106,10 @@ export default {
             .then(function(data){
                 that.tableData = data.data.data.page.list
             })
-            // js引入qs是main.js的局部变量，这里又没有用，
-            // 因为组件化开发，所有的单页面文件，都是一个封闭的块级作用域u，如果要应用这个块级作用域的局部变量，就要想vue文件这样，用export导出，用import导入
-            // 先import导入ele,然后有use方法注册给vue，但是你的qs没有，因为qs只是一个方法，如果你要想饿了么那样的话，
+
+            // js引入qs是main.js的局部变量，这里没有用；
+            // 因为组件化开发，所有的单页面文件，都是一个封闭的块级作用域内，如果要应用这个块级作用域的局部变量，就要想vue文件这样，用export导出，用import导入
+            // 先import导入ele，然后有use方法注册给vue，但是qs没有，因为qs只是一个方法，如果想要饿了么那样的话；
             // 就要想全局配置axios这样，给vue.prototype.Qs = Qs然后通过this.qs使用 
 
         },
@@ -171,6 +172,7 @@ export default {
                 baseURL: 'http://192.168.168.66:8080/',
             })
             .then(function(){
+
                  //重新渲染数据
                 that.loadTable();
                 that.newInfo = false;
@@ -182,7 +184,6 @@ export default {
         },
 
         // 编辑查询
-
         editSearch(ids){
             var that = this;
             that.currentId =that.currentId||ids;
@@ -206,7 +207,6 @@ export default {
         },
 
         // 修改提交
-        
         confirmUpdate(ids){
             var that = this;
             console.log(that.currentId);
@@ -235,6 +235,7 @@ export default {
     },
     data() {
       return {
+
         //要显示的表格数据，这个一定要是数组
         tableData:[],//定义一个空数组用来存放请求后端的表格数据。
         pageNum:1,

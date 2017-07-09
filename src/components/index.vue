@@ -6,13 +6,12 @@
     </div>
 </template>
 <script>
-
-    import Vheader from "./common/header"
-    import Vleftmeau from "./common/leftmeau"
-    import Vcontent from "./common/content"
+    import Vheader from './common/header'
+    import Vleftmeau from './common/leftmeau'
+    import Vcontent from './common/content'
 
     export default{
-        name : "index",
+        name : 'index',
         components : {
             Vheader,
             Vleftmeau,
@@ -20,17 +19,11 @@
         },
         methods:{
             hashChange(){
-                var that = this;
-                // window.addEventListener("hashChange",function(){
-                //     console.log(that.getCookies("useName"))
-                // },false)
-                window.onhashChange=function(){
-                    console.log(that.getCookies("useName"))
-                }
+                // 登录拦截
             }
         },
         mounted(){
-            this.hashChange();
+            // this.hashChange();
         }
     }
 </script>
