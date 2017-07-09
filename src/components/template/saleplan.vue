@@ -213,27 +213,36 @@
                 <div class="table">
                     <el-table
                         :data="newListData"
-                        style="width: 100%">
-                        <el-table-column type="selection" width="55"></el-table-column>
+                        width="100%"
+                        height="250">
                         <el-table-column
+                            fixed
+                            type="selection" 
+                            width="50"></el-table-column>
+                        <el-table-column
+                            width="120"
                             prop="planType"
                             label="计划类型">
                             <template scope="scope">
-                                <el-select v-model="scope.row.planType">
+                                <el-select v-model="scope.row.planType"
+                                    :disabled="editFlag">
                                     <el-option value=""></el-option>
                                 </el-select>
                             </template>
                         </el-table-column>
                         <el-table-column
+                            width="120"
                             prop="custName"
                             label="客户名称">
                             <template scope="scope">
-                                <el-select v-model="scope.row.custName">
+                                <el-select v-model="scope.row.custName"
+                                    :disabled="editFlag">
                                     <el-option value=""></el-option>
                                 </el-select>
                             </template>
                         </el-table-column>
                         <el-table-column
+                            width="120"
                             prop="orderNo"
                             label="订单编号">
                             <template scope="scope">
@@ -244,31 +253,73 @@
                             </template>
                         </el-table-column>
                         <el-table-column
+                            width="160"
                             prop="orderDate"
                             label="订单日期">
                             <template scope="scope">
-                                <el-date-picker type="date" placeholder="选择日期" v-model="scope.row.orderDate " style="width: 100%;"></el-date-picker>
+                                <el-date-picker type="date" 
+                                    :disabled="editFlag"
+                                    placeholder="选择日期" 
+                                    v-model="scope.row.orderDate " 
+                                    style="width: 100%;"></el-date-picker>
                             </template>
                         </el-table-column>
                         <el-table-column
+                            width="120"
                             prop="itemNo"
                             label="产品编号">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    v-model="scope.row.itemNo" 
+                                    :disabled="editFlag">
+                                </el-input>
+                            </template>
                         </el-table-column>
                         <el-table-column
+                            width="120"
                             prop="productName"
                             label="产品名称">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    v-model="scope.row.productName" 
+                                    :disabled="editFlag">
+                                </el-input>
+                            </template>
                         </el-table-column>
                         <el-table-column
+                            width="120"
                             prop="account"
                             label="数量">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    v-model="scope.row.account" 
+                                    :disabled="editFlag">
+                                </el-input>
+                            </template>
                         </el-table-column>
                         <el-table-column
+                            width="120"
                             prop="pic"
                             label="单位">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    v-model="scope.row.pic" 
+                                    :disabled="editFlag">
+                                </el-input>
+                            </template>
                         </el-table-column>
                         <el-table-column
+                            width="160"
+                            fixed="right"
                             prop="publishDate"
                             label="交货日期">
+                            <template scope="scope">
+                                <el-date-picker type="date" 
+                                    :disabled="editFlag"
+                                    placeholder="选择日期" 
+                                    v-model="scope.row.publishDate " 
+                                    style="width: 100%;"></el-date-picker>
+                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -433,10 +484,10 @@
             },
             addPlan(){
                 var that = this;
-                if(typeof that.newFormData.orderDate === "object"){
-                    that.newFormData.orderDate = that.newFormData.orderDate.toLocaleDateString()
-                    that.newFormData.publishDate = that.newFormData.publishDate.toLocaleDateString()
-                }
+                // if(typeof that.newFormData.orderDate === "object"){
+                //     that.newFormData.orderDate = that.newFormData.orderDate.toLocaleDateString()
+                //     that.newFormData.publishDate = that.newFormData.publishDate.toLocaleDateString()
+                // }
                 var _data = that.newFormData;
                 that.newListData.push(_data);
                 // 一开始表单中的日期，是一个日期对象，下面的表格接收的是字符串，说以需要把日期对象转成字符串。
@@ -453,87 +504,11 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-    .content
-        margin-left 235px
-        padding 10px 20px 25px 25px
-        .content-title
-            font-size 16px
-            color #333333
-            line-height 40px
-            border-bottom #e5e5e5 solid 1px
-            span
-                display inline-block
-                height 100%
-                position relative
-                &:after
-                    content ''
-                    position absolute
-                    left 0px
-                    bottom -2px
-                    width 100%
-                    height 1px
-                    border-bottom #148aed solid 2px
-        .content-search
-            margin-top 20px
-            border-bottom #ddd solid 1px
-            .el-input
-                width 148px
-        .content-buttons
-            padding 20px 0
-            width 100%
-        .search-btn
-            width 117px
-            height 38px
-            border #148aed solid 1px
-            border-radius 0
-            color #148aed
-            &:hover
-                color #fff
-                background #148aed
-        .reset-btn
-            width 117px
-            height 38px
-            border #ff9900 solid 1px
-            border-radius 0
-            color #ff9900
-            &:hover
-                color #fff
-                background #ff9900
-        .list-buttons
-            background #f7f7f7
-            border #dcdcdc solid 1px
-            border-radius 0
-            color #696969
-            &:hover
-                border #93c7f7 solid 1px
-                background: #e8f5ff
-                color #148aed
-        .list-tab
-            .el-tabs__item
-                color #333333
-                width 132px
-                text-align center
-                border #e5e5e5 solid 1px
-                background #f7f7f7
-                border-top #e5e5e5 solid 2px!important
-            .is-active
-                background #ffffff
-                border-radius 0!important
-                border-top #148aed solid 2px!important
-        .list-table
-            .el-table
-                border-left none
-            th
-                text-align center
-                font-weight normal
-            td
-                text-align center
-        .list-page
-            padding-top 35px
-        .mid-btn
-            text-align:center
-        .message
-            margin-top 30px
-            padding 5px 0
-            border-top 1px solid #e1e1e1
+.message
+    margin-top 30px
+    padding 5px 0
+    border-top 1px solid #e1e1e1
+.el-table__row 
+    td
+        padding 10px 0
 </style>
