@@ -95,14 +95,12 @@
                                 label="操作"
                                 width="150">
                                 <template scope="scope">
-                                    <el-button 
-                                        v-show = "showInfo[scope.$index].show"
+                                    <el-button  v-show = "showInfo[scope.$index].show"
                                         type="text"
                                         size="small">
                                         修改
                                     </el-button>
-                                    <el-button 
-                                        v-show = "showInfo[scope.$index].show"
+                                    <el-button  v-show = "showInfo[scope.$index].show"
                                         type="text"
                                         size="small"
                                         @click="operationPlan(scope.row.planId,scope.$index)">
@@ -214,36 +212,43 @@
                 </div>
                 <div class="table">
                     <el-table
-                        :data="newTableData"
+                        :data="newListData"
                         style="width: 100%">
-                        <el-table-column type="selection" width="55">
-                        </el-table-column>
+                        <el-table-column type="selection" width="55"></el-table-column>
                         <el-table-column
                             prop="planType"
                             label="计划类型">
-
                             <template scope="scope">
-                                <input type="text" v-model="newTableData.planType" :disabled="editFlag">
+                                <el-select v-model="scope.row.planType">
+                                    <el-option value=""></el-option>
+                                </el-select>
                             </template>
                         </el-table-column>
                         <el-table-column
                             prop="custName"
                             label="客户名称">
-
                             <template scope="scope">
-                                <select v-model="newTableData.custName">
-                                    <option value=""></option>
-                                </select>
+                                <el-select v-model="scope.row.custName">
+                                    <el-option value=""></el-option>
+                                </el-select>
                             </template>
-
                         </el-table-column>
                         <el-table-column
                             prop="orderNo"
                             label="订单编号">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    v-model="scope.row.orderNo" 
+                                    :disabled="editFlag">
+                                </el-input>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="orderDate"
                             label="订单日期">
+                            <template scope="scope">
+                                <el-date-picker type="date" placeholder="选择日期" v-model="scope.row.orderDate " style="width: 100%;"></el-date-picker>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="itemNo"
@@ -285,6 +290,9 @@
                     }
                 },
                 showInfo : [
+                    {
+                        show : true
+                    }
                 ],
                 pickerOptions1: {
                     shortcuts: [{
@@ -328,26 +336,10 @@
 
                 // 加载表格
                 tableData: [{
-                    planNo: '',
-                    createTime: '',
-                    operTime: '',
-                    operUser: '',
-                    operation: '',
-                    planStatus: '',
-                    showInfo : true
                 }],
+                //可编辑表格
                 editFlag : true,
-                newTableData:[{
-                    planType:'',
-                    custName:'',
-                    orderNo:'',
-                    orderDate:'',
-                    itemNo:'',
-                    productName:'',
-                    account:'',
-                    pic:'',
-                    publishDate:''
-                }],
+                //新增页面表格的数据增页面表单的数据
                 newFormData:{
                     planType:'',
                     custName:'',
@@ -356,9 +348,11 @@
                     itemNo:'',
                     productName:'',
                     account:'',
-                    pic:'',
+                    pic:'pic',
                     publishDate:''
-                }
+                },
+                //新增页面表格数据组
+                newListData:[],
             }
         },
         methods: {
@@ -369,10 +363,12 @@
                 var that = this;
                 that.$ajax.get('http://192.168.168.66:8080/ybs_mes/plan/index')
                 .then(function(res){
-                    that.tableData = res.data.data.page.list;
-                    that.tableData.every(function(el){
+                    var loadData = res.data.data.page.list;
+                    that.showInfo = [];
+                    loadData.every(function(el){
                         return that.showInfo.push({show : true})
                     })
+                    that.tableData = loadData;
                 })
                 .catch(function(error){
                     console.log(error);
@@ -437,31 +433,14 @@
             },
             addPlan(){
                 var that = this;
-                var _data = that.newFormData
-                that.$ajax({
-                    method: 'post',
-                    url: '/plan/addPlan',
-                    transformRequest: [function (data) {
-                    　　data = JSON.stringify({
-                            planType:_data.planType,
-                            custName:_data.custName,
-                            orderNo:_data.orderNo,
-                            orderDate:_data.orderDate,
-                            itemNo:_data.itemNo,
-                            productName:_data.productName,
-                            account:_data.account,
-                            publishDate:_data.publishDate
-                        });
-                        return data;
-                    }],
-                    baseURL: 'http://192.168.168.66:8080/ybs_mes',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(function(res){
-                    var newTableData = res.data;
-                })  
+                if(typeof that.newFormData.orderDate === "object"){
+                    that.newFormData.orderDate = that.newFormData.orderDate.toLocaleDateString()
+                    that.newFormData.publishDate = that.newFormData.publishDate.toLocaleDateString()
+                }
+                var _data = that.newFormData;
+                that.newListData.push(_data);
+                // 一开始表单中的日期，是一个日期对象，下面的表格接收的是字符串，说以需要把日期对象转成字符串。
+                // 第一次点击保存没有问题的，点击第二次保存的时候，因为前面没有修改日期的话，它默认还是原来的数据，原来的日期对象被我转成了字符串。就不需要转了，所以就判断一下，是不是对象，是对象，就转，不是就默认
             },
             editTable(){
                 this.editFlag = false;

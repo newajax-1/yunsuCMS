@@ -19,9 +19,9 @@
 
                                 <el-form-item
                                     prop='password'>
-                                    <el-input type="password" auto-complete="off" v-model="ruleForm.password" placeholder="密码"></el-input>
+                                    <el-input type="password" auto-complete="off" @keyup.enter.native="login()" v-model="ruleForm.password" placeholder="密码"></el-input>
                                 </el-form-item>
-                                
+                                <!--
                                 <el-form-item
                                     prop='identify'>
                                     <el-row>
@@ -29,7 +29,7 @@
                                         <el-col :span="8"><img class="identify-img"src="http://192.168.168.66:8080/ybs_mes/memberAccount/AuthImg"></el-col>
                                     </el-row>
                                 </el-form-item>
-                    
+                                -->
                                 <el-checkbox style="margin:0px 0px 35px 0px;">
                                     记住密码
                                 </el-checkbox>
@@ -130,7 +130,7 @@
                     　　data = JSON.stringify({
                             account:that.ruleForm.username,
                             password:that.ruleForm.password,
-                            verifyCode:that.ruleForm.identify
+                            // verifyCode:that.ruleForm.identify
                         });
                         return data;
                     }],
@@ -156,7 +156,6 @@
             $(window).resize(() => {
                 this.setSize();
             });
-            // this.identify();
         }
     }
 </script>
