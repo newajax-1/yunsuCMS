@@ -488,10 +488,11 @@
                 //     that.newFormData.orderDate = that.newFormData.orderDate.toLocaleDateString()
                 //     that.newFormData.publishDate = that.newFormData.publishDate.toLocaleDateString()
                 // }
-                var _data = that.newFormData;
+                var  _data = {}
+                for(var key in that.newFormData){
+                    _data[key] = that.newFormData[key]
+                }
                 that.newListData.push(_data);
-                // 一开始表单中的日期，是一个日期对象，下面的表格接收的是字符串，说以需要把日期对象转成字符串。
-                // 第一次点击保存没有问题的，点击第二次保存的时候，因为前面没有修改日期的话，它默认还是原来的数据，原来的日期对象被我转成了字符串。就不需要转了，所以就判断一下，是不是对象，是对象，就转，不是就默认
             },
             editTable(){
                 this.editFlag = false;
@@ -504,11 +505,11 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-.message
-    margin-top 30px
-    padding 5px 0
-    border-top 1px solid #e1e1e1
-.el-table__row 
-    td
-        padding 10px 0
+    .message
+        margin-top 30px
+        padding 5px 0
+        border-top 1px solid #e1e1e1
+    .el-table__row 
+        td
+            padding 10px 0
 </style>
