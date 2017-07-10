@@ -4,10 +4,11 @@ import Router from 'vue-router'
 import login from '../components/login/login'
 import index from '../components/index'
 
-    /**
-     * @saleplan : 销售计划管理
-     * @salersInfo : 客户信息管理
-     */ 
+/**
+ * @saleplan : 销售计划管理
+ * @salersInfo : 客户信息管理
+ */
+
 import saleplan from '../components/template/saleplan'
 import salersInfo from '../components/template/salersInfo'
 
@@ -18,7 +19,7 @@ export default new Router({
 
     /**
      * @base : 服务器项目文件路径
-     */ 
+     */
     base: '/ybs_mes/',
     routes: [{
             path: '/',

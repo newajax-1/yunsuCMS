@@ -108,20 +108,12 @@
                 size="tiny"
                 title="新增客户信息"
                 custom-class="pub-dialog"
+                @close="clearData()"
                 :visible.sync="newCustom">
                 <div>
                     <el-row>
                         <el-col :span="24">
                             <el-form :inline="true" class="">
-                                <el-row>
-                                    <el-col :span="8">
-                                        <el-form-item label="计划类型：" >
-                                            <el-input v-model='newFormData.planType'></el-input>
-                                            <span class="must-tips">*</span>
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="客户名称:">
@@ -150,13 +142,13 @@
 
                                 <el-row>
                                     <el-col :span="8">
-                                        <el-form-item label="产品编号：">
-                                            <el-input v-model='newFormData.itemNo'></el-input>
+                                        <el-form-item label="产品名称：" >
+                                            <el-input v-model='newFormData.productName'></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label="产品名称：">
-                                            <el-input v-model='newFormData.productName'></el-input>
+                                        <el-form-item label="产品编号：" >
+                                            <el-input v-model='newFormData.itemNo'></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -180,10 +172,18 @@
                                 </el-row>
 
                                 <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label="计划类型：">
+                                            <el-select placeholder="选择客户" v-model='newFormData.planType'>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+
+                                <el-row>
                                     <el-col >
                                         <div class="mid-btn">
-                                            <el-button class="btn-save btn" @click="addPlan()">保 存</el-button>
-                                            <el-button class="btn-close btn" >关 闭</el-button>
+                                            <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -196,8 +196,8 @@
                 <div class="message clearfix">
                     <div class="fl">
                         <el-button class="btn-edit btn" @click="editTable()">编 辑</el-button>
-                        <el-button class="btn-save btn" >保 存</el-button>
-                        <el-button class="btn-publish btn" >下 发</el-button>
+                        <el-button class="btn-save btn" @click="saveList()">保 存</el-button>
+                        <el-button class="btn-publish btn" @click="publishList()" >下 发</el-button>
                     </div>
                     <div class="fr">共有<span class="detailMsg">条下发计划</span></div>
                 </div>
@@ -208,10 +208,6 @@
                         width="100%"
                         height="250"
                         :data="newListData">
-                        <el-table-column
-                            fixed
-                            type="selection" 
-                            width="50"></el-table-column>
                         <el-table-column
                             width="120"
                             prop="planType"
@@ -315,7 +311,6 @@
 
                         <el-table-column
                             width="160"
-                            fixed="right"
                             prop="publishDate"
                             label="交货日期">
                             <template scope="scope">
@@ -341,17 +336,17 @@
      * doing
      *      数据表格查询 search
      *      数据表格删除 deleted
-     *      数据表格 已下发或未下发 判断 {showInfo}
      *      数据表格修改 edit {没有原型图}
      *      数据表格详情 {详情页面}
-     *      新建计划下发 btn-publish {新建计划中，新增已勾选的计划点击确定下发，保存在数据表格中已下发}
-     *      新建计划保存 btn-save {新建计划中，新增但未下发的数据，点击保存，保存在数据表格中的未下发，并在新建计划中表格}
-     *      新建计划编辑 btn-edit {新建计划中，新增但未下发的数据，点击编辑，新建计划表格所有数据都可以编辑}
+     *      dialog弹出时，请求获取 客户名称 与 计划类型
      * done
      *      新建计划 表格可编辑
      *      新建计划数据 同步表格
+     *      数据表格 已下发或未下发 判断 {showInfo}
      *      项目前端 部署与压缩打包 上线
      *      登录页
+     *      新建计划下发 btn-publish {新建计划中，新增已勾选的计划点击确定下发，保存在数据表格中已下发}
+     *      新建计划保存 btn-save {新建计划中，新增但未下发的数据，点击保存，保存在数据表格中的未下发完成 ，并在新建计划中表格}
      */ 
 
     import Qs from 'qs'
@@ -442,8 +437,14 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
+            clearData(){
+                for(var key in this.newFormData){
+                    this.newFormData[key] = "" 
+                }
+                this.newListData = [];
+            },
 
-            // 数据表格 加载
+            // 数据表格 加载 {备注：这段数据请求loadTable 可以与 loadTableStatus函数合并} 
             loadTable(){
                 var that = this;
                 that.$ajax.get('http://192.168.168.66:8080/ybs_mes/plan/index')
@@ -451,9 +452,9 @@
                     var loadData = res.data.data.page.list;
                     that.showInfo = [];
                     loadData.every(function(el){
-
+                        var flag = el.operation === "01" ? true : false
                         // 需要在此判断 el 中 是否下发，如果已下发，则show赋值为false,未下发show赋值为true
-                        return that.showInfo.push({show : true})
+                        return that.showInfo.push({show : flag})
                     })
                     that.tableData = loadData;
                 })
@@ -467,7 +468,13 @@
                 var that = this;
                 that.$ajax.get('http://192.168.168.66:8080/ybs_mes/plan/index?operation='+id)
                 .then(function(res){
-                    that.tableData = res.data.data.page.list;
+                    var loadData = res.data.data.page.list;
+                    that.showInfo = [];
+                    loadData.every(function(el){
+                        var flag = el.operation === "01" ? true : false
+                        return that.showInfo.push({show : flag})
+                    })
+                    that.tableData = loadData;
                 })
                 .catch(function(error){
                     console.log(error);
@@ -527,23 +534,70 @@
                 }); 
             },
 
-            // 新增计划 btn-save
+            // 新增计划表单保存 btn-save
             addPlan(){
                 var that = this;
-                // if(typeof that.newFormData.orderDate === "object"){
-                //     that.newFormData.orderDate = that.newFormData.orderDate.toLocaleDateString()
-                //     that.newFormData.publishDate = that.newFormData.publishDate.toLocaleDateString()
-                // }
                 var  _data = {}
                 for(var key in that.newFormData){
                     _data[key] = that.newFormData[key]
                 }
                 that.newListData.push(_data);
+                for(var key in that.newFormData){
+                    that.newFormData[key] = "" 
+                }
+                
             },
 
-            // 新增计划 btn-edit
+            // 新增计划表格编辑 btn-edit
             editTable(){
                 this.editFlag = false;
+            },
+
+            // 处理新建计划表格数据
+            handleTableData(id){
+                var that = this;
+                var i , len = that.newListData.length;
+                if(!len){
+                    alert("暂无数据，请添加计划");
+                    return;
+                }
+                for( i = 0 ; i < len ; i++){
+                    var el = that.newListData[i];
+                    el.operation = id ;
+
+                    // 1.判断数据是否 Obj 类型
+                    // 2.判断新建计划中的日期是否改变，已改变，则重复第一步骤，并同步展示在新建计划表格[newList]
+                    // 3.如果保存后清空新建计划表格的话，则忽略第二步骤
+                    if(typeof el.orderDate === "object"){
+                        el.orderDate = (el.orderDate.toLocaleDateString()).replace(/\//g,"-");
+                        el.publishDate = (el.publishDate.toLocaleDateString()).replace(/\//g,"-");
+                    }
+                }
+
+                that.$ajax({
+                    method: 'post',
+                    url: '/plan/addPlan',
+                    transformRequest: [function (data) {
+                    　　data = JSON.stringify(that.newListData);
+                        return data;
+                    }],
+                    baseURL: 'http://192.168.168.66:8080/ybs_mes',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(function(results){
+                    that.newListData = [];
+                })
+            
+            },
+
+            // 新增计划保存 btn-save
+            saveList(){
+                this.handleTableData("01");
+            },
+            publishList(){
+                this.handleTableData("02");
             }
         },
 
