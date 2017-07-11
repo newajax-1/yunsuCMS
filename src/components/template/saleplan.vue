@@ -684,33 +684,50 @@
             }
         },
         methods: {
+
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            clearData(){
-                for(var key in this.newFormData){
-                    this.newFormData[key] = "" 
+
+            // 清空数据 
+            clearData(dataObj){
+
+                var obj = Object.prototype.toString.call(dataObj);
+                if(obj === "[object Array]"){
+                    dataObj = [];
+                }else{
+                    for(var key in this.newFormData){
+                        this.newFormData[key] = "" 
+                    }
                 }
-                this.newListData = [];
             },
 
-            // 数据表格 加载 {备注：这段数据请求loadTable 可以与 loadTableStatus函数合并} 
-            loadTable(){
+            // 获取数据数据表格
+            getData(){
                 var that = this;
                 that.$ajax.get('http://192.168.168.66:8080/ybs_mes/plan/index')
                 .then(function(res){
-                    var loadData = res.data.data.page.list;
-                    that.showInfo = [];
-                    loadData.every(function(el){
-                        var flag = el.operation === "01" ? true : false
-                        // 需要在此判断 el 中 是否下发，如果已下发，则show赋值为false,未下发show赋值为true
-                        return that.showInfo.push({show : flag})
-                    })
-                    that.tableData = loadData;
+                    that.loadTable(res);
                 })
                 .catch(function(error){
                     console.log(error);
                 });
+            },
+
+            // 数据表格 加载 {备注：这段数据请求loadTable 可以与 loadTableStatus函数合并} 
+            loadTable(data){
+                var that = this;
+                var loadData = data.data.data.page;
+                that.pageList.pageNum = loadData.pageNum;
+                that.pageList.pageSize = loadData.pageSize;
+                that.pageList.total = loadData.total;
+                that.showInfo = [];
+                loadData.list.every(function(el){
+                    var flag = el.operation === "01" ? true : false
+                    // 需要在此判断 el 中 是否下发，如果已下发，则show赋值为false,未下发show赋值为true
+                    return that.showInfo.push({show : flag});
+                })
+                that.tableData = loadData.list;
             },
 
             // tabController Event 
@@ -718,13 +735,7 @@
                 var that = this;
                 that.$ajax.get('http://192.168.168.66:8080/ybs_mes/plan/index?operation='+id)
                 .then(function(res){
-                    var loadData = res.data.data.page.list;
-                    that.showInfo = [];
-                    loadData.every(function(el){
-                        var flag = el.operation === "01" ? true : false
-                        return that.showInfo.push({show : flag})
-                    })
-                    that.tableData = loadData;
+                    that.loadTable(res);
                 })
                 .catch(function(error){
                     console.log(error);
@@ -735,7 +746,7 @@
             changeTableEffective(tab){
                 switch(tab.name){
                     case 'first':
-                        this.loadTable();
+                        this.getData();
                         break;
                     case 'second':
                         this.loadTableStatus("01");
@@ -792,9 +803,10 @@
                     _data[key] = that.newFormData[key]
                 }
                 that.newListData.push(_data);
-                for(var key in that.newFormData){
-                    that.newFormData[key] = "" 
-                }
+                that.clearData(that.newFormData);
+                // for(var key in that.newFormData){
+                //     that.newFormData[key] = "" 
+                // }
                 
             },
 
@@ -837,7 +849,8 @@
                     }
                 })
                 .then(function(results){
-                    that.newListData = [];
+                    // that.newListData = [];
+                    that.clearData(that.newListData)
                 })
             
             },
@@ -849,56 +862,45 @@
             publishList(){
                 this.handleTableData("02");
             },
+
             //分页
             handleSizeChange(val) {
                 var that = this;
                 that.pageList.pageSize = val;
-                that.loadTable();
+                // that.loadTable();
             },
             handleCurrentChange(val) {
                 var that = this;
                 that.pageList.pageNum = val;
-                that.loadTable();
+                // that.loadTable();
             },
+
            //查询
            search(){
                 var that = this;
                 var _searchData=that.formData;
                 try{
- 
                     _searchData.createTimeStart= (_searchData.createTimeStart.toLocaleDateString()).replace(/\//g,"-");
                     _searchData.createTimeEnd= (_searchData.createTimeEnd.toLocaleDateString()).replace(/\//g,"-");
                     _searchData.operTimeStart= (_searchData.operTimeStart.toLocaleDateString()).replace(/\//g,"-");
                     _searchData.operTimeEnd= (_searchData.operTimeEnd.toLocaleDateString()).replace(/\//g,"-");
-                
                 }catch(er){
-                    alert("请填写完整日期")
+                    console.error(er);
+                    return ;
                 }
-                console.log(_searchData);
 
                 that.$ajax.get('http://192.168.168.66:8080/ybs_mes/plan/loadTable',{
                     params: JSON.stringify(_searchData)
                 })
                 .then(function(response){
-                    console.log(response);
+                    that.loadTable(response);
+                    that.clearData(that.formData);
                 })
                 .catch(function(err){
                     console.log(err);
                 });
-                // that.$ajax({
-                //     method:'get',
-                //     url:'/plan/loadTable',
-                //     data : JSON.stringify(_searchData),
-                //     baseURL:'http://192.168.168.66:8080/ybs_mes',
-                //     headers: {
-                //         'Content-Type': 'application/json'
-                //     }
-                // })
-                // .then(
-                //     function(res){}
-                // )
-               
            },
+
            //新增页面客户名称
            addGuestInfo(){
                var that = this;
@@ -917,9 +919,8 @@
            }
         },
 
-
         mounted(){
-            this.loadTable();
+            this.getData();
         }
     }
 </script>
