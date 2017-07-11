@@ -10,36 +10,36 @@
                     <div class="content-search">
                         <el-form :inline="true" class="">
                             <el-form-item label="下发人：">
-                                <el-input placeholder="输入人员姓名"></el-input>
+                                <el-input placeholder="输入人员姓名" v-model='formData.operUser'></el-input>
                             </el-form-item>
                             <el-form-item label="生成时间：">
                                 <el-date-picker
-                                    v-model="value1"
+                                    v-model="formData.operTimeStart"
                                     type="date"
                                     placeholder="选择日期">
                                 </el-date-picker>
                                 <span style="padding: 0 10px">至</span>
                                 <el-date-picker
-                                    v-model="value2"
+                                    v-model="formData.operTimeEnd"
                                     type="date"
                                     placeholder="选择日期">
                                 </el-date-picker>
                             </el-form-item>
                             <el-form-item label="下发时间：">
                                 <el-date-picker
-                                    v-model="value3"
+                                    v-model="formData.createTimeStart"
                                     type="date"
                                     placeholder="选择日期">
                                 </el-date-picker>
                                 <span style="padding: 0 10px">至</span>
                                 <el-date-picker
-                                    v-model="value4"
+                                    v-model="formData.createTimeEnd"
                                     type="date"
                                     placeholder="选择日期">
                                 </el-date-picker>
                             </el-form-item>
                             <el-form-item>
-                                <el-button @click='' class="search-btn">查询</el-button>
+                                <el-button @click='search()' class="search-btn">查询</el-button>
                             </el-form-item>
                             <el-form-item>
                                 <el-button @click='' class="reset-btn">重置</el-button>
@@ -86,7 +86,8 @@
                                     <el-button  
                                         v-show = "showInfo[scope.$index].show"
                                         type="text"
-                                        size="small">修改</el-button>
+                                        size="small"
+                                        @click="openmodify(scope)">修改</el-button>
                                     <el-button  
                                         v-show = "showInfo[scope.$index].show"
                                         type="text"
@@ -94,7 +95,8 @@
                                         @click="operationPlan(scope.row.planId,scope.$index)">下发</el-button>
                                     <el-button 
                                         type="text"
-                                        size="small"@click="detailPlan(scope)">详情</el-button>
+                                        size="small"
+                                        @click="detailPlan(scope)">详情</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -102,6 +104,19 @@
                 </el-col>
                 <!-- 数据表格 end -->
             </el-row>
+            <!--分页 start-->
+            <div class="block list-page fr">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="pageList.pageNum"
+                        :page-sizes="[10, 20, 30, 40]"
+                        :page-size=pageList.pageSize
+                        layout="total, sizes, prev, pager, next"
+                        :total="pageList.total">
+                </el-pagination>
+            </div>
+            <!--分页 end-->
 
             <!--新增弹框 start-->
             <el-dialog
@@ -109,6 +124,7 @@
                 title="新增客户信息"
                 custom-class="pub-dialog"
                 @close="clearData()"
+                @open="addGuestInfo()"
                 :visible.sync="newCustom">
                 <div>
                     <el-row>
@@ -117,9 +133,8 @@
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="客户名称:">
-                                            <el-select placeholder="选择客户" v-model='newFormData.custName'>
-                                                <el-option label="客户一" value="shanghai"></el-option>
-                                                <el-option label="客户二" value="beijing"></el-option>
+                                            <el-select placeholder="选择客户" v-for="item in guestInfo">
+                                                <el-option :label="item.custName" :value="item.custNo"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -175,6 +190,8 @@
                                     <el-col :span="8">
                                         <el-form-item label="计划类型：">
                                             <el-select placeholder="选择客户" v-model='newFormData.planType'>
+                                                <el-option label="确认" value="01"></el-option>
+                                                <el-option label="预测" value="02"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -327,6 +344,219 @@
                 <!-- 新增计划 可编辑table end-->
             </el-dialog>
             <!--新增弹框 end-->
+            <!--修改弹框 start-->
+            <el-dialog
+                size="tiny"
+                title="新增客户信息"
+                custom-class="pub-dialog"
+                :visible.sync="modifysaleplan">
+                <div>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form :inline="true" class="">
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label='计划编号：'>
+                                            <span></span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label='计划生成时间：'>
+                                            <span></span>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label='计划状态：'>
+                                            <span></span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label='计划下发时间：'>
+                                            <span></span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label='计划下发人：'>
+                                            <span></span>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
+                        </el-col>
+                    </el-row>
+                </div>
+
+                <div class="message clearfix">
+                    <div class="fl">
+                        <el-button class="btn-edit btn" @click="editTable()">编 辑</el-button>
+                        <el-button class="btn-save btn" @click="saveList()">保 存</el-button>
+                        <el-button class="btn-publish btn" @click="publishList()" >下 发</el-button>
+                    </div>
+                    <div class="fr">共有<span class="detailMsg">条下发计划</span></div>
+                </div>
+
+                <!-- 新增计划 可编辑table start-->
+                <div class="table">
+                    <el-table
+                        width="100%"
+                        height="250"
+                        :data="newListData">
+                        <el-table-column
+                            width="120"
+                            prop="planType"
+                            label="计划类型">
+                            <template scope="scope">
+                                <el-select 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.planType">
+                                    <el-option value=""></el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            width="120"
+                            prop="custName"
+                            label="客户名称">
+                            <template scope="scope">
+                                <el-select 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.custName">
+                                    <el-option value=""></el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            width="120"
+                            prop="orderNo"
+                            label="订单编号">
+                            <template scope="scope">
+                                <el-input 
+                                    type="text" 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.orderNo" >
+                                </el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="160"
+                            prop="orderDate"
+                            label="订单日期">
+                            <template scope="scope">
+                                <el-date-picker 
+                                    type="date" 
+                                    style="width: 100%;"
+                                    placeholder="选择日期" 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.orderDate"></el-date-picker>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="120"
+                            prop="itemNo"
+                            label="产品型号">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    v-model="scope.row.itemNo" 
+                                    :disabled="editFlag">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="120"
+                            prop="productName"
+                            label="产品名称">
+                            <template scope="scope">
+                                <el-input
+                                    type="text" 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.productName">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="120"
+                            prop="account"
+                            label="数量">
+                            <template scope="scope">
+                                <el-input 
+                                    type="text"
+                                    :disabled="editFlag"
+                                    v-model="scope.row.account" >
+                                </el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="120"
+                            prop="pic"
+                            label="单位">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.pic">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="120"
+                            prop="pic"
+                            label="订单状态">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.pic">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="120"
+                            prop="pic"
+                            label="完成进度">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.pic">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="120"
+                            prop="pic"
+                            label="完成率">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.pic">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            width="120"
+                            prop="pic"
+                            label="交货日期">
+                            <template scope="scope">
+                                <el-input type="text" 
+                                    :disabled="editFlag"
+                                    v-model="scope.row.pic">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <!-- 新增计划 可编辑table end-->
+            </el-dialog>
+            <!--修改弹框 end-->
         </div>
     </div>
 </template>
@@ -334,11 +564,14 @@
 <script>
     /**
      * doing
-     *      数据表格查询 search
-     *      数据表格删除 deleted
-     *      数据表格修改 edit {没有原型图}
-     *      数据表格详情 {详情页面}
-     *      dialog弹出时，请求获取 客户名称 与 计划类型
+     *      数据表格查询 search （报错没找出原因）
+     *      数据表格修改 edit （以新增为模板，保存和下发功能分别有新接口）
+     *      数据表格详情 {详情页面}（不是以模态框，而是组件形式展现，所以静态页面写了，但是路由没搞好了，看不到，所以没有继续些功能）
+     *      dialog弹出时，请求获取 客户名称 与 计划类型（写完了，有问题）
+     *      分页
+     *      关闭提示
+     *      校验
+     *      重置按钮
      * done
      *      新建计划 表格可编辑
      *      新建计划数据 同步表格
@@ -408,6 +641,7 @@
 
                 // 对话框
                 newCustom: false,
+                modifysaleplan: false,
 
                 // 加载表格
                 tableData: [{
@@ -431,6 +665,22 @@
 
                 //新增页面表格数据组
                 newListData:[],
+                //表格数据表单部分
+                formData:{
+                    operUser:'',
+                    operTimeStart:'',
+                    operTimeEnd:'',
+                    createTimeStart:'',
+                    createTimeEnd:'',
+                },
+                // 分页
+                pageList: {
+                    pageNum: 1,
+                    pageSize: 1,
+                    total: 1
+                },
+                //新增页客户信息
+                guestInfo:[],
             }
         },
         methods: {
@@ -598,8 +848,75 @@
             },
             publishList(){
                 this.handleTableData("02");
-            }
+            },
+            //分页
+            handleSizeChange(val) {
+                var that = this;
+                that.pageList.pageSize = val;
+                that.loadTable();
+            },
+            handleCurrentChange(val) {
+                var that = this;
+                that.pageList.pageNum = val;
+                that.loadTable();
+            },
+           //查询
+           search(){
+                var that = this;
+                var _searchData=that.formData;
+                try{
+ 
+                    _searchData.createTimeStart= (_searchData.createTimeStart.toLocaleDateString()).replace(/\//g,"-");
+                    _searchData.createTimeEnd= (_searchData.createTimeEnd.toLocaleDateString()).replace(/\//g,"-");
+                    _searchData.operTimeStart= (_searchData.operTimeStart.toLocaleDateString()).replace(/\//g,"-");
+                    _searchData.operTimeEnd= (_searchData.operTimeEnd.toLocaleDateString()).replace(/\//g,"-");
+                
+                }catch(er){
+                    alert("请填写完整日期")
+                }
+                console.log(_searchData);
+
+                that.$ajax.get('http://192.168.168.66:8080/ybs_mes/plan/loadTable',{
+                    params: JSON.stringify(_searchData)
+                })
+                .then(function(response){
+                    console.log(response);
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+                // that.$ajax({
+                //     method:'get',
+                //     url:'/plan/loadTable',
+                //     data : JSON.stringify(_searchData),
+                //     baseURL:'http://192.168.168.66:8080/ybs_mes',
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     }
+                // })
+                // .then(
+                //     function(res){}
+                // )
+               
+           },
+           //新增页面客户名称
+           addGuestInfo(){
+               var that = this;
+               that.$ajax.get('http://192.168.168.66:8080/ybs_mes/plan/addPlanOnclick')
+               .then(
+                   function(res){
+                       guestInfo = res.data.data.dataList;
+                       return guestInfo;
+                   }
+               )
+           },
+           openmodify(ids){
+               modifysaleplan = true;
+            //    console.log(ids.data.data.dataList[0]);
+
+           }
         },
+
 
         mounted(){
             this.loadTable();
