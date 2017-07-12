@@ -124,18 +124,20 @@
             custom-class="pub-dialog"
             @close="clearData()"
             @open="addGuestInfo()"
-            :visible.sync="newCustom"
-            :model="ruleForm" 
-            :rules="rules"
-            ref="ruleForm">
+            :visible.sync="newCustom">
             <div>
                 <el-row>
                     <el-col :span="24">
                         <div class="pub-mask-wrap">
-                            <el-form :inline="true" class="">
+                            <!-- 校验规则必须写在 el-form 标签中 -- >
+                            <el-form :inline="true" class="" 
+                                :model="ruleForm" 
+                                :rules="rules"
+                                ref="ruleForm">
                                 <el-row :gutter="24">
                                     <el-col :span="8">
-                                        <el-form-item label="客户名称: ">
+                                        <!-- 校验提示必须加上 prop 属性 -->
+                                        <el-form-item label="客户名称: " prop="custName">
                                             <el-select placeholder="选择客户" v-model="ruleForm.custName" >
                                                 <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
                                             </el-select>
@@ -145,13 +147,13 @@
                                     </el-col>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label='订单编号：'>
+                                        <el-form-item label='订单编号：' prop="orderNo">
                                             <el-input  v-model='ruleForm.orderNo'></el-input>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label="订单日期：">
+                                        <el-form-item label="订单日期：" prop="orderDate">
                                             <el-date-picker
                                                 type="date"
                                                 placeholder="选择日期"
@@ -165,13 +167,13 @@
 
                                 <el-row :gutter="24">
                                     <el-col :span="8">
-                                        <el-form-item label="产品名称：" >
+                                        <el-form-item label="产品名称：" prop="productName">
                                             <el-input v-model='ruleForm.productName'></el-input>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label="产品编号：" >
+                                        <el-form-item label="产品编号：" prop="itemNo">
                                             <el-input v-model='ruleForm.itemNo'></el-input>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
@@ -180,13 +182,13 @@
 
                                 <el-row :gutter="24">
                                     <el-col :span="8">
-                                        <el-form-item label="需求数量：">
+                                        <el-form-item label="需求数量：" prop="account">
                                             <el-input v-model='ruleForm.account'></el-input>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label="交货日期：">
+                                        <el-form-item label="交货日期：" prop="publishDate">
                                             <el-date-picker
                                                 type="date"
                                                 placeholder="选择日期"
@@ -200,7 +202,7 @@
 
                                 <el-row>
                                     <el-col :span="8">
-                                        <el-form-item label="计划类型：">
+                                        <el-form-item label="计划类型：" prop="planType">
                                             <el-select placeholder="选择客户" v-model='ruleForm.planType'>
                                                 <el-option label="确认" value="01"></el-option>
                                                 <el-option label="预测" value="02"></el-option>
