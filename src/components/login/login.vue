@@ -62,7 +62,7 @@
 </template>
 <script>
     import axios from 'axios'
-    export default{
+    export default {
 
         name: "login",
         data() {
@@ -72,6 +72,7 @@
                 }
                 callback();
             };
+
             var validatePass = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入密码'));

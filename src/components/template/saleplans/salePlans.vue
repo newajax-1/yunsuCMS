@@ -95,7 +95,7 @@
                                 <el-button 
                                     type="text"
                                     size="small"
-                                    @click="$goRoute('saleplaninfo')">详情</el-button>
+                                    @click="detailplan(scope.row.planId)">详情</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -124,87 +124,102 @@
             custom-class="pub-dialog"
             @close="clearData()"
             @open="addGuestInfo()"
-            :visible.sync="newCustom">
+            :visible.sync="newCustom"
+            :model="ruleForm" 
+            :rules="rules"
+            ref="ruleForm">
             <div>
                 <el-row>
                     <el-col :span="24">
-                        <el-form :inline="true" class="">
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="客户名称:">
-                                        <el-select placeholder="选择客户" v-model="newFormData.custName" >
-                                            <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label='订单编号：'>
-                                        <el-input  v-model='newFormData.orderNo'></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label="订单日期：">
-                                        <el-date-picker
-                                            type="date"
-                                            placeholder="选择日期"
-                                            v-model="newFormData.orderDate"
-                                            :picker-options="pickerOptions">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+                        <div class="pub-mask-wrap">
+                            <el-form :inline="true" class="">
+                                <el-row :gutter="24">
+                                    <el-col :span="8">
+                                        <el-form-item label="客户名称: ">
+                                            <el-select placeholder="选择客户" v-model="ruleForm.custName" >
+                                                <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
+                                            </el-select>
+                                            <span class="must-tips">*</span>
+                                        </el-form-item>
+                                         <el-col :span="8">
+                                    </el-col>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label='订单编号：'>
+                                            <el-input  v-model='ruleForm.orderNo'></el-input>
+                                            <span class="must-tips">*</span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="订单日期：">
+                                            <el-date-picker
+                                                type="date"
+                                                placeholder="选择日期"
+                                                v-model="ruleForm.orderDate"
+                                                :picker-options="pickerOptions">
+                                            </el-date-picker>
+                                            <span class="must-tips">*</span>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
 
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="产品名称：" >
-                                        <el-input v-model='newFormData.productName'></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label="产品编号：" >
-                                        <el-input v-model='newFormData.itemNo'></el-input>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+                                <el-row :gutter="24">
+                                    <el-col :span="8">
+                                        <el-form-item label="产品名称：" >
+                                            <el-input v-model='ruleForm.productName'></el-input>
+                                            <span class="must-tips">*</span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="产品编号：" >
+                                            <el-input v-model='ruleForm.itemNo'></el-input>
+                                            <span class="must-tips">*</span>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
 
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="需求数量：">
-                                        <el-input v-model='newFormData.account'></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label="交货日期：">
-                                        <el-date-picker
-                                            type="date"
-                                            placeholder="选择日期"
-                                            v-model='newFormData.publishDate'
-                                            :picker-options="pickerOptions">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+                                <el-row :gutter="24">
+                                    <el-col :span="8">
+                                        <el-form-item label="需求数量：">
+                                            <el-input v-model='ruleForm.account'></el-input>
+                                            <span class="must-tips">*</span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="交货日期：">
+                                            <el-date-picker
+                                                type="date"
+                                                placeholder="选择日期"
+                                                v-model='ruleForm.publishDate'
+                                                :picker-options="pickerOptions">
+                                            </el-date-picker>
+                                            <span class="must-tips">*</span>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
 
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="计划类型：">
-                                        <el-select placeholder="选择客户" v-model='newFormData.planType'>
-                                            <el-option label="确认" value="01"></el-option>
-                                            <el-option label="预测" value="02"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label="计划类型：">
+                                            <el-select placeholder="选择客户" v-model='ruleForm.planType'>
+                                                <el-option label="确认" value="01"></el-option>
+                                                <el-option label="预测" value="02"></el-option>
+                                            </el-select>
+                                            <span class="must-tips">*</span>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
 
-                            <el-row>
-                                <el-col >
-                                    <div class="mid-btn">
-                                        <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
-                                    </div>
-                                </el-col>
-                            </el-row>
+                                <el-row>
+                                    <el-col >
+                                        <div class="mid-btn">
+                                            <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
+                                        </div>
+                                    </el-col>
+                                </el-row>
 
-                        </el-form>
+                            </el-form>
+                        </div>
                     </el-col>
                 </el-row>
             </div>

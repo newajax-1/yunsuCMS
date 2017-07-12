@@ -3,6 +3,55 @@ import Qs from 'qs'
 export default {
     name: 'saleplan',
     data() {
+        var validateplanType = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请选择计划类型'));
+            }
+            callback();
+        };
+        var validatecustName = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请选择客户名称'));
+            }
+            callback();
+        };
+        var validateorderNo = (rule, value, callback) => {
+            debugger
+            if (value === '') {
+                callback(new Error('请输入订单编号'));
+            }
+            callback();
+        };
+        var validateorderDate = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请选择订单日期'));
+            }
+            callback();
+        };
+        var validateitemNo = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入产品型号'));
+            }
+            callback();
+        };
+        var validateproductName = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入产品名称'));
+            }
+            callback();
+        };
+        var validateaccount = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入需求数量'));
+            }
+            callback();
+        };
+        var validatepublishDate = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请选择交货日期'));
+            }
+            callback();
+        };
         return {
 
             //时间选择器
@@ -63,7 +112,7 @@ export default {
             //可编辑表格
             editFlag: true,
 
-            //新增页面表格的数据增页面表单的数据
+            //新增页面表格的数据
             newFormData: {
                 planType: '',
                 custName: '',
@@ -97,22 +146,90 @@ export default {
 
             //新增页客户信息
             guestInfo: [],
-            
+
             //数据表格的id
             tempID: '',
- 
+
             // 修改客户计划
             ModifyGuestInfo: null,
             ModifyFormData: null,
-            ModifyListData: null
+            ModifyListData: null,
+
+            //详情表单数据
+            infoform: {
+                planNo: '',
+                createTime: '',
+                operation: '',
+                operTime: '',
+                operUser: ''
+            },
+
+            //详情列表数据
+            infolist: [{
+                planType: '',
+                custName: '',
+                orderNo: '',
+                orderDate: '',
+                itemNo: '',
+                itemName: '',
+                quantity: '',
+                unit: '',
+                orderStatus: '',
+                finishProcess: '',
+                finishrate: '',
+                deliveryDate: '',
+            }],
+
+            //新增校验
+            ruleForm: {
+                planType: '',
+                custName: '',
+                orderNo: '',
+                orderDate: '',
+                itemNo: '',
+                productName: '',
+                account: '',
+                publishDate: '',
+            },
+
+            rules: {
+                planType: [
+                    { validator: validateplanType, trigger: 'change' }
+                ],
+                custName: [
+                    { validator: validatecustName, trigger: 'blur' }
+                ],
+                orderNo: [
+                    { validator: validateorderNo, trigger: 'blur' }
+                ],
+                orderDate: [
+                    { validator: validateorderDate, trigger: 'blur' }
+                ],
+                itemNo: [
+                    { validator: validateitemNo, trigger: 'blur' }
+                ],
+                productName: [
+                    { validator: validateproductName, trigger: 'blur' }
+                ],
+                account: [
+                    { validator: validateaccount, trigger: 'blur' }
+                ],
+                publishDate: [
+                    { validator: validatepublishDate, trigger: 'blur' }
+                ],
+            }
         }
     },
+
     methods: {
- 
+        test() {
+            console.log(1)
+        },
+
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
- 
+
         // 清空数据 
         clearData(dataObj) {
             var obj = Object.prototype.toString.call(dataObj);
@@ -124,7 +241,7 @@ export default {
                 }
             }
         },
- 
+
         getEditData(id) {
             var that = this;
             that.$ajax.get('plan/updatePlanOnclick', {
@@ -139,7 +256,7 @@ export default {
                     console.log(err);
                 });
         },
- 
+
         // 获取数据数据表格
         getData() {
             var that = this;
@@ -151,7 +268,7 @@ export default {
                     console.log(error);
                 });
         },
- 
+
         // 数据表格 加载 {备注：这段数据请求loadTable 可以与 loadTableStatus函数合并} 
         loadTable(data) {
             var that = this;
@@ -168,7 +285,7 @@ export default {
             })
             that.tableData = loadData.list;
         },
- 
+
         // tabController Event 
         loadTableStatus(id) {
             var that = this;
@@ -180,7 +297,7 @@ export default {
                     console.log(error);
                 });
         },
- 
+
         // tabController Event
         changeTableEffective(tab) {
             switch (tab.name) {
@@ -195,7 +312,7 @@ export default {
                     break;
             }
         },
- 
+
         // 数据表格 下发Event
         operationPlan(ids, index) {
             var that = this;
@@ -220,7 +337,7 @@ export default {
                     }
                 })
         },
- 
+
         // 数据表格 详情Event
         detailPlan(id) {
             var that = this;
@@ -230,24 +347,24 @@ export default {
                 console.log(error);
             });
         },
- 
+
         // 新增计划表单保存 btn-save
         addPlan() {
             var that = this;
             var _data = {}
-            for (var key in that.newFormData) {
-                _data[key] = that.newFormData[key];
+            for (var key in that.ruleForm) {
+                _data[key] = that.ruleForm[key];
             }
             that.newListData.push(_data);
-            that.clearData(that.newFormData);
- 
+            that.clearData(that.ruleForm);
+
         },
- 
+
         // 新增计划表格编辑 btn-edit
         editTable() {
             this.editFlag = false;
         },
- 
+
         // 处理新建计划表格数据
         handleTableData(id, url) {
             var that = this;
@@ -259,7 +376,7 @@ export default {
             for (i = 0; i < len; i++) {
                 var el = that.newListData[i];
                 el.operation = id;
- 
+
                 // 1.判断数据是否 Obj 类型
                 // 2.判断新建计划中的日期是否改变，已改变，则重复第一步骤，并同步展示在新建计划表格[newList]
                 // 3.如果保存后清空新建计划表格的话，则忽略第二步骤
@@ -268,7 +385,7 @@ export default {
                     el.publishDate = (el.publishDate.toLocaleDateString()).replace(/\//g, "-");
                 }
             }
- 
+
             that.$ajax({
                 method: 'post',
                 url: url,
@@ -282,9 +399,9 @@ export default {
             }).then(function(results) {
                 that.clearData(that.newListData);
             })
- 
+
         },
- 
+
         // 新增计划保存 btn-save
         saveList() {
             this.handleTableData("01", "plan/addPlan");
@@ -292,16 +409,16 @@ export default {
         publishList() {
             this.handleTableData("02", "plan/addPlan");
         },
- 
+
         saveModifyList() {
             this.handleTableData("01", "plan/updatePlan");
         },
- 
- 
+
+
         publishModifyList() {
             this.handleTableData("02", "plan/updatePlan");
         },
- 
+
         //分页
         handleSizeChange(val) {
             var that = this;
@@ -311,20 +428,20 @@ export default {
             var that = this;
             that.pageList.pageNum = val;
         },
- 
+
         //查询
         search() {
             var that = this;
             var _searchData = that.formData;
             _searchData.pageSize = '10';
             _searchData.pageNum = '1';
- 
+
             for (var key in _searchData) {
                 if (typeof _searchData[key] === "object") {
                     _searchData[key] = (_searchData[key].toLocaleDateString()).replace(/\//g, "-");
                 }
             }
- 
+
             that.$ajax.get('plan/loadTable', {
                 params: _searchData
             }).then(function(response) {
@@ -334,7 +451,7 @@ export default {
                 console.log(err);
             });
         },
- 
+
         //新增页面客户名称
         addGuestInfo() {
             var that = this;
@@ -342,7 +459,7 @@ export default {
                 that.guestInfo = res.data.data.dataList;
             })
         },
- 
+
         // 修改模态框
         openmodify(ids) {
             var that = this;
@@ -370,10 +487,23 @@ export default {
                 that.ModifyFormData = res.data.data.data;
                 that.newListData = that.ModifyFormData.planDetailList;
             })
+        },
+
+        //详情
+        detailplan(id) {
+            var that = this;
+            that.$ajax.get('plan/detailPlan', {
+                params: {
+                    planId: id
+                }
+            }).then(function(res) {
+                console.log(res.data.data.data);
+                console.log(res.data.data.dataList);
+            })
         }
     },
 
     mounted() {
-       this.getData();
+        this.getData();
     }
 }

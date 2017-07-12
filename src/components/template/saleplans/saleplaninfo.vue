@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="24">
                 <div class="content-title">
-                    <span>销售管理-客户信息管理</span>
+                    <span>销售计划-计划详情</span>
                 </div>
                 <div class="content-search">
                     <el-row>
@@ -12,12 +12,12 @@
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="计划编号:">
-                                            <el-input placeholder="" ></el-input>
+                                            <span v-html='infoform.planNo'></span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="计划生成时间：">
-                                            <el-input placeholder="" ></el-input>
+                                            <span v-html='infoform.createTime'></span>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -25,17 +25,17 @@
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="计划状态：" >
-                                            <el-input placeholder="" ></el-input>
+                                            <span v-html='infoform.operation'></span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="计划下发时间：" >
-                                            <el-input placeholder="" ></el-input>
+                                            <span v-html='infoform.operTime'></span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="计划下发人：">
-                                            <el-input placeholder="" ></el-input>
+                                            <span v-html='infoform.operUser'></span>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -48,40 +48,52 @@
                 <div class="list-table">
                     <el-table  style="width: 100%">
                         <el-table-column
-                                label="计划类型">
+                            prop="planType"
+                            label="计划类型">
                         </el-table-column>
                         <el-table-column
-                                label="客户名称">
+                            prop="custName"
+                            label="客户名称">
                         </el-table-column>
                         <el-table-column
-                                label="订单编号">
+                            prop="orderNo"
+                            label="订单编号">
                         </el-table-column>
                         <el-table-column
-                                label="订单日期">
+                            prop="orderDate"
+                            label="订单日期">
                         </el-table-column>
                         <el-table-column
-                                label="产品型号">
+                            prop="itemNo"
+                            label="产品型号">
                         </el-table-column>
                         <el-table-column
-                                label="产品名称">
+                            prop="itemName" 
+                            label="产品名称">
                         </el-table-column>
                         <el-table-column
-                                label="数量">
+                            prop="quantity"
+                            label="数量">
                         </el-table-column>
                         <el-table-column
-                                label="单位">
+                            prop="unit"
+                            label="单位">
                         </el-table-column>
                         <el-table-column
-                                label="订单状态">
+                            prop="orderStatus"
+                            label="订单状态">
                         </el-table-column>
                         <el-table-column
-                                label="完成进度">
+                            prop="finishProcess"
+                            label="完成进度">
                         </el-table-column>
                         <el-table-column
-                                label="完成率">
+                            prop="finishrate"
+                            label="完成率">
                         </el-table-column>
                         <el-table-column
-                                label="交货日期">
+                            prop="deliveryDate"
+                            label="交货日期">
                         </el-table-column>
                     </el-table>
                 </div>
@@ -96,6 +108,6 @@
 </template>
 <script>
     export default{
-        name : "saleplaninfo"
+        name : 'saleplaninfo',
     }
 </script>
