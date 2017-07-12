@@ -7,9 +7,11 @@ import index from '../components/index'
 /**
  * @saleplan : 销售计划管理
  * @salersInfo : 客户信息管理
+ * @saleplaninfo : 销售计划详情
  */
 
-import saleplan from '../components/template/saleplan'
+import saleplan from '../components/template/saleplans/salePlans'
+import saleplaninfo from '../components/template/saleplans/saleplaninfo'
 import salersInfo from '../components/template/salersInfo'
 
 Vue.use(Router)
@@ -35,6 +37,10 @@ export default new Router({
                 {
                     path: 'salersInfo',
                     component: salersInfo
+                },
+                {
+                    path: 'saleplaninfo',
+                    component: saleplaninfo
                 }
             ]
         },
