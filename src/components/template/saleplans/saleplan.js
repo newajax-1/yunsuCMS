@@ -16,7 +16,6 @@ export default {
             callback();
         };
         var validateorderNo = (rule, value, callback) => {
-            debugger
             if (value === '') {
                 callback(new Error('请输入订单编号'));
             }
