@@ -162,7 +162,8 @@ export default {
             that.showInfo = [];
             loadData.list.every(function(el) {
                 var flag = el.operation === "01" ? true : false
-                    // 需要在此判断 el 中 是否下发，如果已下发，则show赋值为false,未下发show赋值为true
+
+                // 需要在此判断 el 中 是否下发，如果已下发，则show赋值为false,未下发show赋值为true
                 return that.showInfo.push({ show: flag });
             })
             that.tableData = loadData.list;
@@ -223,13 +224,11 @@ export default {
         // 数据表格 详情Event
         detailPlan(id) {
             var that = this;
-            that.$ajax.get('plan/index?operation=' + id)
-                .then(function(res) {
-                    console.log(res);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
+            that.$ajax.get('plan/index?operation=' + id).then(function(res) {
+                console.log(res);
+            }).catch(function(error) {
+                console.log(error);
+            });
         },
  
         // 新增计划表单保存 btn-save
@@ -237,7 +236,7 @@ export default {
             var that = this;
             var _data = {}
             for (var key in that.newFormData) {
-                _data[key] = that.newFormData[key]
+                _data[key] = that.newFormData[key];
             }
             that.newListData.push(_data);
             that.clearData(that.newFormData);
@@ -271,19 +270,18 @@ export default {
             }
  
             that.$ajax({
-                    method: 'post',
-                    url: url,
-                    transformRequest: [function(data) {　　
-                        data = JSON.stringify(that.newListData);
-                        return data;
-                    }],
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(function(results) {
-                    that.clearData(that.newListData)
-                })
+                method: 'post',
+                url: url,
+                transformRequest: [function(data) {　　
+                    data = JSON.stringify(that.newListData);
+                    return data;
+                }],
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function(results) {
+                that.clearData(that.newListData);
+            })
  
         },
  
@@ -308,12 +306,10 @@ export default {
         handleSizeChange(val) {
             var that = this;
             that.pageList.pageSize = val;
-            // that.loadTable();
         },
         handleCurrentChange(val) {
             var that = this;
             that.pageList.pageNum = val;
-            // that.loadTable();
         },
  
         //查询
@@ -329,50 +325,37 @@ export default {
                 }
             }
  
-            // try{
-            //     _searchData.createTimeStart= (_searchData.createTimeStart.toLocaleDateString()).replace(/\//g,"-");
-            //     _searchData.createTimeEnd= (_searchData.createTimeEnd.toLocaleDateString()).replace(/\//g,"-");
-            //     _searchData.operTimeStart= (_searchData.operTimeStart.toLocaleDateString()).replace(/\//g,"-");
-            //     _searchData.operTimeEnd= (_searchData.operTimeEnd.toLocaleDateString()).replace(/\//g,"-");
-            // }catch(er){
-            //     console.error(er);
-            //     return ;
-            // }
- 
             that.$ajax.get('plan/loadTable', {
-                    params: _searchData
-                })
-                .then(function(response) {
-                    console.log(response);
-                    that.loadTable(response);
-                    that.clearData(that.formData);
-                })
-                .catch(function(err) {
-                    console.log(err);
-                });
+                params: _searchData
+            }).then(function(response) {
+                that.loadTable(response);
+                that.clearData(that.formData);
+            }).catch(function(err) {
+                console.log(err);
+            });
         },
  
         //新增页面客户名称
         addGuestInfo() {
             var that = this;
-            that.$ajax.get('plan/addPlanOnclick')
-                .then(function(res) {
-                    that.guestInfo = res.data.data.dataList;
-                    console.log(that.guestInfo);
-                })
+            that.$ajax.get('plan/addPlanOnclick').then(function(res) {
+                that.guestInfo = res.data.data.dataList;
+            })
         },
  
-        // 
+        // 修改模态框
         openmodify(ids) {
             var that = this;
             that.modifysaleplan = true;
             that.tempID = ids.row.planId;
         },
+
         //重置
         reset() {
             var that = this;
             that.clearData(that.formData);
         },
+
         //修改
         lodeModifyInfo() {
             var that = this;
@@ -381,12 +364,11 @@ export default {
                     planId: that.tempID
                 }
             }).then(function(res) {
-                console.log(res)
+                // 客户列表 res.data.dataList
+                // 客户信息 res.data.data
                 that.ModifyGuestInfo = res.data.data.dataList;
                 that.ModifyFormData = res.data.data.data;
                 that.newListData = that.ModifyFormData.planDetailList;
-                // 客户列表 res.data.dataList
-                // 客户信息 res.data.data
             })
         }
     },
