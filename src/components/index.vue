@@ -23,7 +23,6 @@
             }
         },
         mounted(){
-            // this.hashChange();
         }
     }
 </script>

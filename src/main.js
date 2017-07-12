@@ -14,14 +14,14 @@ import 'font-awesome/css/font-awesome.css'
 
 //axios配置请求根目录
 axios.defaults.baseURL = 'http://192.168.168.66:8080/ybs_mes/'
-    // axios添加给Vue的原型方法
+
+// axios添加给Vue的原型方法
 Vue.prototype.$ajax = axios
 
 // 路由跳转
 Vue.prototype.$goRoute = function(index) {
     this.$router.push(index);
 }
-
 
 // Vue.config.productionTip = false;
 

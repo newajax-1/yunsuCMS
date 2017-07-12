@@ -1,44 +1,44 @@
 <template>
     <div class="left-nav">
-      <el-row class="tac">
-        <el-col :span="3" >
-          <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark"style="border-radius:0;">
-            <el-menu-item v-for="item in link" index="item.index" ><a class="left-item" @click="$goRoute(item.route)">{{item.text}}</a><i class="item.class"></i></el-menu-item>
-          </el-menu>
-        </el-col>
+        <el-row class="tac">
+            <el-col :span="3" >
+                <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark"style="border-radius:0;">
+                    <el-menu-item v-for="item in link" index="item.index" >
+                        <a class="left-item" @click="$goRoute(item.route)">{{item.text}}</a>
+                        <i class="item.class"></i>
+                    </el-menu-item>
+                </el-menu>
+            </el-col>
       </el-row>
     </div>
 </template>
 <script>
-  export default {
-    name:"leftmeau",
-    data() {
-      return {
-        activeIndex: '1',
-        activeIndex2: '1',
-        link:[
-          {
-            text:'销售计划管理',
-            route:'/home/saleplan',
-            index:'1',
-            class:'',
-          },
-          {
-            text:'客户信息管理',
-            route:'/home/salersInfo',
-            index:'2',
-            class:'',
-          },
-        ]
-      };
-    },
-    methods: {
-      handleOpen(key, keyPath) {
-      },
-      handleClose(key, keyPath) {
-      }
+    export default {
+        name:"leftmeau",
+        data() {
+            return {
+                activeIndex: '1',
+                activeIndex2: '1',
+                link:[{
+                    text:'销售计划管理',
+                    route:'/home/saleplan',
+                    index:'1',
+                    class:'',
+                },{
+                    text:'客户信息管理',
+                    route:'/home/salersInfo',
+                    index:'2',
+                    class:'',
+                }]
+            };
+        },
+        methods: {
+            handleOpen(key, keyPath) {
+            },
+            handleClose(key, keyPath) {
+            }
+        }
     }
-  }
 </script>
 <style lang="stylus">
   @media screen and (max-width:1366px)

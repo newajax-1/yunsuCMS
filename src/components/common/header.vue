@@ -1,75 +1,44 @@
 <template>
     <div class="top-nav">
-      <el-row>
-        <el-col :span="24"style=" height: 80px;" class="header">
-          <div class="top-nav-content clearfix">
+        <el-row>
+            <el-col :span="24"style=" height: 80px;" class="header">
+                <div class="top-nav-content clearfix">
 
-            <div class="top-nav-left fl">
-              <h1 class="logo fl"><img :src="img" /></h1>
-              <p class="nav-title fl border-right">管理控制台</p>
-            </div>
+                    <div class="top-nav-left fl">
+                        <h1 class="logo fl"><img :src="img" /></h1>
+                        <p class="nav-title fl border-right">管理控制台</p>
+                    </div>
 
-            <div class="top-nav-right fr">
-              <a href="" class="right-nav-items">
-                <i class="fa fa-bell bell "></i>
-                <span class="num">16</span>
-              </a>
-              <a href="" class="right-nav-items">
-                <span>范小强</span>
-                <span class="work-id">工号：11013</span>
-              </a>
-              <a href="" class="right-nav-items">
-                <span>任务单</span>
-                <span class="num">16</span>
-              </a>
-            </div>
+                    <div class="top-nav-right fr">
+                        <a href="" class="right-nav-items">
+                            <i class="fa fa-bell bell "></i>
+                            <span class="num">16</span>
+                        </a>
+                        <a href="" class="right-nav-items">
+                            <span>范小强</span>
+                            <span class="work-id">工号：11013</span>
+                        </a>
+                        <a href="" class="right-nav-items">
+                            <span>任务单</span>
+                            <span class="num">16</span>
+                        </a>
+                    </div>
 
-            <!--<div class="logo header fl">
-              <img :src="img" />
-            </div>
-
-            <div class="line header fl"></div>
-
-            <div class="page-content header fl">
-              <span>管理控制台</span>
-            </div>-->
-
-            <!--<div class="line header fl"></div>
-
-            <div class="order-list header fr">
-              <span>任务单</span>
-              <i class="num">16</i>
-            </div>
-
-            <div class="line header fr"></div>
-
-            <div class="staff header fr">
-              <span class="staff-name">范小强</span>
-              <span class="staff-num">工号：11013</span>
-            </div>
-
-            <div class="line header fr"></div>
-
-            <div class="message">
-              <i class="fa fa-bell bell fr"></i>
-              <i class="line-num">16</i>
-            </div>
-
-            <div class="line header fr"></div>-->
-          </div>
-        </el-col>
-      </el-row>
+                </div>
+            </el-col>
+        </el-row>
     </div>
 </template>
 <script>
-  export default {
-    name:"header",
-    data() {
-      return {
-        img :require( '../../assets/images/logo.png'),
-      };
+
+    export default {
+        name:"header",
+        data() {
+            return {
+                img :require( '../../assets/images/logo.png'),
+            };
+        }
     }
-  }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
   @media screen and (max-width:1366px)
