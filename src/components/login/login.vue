@@ -126,7 +126,7 @@
                 var that = this;
                 that.$ajax({
                     method: 'post',
-                    url: 'ybs_mes/memberAccount/toLogin',
+                    url: 'memberAccount/toLogin',
                     transformRequest: [function (data) {
                     　　data = JSON.stringify({
                             account:that.ruleForm.username,
@@ -135,7 +135,6 @@
                         });
                         return data;
                     }],
-                    baseURL: 'http://192.168.168.66:8080/',
                     headers: {
                         'Content-Type': 'application/json'
                     }

@@ -118,12 +118,26 @@ export default {
                 orderNo: '',
                 orderDate: '',
                 itemNo: '',
-                productName: '',
-                account: '',
+                itemName: '',
+                quantity: '',
                 pic: 'pic',
-                publishDate: ''
+                deliveryDate: ''
             },
-
+            //修改页面表格数据
+            modifyFormDate: {
+                planType: '',
+                custName: '',
+                orderNo: '',
+                orderDate: '',
+                itemNo: '',
+                itemName: '',
+                quantity: '',
+                unit: '',
+                orderStatus: '',
+                finishProcess: '',
+                finishrate: '',
+                deliveryDate: '',
+            },
             //新增页面表格数据组
             newListData: [],
 
@@ -186,17 +200,17 @@ export default {
                 orderNo: '',
                 orderDate: '',
                 itemNo: '',
-                productName: '',
-                account: '',
-                publishDate: '',
+                itemName: '',
+                quantity: '',
+                deliveryDate: '',
             },
 
             rules: {
                 planType: [
-                    { validator: validateplanType, trigger: 'change' }
+                    { validator: validateplanType, trigger: 'select' }
                 ],
                 custName: [
-                    { validator: validatecustName, trigger: 'blur' }
+                    { validator: validatecustName, trigger: 'select' }
                 ],
                 orderNo: [
                     { validator: validateorderNo, trigger: 'blur' }
@@ -207,13 +221,13 @@ export default {
                 itemNo: [
                     { validator: validateitemNo, trigger: 'blur' }
                 ],
-                productName: [
+                itemName: [
                     { validator: validateproductName, trigger: 'blur' }
                 ],
-                account: [
+                quantity: [
                     { validator: validateaccount, trigger: 'blur' }
                 ],
-                publishDate: [
+                deliveryDate: [
                     { validator: validatepublishDate, trigger: 'blur' }
                 ],
             }
@@ -240,7 +254,9 @@ export default {
                 }
             }
         },
-
+        clearTableData() {
+            this.newListData = [];
+        },
         getEditData(id) {
             var that = this;
             that.$ajax.get('plan/updatePlanOnclick', {
@@ -315,9 +331,10 @@ export default {
         // 数据表格 下发Event
         operationPlan(ids, index) {
             var that = this;
+            console.log(ids);
             that.$ajax({
                     method: 'post',
-                    url: '/plan/operationPlan',
+                    url: 'plan/operationPlan',
                     transformRequest: [function(data) {　　
                         data = JSON.stringify({
                             operationType: "issued",
@@ -352,6 +369,10 @@ export default {
             var that = this;
             var _data = {}
             for (var key in that.ruleForm) {
+                if (!that.ruleForm[key]) {
+                    alert("请完整填写信息");
+                    return
+                }
                 _data[key] = that.ruleForm[key];
             }
             that.newListData.push(_data);
@@ -374,29 +395,38 @@ export default {
             }
             for (i = 0; i < len; i++) {
                 var el = that.newListData[i];
-                el.operation = id;
+                var custNo = el.custName.custNo;
+                el.custNo = custNo;
+                el.custName = el.custName.custName;
 
                 // 1.判断数据是否 Obj 类型
                 // 2.判断新建计划中的日期是否改变，已改变，则重复第一步骤，并同步展示在新建计划表格[newList]
                 // 3.如果保存后清空新建计划表格的话，则忽略第二步骤
                 if (typeof el.orderDate === "object") {
                     el.orderDate = (el.orderDate.toLocaleDateString()).replace(/\//g, "-");
-                    el.publishDate = (el.publishDate.toLocaleDateString()).replace(/\//g, "-");
+                    el.deliveryDate = (el.deliveryDate.toLocaleDateString()).replace(/\//g, "-");
                 }
             }
 
+            var tempObj = {
+                operation: id,
+                planDetailList: that.newListData
+            }
+
+            if (that.tempID) tempObj.planId = that.tempID;
             that.$ajax({
                 method: 'post',
                 url: url,
                 transformRequest: [function(data) {　　
-                    data = JSON.stringify(that.newListData);
+                    data = JSON.stringify(tempObj);
                     return data;
                 }],
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }).then(function(results) {
-                that.clearData(that.newListData);
+                // that.clearData(that.newListData);
+                that.newListData = [];
             })
 
         },
@@ -482,6 +512,7 @@ export default {
             }).then(function(res) {
                 // 客户列表 res.data.dataList
                 // 客户信息 res.data.data
+                console.log(res);
                 that.ModifyGuestInfo = res.data.data.dataList;
                 that.ModifyFormData = res.data.data.data;
                 that.newListData = that.ModifyFormData.planDetailList;
@@ -496,13 +527,19 @@ export default {
                     planId: id
                 }
             }).then(function(res) {
-                console.log(res.data.data.data);
-                console.log(res.data.data.dataList);
+                that.$goRoute("saleplaninfo")
+                that.EventData = {
+                    data: res.data.data.data,
+                    list: res.data.data.dataList
+                }
             })
         }
     },
 
     mounted() {
         this.getData();
+    },
+    destroyed() {
+        EventBus.$emit("setInfoData", this.EventData);
     }
 }

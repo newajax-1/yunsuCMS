@@ -31,7 +31,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="产品名称：" >
-                                <el-input v-model='newFormData.productName'></el-input>
+                                <el-input v-model='newFormData.itemName'></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -163,13 +163,13 @@
 
             <el-table-column
                 width="120"
-                prop="productName"
+                prop="itemName"
                 label="产品名称">
                 <template scope="scope">
                     <el-input
                         type="text" 
                         :disabled="editFlag"
-                        v-model="scope.row.productName">
+                        v-model="scope.row.itemName">
                     </el-input>
                 </template>
             </el-table-column>

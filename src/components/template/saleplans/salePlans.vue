@@ -122,30 +122,31 @@
             size="tiny"
             title="新增客户信息"
             custom-class="pub-dialog"
-            @close="clearData()"
+            @close="clearData(ruleForm)"
             @open="addGuestInfo()"
             :visible.sync="newCustom">
             <div>
                 <el-row>
                     <el-col :span="24">
                         <div class="pub-mask-wrap">
-                            <!-- 校验规则必须写在 el-form 标签中 -- >
+
+                            <!-- 校验规则必须写在 el-form 标签中 -->
                             <el-form :inline="true" class="" 
                                 :model="ruleForm" 
                                 :rules="rules"
                                 ref="ruleForm">
                                 <el-row :gutter="24">
                                     <el-col :span="8">
+                                    
                                         <!-- 校验提示必须加上 prop 属性 -->
                                         <el-form-item label="客户名称: " prop="custName">
                                             <el-select placeholder="选择客户" v-model="ruleForm.custName" >
-                                                <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
+                                                <el-option v-for="item in guestInfo" :label="item.custName" :value="item"></el-option>
                                             </el-select>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
-                                         <el-col :span="8">
                                     </el-col>
-                                    </el-col>
+
                                     <el-col :span="8">
                                         <el-form-item label='订单编号：' prop="orderNo">
                                             <el-input  v-model='ruleForm.orderNo'></el-input>
@@ -167,8 +168,8 @@
 
                                 <el-row :gutter="24">
                                     <el-col :span="8">
-                                        <el-form-item label="产品名称：" prop="productName">
-                                            <el-input v-model='ruleForm.productName'></el-input>
+                                        <el-form-item label="产品名称：" prop="itemName">
+                                            <el-input v-model='ruleForm.itemName'></el-input>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
                                     </el-col>
@@ -182,17 +183,17 @@
 
                                 <el-row :gutter="24">
                                     <el-col :span="8">
-                                        <el-form-item label="需求数量：" prop="account">
-                                            <el-input v-model='ruleForm.account'></el-input>
+                                        <el-form-item label="需求数量：" prop="quantity">
+                                            <el-input v-model='ruleForm.quantity'></el-input>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label="交货日期：" prop="publishDate">
+                                        <el-form-item label="交货日期：" prop="deliveryDate">
                                             <el-date-picker
                                                 type="date"
                                                 placeholder="选择日期"
-                                                v-model='ruleForm.publishDate'
+                                                v-model='ruleForm.deliveryDate'
                                                 :picker-options="pickerOptions">
                                             </el-date-picker>
                                             <span class="must-tips">*</span>
@@ -306,26 +307,26 @@
 
                     <el-table-column
                         width="120"
-                        prop="productName"
+                        prop="itemName"
                         label="产品名称">
                         <template scope="scope">
                             <el-input
                                 type="text" 
                                 :disabled="editFlag"
-                                v-model="scope.row.productName">
+                                v-model="scope.row.itemName">
                             </el-input>
                         </template>
                     </el-table-column>
 
                     <el-table-column
                         width="120"
-                        prop="account"
+                        prop="quantity"
                         label="数量">
                         <template scope="scope">
                             <el-input 
                                 type="text"
                                 :disabled="editFlag"
-                                v-model="scope.row.account" >
+                                v-model="scope.row.quantity" >
                             </el-input>
                         </template>
                     </el-table-column>
@@ -344,7 +345,7 @@
 
                     <el-table-column
                         width="160"
-                        prop="publishDate"
+                        prop="deliveryDate"
                         label="交货日期">
                         <template scope="scope">
                             <el-date-picker 
@@ -352,7 +353,7 @@
                                 style="width: 100%;"
                                 placeholder="选择日期" 
                                 :disabled="editFlag"
-                                v-model="scope.row.publishDate"></el-date-picker>
+                                v-model="scope.row.deliveryDate"></el-date-picker>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -367,87 +368,90 @@
             title="修改客户信息"
             custom-class="pub-dialog"
             @open = "lodeModifyInfo()"
+            @close = "clearTableData()"
             :visible.sync="modifysaleplan">
             <div>
                 <el-row>
                     <el-col :span="24">
-                        <el-form :inline="true" class="">
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="客户名称:">
-                                        <el-select placeholder="选择客户" v-model="newFormData.custName" >
-                                            <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label='订单编号：'>
-                                        <el-input  v-model='newFormData.orderNo'></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label="订单日期：">
-                                        <el-date-picker
-                                            type="date"
-                                            placeholder="选择日期"
-                                            v-model="newFormData.orderDate"
-                                            :picker-options="pickerOptions">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+                        <div class="pub-mask-wrap">   
+                            <el-form :inline="true" class="">
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label="客户名称:">
+                                            <el-select placeholder="选择客户" v-model="newFormData.custName" >
+                                                <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label='订单编号：'>
+                                            <el-input  v-model='newFormData.orderNo'></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="订单日期：">
+                                            <el-date-picker
+                                                type="date"
+                                                placeholder="选择日期"
+                                                v-model="newFormData.orderDate"
+                                                :picker-options="pickerOptions">
+                                            </el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
 
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="产品名称：" >
-                                        <el-input v-model='newFormData.productName'></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label="产品编号：" >
-                                        <el-input v-model='newFormData.itemNo'></el-input>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label="产品名称：" >
+                                            <el-input v-model='newFormData.itemName'></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="产品编号：" >
+                                            <el-input v-model='newFormData.itemNo'></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
 
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="需求数量：">
-                                        <el-input v-model='newFormData.account'></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label="交货日期：">
-                                        <el-date-picker
-                                            type="date"
-                                            placeholder="选择日期"
-                                            v-model='newFormData.publishDate'
-                                            :picker-options="pickerOptions">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label="需求数量：">
+                                            <el-input v-model='newFormData.quantity'></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="交货日期：">
+                                            <el-date-picker
+                                                type="date"
+                                                placeholder="选择日期"
+                                                v-model='newFormData.deliveryDate'
+                                                :picker-options="pickerOptions">
+                                            </el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
 
-                            <el-row>
-                                <el-col :span="8">
-                                    <el-form-item label="计划类型：">
-                                        <el-select placeholder="选择客户" v-model='newFormData.planType'>
-                                            <el-option label="确认" value="01"></el-option>
-                                            <el-option label="预测" value="02"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label="计划类型：">
+                                            <el-select placeholder="选择客户" v-model='newFormData.planType'>
+                                                <el-option label="确认" value="01"></el-option>
+                                                <el-option label="预测" value="02"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
 
-                            <el-row>
-                                <el-col >
-                                    <div class="mid-btn">
-                                        <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
-                                    </div>
-                                </el-col>
-                            </el-row>
+                                <el-row>
+                                    <el-col >
+                                        <div class="mid-btn">
+                                            <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
+                                        </div>
+                                    </el-col>
+                                </el-row>
 
-                        </el-form>
+                            </el-form>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -458,7 +462,7 @@
                     <el-button class="btn-save btn" @click="saveModifyList()">保 存</el-button>
                     <el-button class="btn-publish btn" @click="publishModifyList()" >下 发</el-button>
                 </div>
-                <div class="fr">共有<span class="detailMsg">条下发计划</span></div>
+                <div class="fr">共有<span class="detailMsg" ></span>条下发计划</div>
             </div>
 
             <!-- 修改计划 可编辑table start-->
@@ -487,7 +491,7 @@
                             <el-select 
                                 :disabled="editFlag"
                                 v-model="scope.row.custName">
-                                <el-option value=""></el-option>
+                                <el-option v-for = "item in ModifyGuestInfo" :label="item.custName" :value="item.custNo"></el-option>
                             </el-select>
                         </template>
                     </el-table-column>
@@ -532,26 +536,26 @@
 
                     <el-table-column
                         width="120"
-                        prop="productName"
+                        prop="itemName"
                         label="产品名称">
                         <template scope="scope">
                             <el-input
                                 type="text" 
                                 :disabled="editFlag"
-                                v-model="scope.row.productName">
+                                v-model="scope.row.itemName">
                             </el-input>
                         </template>
                     </el-table-column>
 
                     <el-table-column
                         width="120"
-                        prop="account"
+                        prop="quantity"
                         label="数量">
                         <template scope="scope">
                             <el-input 
                                 type="text"
                                 :disabled="editFlag"
-                                v-model="scope.row.account" >
+                                v-model="scope.row.quantity" >
                             </el-input>
                         </template>
                     </el-table-column>
@@ -570,7 +574,7 @@
 
                     <el-table-column
                         width="160"
-                        prop="publishDate"
+                        prop="deliveryDate"
                         label="交货日期">
                         <template scope="scope">
                             <el-date-picker 
@@ -578,7 +582,7 @@
                                 style="width: 100%;"
                                 placeholder="选择日期" 
                                 :disabled="editFlag"
-                                v-model="scope.row.publishDate"></el-date-picker>
+                                v-model="scope.row.deliveryDate"></el-date-picker>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -593,9 +597,6 @@
 <script src="./saleplan.js">
     /**
      * doing
-     *      数据表格修改 edit （以新增为模板，保存和下发功能分别有新接口）
-     *      数据表格详情 {详情页面}（不是以模态框，而是组件形式展现，所以静态页面写了，但是路由没搞好了，看不到，所以没有继续些功能）
-     *      校验
      * done
      *      数据表格查询 search （报错没找出原因）
      *      新建计划 表格可编辑
@@ -608,6 +609,9 @@
      *      dialog弹出时，请求获取 客户名称 与 计划类型
      *      分页
      *      重置按钮
+     *      数据表格修改 edit （以新增为模板，保存和下发功能分别有新接口）
+     *      数据表格详情 {详情页面}
+     *      校验
      */  
 </script>
 

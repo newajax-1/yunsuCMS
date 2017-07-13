@@ -46,7 +46,8 @@
             </el-col>
             <el-col :span="24">
                 <div class="list-table">
-                    <el-table  style="width: 100%">
+                    <el-table  style="width: 100%"
+                    :data = "infoTableList">
                         <el-table-column
                             prop="planType"
                             label="计划类型">
@@ -100,7 +101,7 @@
             </el-col>
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="list-buttons" ><i class="fa fa-repeat"></i> 返回</el-button>
+                    <el-button class="list-buttons" @click="$goRoute('saleplan')"><i class="fa fa-repeat" ></i> 返回</el-button>
                 </el-col>
             </div>
         </el-row>
@@ -109,5 +110,29 @@
 <script>
     export default{
         name : 'saleplaninfo',
+        data(){
+            return {
+                infoform : {},
+                infoTableList : []
+            }
+        },
+        created() {
+            var that = this;
+            EventBus.$on("setInfoData",function(data){
+                that.infoform = data.data;
+                that.infoTableList = data.list;
+
+                that.infoTableList.every(function(el){
+                    return el.finishrate = (el.finishProcess/el.quantity) + "%"
+                })
+            })
+        },
+        methods : {
+            compute(){
+            }
+        },
+        mounted() {
+            this.compute();
+        }
     }
 </script>

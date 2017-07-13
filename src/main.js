@@ -18,6 +18,10 @@ axios.defaults.baseURL = 'http://192.168.168.66:8080/ybs_mes/'
 // axios添加给Vue的原型方法
 Vue.prototype.$ajax = axios
 
+
+// 非父子组件通信
+var EventBus = window.EventBus = new Vue();
+
 // 路由跳转
 Vue.prototype.$goRoute = function(index) {
     this.$router.push(index);
