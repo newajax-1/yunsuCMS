@@ -17,7 +17,7 @@
                             <el-input placeholder="输入联系人" v-model='info.contacts' prop="contacts"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable" class="search-btn">查询</el-button>
+                            <el-button @click="loadTable(1)" class="search-btn">查询</el-button>
                         </el-form-item>
                         <el-form-item>
                             <el-button @click='reset' class="reset-btn">重置</el-button>
@@ -120,7 +120,7 @@
                         <el-row :gutter="24">
                             <el-col :span="8">
                                 <el-form-item label="客户类型：">
-                                    <el-select placeholder="选择客户类型" v-model="sel_val">
+                                    <el-select :placeholder="selectOp[0] && selectOp[0].dicName" v-model="sel_val">
                                         <el-option
                                                 v-for="item in selectOp"
                                                 :label="item.dicName"
@@ -208,7 +208,14 @@
                         <el-row :gutter="24">
                             <el-col :span="8">
                                 <el-form-item label="客户类型：">
-                                    <p v-html="editTable.custType"></p>
+                                   <input type="hidden" v-html='editTable.custType' id="custType">
+                                    <el-select v-model="editsel_val"  :placeholder="editTable.custValue" >
+                                        <el-option
+                                                v-for="item in editSelectOp"
+                                                :label="item.dicName"
+                                                :value="item.dicValue">
+                                        </el-option>
+                                    </el-select>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
@@ -337,6 +344,24 @@
                 <el-button class="btn-close btn" @click="customDetail = false">关 闭</el-button>
             </span>
         </el-dialog>
+        
+        <!-- 删除提示信息 -->
+        <el-dialog
+          title="提示"
+          :visible.sync="dialogVisible" 
+          size="tiny">
+              <span v-text="deleteMsg">
+              	
+              </span>
+              <span slot="footer" class="dialog-footer">
+              	   <el-button type="primary" @click="deleteObject()">确 定</el-button>
+                  <el-button @click="dialogVisible = false">
+                  	<input type="hidden" v-html='tipMsg' id="deleteId">
+                  	取 消
+                  </el-button>
+                 
+              </span>
+       </el-dialog> 
     </div>
 </template>
 
@@ -346,8 +371,12 @@
   export default {
     name: "list-table",
     data () {
+      //所有的数据v-html设置的值都得在return先设置一下  这样就可以直接通过that.获取或者设值
       return {
         // 设置城市三级联动参数
+        dialogVisible: false,
+        deleteMsg:'',
+        tipMsg:'',
         data: citydata,
         pro: "",
         city: "",
@@ -405,6 +434,8 @@
         // 新增数据
         sel_val: '',
         selectOp: [],
+        editsel_val: '',
+        editSelectOp: [],
         addInfo: {
           selValue: '',
           selName: '',
@@ -415,7 +446,7 @@
 
         // 修改数据存放
         editTable: {
-          custType:'',
+          custValue:'',
           memberType:'',
           custId:'',
           custName:'',
@@ -424,29 +455,54 @@
           province:'',
           city:'',
           area:'',
-          address:''
+          address:'',
+          custType:''
         }
       }
     },
     methods: {
-
       // 单条删除
       deletetab(id){
-        var that = this;
-        that.$ajax({
-          method: 'get',
-          url: 'ybs_mes/cust/deleteById?id=' + id,
-          baseURL: 'http://192.168.168.66:8080/',
-        }).then(function (data) {
-          if(data.data.success){
-        	  alert("删除成功");
-        	  that.loadTable();
-          }else{
-        	  alert(data.data.tipMsg);
-          }
-        })
+         var that = this;
+         that.deleteMsg="你确定要删除该条数据？";
+         that.tipMsg=id;
+         that.dialogVisible=true;
       },
-
+	   deleteObject(){
+    	  var that=this;
+    	  var id=that.tipMsg;
+    	  if(id.indexOf(",")!= -1){
+    		  that.$ajax({
+    	          method: 'get',
+    	          url: '/cust/deleteByIds?ids=' + id
+    	          /* baseURL: 'http://192.168.168.219:8080/' */
+    	        }).then(function (data) {
+    	        	if(data.data.success){
+    	          	  alert("删除成功");
+    	          	  that.dialogVisible = false
+    	          	  that.loadTable(0);
+    	            }else{
+    	          	 alert("删除失败");
+    	          	 that.dialogVisible = false
+    	            }
+    	        })
+    	  }else{
+    		  that.$ajax({
+                  method: 'get',
+                  url: '/cust/deleteById?id=' + id
+                 /*  baseURL: 'http://192.168.168.219:8080/', */
+                }).then(function (data) {
+                  if(data.data.success){
+                	  alert("删除成功");
+                	  that.dialogVisible=false;
+                	  that.loadTable(0);
+                  }else{
+                	  alert("删除失败");
+                	  that.dialogVisible=false;
+                  }
+                }) 
+    	  }
+      },
       // 批量删除
       batchDelete() {
         var that = this;
@@ -454,18 +510,9 @@
           alert("请选择要删除的记录");
           return;
         }
-        that.$ajax({
-          method: 'get',
-          url: 'ybs_mes/cust/deleteByIds?ids=' + that.batch_ids,
-          baseURL: 'http://192.168.168.66:8080/'
-        }).then(function (data) {
-        	if(data.data.success){
-          	  alert("删除成功");
-          	  that.loadTable();
-            }else{
-          	  alert(data.data.tipMsg);
-            }
-        })
+        that.deleteMsg="你确定要删除这些数据？";
+        that.tipMsg=that.batch_ids;
+        that.dialogVisible=true;
       },
 
       // 重置
@@ -493,22 +540,27 @@
       },
 
       //加载表格
-      loadTable(){
+      loadTable(id){
         var that = this;
+        var pageNum=0;
+        if(id==1){
+        	pageNum=1;
+        }else{
+        	pageNum=that.page.pageNum;
+        }
         that.$ajax({
           method: 'post',
-          url: 'ybs_mes/cust/queryList',
+          url: '/cust/queryList',
           transformRequest: [function (data) {
             data = JSON.stringify({
-              pageNum: 1,
+              pageNum: pageNum,
               pageSize: that.page.pageSize,
               custNo: that.info.custNo,
-              custName: that.info.custName,
-              contacts: that.info.contacts
+              custName: $.trim(that.info.custName),
+              contacts: $.trim(that.info.contacts)
             });
             return data;
           }],
-          baseURL: 'http://192.168.168.66:8080/',
           headers: {
             'Content-Type': 'application/json'
           }
@@ -529,7 +581,7 @@
         that.info.custName= '';
         that.info.custNo= '';
         that.info.contacts= '';
-        loadTable();
+        loadTable(1);
       },
 
       // 新增客户信息
@@ -546,11 +598,10 @@
         that.addInfo.address='';
         that.$ajax({
           method: 'get',
-          url: 'ybs_mes/cust/getSelects?key=cust_type',
-          baseURL: 'http://192.168.168.66:8080/'
+          url: 'cust/getSelects?key=cust_type',
         }).then(function (data) {
           that.selectOp = data.data.data.dicData;
-          that.loadTable();
+          that.loadTable(0);
         });
       },
 
@@ -559,9 +610,15 @@
         var that = this;
         that.editCustom = true;
         that.$ajax({
+            method: 'get',
+            url: 'cust/getSelects?key=cust_type',
+          }).then(function (data) {
+            that.editSelectOp = data.data.data.dicData;
+            that.loadTable(0);
+          });
+        that.$ajax({
           method: 'get',
-          url: 'ybs_mes/cust/getObject?id='+ ids,
-          baseURL: 'http://192.168.168.66:8080/',
+          url: 'cust/getObject?id='+ ids,
           headers: {
             'Content-Type': 'application/json'
           }
@@ -595,93 +652,159 @@
 		} else {
 			s_area = that.county[that.f.cc].name;
 		}
-        that.$ajax({
-            method: 'post',
-            url: 'ybs_mes/cust/save',
-            transformRequest: [function (data) {
-              //console.log(s_province + "," + s_city + "," + s_area);
-              data = JSON.stringify({
-	              custId : that.editTable.custId,
-	              memberType: that.editTable.memberType,
-	              custName : that.editTable.custName,
-	              contacts : that.editTable.contacts,
-	              phone : that.editTable.phone,
-	              province : s_province,
-	              city : s_city, 
-	              area : s_area,
-	              address : that.editTable.address
-              });
-            return data;
-          }],
-          baseURL: 'http://192.168.168.66:8080/',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then(function(results){
-            that.loadTable();
-            that.editCustom = false;
-            that.sel_val = '';
-            that.addInfo = '';
-            that.f.p = '';
-            that.f.c = '';
-            that.f.cc = '';
-          })
+		var custType=that.editsel_val=="" ? that.editTable.custType:that.editsel_val;
+		console.info(custType);
+		 if($.trim(custType)=="" || $.trim(that.editTable.custName) == "" || $.trim(that.editTable.contacts) == "" 
+     		||$.trim(that.editTable.phone)==""||s_province==""
+     		||s_city==""||s_area==""
+     		||$.trim(that.editTable.address)==""){
+     			alert("请将信息填写完整");
+     			return;
+	     }else if(!/^1[34578]\d{9}$/.test($.trim(that.editTable.phone))){
+	     		alert("手机格式错误");
+	     		return;
+	     }else{
+		        that.$ajax({
+		            method: 'post',
+		            url: '/cust/save',
+		            transformRequest: [function (data) {
+		              //console.log(s_province + "," + s_city + "," + s_area);
+		              data = JSON.stringify({
+		            	  custType : custType ,
+			              custId : $.trim(that.editTable.custId),
+			              memberType: $.trim(that.editTable.memberType),
+			              custName : $.trim(that.editTable.custName),
+			              contacts : $.trim(that.editTable.contacts),
+			              phone : $.trim(that.editTable.phone),
+			              province : s_province,
+			              city : s_city, 
+			              area : s_area,
+			              address : $.trim(that.editTable.address)
+		              });
+		              console.info(data);
+		            return data;
+		          }],
+		         /*  baseURL: 'http://192.168.168.219:8080/', */
+		          headers: {
+		            'Content-Type': 'application/json'
+		          }
+		        })
+		          .then(function(results){
+		        	if(results.data.success){
+			        	that.loadTable(0);
+			            that.editCustom = false;
+			            that.sel_val = '';
+			            that.addInfo = '';
+			            that.f.p = '';
+			            that.f.c = '';
+			            that.f.cc = '';
+		        	}else {
+		        		if(results.data.tipMsg.indexOf("重复")!=-1){
+      						alert("用户信息重复");
+      						that.editCustom = true;
+	      				}else{
+	      					that.editCustom = false;
+	          	            that.loadTable(0);
+	      				}
+		        	}
+		          })
+	     	}
       },
 
 
       // 保存提交客户信息
       addNewCustom(){
         var that = this;
-       
-        if(that.addInfo.selNam == ''|| that.sel_val == '' || that.addInfo.selContact == '' 
-        		||that.addInfo.selPhone==''||that.pro[that.f.p].name==''
-        		||that.city[that.f.c].name==''||that.county[that.f.cc].name==''
-        		||that.addInfo.address==''
-        		){
+        var custType =that.sel_val == "" ? that.selectOp[0].dicValue : that.sel_val;
+        var flag1=false,flag2=false,flag3=false;
+        if(typeof(that.f.c)=="string"){
+        	if(that.f.c==""){
+        		flag1=true;
+        	}
+        }
+        if(typeof(that.f.c)=="number"){
+        	if(that.f.c<0){
+        		flag1=true;
+        	}
+        }
+        if(typeof(that.f.cc)=="string"){
+        	if(that.f.cc==""){
+        		flag2=true;
+        	}
+        }
+        if(typeof(that.f.cc)=="number"){
+        	if(that.f.cc<0){
+        		flag2=true;
+        	}
+        }
+        if(typeof(that.f.p)=="string"){
+        	if(that.f.p==""){
+        		flag3=true;
+        	}
+        }
+        if(typeof(that.f.p)=="number"){
+        	if(that.f.cc<0){
+        		flag3=true;
+        	}
+        }
+        if($.trim(that.addInfo.selName) == ""|| custType == "" || $.trim(that.addInfo.selContact) == "" 
+        		||$.trim(that.addInfo.selPhone)==""||flag3
+        		||flag1||flag2
+        		||$.trim(that.addInfo.address)==""){
         	alert("请将信息填写完整");
+        	return;
         }else{
-        	 that.newCustom = false;
-        	that.$ajax({
-                method: 'post',
-                url: 'ybs_mes/cust/save',
-                transformRequest: [function (data) {
-                  data = JSON.stringify({
-                    custType : that.sel_val,
-                    custName  : that.addInfo.selName,
-                    contacts   : that.addInfo.selContact,
-                    phone  : that.addInfo.selPhone,
-                    province: that.pro[that.f.p].name,
-                    city: that.city[that.f.c].name,
-                    area: that.county[that.f.cc].name,
-                    address : that.addInfo.address
-                  });
-                  return data;
-                }],
-                baseURL: 'http://192.168.168.66:8080/',
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              })
-                .then(function (data) {
-      			if(data.data.success){
-      				that.editCustom = false;
-      	            that.loadTable();
-      	            that.sel_val = '';
-      	            that.addInfo.selName = '';
-      	            that.addInfo.selContact = '';
-      	            that.addInfo.selPhone = '';
-//      	            that.addInfo.address = '';
-      	            that.f.p = '';
-      	            that.f.c = '';
-      	            that.f.cc = ''
-      			}else{
-      				alert(data.data.tipMsg);
-      				that.editCustom = false;
-      	            that.loadTable();
-      			}
-              	
-                })
+        	if(!/^1[34578]\d{9}$/.test($.trim(that.addInfo.selPhone))){
+        		alert("手机格式错误");
+        		return;
+        	}else{
+        		that.newCustom = false;
+            	that.$ajax({
+                    method: 'post',
+                    url: '/cust/save',
+                    transformRequest: [function (data) {
+                      data = JSON.stringify({
+                    	custType : custType,
+                        custName  : $.trim(that.addInfo.selName),
+                        contacts   : $.trim(that.addInfo.selContact),
+                        phone  : $.trim(that.addInfo.selPhone),
+                        province: that.pro[that.f.p].name,
+                        city: that.city[that.f.c].name,
+                        area: that.county[that.f.cc].name,
+                        address : $.trim(that.addInfo.address)
+                      });
+                      return data;
+                    }],
+                    /* baseURL: 'http://192.168.168.219:8080/', */
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  })
+                    .then(function (data) {
+          			if(data.data.success){
+          				that.editCustom = false;
+          	            that.loadTable(1);
+          	            that.sel_val = '';
+          	            that.addInfo.selName = '';
+          	            that.addInfo.selContact = '';
+          	            that.addInfo.selPhone = '';
+//          	            that.addInfo.address = '';
+          	            that.f.p = '';
+          	            that.f.c = '';
+          	            that.f.cc = ''
+          			}else{
+          				if(data.data.tipMsg.indexOf("重复")!=-1){
+          					alert("用户信息重复");
+          					that.newCustom = true;
+          				}else{
+          					that.newCustom = false;
+              	            that.loadTable(0);
+          				}
+          				
+          			}
+                  	
+                    })
+        	}
         }
         
       },
@@ -696,12 +819,12 @@
       handleSizeChange(val) {
         var that = this;
         that.page.pageSize = val;
-        that.loadTable();
+        that.loadTable(0);
       },
       handleCurrentChange(val) {
         var that = this;
         that.page.pageNum = val;
-        that.loadTable();
+        that.loadTable(0);
       },
 
       // 城市三级联动
@@ -730,7 +853,7 @@
     },
     mounted(){
       //当组件模板挂载时数据显示到上面去。
-      this.loadTable();
+      this.loadTable(0);
     },
     created: function () {
       this.pro = this.data;

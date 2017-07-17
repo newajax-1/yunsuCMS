@@ -14,6 +14,10 @@ import saleplan from '../components/template/saleplans/salePlans'
 import saleplaninfo from '../components/template/saleplans/saleplaninfo'
 import salersInfo from '../components/template/salersInfo'
 
+import prodPlansInfo from '../components/template/productionplans/prodPlansInfo'
+import weekProdPlans from '../components/template/productionplans/weekProdPlans'
+import schedulingPlans from '../components/template/productionplans/schedulingPlans'
+
 Vue.use(Router)
 
 export default new Router({
@@ -41,6 +45,18 @@ export default new Router({
                 {
                     path: 'saleplaninfo',
                     component: saleplaninfo
+                },
+                {
+                    path: 'prodplansinfo',
+                    component: prodPlansInfo
+                },
+                {
+                    path: 'weekprodplans',
+                    component: weekProdPlans
+                },
+                {
+                    path: 'schedulingplans',
+                    component: schedulingPlans
                 }
             ]
         },
