@@ -22,4 +22,61 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 
 ##
 
-查询，详情，修改，新增的bug还没有修复
+```html
+ src
+  ├─ router   [ 全局路由配置 ]
+  │
+  ├─ assets   [ 静态资源文件夹 ]
+  │    │
+  │    └─ js  [ js文件 ]
+  │    │   │
+  │    │   └─ lib [ js插件 ]
+  │    │   │
+  │    │   └─ scripts [ 单页JS ]
+  │    │        │
+  │    │        └─ common/
+  │    │        │
+  │    │        └─ index.js
+  │    │
+  │    └─ css/ 
+  │    │   │                       
+  │    │   └─ styles.styl/  
+  │    │
+  │    └─ images/
+  │
+  └─ components/   [ 组件文件夹 ]
+        │
+        └─ common/  [ 公共组件 ]
+        │   │
+        │   └─ header.vue/
+        │   │
+        │   └─ footer.vue/
+        │   │
+        │   └─ left-menu.vue/
+        │
+        └─ single/    [ 单页]
+                │
+                └─ index/
+                │  │
+                │  └─ index.vue 
+                │  │
+                │  └─ index.js 
+                │
+                └─ login/
+                │  │
+                │  └─ login.vue 
+                │  │
+                │  └─ login.js  
+                │
+                └─ sale-plan/
+                │  │
+                │  └─ sale-plan.vue 
+                │  │
+                │  └─ sale-plan.js 
+                │
+                └─ saler-info/
+                │  │
+                │  └─ saler-info.vue 
+                │  │
+                │  └─ saler-info.js 
+```
