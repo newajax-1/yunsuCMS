@@ -4,7 +4,7 @@
             <!-- 销售管理 start -->
             <el-col :span="24">
                 <div class="content-title">
-                    <span>销售管理-业务订单-确认的计划</span>
+                    <span>销售计划管理</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">
@@ -38,10 +38,10 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click='search()' class="search-btn">查询</el-button>
+                            <el-button @click='search()' class="btn btn-close">查询</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click='' class="reset-btn">重置</el-button>
+                            <el-button @click='reset()' class="btn btn-reset">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -51,7 +51,7 @@
             <!-- 刷新 or 新建 start -->
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="list-buttons">
+                    <el-button class="list-buttons" @click="getData()">
                         <i class="fa fa-repeat"></i> 刷新
                     </el-button>
                     <el-button class="list-buttons" @click="newCustom = true">
@@ -72,10 +72,9 @@
                 <div class="list-table">
                     <el-table
                         style="width: 100% "
-                        :data="tableData"
-                        @selection-change="handleSelectionChange">
-                        <el-table-column prop="planNo" label="计划编号"></el-table-column>
-                        <el-table-column prop="createTime" label="生产时间"></el-table-column>
+                        :data="tableData">
+                        <el-table-column prop="planNo" label="销售计划编号"></el-table-column>
+                        <el-table-column prop="createTime" label="计划生产时间"></el-table-column>
                         <el-table-column prop="operTime" label="下发时间"></el-table-column>
                         <el-table-column prop="operUser" label="下发人"></el-table-column>
                         <el-table-column prop="operation" label="下发状态"></el-table-column>
@@ -91,7 +90,7 @@
                                     v-show = "showInfo[scope.$index].show"
                                     type="text"
                                     size="small"
-                                    @click="operationPlan(scope.row.planId,scope.$index)">下发</el-button>
+                                    @click="tipsOperationPlan(scope.row.planId,scope.$index)">下发</el-button>
                                 <el-button 
                                     type="text"
                                     size="small"
@@ -119,10 +118,10 @@
 
         <!--新增弹框 start-->
         <el-dialog
-            size="tiny"
-            title="新增客户信息"
+            size="large"
+            title="新增计划"
             custom-class="pub-dialog"
-            @close="clearData(ruleForm)"
+            :before-close="handleClose"
             @open="addGuestInfo()"
             :visible.sync="newCustom">
             <div>
@@ -139,7 +138,8 @@
                                     <el-col :span="8">
                                     
                                         <!-- 校验提示必须加上 prop 属性 -->
-                                        <el-form-item label="客户名称: " prop="custName">
+                                        <el-form-item label="客户名称：" prop="custName">
+                                            <input type="hidden" value="guestInfo">
                                             <el-select placeholder="选择客户" v-model="ruleForm.custName" >
                                                 <el-option v-for="item in guestInfo" :label="item.custName" :value="item"></el-option>
                                             </el-select>
@@ -159,6 +159,7 @@
                                                 type="date"
                                                 placeholder="选择日期"
                                                 v-model="ruleForm.orderDate"
+                                                @change = "deliveryDatePicker"
                                                 :picker-options="pickerOptions">
                                             </el-date-picker>
                                             <span class="must-tips">*</span>
@@ -168,14 +169,14 @@
 
                                 <el-row :gutter="24">
                                     <el-col :span="8">
-                                        <el-form-item label="产品名称：" prop="itemName">
-                                            <el-input v-model='ruleForm.itemName'></el-input>
+                                        <el-form-item label="产品型号：" prop="itemNo">
+                                            <el-input v-model='ruleForm.itemNo'></el-input>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label="产品编号：" prop="itemNo">
-                                            <el-input v-model='ruleForm.itemNo'></el-input>
+                                        <el-form-item label="产品名称：" prop="itemName">
+                                            <el-input v-model='ruleForm.itemName'></el-input>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
                                     </el-col>
@@ -194,7 +195,7 @@
                                                 type="date"
                                                 placeholder="选择日期"
                                                 v-model='ruleForm.deliveryDate'
-                                                :picker-options="pickerOptions">
+                                                :picker-options="deliveryPicker">
                                             </el-date-picker>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
@@ -217,6 +218,7 @@
                                     <el-col >
                                         <div class="mid-btn">
                                             <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
+                                            <el-button class="btn-close btn" @click="newCustom=false">关 闭</el-button>
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -230,10 +232,10 @@
             <div class="message clearfix">
                 <div class="fl">
                     <el-button class="btn-edit btn" @click="editTable()">编 辑</el-button>
-                    <el-button class="btn-save btn" @click="saveList()">保 存</el-button>
-                    <el-button class="btn-publish btn" @click="publishList()" >下 发</el-button>
+                    <el-button class="btn-save btn" @click="ensureSave()">保 存</el-button>
+                    <el-button class="btn-publish btn" @click="ensurePublish()" >下 发</el-button>
                 </div>
-                <div class="fr">共有<span class="detailMsg">条下发计划</span></div>
+                <div class="fr">共有<span class="detailMsg">{{detailMath}}</span>条下发计划</div>
             </div>
 
             <!-- 新增计划 可编辑table start-->
@@ -250,7 +252,8 @@
                             <el-select 
                                 :disabled="editFlag"
                                 v-model="scope.row.planType">
-                                <el-option value=""></el-option>
+                                <el-option label="确认" value="01"></el-option>
+                                <el-option label="预测" value="02"></el-option>
                             </el-select>
                         </template>
                     </el-table-column>
@@ -262,7 +265,7 @@
                             <el-select 
                                 :disabled="editFlag"
                                 v-model="scope.row.custName">
-                                <el-option value=""></el-option>
+                                <el-option v-for = "item in guestInfo" :label="item.custName" :value="item"></el-option>
                             </el-select>
                         </template>
                     </el-table-column>
@@ -333,12 +336,12 @@
 
                     <el-table-column
                         width="120"
-                        prop="pic"
+                        prop="unit"
                         label="单位">
                         <template scope="scope">
                             <el-input type="text" 
                                 :disabled="editFlag"
-                                v-model="scope.row.pic">
+                                v-model="scope.row.unit">
                             </el-input>
                         </template>
                     </el-table-column>
@@ -364,11 +367,11 @@
 
         <!--修改弹框 start-->
         <el-dialog
-            size="tiny"
-            title="修改客户信息"
+            size="large"
+            title="修改计划"
             custom-class="pub-dialog"
+            :before-close="handleClose"
             @open = "lodeModifyInfo()"
-            @close = "clearTableData()"
             :visible.sync="modifysaleplan">
             <div>
                 <el-row>
@@ -377,7 +380,7 @@
                             <el-form :inline="true" class="">
                                 <el-row>
                                     <el-col :span="8">
-                                        <el-form-item label="客户名称:">
+                                        <el-form-item label="客户名称：">
                                             <el-select placeholder="选择客户" v-model="newFormData.custName" >
                                                 <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
                                             </el-select>
@@ -446,6 +449,7 @@
                                     <el-col >
                                         <div class="mid-btn">
                                             <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
+                                            <el-button class="btn-close btn" @click="modifysaleplan=false">关 闭</el-button>
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -459,8 +463,8 @@
             <div class="message clearfix">
                 <div class="fl">
                     <el-button class="btn-edit btn" @click="editTable()">编 辑</el-button>
-                    <el-button class="btn-save btn" @click="saveModifyList()">保 存</el-button>
-                    <el-button class="btn-publish btn" @click="publishModifyList()" >下 发</el-button>
+                    <el-button class="btn-save btn" @click="modifyEnsureSave()">保 存</el-button>
+                    <el-button class="btn-publish btn" @click="modifyEnsurePublish()" >下 发</el-button>
                 </div>
                 <div class="fr">共有<span class="detailMsg" ></span>条下发计划</div>
             </div>
@@ -491,7 +495,7 @@
                             <el-select 
                                 :disabled="editFlag"
                                 v-model="scope.row.custName">
-                                <el-option v-for = "item in ModifyGuestInfo" :label="item.custName" :value="item.custNo"></el-option>
+                                <el-option v-for = "item in ModifyGuestInfo" :label="item.custName" :value="item.custNo     "></el-option>
                             </el-select>
                         </template>
                     </el-table-column>
@@ -562,12 +566,12 @@
 
                     <el-table-column
                         width="120"
-                        prop="pic"
+                        prop="unit"
                         label="单位">
                         <template scope="scope">
                             <el-input type="text" 
                                 :disabled="editFlag"
-                                v-model="scope.row.pic">
+                                v-model="scope.row.unit">
                             </el-input>
                         </template>
                     </el-table-column>
@@ -595,24 +599,6 @@
 </template>
 
 <script src="./saleplan.js">
-    /**
-     * doing
-     * done
-     *      数据表格查询 search （报错没找出原因）
-     *      新建计划 表格可编辑
-     *      新建计划数据 同步表格
-     *      数据表格 已下发或未下发 判断 {showInfo}
-     *      项目前端 部署与压缩打包 上线
-     *      登录页
-     *      新建计划下发 btn-publish {新建计划中，新增已勾选的计划点击确定下发，保存在数据表格中已下发}
-     *      新建计划保存 btn-save {新建计划中，新增但未下发的数据，点击保存，保存在数据表格中的未下发完成 ，并在新建计划中表格}
-     *      dialog弹出时，请求获取 客户名称 与 计划类型
-     *      分页
-     *      重置按钮
-     *      数据表格修改 edit （以新增为模板，保存和下发功能分别有新接口）
-     *      数据表格详情 {详情页面}
-     *      校验
-     */  
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

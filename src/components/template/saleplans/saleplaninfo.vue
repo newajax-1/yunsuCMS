@@ -85,7 +85,7 @@
                             label="订单状态">
                         </el-table-column>
                         <el-table-column
-                            prop="finishProcess"
+                            prop="finishProcessText"
                             label="完成进度">
                         </el-table-column>
                         <el-table-column
@@ -121,10 +121,12 @@
             EventBus.$on("setInfoData",function(data){
                 that.infoform = data.data;
                 that.infoTableList = data.list;
-
-                that.infoTableList.every(function(el){
-                    return el.finishrate = (el.finishProcess/el.quantity) + "%"
-                })
+                var i , len = that.infoTableList.length;
+                for( i = 0 ; i < len ; i++ ){
+                    var el = that.infoTableList[i];
+                    el.finishrate = (el.finishProcess/el.quantity)+"%";
+                    el.finishProcessText = "完成/数量" ;
+                }
             })
         },
         methods : {

@@ -191,7 +191,7 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn-green btn" @click="addNewCustom()">提交</el-button>
+                <el-button class="btn-save btn" @click="addNewCustom()">提交</el-button>
                 <el-button class="btn-close btn" @click="newCustom = false">取 消</el-button>
             </span>
         </el-dialog>

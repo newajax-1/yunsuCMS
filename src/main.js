@@ -13,9 +13,9 @@ import '../src/assets/css/common.styl'
 import 'font-awesome/css/font-awesome.css'
 
 //axios配置请求根目录
-axios.defaults.baseURL = 'http://192.168.168.66:8080/ybs_mes/'
-
-// axios添加给Vue的原型方法
+// axios.defaults.baseURL = 'http://192.168.168.66:8080/ybs_mes/'
+axios.defaults.baseURL = 'http://localhost:8080/ybs_mes/'
+    // axios添加给Vue的原型方法
 Vue.prototype.$ajax = axios
 
 

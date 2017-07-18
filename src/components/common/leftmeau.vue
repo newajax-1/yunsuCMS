@@ -41,6 +41,11 @@
                         index:'4',
                         class:'',
                     },{
+                        text:'库存预警',
+                        route:'/home/invwarning',
+                        index:'5',
+                        class:'',
+                    },{
                         text:'排产计划',
                         route:'/home/schedulingplans',
                         index:'5',

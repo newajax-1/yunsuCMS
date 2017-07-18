@@ -18,6 +18,7 @@ import prodPlansInfo from '../components/template/productionplans/prodPlansInfo'
 import weekProdPlans from '../components/template/productionplans/weekProdPlans'
 import schedulingPlans from '../components/template/productionplans/schedulingPlans'
 
+import invWarning from '../components/template/invwarning/invWarning'
 Vue.use(Router)
 
 export default new Router({
@@ -53,6 +54,9 @@ export default new Router({
                 {
                     path: 'weekprodplans',
                     component: weekProdPlans
+                },{
+                	path:'invwarning',
+                	component: invWarning
                 },
                 {
                     path: 'schedulingplans',

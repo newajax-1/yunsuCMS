@@ -13,6 +13,7 @@
   import weekProdPlans from '../template/productionplans/weekProdPlans'
   import schedulingPlans from '../template/productionplans/schedulingPlans'
 
+  import invWarning from '../template/invwarning/invWarning'
     export default {
         name : "content",
         components : {
@@ -21,6 +22,7 @@
             saleplaninfo,
             prodPlansInfo,
             weekProdPlans,
+            invWarning,
             schedulingPlans,
         }
     }
