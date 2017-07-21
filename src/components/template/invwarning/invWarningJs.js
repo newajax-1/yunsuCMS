@@ -18,13 +18,14 @@ import Qs from 'qs'
         //end
         
         //表单数据开始start
-        tableData:{
+        tableData:[{
         	itemNo:'',
         	itemName:'',
         	materialFactory:'',
         	curInv:'',
-        	invSts:''
-        },
+        	secInv:'',
+        	invStsName:''
+        }],
         
     	//删除提示框start
         dialogVisible: false,
@@ -33,21 +34,8 @@ import Qs from 'qs'
         //end
         
         
-        // 对话框
-        newCustom: false,
-        customDetail: false,
-        editCustom: false,
 
         // 表格当前页数据
-        tableData: [{
-          custId: '',
-          custType: '',
-          custNo: '',
-          custName: '',
-          contacts: '',
-          phone: '',
-          delivery: '',
-        }],
 
         // 分页
         page: {
@@ -59,7 +47,7 @@ import Qs from 'qs'
 
         // 批量删除ids
         batch_ids: '',
-
+        items:'',
         // 新增数据
         newWarning:false,
         sel_val: '',
@@ -70,23 +58,42 @@ import Qs from 'qs'
         	materialFactory: '',
         	secInv: ''
         },
-
+        selectItemOp:[],
         // 修改数据存放
+        eselectItemOp:[],
+        eselectOp:[],
         editWarning:false,
         editTable: {
-          id:'',
-          warningNo:'',  
-          sel_val:'',
-          itemNo:'',
-          itemName:'',
-          materialFactory:'',
-          secInv:''
+        	invWarningId:'',
+        	warningType:'',  
+        	warningName:'',
+        	itemNo:'',
+        	itemName:'',
+        	materialFactory:'',
+        	secInv:'',
+        	curIns:''
         },
-        selectOp:[]
+        selectOp:[],
+        //是否显示  备库存这个 
+        showInfo: [{
+        }],
+        //新增是否显示供应商
+        showFactory:true,
+        //更新是否显示供应商
+        showFactoryUpdate:true,
+        warningDetail:false,
+        detailTable: {
+        	warningName:'',
+        	itemNo:'',
+        	itemName:'',
+        	materialFactory:'',
+        	secInv:''
+        },
+        showFactoryDetail:true,
       }
     },
     methods: {
-       //获取查询条件的下拉框
+       //获取查询条件的下拉框 
        loadSearchSelect(){
     	   var that=this;
     	   that.$ajax({
@@ -96,14 +103,17 @@ import Qs from 'qs'
  	        	that.selectInvSts = data.data.data.dicData;
  	        })
        },
-      // 单条删除
-      showOpt(invSts){
-    	  if(invSts=="安全"){
+       //是否显示
+      showOpt(id){
+    	  console.info(id+"@@@");
+    	 /* if(invStsName=="安全"){
     		  return false;
-    	  }else if(invSts="预警"){
+    	  }else if(invStsName=="预警"){
     		  return true;
-    	  }
+    	  }*/
+    	  return true;
       },
+      // 单条删除
       deletetab(id){
          var that = this;
          that.deleteMsg="你确定要删除该条数据？";
@@ -121,15 +131,36 @@ import Qs from 'qs'
     	        	if(data.data.success){
     	          	  alert("删除成功");
     	          	  that.dialogVisible = false
-    	          	  that.loadTable(0);
+    	          	  that.loadTable();
     	            }else{
     	          	 alert("删除失败");
     	          	 that.dialogVisible = false
-    	          	 that.loadTable(0);
+    	          	 that.loadTable();
     	            }
     	        })
       },
-      // 批量删除
+      // tabController Event
+      changeTableEffective(tab) {
+          switch (tab.name) {
+              case 'first':
+            	  this.activeName=tab.name;
+                  this.loadTable();
+                  break;
+              case 'second':
+            	  this.activeName=tab.name;
+                  this.loadTable();
+                  break;
+          }
+      },
+      // 复选框勾选
+      handleSelectionChange(val) {
+    	var batchIds="";
+        for (var i = 0; i < val.length; i++) {
+            batchIds =  batchIds + val[i].invWarningId+",";
+        }
+        this.batch_ids = batchIds.substring(0,batchIds.lastIndexOf(","));
+      },
+   // 批量删除
       batchDelete() {
         var that = this;
         if (that.batch_ids == "") {
@@ -147,33 +178,10 @@ import Qs from 'qs'
         that.warning.itemName = '';
         that.warning.invSts = '';
       },
-
-      // 复选框勾选
-      handleSelectionChange(val) {
-        for (var i = 0; i < val.length; i++) {
-          if (val.length) {
-            var ids = [];
-            for (var i = 0; i < val.length; i++) {
-              ids.push(val[i].custId);
-            }
-            this.batch_ids = ids.join(',')
-          } else {
-            this.batch_ids = '';
-          }
-        }
-      },
-
       //加载表格
-      loadTable(id){
+      loadTable(){
         var that = this;
-        var pageNum=0;
         var warningName = "";
-        if(id==1){
-        	pageNum=1;
-        }else{
-        	pageNum=that.page.pageNum;
-        }
-        
         if(that.activeName=="first"){
         	warningName="原材料";
         }else{
@@ -184,13 +192,12 @@ import Qs from 'qs'
           url: '/invWarning/queryList',
           transformRequest: [function (data) {
             data = JSON.stringify({
-              pageNum: pageNum,
+              pageNum: that.page.pageNum,
               pageSize: that.page.pageSize,
-              warningName:warningName,
+              warningName: warningName,
               itemName: $.trim(that.warning.itemName),
               invSts: that.warning.invSts,
             });
-            console.info(data);
             return data;
           }],
           headers: {
@@ -198,14 +205,24 @@ import Qs from 'qs'
           }
         })
           .then(function (data) {
-        	  console.info(data+"@");
               that.tableData = data.data.data.page.list,
-              that.page.pageNum = data.data.data.page.pageNum,
-              that.page.pageSize = data.data.data.page.pageSize,
               that.page.total = data.data.data.page.total
+              that.showInfo=[];
+              for(var i=0;i<that.tableData.length;i++){
+            	  console.info(that.tableData[i].invStsName+"@@");
+            	  if(that.tableData[i].invStsName==="预警"){
+            		  that.showInfo.push({show:true});
+            	  }else{
+            		  that.showInfo.push({show:false});
+            	  }
+              }
           })
       },
-
+      search(){
+    	  var that=this;
+    	  that.page.pageNum = '1';
+    	  that.loadTable();
+      },
       // 刷新
       refresh() {
         var that = this;
@@ -213,10 +230,10 @@ import Qs from 'qs'
         that.page.pageSize = '10';
         that.warning.itemName= '';
         that.warning.invSts= '';
-        loadTable(1);
+        that.loadTable();
       },
 
-      // 新增客户信息
+      // 预添加
       toAdd() {
         var that = this;
         that.newWarning = true;
@@ -227,238 +244,227 @@ import Qs from 'qs'
         that.addInfo.secInv='';
         that.$ajax({
           method: 'get',
-          url: 'cust/getAllInvStsInfo?key=warning_type',
+          url: 'invWarning/toAddOrEditInvWarning',
         }).then(function (data) {
           that.selectOp = data.data.data.dicData;
-          that.loadTable(0);
+          that.selectItemOp = data.data.data.dataList;
         });
       },
 
-      // 修改客户信息
+      // 预修改
       edittab(ids){
         var that = this;
-        that.editCustom = true;
+        that.editWarning = true;
         that.$ajax({
           method: 'get',
-          url: 'invWarning/toAddOrEditInvWarning?id='+ ids,
+          url: 'invWarning/toAddOrEditInvWarning?invWarningId='+ ids,
           headers: {
             'Content-Type': 'application/json'
           }
         })
-          .then(function (res) {
-        	that.selectOp = data.data.data.dicData;
-            var dataArr = res.data.data.data;
-            that.editTable =  dataArr;
+          .then(function (data) {
+        	  that.eselectOp = data.data.data.dicData;
+              that.eselectItemOp = data.data.data.dataList;
+              that.editTable =  data.data.data.data;
+              that.editTable.warningType=data.data.data.data.warningType;
+              that.editTable.curIns=data.data.data.data.curInv;
+              if(that.editTable.warningName=="成品"){
+            	  that.showFactoryUpdate=false;
+              }else{
+            	  that.showFactoryUpdate=true;
+              }
           })
       },
-
-
+      detailtab(object){
+    	  var that=this;
+    	  that.warningDetail=true;
+    	  that.detailTable=object;
+    	  console.info(object.warningName=="原材料");
+    	  if(object.warningName=="原材料"){
+    		  that.showFactoryDetail=true;
+    	  }else{
+    		  that.showFactoryDetail=false;
+    	  }
+      },
+      //当改变库品编号的时候调用
+      changeItemNo(id){
+    	  var that=this;
+    	  if(id==1){
+	    	  for(var i=0;i<that.selectItemOp.length;i++){
+	    			  if(that.selectItemOp[i].itemNo==that.addInfo.itemNo){
+	        			  that.addInfo.itemName=that.selectItemOp[i].itemName;
+	        			  that.addInfo.materialFactory=that.selectItemOp[i].itemProvider;
+	        			  that.addInfo.curIns=that.selectItemOp[i].curInv;
+	        			  break;
+	    		  
+	    			  }
+	    	  }
+    	  }else{
+    		  for(var i=0;i<that.eselectItemOp.length;i++){
+	    		  if(that.eselectItemOp[i].itemNo==that.editTable.itemNo){
+	    			  that.editTable.itemName=that.eselectItemOp[i].itemName;
+	    			  that.editTable.materialFactory=that.eselectItemOp[i].itemProvider;
+	    			  that.editTable.curIns=that.eselectItemOp[i].curInv;
+	    			  break;
+	    		  }
+    		  }
+    	  }
+    	  
+    	  
+      },
+      //改变警告类型的时候，当为成品就没有供应商
+      changeSelValue(){
+    	  var that=this;
+    	  var warningType =that.sel_val == "" ? that.selectOp[0].dicValue : that.sel_val;
+    	  if(warningType=="01"){
+    		  //原材料
+    		  that.showFactory=true;
+    	  }else if(warningType=="02"){
+    		  //成品
+    		  that.showFactory=false;
+    	  }
+      },
       // 修改信息提交
       UpdateInvWarning(){
-		var that = this;
-		var custType=that.editsel_val=="" ? that.editTable.custType:that.editsel_val;
-		console.info(custType);
-		 if($.trim(custType)=="" || $.trim(that.editTable.custName) == "" || $.trim(that.editTable.contacts) == "" 
-     		||$.trim(that.editTable.phone)==""||s_province==""
-     		||s_city==""||s_area==""
-     		||$.trim(that.editTable.address)==""){
-     			alert("请将信息填写完整");
-     			return;
-	     }else if(!/^1[34578]\d{9}$/.test($.trim(that.editTable.phone))){
-	     		alert("手机格式错误");
-	     		return;
-	     }else{
-		        that.$ajax({
-		            method: 'post',
-		            url: '/cust/save',
-		            transformRequest: [function (data) {
-		              //console.log(s_province + "," + s_city + "," + s_area);
-		              data = JSON.stringify({
-		            	  custType : custType ,
-			              custId : $.trim(that.editTable.custId),
-			              memberType: $.trim(that.editTable.memberType),
-			              custName : $.trim(that.editTable.custName),
-			              contacts : $.trim(that.editTable.contacts),
-			              phone : $.trim(that.editTable.phone),
-			              province : s_province,
-			              city : s_city, 
-			              area : s_area,
-			              address : $.trim(that.editTable.address)
-		              });
-		              console.info(data);
-		            return data;
-		          }],
-		         /*  baseURL: 'http://192.168.168.219:8080/', */
-		          headers: {
-		            'Content-Type': 'application/json'
-		          }
-		        })
-		          .then(function(results){
-		        	if(results.data.success){
-			        	that.loadTable(0);
-			            that.editCustom = false;
-			            that.sel_val = '';
-			            that.addInfo = '';
-			            that.f.p = '';
-			            that.f.c = '';
-			            that.f.cc = '';
-		        	}else {
-		        		if(results.data.tipMsg.indexOf("重复")!=-1){
-      						alert("用户信息重复");
-      						that.editCustom = true;
-	      				}else{
-	      					that.editCustom = false;
-	          	            that.loadTable(0);
-	      				}
-		        	}
-		          })
-	     	}
+    	  var that=this;
+          if($.trim(that.editTable.secInv) == ""){
+          	alert("请填写安全库存");
+          	return;
+          }else{
+          	if( !/^[1-9]\d*$/.test($.trim(that.editTable.secInv))){
+          		alert("安全库存只能为正整数");
+              	return;
+          	}
+          }
+          that.$ajax({
+              method: 'post',
+              url: '/invWarning/addOrEditInvWarning',
+              transformRequest: [function (data) {
+              	console.info(that.addInfo.curIns);
+                data = JSON.stringify({
+                  warningType:that.editTable.warningType,
+                  invWarningId:that.editTable.invWarningId,
+              	  itemNo:that.editTable.itemNo,
+              	  itemName:that.editTable.itemName,
+              	  materialFactory:that.editTable.materialFactory,
+              	  secInv:that.editTable.secInv,
+              	  curInv:$.trim(that.editTable.curIns),
+                });
+                console.info(data);
+                return data;
+              }],
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+              .then(function (data) {
+              	if(data.data.success){
+        				that.editWarning = false;
+        				that.page.pageNum = 1;
+        	            that.loadTable();
+        	            that.editTable.invWarningId='';
+        	            that.editTable.warningType='';
+        	            that.editTable.itemNo = '';
+        	            that.editTable.itemName = '';
+        	            that.editTable.materialFactory = '';
+        	            that.editTable.secInv = '';
+        	            that.editTable.secInv = '';
+        	            that.addInfo.secInv = '';
+        			}else{
+        				if(data.data.tipMsg.indexOf("重复")!=-1){
+        					alert("用户信息重复");
+        					that.editWarning = true;
+        				}else{
+        					that.editWarning = false;
+            	            that.loadTable();
+        				}
+        				
+        			}
+              	
+                  
+              })
       },
-
-
-      // 保存提交客户信息
+      // 保存提交预警信息
       addNewWarning(){
-        var that = this;
-        var custType =that.sel_val == "" ? that.selectOp[0].dicValue : that.sel_val;
-        var flag1=false,flag2=false,flag3=false;
-        if(typeof(that.f.c)=="string"){
-        	if(that.f.c==""){
-        		flag1=true;
-        	}
+    	var that=this;
+    	var warningType =that.sel_val == "" ? that.selectOp[0].dicValue : that.sel_val;
+        if(that.addInfo.itemNo == ""){
+        	alert("请选择库品编码");
+        	return;
         }
-        if(typeof(that.f.c)=="number"){
-        	if(that.f.c<0){
-        		flag1=true;
-        	}
-        }
-        if(typeof(that.f.cc)=="string"){
-        	if(that.f.cc==""){
-        		flag2=true;
-        	}
-        }
-        if(typeof(that.f.cc)=="number"){
-        	if(that.f.cc<0){
-        		flag2=true;
-        	}
-        }
-        if(typeof(that.f.p)=="string"){
-        	if(that.f.p==""){
-        		flag3=true;
-        	}
-        }
-        if(typeof(that.f.p)=="number"){
-        	if(that.f.cc<0){
-        		flag3=true;
-        	}
-        }
-        if($.trim(that.addInfo.selName) == ""|| custType == "" || $.trim(that.addInfo.selContact) == "" 
-        		||$.trim(that.addInfo.selPhone)==""||flag3
-        		||flag1||flag2
-        		||$.trim(that.addInfo.address)==""){
-        	alert("请将信息填写完整");
+        if($.trim(that.addInfo.secInv) == ""){
+        	alert("请填写安全库存");
         	return;
         }else{
-        	if(!/^1[34578]\d{9}$/.test($.trim(that.addInfo.selPhone))){
-        		alert("手机格式错误");
-        		return;
-        	}else{
-        		that.newCustom = false;
-            	that.$ajax({
-                    method: 'post',
-                    url: '/cust/save',
-                    transformRequest: [function (data) {
-                      data = JSON.stringify({
-                    	custType : custType,
-                        custName  : $.trim(that.addInfo.selName),
-                        contacts   : $.trim(that.addInfo.selContact),
-                        phone  : $.trim(that.addInfo.selPhone),
-                        province: that.pro[that.f.p].name,
-                        city: that.city[that.f.c].name,
-                        area: that.county[that.f.cc].name,
-                        address : $.trim(that.addInfo.address)
-                      });
-                      return data;
-                    }],
-                    /* baseURL: 'http://192.168.168.219:8080/', */
-                    headers: {
-                      'Content-Type': 'application/json'
-                    }
-                  })
-                    .then(function (data) {
-          			if(data.data.success){
-          				that.editCustom = false;
-          	            that.loadTable(1);
-          	            that.sel_val = '';
-          	            that.addInfo.selName = '';
-          	            that.addInfo.selContact = '';
-          	            that.addInfo.selPhone = '';
-//          	            that.addInfo.address = '';
-          	            that.f.p = '';
-          	            that.f.c = '';
-          	            that.f.cc = ''
-          			}else{
-          				if(data.data.tipMsg.indexOf("重复")!=-1){
-          					alert("用户信息重复");
-          					that.newCustom = true;
-          				}else{
-          					that.newCustom = false;
-              	            that.loadTable(0);
-          				}
-          				
-          			}
-                  	
-                    })
+        	if( !/^[1-9]\d*$/.test($.trim(that.addInfo.secInv))){
+        		alert("安全库存只能为正整数");
+            	return;
         	}
         }
-        
+        that.$ajax({
+            method: 'post',
+            url: '/invWarning/addOrEditInvWarning',
+            transformRequest: [function (data) {
+            	console.info(that.addInfo.curIns);
+                data = JSON.stringify({
+            	  warningType:warningType,
+            	  itemNo:that.addInfo.itemNo,
+            	  itemName:that.addInfo.itemName,
+            	  materialFactory:that.addInfo.materialFactory,
+            	  curInv:that.addInfo.curIns,
+            	  secInv:$.trim(that.addInfo.secInv),
+              });
+              console.info(data);
+              return data;
+            }],
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(function (data) {
+            	if(data.data.success){
+      				that.newWarning = false;
+      				that.page.pageNum = 1;
+      	            that.loadTable(0);
+      	            that.sel_val = '';
+      	            that.addInfo.curIns = '';
+      	            that.addInfo.itemNo = '';
+      	            that.addInfo.itemName = '';
+      	            that.addInfo.materialFactory = '';
+      	            that.addInfo.secInv = '';
+      			}else{
+      				if(data.data.tipMsg.indexOf("重复")!=-1){
+      					alert("用户信息重复");
+      					that.newWarning = true;
+      				}else{
+      					that.newWarning = false;
+      					that.page.pageNum = 1;
+          	            that.loadTable();
+      				}
+      				
+      			}
+            	
+                
+            })
       },
 
-      //查看详情
-      lookInfo(obj){
-        this.customDetail = true;
-        this.tableData = obj;
-      },
-
-      // 分页
+      // 改变分页数目的时候调用
       handleSizeChange(val) {
         var that = this;
         that.page.pageSize = val;
-        that.loadTable(0);
+        that.loadTable();
       },
+      //改变页码的时候调用
       handleCurrentChange(val) {
         var that = this;
         that.page.pageNum = val;
-        that.loadTable(0);
+        that.loadTable();
       },
-
-      // 城市三级联动
-      selpro: function () {
-        this.city = this.pro[this.f.p]['child'];
-        this.county = this.city[0]['child'];
-        this.f.c = 0;
-        this.f.cc = 0;
-        this.result();
-      },
-      selcity: function () {
-        this.county = this.city[this.f.c]['child'];
-        this.f.cc = 0;
-        this.result();
-      },
-      result: function () {
-        var re = {
-          pro: {id: this.pro[this.f.p].id, name: this.pro[this.f.p].name},
-          city: {id: this.city[this.f.c].id, name: this.city[this.f.c].name},
-          county: {id: this.county[this.f.cc].id, name: this.county[this.f.cc].name}
-        };
-        this.$emit("select", re);
-      },
-
-
     },
+    //当加载页面的时候调用
     mounted(){
-      //当组件模板挂载时数据显示到上面去。
-      //获取查询条件的下拉框的值
+      console.info("2222");
       this.loadSearchSelect();
-      this.loadTable(0);
+      this.loadTable();
     },
   }

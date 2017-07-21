@@ -11,19 +11,29 @@
 
   import prodPlansInfo from '../template/productionplans/prodPlansInfo'
   import weekProdPlans from '../template/productionplans/weekProdPlans'
-  import schedulingPlans from '../template/productionplans/schedulingPlans'
+  import weekProdPlansInfo from '../template/productionplans/weekProdPlansInfo'
 
   import invWarning from '../template/invwarning/invWarning'
-    export default {
-        name : "content",
-        components : {
-            saleplan,
-            salersInfo,
-            saleplaninfo,
-            prodPlansInfo,
-            weekProdPlans,
-            invWarning,
-            schedulingPlans,
-        }
-    }
+
+  // 用户
+  import userManagement from '../template/systemsMent/userManagement'
+  import roleManagement from '../template/systemsMent/roleManagement'
+
+  import test from '../template/test'
+
+  export default {
+      name : "content",
+      components : {
+          saleplan,
+          salersInfo,
+          saleplaninfo,
+          prodPlansInfo,
+          weekProdPlans,
+          weekProdPlansInfo,
+          invWarning,
+          userManagement,
+          roleManagement,
+          test,
+      }
+  }
 </script>

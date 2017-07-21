@@ -76,8 +76,8 @@
                         <el-table-column prop="planNo" label="销售计划编号"></el-table-column>
                         <el-table-column prop="createTime" label="计划生产时间"></el-table-column>
                         <el-table-column prop="operTime" label="下发时间"></el-table-column>
-                        <el-table-column prop="operUser" label="下发人"></el-table-column>
-                        <el-table-column prop="operation" label="下发状态"></el-table-column>
+                        <el-table-column prop="operUserName" label="下发人"></el-table-column>
+                        <el-table-column prop="operationName" label="下发状态"></el-table-column>
                         <el-table-column prop="planStatus" label="排产状态"></el-table-column>
                         <el-table-column fixed="right"label="操作" width="150">
                             <template scope="scope">
@@ -206,8 +206,8 @@
                                     <el-col :span="8">
                                         <el-form-item label="计划类型：" prop="planType">
                                             <el-select placeholder="选择客户" v-model='ruleForm.planType'>
-                                                <el-option label="确认" value="01"></el-option>
-                                                <el-option label="预测" value="02"></el-option>
+                                                <el-option label="生产" value="01"></el-option>
+                                                <el-option label="库存" value="02"></el-option>
                                             </el-select>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
@@ -252,8 +252,8 @@
                             <el-select 
                                 :disabled="editFlag"
                                 v-model="scope.row.planType">
-                                <el-option label="确认" value="01"></el-option>
-                                <el-option label="预测" value="02"></el-option>
+                                <el-option label="生产" value="01"></el-option>
+                                <el-option label="库存" value="02"></el-option>
                             </el-select>
                         </template>
                     </el-table-column>
@@ -438,8 +438,8 @@
                                     <el-col :span="8">
                                         <el-form-item label="计划类型：">
                                             <el-select placeholder="选择客户" v-model='newFormData.planType'>
-                                                <el-option label="确认" value="01"></el-option>
-                                                <el-option label="预测" value="02"></el-option>
+                                                <el-option label="生产" value="01"></el-option>
+                                                <el-option label="库存" value="02"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>

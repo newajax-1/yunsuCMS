@@ -20,15 +20,15 @@
                             <el-button @click="loadTable(1)" class="search-btn">查询</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click='reset' class="reset-btn">重置</el-button>
+                            <el-button @click='reset()' class="reset-btn">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="list-buttons" @click="refresh"><i class="fa fa-repeat"></i> 刷新</el-button>
-                    <el-button class="list-buttons" @click="batchDelete"><i class="fa fa-trash-o"></i> 批量删除</el-button>
+                    <el-button class="list-buttons" @click="refresh()"><i class="fa fa-repeat"></i> 刷新</el-button>
+                    <el-button class="list-buttons" @click="batchDelete()"><i class="fa fa-trash-o"></i> 批量删除</el-button>
                     <el-button class="list-buttons" @click="toAdd()"><i class="fa fa-user-plus"></i> 新建客户</el-button>
                 </el-col>
             </div>
@@ -100,11 +100,11 @@
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page.sync=page.pageNum
+                    :current-page.sync="page.pageNum"
                     :page-sizes="[10, 20, 30, 40]"
-                    :page-size=page.pageSize
+                    :page-size="page.pageSize"
                     layout="total, sizes, prev, pager, next"
-                    :total=page.total>
+                    :total="page.total">
             </el-pagination>
         </div>
 
@@ -116,9 +116,9 @@
                 custom-class="pub-dialog">
             <span>
                 <div class="pub-mask-wrap">
-                    <el-form :inline="true" class="">
+                    <el-form :inline="true" class="subClass">
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="16">
                                 <el-form-item label="客户类型：">
                                     <el-select :placeholder="selectOp[0] && selectOp[0].dicName" v-model="sel_val">
                                         <el-option
@@ -131,19 +131,23 @@
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="16">
                                 <el-form-item label="客户名称：">
                                     <el-input v-model="addInfo.selName"></el-input>
                                     <span class="must-tips">*</span>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8">
+                        </el-row>
+                        <el-row :gutter="24">
+                        	 <el-col :span="16">
                                 <el-form-item label="联系人：">
                                     <el-input v-model="addInfo.selContact"></el-input>
                                     <span class="must-tips">*</span>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8">
+                        </el-row>
+                        <el-row :gutter="24">
+                        	<el-col :span="16">
                                 <el-form-item label="手机号：">
                                     <el-input v-model="addInfo.selPhone"></el-input>
                                     <span class="must-tips">*</span>
@@ -419,9 +423,9 @@
 
         // 分页
         page: {
-          pageNum: '',
-          pageSize: '',
-          total: ''
+          pageNum: 1,
+          pageSize: 10,
+          total: 1
         },
         currentPage: 1,
 
@@ -506,6 +510,7 @@
       // 批量删除
       batchDelete() {
         var that = this;
+        console.log(that.batch_ids);
         if (that.batch_ids == "") {
           alert("请选择要删除的记录");
           return;
@@ -521,28 +526,21 @@
         that.info.custNo = '';
         that.info.custName = '';
         that.info.contacts = '';
-        //that.loadTable();
       },
 
       // 复选框勾选
       handleSelectionChange(val) {
+        var batchIds="";
         for (var i = 0; i < val.length; i++) {
-          if (val.length) {
-            var ids = [];
-            for (var i = 0; i < val.length; i++) {
-              ids.push(val[i].custId);
-            }
-            this.batch_ids = ids.join(',')
-          } else {
-            this.batch_ids = '';
-          }
+            batchIds =  batchIds + val[i].custId+",";
         }
+        this.batch_ids = batchIds.substring(0,batchIds.lastIndexOf(","));
       },
 
       //加载表格
       loadTable(id){
         var that = this;
-        var pageNum=0;
+        var pageNum = 0;
         if(id==1){
         	pageNum=1;
         }else{
@@ -566,10 +564,8 @@
           }
         })
           .then(function (data) {
-            that.tableData = data.data.data.page.list,
-              that.page.pageNum = data.data.data.page.pageNum,
-              that.page.pageSize = data.data.data.page.pageSize,
-              that.page.total = data.data.data.page.total
+            that.tableData = data.data.data.page.list;
+              that.page.total = data.data.data.page.total;
           })
       },
 
@@ -601,7 +597,6 @@
           url: 'cust/getSelects?key=cust_type',
         }).then(function (data) {
           that.selectOp = data.data.data.dicData;
-          that.loadTable(0);
         });
       },
 
@@ -821,9 +816,12 @@
         that.page.pageSize = val;
         that.loadTable(0);
       },
+// -----------------------------------------------------------------------------------------------------------------------------------      
       handleCurrentChange(val) {
         var that = this;
         that.page.pageNum = val;
+        console.log("pageNum", that.page.pageNum)
+        console.log("pageSize",that.page.pageSize)
         that.loadTable(0);
       },
 
@@ -865,5 +863,6 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-
+.subClass label
+	width 100px
 </style>

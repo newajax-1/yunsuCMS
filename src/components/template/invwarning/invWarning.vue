@@ -8,8 +8,8 @@
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">
-                        <el-form-item label="库存名称：">
-                            <el-input placeholder="输入库存名称" v-model='warning.itemName' prop="itemName"></el-input>
+                        <el-form-item label="库品名称：">
+                            <el-input placeholder="输入库品名称" v-model='warning.itemName' prop="itemName"></el-input>
                         </el-form-item>
                         <el-form-item label="备货状态：">
                             <el-select v-model="warning.invSts">
@@ -54,16 +54,18 @@
                 <div class="list-table">
                     <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
                         <el-table-column type="selection" width="55"></el-table-column>
-                        <el-table-column prop="itemNo" label="原材料编号"></el-table-column>
-                        <el-table-column prop="itemName" label="原材料名称"></el-table-column>
+                        <el-table-column prop="itemNo" label="库品编号"></el-table-column>
+                        <el-table-column prop="itemName" label="库品名称"></el-table-column>
                         <el-table-column prop="materialFactory" label="供应商"></el-table-column>
                         <el-table-column prop="curInv" label="当前库存"></el-table-column>
+                        <el-table-column prop="secInv" label="安全库存"></el-table-column>
                         <el-table-column prop="invStsName" label="库存状态"></el-table-column>
                         <el-table-column fixed="right" label="操作" width="140">
                             <template scope="scope">
-                                <el-button type="text" size="small" v-show="{showOpt(scope.row.invSts)}">备库存</el-button>
-                                <el-button type="text" size="small" @click="{edittab(scope.row.custId)}">修改</el-button>
-                                <el-button type="text" size="small" @click="deletetab(scope.row.custId)"> 删除</el-button>
+                                <el-button type="text" size="small" v-show="showInfo[scope.$index].show">备库存</el-button>
+                                <el-button type="text" size="small" @click="detailtab(scope.row)">详情</el-button>
+                                <el-button type="text" size="small" @click="edittab(scope.row.invWarningId)">修改</el-button>
+                                <el-button type="text" size="small" @click="deletetab(scope.row.invWarningId)"> 删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -93,42 +95,50 @@
                 custom-class="pub-dialog">
             <span>
                 <div class="pub-mask-wrap">
-                    <el-form :inline="true" class="">
+                    <el-form :inline="true" class="formClass">
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="16">
                                 <el-form-item label="库品类型：">
-                                    <el-select :placeholder="selectOp[0] && selectOp[0].dicName" v-model="sel_val">
+                                    <el-select :placeholder="selectOp[0] && selectOp[0].dicName" v-model="sel_val" @change="changeSelValue()">
                                         <el-option
                                                 v-for="item in selectOp"
                                                 :label="item.dicName"
                                                 :value="item.dicValue">
                                         </el-option>
                                     </el-select>
+                                     <span class="must-tips">*</span>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                        <el-row :gutter="24">
-                        	<el-col :span="8">
+                        	<el-col :span="16">
                                 <el-form-item label="库品编号：">
-                                    <el-input v-model="addInfo.itemNo"></el-input>
+                                <input type="hidden" v-html='addInfo.curIns' id=curIns>
+                                	<el-select v-model="addInfo.itemNo" @change="changeItemNo(1)">
+                                        <el-option
+                                                v-for="item in selectItemOp"
+                                                :label="item.itemNo"
+                                                :value="item.itemNo">
+                                        </el-option>
+                                    </el-select>
                                     <span class="must-tips">*</span>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="16">
                                 <el-form-item label="库品名称：">
                                      <p v-html="addInfo.itemName"></p>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8">
+                            <el-col :span="16" v-show="showFactory">
                                 <el-form-item label="供应商：">
                                  	<p v-html="addInfo.materialFactory"></p>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
-                        	<el-col :span="8">
+                        	<el-col :span="16">
                                 <el-form-item label="安全库存：">
                                     <el-input v-model="addInfo.secInv"></el-input>
                                     <span class="must-tips">*</span>
@@ -136,8 +146,8 @@
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
-                        	<el-col :span="8">
-                                <el-form-item label="库存预警：">
+                        	<el-col :span="16">
+                                <el-form-item label="库存预警：低于">
                                     <el-input v-model="addInfo.secInv" :disabled="true"></el-input>
                                     <span class="must-tips">*</span>
                                 </el-form-item>
@@ -148,7 +158,7 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn-green btn" @click="addNewWarning()">提交</el-button>
+                <el-button class="btn-save btn" @click="addNewWarning()">提交</el-button>
                 <el-button class="btn-close btn" @click="newWarning = false">取 消</el-button>
             </span>
         </el-dialog>
@@ -161,46 +171,46 @@
         custom-class="pub-dialog">
             <span>
                 <div class="pub-mask-wrap">
-                <el-form :inline="true" class="">
+                <el-form :inline="true" class="formClass">
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="16">
                                 <el-form-item label="库品类型：">
                                 	<!-- id -->
-                                     <input type="hidden" v-html='editTable.id' id="id">
-                                     <!-- 预警编号 -->
-                                	 <input type="hidden" v-html='editTable.warningNo' id="warningNo">
-                                    <el-select :placeholder="selectOp[0] && selectOp[0].dicName" v-model="editTable.sel_val">
+                                     <input type="hidden" v-html='editTable.invWarningId' id="invWarningId">
+                                     <!-- 默认的预警编号 -->
+                                	 <input type="hidden" v-html='editTable.warningType' id="warningType">
+                                     <p v-html="editTable.warningName"></p>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                       <el-row :gutter="24">
+                        	<el-col :span="16">
+                                <el-form-item label="库品编号：">
+                                <input type="hidden" v-html='editTable.curIns' id=curIns>
+                                    <el-select v-model="editTable.itemNo" @change="changeItemNo(2)">
                                         <el-option
-                                                v-for="item in selectOp"
-                                                :label="item.dicName"
-                                                :value="item.dicValue">
+                                                v-for="item in eselectItemOp"
+                                                :label="item.itemNo"
+                                                :value="item.itemNo">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                       <el-row :gutter="24">
-                        	<el-col :span="8">
-                                <el-form-item label="库品编号：">
-                                    <el-input v-model="editTable.itemNo"></el-input>
-                                    <span class="must-tips">*</span>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="16">
                                 <el-form-item label="库品名称：">
                                      <p v-html="editTable.itemName"></p>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="供应商：">
+                            <el-col :span="16">
+                                <el-form-item label="供应商：" v-show="showFactoryUpdate">
                                  	<p v-html="editTable.materialFactory"></p>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
-                        	<el-col :span="8">
+                        	<el-col :span="16">
                                 <el-form-item label="安全库存：">
                                     <el-input v-model="editTable.secInv"></el-input>
                                     <span class="must-tips">*</span>
@@ -208,8 +218,8 @@
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
-                        	<el-col :span="8">
-                                <el-form-item label="库存预警：">
+                        	<el-col :span="16">
+                                <el-form-item label="库存预警：低于">
                                     <el-input v-model="editTable.secInv" :disabled="true"></el-input>
                                     <span class="must-tips">*</span>
                                 </el-form-item>
@@ -223,6 +233,67 @@
                 <el-button class="btn-close btn" @click="editWarning = false">取 消</el-button>
             </span>
       </el-dialog>
+
+		
+		<!--详情弹框-->
+        <el-dialog
+                title="库存预警详情"
+                :visible.sync="warningDetail"
+                size="tiny"
+                custom-class="pub-dialog">
+            <span>
+                <div class="pub-mask-wrap">
+                    <el-form :inline="true" class="">
+                        <el-row :gutter="24">
+                            <el-col :span="16">
+                                <el-form-item label="库品类型：">
+                                     <p v-html="detailTable.warningName"></p>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                       <el-row :gutter="24">
+                        	<el-col :span="16">
+                                <el-form-item label="库品编号：">
+                                	<p v-html="detailTable.itemNo"></p>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="24">
+                            <el-col :span="16">
+                                <el-form-item label="库品名称：">
+                                     <p v-html="detailTable.itemName"></p>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="16">
+                                <el-form-item label="供应商：" v-show="showFactoryDetail">
+                                 	<p v-html="detailTable.materialFactory"></p>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="24">
+                        	<el-col :span="16">
+                                <el-form-item label="安全库存：">
+                                   <p v-html="detailTable.secInv"></p>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="24">
+                        	<el-col :span="16">
+                                <el-form-item label="库存预警：低于">
+                                     <p v-html="detailTable.secInv"></p>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+
+                </div>
+            </span>
+            <span slot="footer" class="dialog-footer">
+                <el-button class="btn-close btn" @click="warningDetail = false">关 闭</el-button>
+            </span>
+        </el-dialog>
+		
+		
 
         <!-- 删除提示信息 -->
         <el-dialog
@@ -249,5 +320,6 @@
 
 <!-- 样式 -->
 <style lang="stylus" rel="stylesheet/stylus">
-
+.formClass label
+	width 120px
 </style>

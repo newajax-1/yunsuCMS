@@ -1,276 +1,82 @@
 import Qs from 'qs'
 
 export default {
-    name: 'weekProdPlans',
+    name: 'weekProdPlan',
     data() {
-        var validateplanType = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请选择计划类型'));
-            }
-            callback();
-        };
-        var validatecustName = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请选择客户名称'));
-            }
-            callback();
-        };  
-        var validateorderNo = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入订单编号'));
-            }
-            callback();
-        };
-        var validateorderDate = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请选择订单日期'));
-            }
-            callback();
-        };
-        var validateitemNo = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入产品型号'));
-            }
-            callback();
-        };
-        var validateproductName = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入产品名称'));
-            }
-            callback();
-        };
-        var validateaccount = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入需求数量'));
-            }
-            callback();
-        };
-        var validatepublishDate = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请选择交货日期'));
-            }
-            callback();
-        };
         return {
 
-            //时间选择器
-            pickerOptions: {
-                disabledDate(time) {
-                    return time.getTime() < Date.now() - 8.64e7;
-                }
+            // 查询条件 
+            searchForm : {
+                issUsr: '',
+                creStartTime: '',
+                creEndTime: '',
+                issStartTime: '',
+                issEndTime: '',
             },
-
-            // ？？
-            pickerOptions1: {
-                shortcuts: [{
-                    text: '今天',
-                    onClick(picker) {
-                        picker.$emit('pick', new Date());
-                    }
-                }, {
-                    text: '昨天',
-                    onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24);
-                        picker.$emit('pick', date);
-                    }
-                }, {
-                    text: '一周前',
-                    onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', date);
-                    }
-                }]
-            },
-
-            // 下发 or 详情显示
-            showInfo: [{
-                show: true
-            }],
-
-            //表格修改下发按钮
-            activeName: "first",
-
-            // 存放日期值
-            value1: '',
-            value2: '',
-            value3: '',
-            value4: '',
-
-            // 设置tab默认显示
-            activeName2: 'first',
-
-            // 对话框
-            newCustom: false,
-            modifysaleplan: false,
 
             // 加载表格
             tableData: [{}],
 
-            //可编辑表格
-            editFlag: true,
+            // 新增对话框
+            newCustom: false,
 
-            //新增页面表格的数据
-            newFormData: {
-                planType: '',
-                custName: '',
-                orderNo: '',
-                orderDate: '',
-                itemNo: '',
-                itemName: '',
-                quantity: '',
-                pic: 'pic',
-                deliveryDate: ''
-            },
-            //修改页面表格数据
-            modifyFormDate: {
-                planType: '',
-                custName: '',
-                orderNo: '',
-                orderDate: '',
-                itemNo: '',
-                itemName: '',
-                quantity: '',
-                unit: '',
-                orderStatus: '',
-                finishProcess: '',
-                finishrate: '',
-                deliveryDate: '',
-            },
-            //新增页面表格数据组
+            // 下发 与 详情显示
+            showInfo: [{
+                show: true
+            }],
+
+            // 设置tab默认显示
+            activeTab: 'first',
+
+            // 修改对话框
+            modifysaleplan: false,
+
+            // 可编辑表格
+            isDisabled: false,
+
+            // 新增按钮显示 
+            isAddPlanBtn : true,
+            isSaveNewPlan : true,
+
+            // 新增页面表格数据组
             newListData: [],
 
-            //表格数据表单部分
-            formData: {
-                operUser: '',
-                operTimeStart: '',
-                operTimeEnd: '',
-                createTimeStart: '',
-                createTimeEnd: '',
-            },
+            // 新增页排產計劃 周信息
+            weekDate: [],
 
-            // 分页
-            pageList: {
-                pageNum: 1,
-                pageSize: 1,
-                total: 1
-            },
-
-            //新增页客户信息
-            guestInfo: [],
-
-            //数据表格的id
+            // 数据表格的id
             tempID: '',
+            
+            // 数据表格的title
+            titleValue: '新增',
+            
+            // 表格渲染对象
+            SysDicListInfo: {
+                processList : [],
+                typeList : [],
+                priorityList : [],
+                custList : []
+            },
+
+            // 周计划时间
+            PlanBill : {
+            },
 
             // 修改客户计划
             ModifyGuestInfo: null,
             ModifyFormData: null,
-            ModifyListData: null,
+            
+            //全选框获取ID
+            batchIds: '',
 
-            //详情表单数据
-            infoform: {
-                planNo: '',
-                createTime: '',
-                operation: '',
-                operTime: '',
-                operUser: ''
-            },
-
-            //详情列表数据
-            infolist: [{
-                planType: '',
-                custName: '',
-                orderNo: '',
-                orderDate: '',
-                itemNo: '',
-                itemName: '',
-                quantity: '',
-                unit: '',
-                orderStatus: '',
-                finishProcess: '',
-                finishrate: '',
-                deliveryDate: '',
-            }],
-
-            //新增校验
-            ruleForm: {
-                planType: '',
-                custName: '',
-                orderNo: '',
-                orderDate: '',
-                itemNo: '',
-                itemName: '',
-                quantity: '',
-                deliveryDate: '',
-            },
-
-            rules: {
-                planType: [
-                    { validator: validateplanType, trigger: 'select' }
-                ],
-                custName: [
-                    { validator: validatecustName, trigger: 'select' }
-                ],
-                orderNo: [
-                    { validator: validateorderNo, trigger: 'blur' }
-                ],
-                orderDate: [
-                    { validator: validateorderDate, trigger: 'blur' }
-                ],
-                itemNo: [
-                    { validator: validateitemNo, trigger: 'blur' }
-                ],
-                itemName: [
-                    { validator: validateproductName, trigger: 'blur' }
-                ],
-                quantity: [
-                    { validator: validateaccount, trigger: 'blur' }
-                ],
-                deliveryDate: [
-                    { validator: validatepublishDate, trigger: 'blur' }
-                ],
-            }
+            //弹框是否关闭
+            dialogVisible: false,
+            deleteMsg:'',
+            tipMsg:''
         }
     },
 
     methods: {
-        test() {
-            console.log(1)
-        },
-
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
-        },
-
-        // 清空数据 
-        clearData(dataObj) {
-            var obj = Object.prototype.toString.call(dataObj);
-            if (obj === "[object Array]") {
-                dataObj = [];
-            } else {
-                for (var key in dataObj) {
-                    dataObj[key] = ""
-                }
-            }
-        },
-        clearTableData() {
-            this.newListData = [];
-        },
-        getEditData(id) {
-            var that = this;
-            that.$ajax.get('plan/updatePlanOnclick', {
-                    params: {
-                        planId: id
-                    }
-                })
-                .then(function(res) {
-                    console.log(res)
-                })
-                .catch(function(err) {
-                    console.log(err);
-                });
-        },
 
         // 获取数据数据表格
         getData() {
@@ -280,248 +86,187 @@ export default {
                 url: 'week/index',
                 transformRequest: [function(data) {　　
                     data = JSON.stringify({
-                    	memberNo: "123",
-                    	pageNum:"1",
-                    	pageSize:"10"
+                        pageNum:"1",
+                        pageSize:"10"
                     });
                     return data;
                 }],
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            })
-            .then(function(results) {
-            	console.info(results);
+            }).then(function(results) {
                 var data = results.data;
                 if (data.success === true) {
-//                    that.showInfo[index].show = false
                     that.loadTable(data);
                 }
-            })
-            .catch(function(error) {
+            }).catch(function(error) {
                 console.log(error);
             });
         },
 
-        // 数据表格 加载 {备注：这段数据请求loadTable 可以与 loadTableStatus函数合并} 
+        // 加载数据
         loadTable(data) {
-            var that = this;
-            var loadData = data.data.page;
-            that.pageList.pageNum = loadData.pageNum;
-            that.pageList.pageSize = loadData.pageSize;
-            that.pageList.total = loadData.total;
+            var that = this,
+                loadData = data.data.page;
             that.showInfo = [];
-            loadData.list.every(function(el) {
-                var flag = el.operation === "01" ? true : false
 
-                // 需要在此判断 el 中 是否下发，如果已下发，则show赋值为false,未下发show赋值为true
+            loadData.list.every(function(el) {
+                var flag = el.issSts === "01" ? true : false;
+                el.issSts = el.issSts === "01" ? '未下发' : '已下发';
                 return that.showInfo.push({ show: flag });
             })
             that.tableData = loadData.list;
         },
 
-        // tabController Event 
-        loadTableStatus(id) {
-            var that = this;
-            that.$ajax.get('plan/index?operation=' + id)
-                .then(function(res) {
-                    that.loadTable(res);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
+        // 查询
+        search(type) {
+            var that = this,
+                searchData = that.searchForm;
+
+            searchData.pageSize = '10';
+            searchData.pageNum = '1';
+            searchData.issSts = type;
+
+            for (var key in searchData) {
+                if (typeof searchData[key] === "object") {
+                    searchData[key] = (searchData[key].toLocaleDateString()).replace(/\//g, "-");
+                }
+            }
+
+            that.$ajax.get('week/loadTable', {
+                params: searchData
+            }).then(function(res) {
+                var data = res.data;
+                if (data.success) {
+                    that.loadTable(data);
+                }
+            }).catch(function(err) {
+                console.log(err);
+            });
         },
 
-        // tabController Event
+        // 重置
+        reset() {
+            var that = this;
+            that.$clearObject(that.searchForm);
+        },
+
+        // 刷新
+        refresh() {
+            var that = this;
+            that.$clearObject(that.searchForm);
+            that.getData();
+        },
+
+        // 新增周计划页面
+        openAddWeekPlan() {
+            var that = this;
+            that.newCustom = true;
+            that.$ajax.get('week/queryWeekList').then(function(res) {
+                 if(res.data.success){
+                    that.loadWeekPlanTable(res.data.data)
+                 }
+            })
+        },
+
+        loadWeekPlanTable(data){
+            this.weekDate = data.data;
+            this.SysDicListInfo = data;
+            this.isAddPlanBtn = true;
+            this.isSaveNewPlan = false;
+            this.newListData = [];
+            this.addWorkplan();
+        },
+
+        saveWeekNewPlan(){
+            this.isAddPlanBtn = false;
+            this.isSaveNewPlan = true;
+            this.isDisabled = true;
+            console.log(this.newListData)
+        },
+
+        // 根据下发类型展示数据
         changeTableEffective(tab) {
             switch (tab.name) {
                 case 'first':
-                    this.getData();
+                    this.search();
                     break;
                 case 'second':
-                    this.loadTableStatus("01");
+                    this.search("01");
                     break;
                 case 'third':
-                    this.loadTableStatus("02");
+                    this.search("02");
                     break;
             }
         },
 
         // 数据表格 下发Event
-        operationPlan(ids, index) {
+        operationWeek(id, index) {
             var that = this;
-            console.log(ids);
             that.$ajax({
                     method: 'post',
-                    url: 'plan/operationPlan',
+                    url: 'week/operationWeekStatus',
                     transformRequest: [function(data) {　　
                         data = JSON.stringify({
-                            operationType: "issued",
-                            planId: ids,
+                            workplanWeekId: id,
                         });
                         return data;
                     }],
                     headers: {
                         'Content-Type': 'application/json'
                     }
-                })
-                .then(function(results) {
+                }).then(function(results) {
                     var data = results.data;
-                    if (data.success === true) {
+                    if (data.success) {
                         that.showInfo[index].show = false
+                        that.search();
                     }
                 })
         },
 
-        // 数据表格 详情Event
-        detailPlan(id) {
+        // 修改模态框
+        updateWeek(id) {
             var that = this;
-            that.$ajax.get('plan/index?operation=' + id).then(function(res) {
-                console.log(res);
-            }).catch(function(error) {
-                console.log(error);
-            });
-        },
-
-        // 新增计划表单保存 btn-save
-        addPlan() {
-            var that = this;
-            var _data = {}
-            for (var key in that.ruleForm) {
-                if (!that.ruleForm[key]) {
-                    alert("请完整填写信息");
-                    return
+            that.$ajax.get('week/queryWeekList',{
+                params: {
+                    workplanWeekId: id
                 }
-                _data[key] = that.ruleForm[key];
-            }
-            that.newListData.push(_data);
-            that.clearData(that.ruleForm);
-
+            }).then(function(res) {
+                that.titleValue = "编辑";
+                that.modifysaleplan = true;
+                that.tempID = id;
+                that.ModifyGuestInfo = res.data.data.dataList;
+                that.SysDicListInfo = null;
+                that.SysDicListInfo = res.data.data;
+            });            
         },
 
-        // 新增计划表格编辑 btn-edit
-        editTable() {
-            this.editFlag = false;
-        },
 
-        // 处理新建计划表格数据
-        handleTableData(id, url) {
+
+        // 刪除周計劃
+        deletelWeek(id) {
             var that = this;
-            var i, len = that.newListData.length;
-            if (!len) {
-                alert("暂无数据，请添加计划");
-                return;
-            }
-            for (i = 0; i < len; i++) {
-                var el = that.newListData[i];
-                var custNo = el.custName.custNo;
-                el.custNo = custNo;
-                el.custName = el.custName.custName;
-
-                // 1.判断数据是否 Obj 类型
-                // 2.判断新建计划中的日期是否改变，已改变，则重复第一步骤，并同步展示在新建计划表格[newList]
-                // 3.如果保存后清空新建计划表格的话，则忽略第二步骤
-                if (typeof el.orderDate === "object") {
-                    el.orderDate = (el.orderDate.toLocaleDateString()).replace(/\//g, "-");
-                    el.deliveryDate = (el.deliveryDate.toLocaleDateString()).replace(/\//g, "-");
-                }
-            }
-
-            var tempObj = {
-                operation: id,
-                planDetailList: that.newListData
-            }
-
-            if (that.tempID) tempObj.planId = that.tempID;
             that.$ajax({
                 method: 'post',
-                url: url,
+                url: 'week/deleteById',
                 transformRequest: [function(data) {　　
-                    data = JSON.stringify(tempObj);
+                    data = JSON.stringify({
+                        workplanWeekId: id,
+                    });
                     return data;
                 }],
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }).then(function(results) {
-                // that.clearData(that.newListData);
-                that.newListData = [];
-            })
-
-        },
-
-        // 新增计划保存 btn-save
-        saveList() {
-            this.handleTableData("01", "plan/addPlan");
-        },
-        publishList() {
-            this.handleTableData("02", "plan/addPlan");
-        },
-
-        saveModifyList() {
-            this.handleTableData("01", "plan/updatePlan");
-        },
-
-
-        publishModifyList() {
-            this.handleTableData("02", "plan/updatePlan");
-        },
-
-        //分页
-        handleSizeChange(val) {
-            var that = this;
-            that.pageList.pageSize = val;
-        },
-        handleCurrentChange(val) {
-            var that = this;
-            that.pageList.pageNum = val;
-        },
-
-        //查询
-        search() {
-            var that = this;
-            var _searchData = that.formData;
-            _searchData.pageSize = '10';
-            _searchData.pageNum = '1';
-
-            for (var key in _searchData) {
-                if (typeof _searchData[key] === "object") {
-                    _searchData[key] = (_searchData[key].toLocaleDateString()).replace(/\//g, "-");
+                var data = results.data;
+                if (data.success === true) {
+                    that.search();
                 }
-            }
-
-            that.$ajax.get('plan/loadTable', {
-                params: _searchData
-            }).then(function(response) {
-                that.loadTable(response);
-                that.clearData(that.formData);
-            }).catch(function(err) {
-                console.log(err);
-            });
-        },
-
-        //新增页面客户名称
-        addGuestInfo() {
-            var that = this;
-            that.$ajax.get('plan/addPlanOnclick').then(function(res) {
-                that.guestInfo = res.data.data.dataList;
             })
         },
-
-        // 修改模态框
-        openmodify(ids) {
-            var that = this;
-            that.modifysaleplan = true;
-            that.tempID = ids.row.planId;
-        },
-
-        //重置
-        reset() {
-            var that = this;
-            that.clearData(that.formData);
-        },
-
-        //修改
+        
+        // 修改
         lodeModifyInfo() {
             var that = this;
             that.$ajax.get('plan/updatePlanOnclick', {
@@ -529,16 +274,13 @@ export default {
                     planId: that.tempID
                 }
             }).then(function(res) {
-                // 客户列表 res.data.dataList
-                // 客户信息 res.data.data
-                console.log(res);
                 that.ModifyGuestInfo = res.data.data.dataList;
                 that.ModifyFormData = res.data.data.data;
                 that.newListData = that.ModifyFormData.planDetailList;
             })
         },
 
-        //详情
+        // 详情
         detailplan(id) {
             var that = this;
             that.$ajax.get('plan/detailPlan', {
@@ -552,13 +294,188 @@ export default {
                     list: res.data.data.dataList
                 }
             })
+        },
+
+        // 下发周计划
+        opearationWeekplan(){
+          var that = this;
+          var tempObj = {
+                  workplanWeekId:"1"
+                }
+               that.$ajax({
+                   method: 'post',
+                   url: 'week/operationWeekStatus',
+                   transformRequest: [function(data) {　　
+                       data = JSON.stringify(tempObj);
+                       return data;
+                   }],
+                   headers: {
+                       'Content-Type': 'application/json'
+                   }
+               }).then(function(results) {
+                   that.newListData = [];
+               })
+        },
+
+        deleteObject(){
+            var that = this;
+            var dataList = that.dataList;
+            var tempObj = {
+                idList: dataList
+            }
+            that.$ajax({
+                method: 'post',
+                url: "/week/operationWeek",
+                transformRequest: [function(data) {　
+                    data = JSON.stringify(tempObj);
+                    return data;
+                }] ,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function (data) {
+                console.log(data);
+                if(data.data.success){
+                  alert("删除成功");
+                  that.dialogVisible = false;
+                }else{
+                 alert("删除失败");
+                 that.dialogVisible = false;
+                }
+            })
+        },
+
+        //删除排产计划、排产班次
+        batchDeleteWorkplanData(){
+          var that = this;
+            if (that.batchIds == "") {
+              alert("请选择您要删除的数据");
+              return;
+            }
+            that.deleteMsg="您确定要删除这些数据吗？";
+            that.dataList=that.batchIds;
+            that.dialogVisible=true;          
+        },
+
+        // 批量删除 获取被选中的排产计划id
+        handleSelectionChange(id,index) {
+            var val = [];
+            val.push(id);
+            val.push(index);
+            this.batchIds = val;
+        },
+
+        // 新增 排产计划
+        addWorkplan(){
+            var that = this;
+            that.newListData.push({
+                type        :null,
+                lv          :null,
+                custName    :null,
+                ordrNo      :"",
+                itemNo      :"",
+                itemName    :"",
+                productNo   :"",
+                machine     :"",
+                moldingCycle:"",
+                mouldNo     :"",
+                materialGrade:"",
+                scndProc    :null,
+                PlanBill    :{
+                    monday : {
+                        day:{
+                            weekDate: that.weekDate.mondayDate,
+                            clas: "01",
+                            quantity: ""
+                        },
+                        night:{
+                            weekDate: that.weekDate.mondayDate,
+                            clas: "02",
+                            quantity: ""
+                        }
+                    },
+                    tuesday : {
+                        day:{
+                            weekDate: that.weekDate.tuesdayDate,
+                            clas: "01",
+                            quantity: ""
+                        },
+                        night:{
+                            weekDate: that.weekDate.tuesdayDate,
+                            clas: "02",
+                            quantity: ""
+                        }
+                    },
+                    wednesday : {
+                        day:{
+                            weekDate: that.weekDate.wednesdayDate,
+                            clas: "01",
+                            quantity: ""
+                        },
+                        night:{
+                            weekDate: that.weekDate.wednesdayDate,
+                            clas: "02",
+                            quantity: ""
+                        }
+                    },
+                    thursday : {
+                        day:{
+                            weekDate: that.weekDate.thursdayDate,
+                            clas: "01",
+                            quantity: ""
+                        },
+                        night:{
+                            weekDate: that.weekDate.thursdayDate,
+                            clas: "02",
+                            quantity: ""
+                        }
+                    },
+                    friday : {
+                        day:{
+                            weekDate: that.weekDate.fridayDate,
+                            clas: "01",
+                            quantity: ""
+                        },
+                        night:{
+                            weekDate: that.weekDate.fridayDate,
+                            clas: "02",
+                            quantity: ""
+                        }
+                    },
+                    saturday : {
+                        day:{
+                            weekDate: that.weekDate.saturdayDate,
+                            clas: "01",
+                            quantity: ""
+                        },
+                        night:{
+                            weekDate: that.weekDate.saturdayDate,
+                            clas: "02",
+                            quantity: ""
+                        }
+                    },
+                    sunday : {
+                        day:{
+                            weekDate: that.weekDate.sundayDate,
+                            clas: "01",
+                            quantity: ""
+                        },
+                        night:{
+                            weekDate: that.weekDate.sundayDate,
+                            clas: "02",
+                            quantity: ""
+                        }
+                    }
+                },
+                sum         :"",
+                picking     :"",
+                delivery    :"",
+                inv         :"",
+                secInv      :""
+            });
         }
     },
-
     mounted() {
         this.getData();
-    },
-    destroyed() {
-        EventBus.$emit("setInfoData", this.EventData);
     }
 }

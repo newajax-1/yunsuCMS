@@ -25,7 +25,7 @@
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="计划状态：" >
-                                            <span v-html='infoform.operation'></span>
+                                            <span v-html='infoform.operationName'></span>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
@@ -35,7 +35,7 @@
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="计划下发人：">
-                                            <span v-html='infoform.operUser'></span>
+                                            <span v-html='infoform.operUserName'></span>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -124,8 +124,8 @@
                 var i , len = that.infoTableList.length;
                 for( i = 0 ; i < len ; i++ ){
                     var el = that.infoTableList[i];
-                    el.finishrate = (el.finishProcess/el.quantity)+"%";
-                    el.finishProcessText = "完成/数量" ;
+                    el.finishrate = (100*el.finishProcess/el.quantity)+"%";
+                    el.finishProcessText = el.finishProcess+"/"+el.quantity;
                 }
             })
         },

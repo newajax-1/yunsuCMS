@@ -9,29 +9,79 @@
             </el-col>
             <!-- 生产计划管理 end -->
             <!-- 数据表格 start -->
-            <el-col :span="24">
+            <el-col :span="24" class="box"> 
+                <p class="prod-title">注塑机</p>
                 <div class="prod-table">
-                    <span>注塑机</span>
-                    <table>
-                        <tr>
-                            <td class="prod-table-td">
-                                <span>全部</span>
-                                <span>10</span>
-                            </td>
-                            <td class="prod-table-td">
-                                <span>生产</span>
-                                <span>10</span>
-                            </td> 
-                            <td class="prod-table-td">
-                                <span>空闲</span>
-                                <span>10</span>
-                            </td> 
-                            <td class="prod-table-td">
-                                <span>故障</span>
-                                <span>10</span>
-                            </td> 
-                        </tr>
-                    </table>
+                    <el-tooltip class="text" effect="dark" content="全部：10" placement="top-start">
+                        <p class="prod-text">
+                            <span>全部：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                    <el-tooltip class="text" effect="dark" content="生产：10" placement="top">
+                        <p class="prod-text">
+                            <span>生产：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                    <el-tooltip class="text" effect="dark" content="空闲：10" placement="top-end">
+                        <p class="prod-text">
+                            <span>空闲：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                    <el-tooltip class="text" effect="dark" content="空闲：10" placement="top-end">
+                        <p class="prod-text">
+                            <span>故障：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                </div>
+            </el-col>
+            <el-col :span="24" class="box"> 
+                <p class="prod-title">模具</p>
+                <div class="prod-table">
+                    <el-tooltip class="text" effect="dark" content="全部：10" placement="top-start">
+                        <p class="prod-text">
+                            <span>全部：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                    <el-tooltip class="text" effect="dark" content="生产：10" placement="top">
+                        <p class="prod-text">
+                            <span>生产中：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                    <el-tooltip class="text" effect="dark" content="空闲：10" placement="top-end">
+                        <p class="prod-text">
+                            <span>维修保养中：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                </div>
+            </el-col>
+            <el-col :span="24" class="box"> 
+                <p class="prod-title">原材料</p>
+                <div class="prod-table">
+                    <el-tooltip class="text" effect="dark" content="全部：10" placement="top-start">
+                        <p class="prod-text">
+                            <span>种类：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                    <el-tooltip class="text" effect="dark" content="生产：10" placement="top">
+                        <p class="prod-text">
+                            <span>正常库存：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
+                    <el-tooltip class="text" effect="dark" content="空闲：10" placement="top-end">
+                        <p class="prod-text">
+                            <span>库存告警：</span>
+                            <strong>10</strong>
+                        </p>
+                    </el-tooltip>
                 </div>
             </el-col>
             <!-- 数据表格 end -->
@@ -40,8 +90,23 @@
 </template>
 
 <style lang="stylus" rel="stylesheet/stylus">
-.prod-table-td
+.box
+    margin 0
+.prod-title 
+    margin-top 20px
+    margin-bottom 10px
+    padding-left 10px
+.text
     width 200px
     height 78px
+    color #333743
     border 1px solid  #e1e1e1
+.prod-text
+    display inline-block
+    line-height 78px
+    padding 10px
+strong
+    padding-left 40px
+    font-size 30px
+    font-weight 100
 </style>

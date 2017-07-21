@@ -307,6 +307,7 @@ export default {
                 if (data.success === true) {
                     that.showInfo[index].show = false
                 };
+                that.getData();
             });
         },
 
@@ -326,12 +327,13 @@ export default {
         handleSizeChange(val) {
             var that = this;
             that.pageList.pageSize = val;
-            console.log(that.pageList.pageSize)
+            that.getData();
         },
 
         handleCurrentChange(val) {
             var that = this;
             that.pageList.pageNum = val;
+            that.getData();
         },
 
 
@@ -357,6 +359,7 @@ export default {
             loadData.list.every(function(el) {
                 var flag = el.operation === "01" ? true : false;
                 return that.showInfo.push({ show: flag });
+
             })
             that.tableData = loadData.list;
         },
@@ -444,7 +447,7 @@ export default {
                     'Content-Type': 'application/json'
                 }
             }).then(function(res) {
-                // if (res.data.success) that.newListData = [];
+                if (res.data.success) that.newListData = [];
             });
         },
 
@@ -457,8 +460,8 @@ export default {
                 type: "warning"
             }).then(function() {
                 done();
-                // that.ruleForm = [];
-                // that.newListData = [];
+                that.ruleForm = [];
+                that.newListData = [];
             }).catch(function() {});
         },
 

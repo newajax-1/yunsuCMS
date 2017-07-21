@@ -26,7 +26,7 @@
                                     prop='identify'>
                                     <el-row>
                                         <el-col :span="16"><el-input type="text" v-on:keyup.enter="login"  v-model="ruleForm.identify" auto-complete="off" placeholder="验证码"></el-input></el-col>
-                                        <el-col :span="8"><img class="identify-img"src="http://192.168.168.66:8080/ybs_mes/memberAccount/AuthImg"></el-col>
+                                        <el-col :span="8"><img class="identify-img" :src="loginURL" @click="reImg()"></el-col>
                                     </el-row>
                                 </el-form-item>
                                 -->
@@ -60,6 +60,9 @@
         </el-row>
     </div>
 </template>
+
+<script src="./../../main.js"></script>
+
 <script>
     import axios from 'axios'
     export default {
@@ -88,6 +91,7 @@
                 dialogVisible: false,
                 errorMsg:'',
                 activeName: 'login',
+                loginURL: axios.defaults.baseURL + "memberAccount/AuthImg",
                 winSize: {
                     width: '',
                     height: ''
@@ -113,6 +117,7 @@
             }
         },
         methods: {
+            
             handleClick(tab, event) {
             },
             setSize() {
@@ -124,6 +129,7 @@
             },
             login(){
                 var that = this;
+                        console.log(1)
                 that.$ajax({
                     method: 'post',
                     url: 'memberAccount/toLogin',
@@ -131,7 +137,6 @@
                     　　data = JSON.stringify({
                             account:that.ruleForm.username,
                             password:that.ruleForm.password,
-                            // verifyCode:that.ruleForm.identify
                         });
                         return data;
                     }],
@@ -142,14 +147,20 @@
                 .then(function(results){
                     var data = results.data;
                     if(data.success === true){
+                        sessionStorage.setItem("useName",that.ruleForm.username)
                         that.$goRoute("/home");
+                        console.log(1)
                     }else{
                         // 弹出 data.data.tipMsg;
                         that.dialogVisible=true;
                         that.errorMsg=data.tipMsg;
                     }
                 })
-            }
+            },
+            // reImg() {
+            //     var that = this;
+            //     that.loginURL = axios.defaults.baseURL + "memberAccount/AuthImg?nId" + Math.random();
+            // }
         },
         created() {
             this.setSize();

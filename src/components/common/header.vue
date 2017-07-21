@@ -43,14 +43,14 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @media screen and (max-width:1366px)
     .header
-      height:70px !important
+      height:50px !important
     .top-nav-content
-      line-height:70px !important
+      line-height:50px !important
       .logo,.nav-title
         padding:0 5px !important
   
   .top-nav-content
-    line-height:80px
+    line-height:70px
     background-color:#383d41
     .border-right
       border-left:1px solid #2c2d2f

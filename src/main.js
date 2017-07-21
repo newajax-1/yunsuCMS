@@ -4,29 +4,14 @@
 import Qs from 'qs'
 import Vue from 'vue'
 import App from './App'
-import axios from 'axios'
 import router from './router'
 import ElementUI from 'element-ui'
 
 import 'element-ui/lib/theme-default/index.css'
-import '../src/assets/css/common.styl'
 import 'font-awesome/css/font-awesome.css'
+import '../src/assets/css/common.styl'
 
-//axios配置请求根目录
-// axios.defaults.baseURL = 'http://192.168.168.66:8080/ybs_mes/'
-axios.defaults.baseURL = 'http://localhost:8080/ybs_mes/'
-    // axios添加给Vue的原型方法
-Vue.prototype.$ajax = axios
-
-
-// 非父子组件通信
-var EventBus = window.EventBus = new Vue();
-
-// 路由跳转
-Vue.prototype.$goRoute = function(index) {
-    this.$router.push(index);
-}
-
+import './assets/js/common'
 // Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
