@@ -23,12 +23,11 @@ import invWarning from '../components/template/invwarning/invWarning'
 //用户管理
 import userManagement from '../components/template/systemsMent/userManagement'
 import roleManagement from '../components/template/systemsMent/roleManagement'
-
-import test from '../components/template/test'
+import orgManagement from '../components/template/systemsMent/orgManagement'
 
 Vue.use(Router)
 
-let YusuRouter = new Router({
+export default new Router({
     mode: "history",
 
     /**
@@ -42,98 +41,47 @@ let YusuRouter = new Router({
         {
             path: '/home',
             component: index,
-            meta: {
-                requireAuth: true,
-            },
             children: [{
                     path: 'saleplan',
-                    component: saleplan,
-                    meta: {
-                        requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-                    },
+                    component: saleplan
                 },
                 {
                     path: 'salersInfo',
-                    component: salersInfo,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    component: salersInfo
                 },
                 {
                     path: 'saleplaninfo',
-                    component: saleplaninfo,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    component: saleplaninfo
                 },
                 {
                     path: 'prodplansinfo',
-                    component: prodPlansInfo,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    component: prodPlansInfo
                 },
                 {
                     path: 'weekprodplans',
-                    component: weekProdPlans,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    component: weekProdPlans
                 },
                 {
-                    path: 'weekprodplansinfo',
-                    component: weekProdPlansInfo,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    path:'weekprodplansinfo',
+                    component: weekProdPlansInfo
                 },
                 {
-                    path: 'invwarning',
-                    component: invWarning,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    path:'invwarning',
+                    component: invWarning
                 },
                 {
-                    path: 'usermanagement',
-                    component: userManagement,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    path:'usermanagement',
+                    component: userManagement
                 },
                 {
-                    path: 'rolemanagement',
-                    component: roleManagement,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    path:'rolemanagement',
+                    component: roleManagement
                 },
                 {
-                    path: 'test',
-                    component: test,
-                    meta: {
-                        requireAuth: true,
-                    },
+                    path:'orgManagement',
+                    component: orgManagement
                 },
             ]
         },
     ]
-});
-
-//  判断是否需要登录权限 以及是否登录
-YusuRouter.beforeEach((to, from, next) => {
-    if (to.matched.some(res => res.meta.requireAuth)) { // 判断是否需要登录权限
-        if (localStorage.getItem('username')) { // 判断是否登录
-            next()
-        } else { // 没登录则跳转到登录界面
-            next({
-                path: '/',
-                query: { redirect: login }
-            })
-        }
-    } else {
-        next()
-    }
 })
-
-export default YusuRouter;

@@ -129,7 +129,6 @@
             },
             login(){
                 var that = this;
-                        console.log(1)
                 that.$ajax({
                     method: 'post',
                     url: 'memberAccount/toLogin',
@@ -145,11 +144,12 @@
                     }
                 })
                 .then(function(results){
+                    sessionStorage.setItem("name",results.data.data.data.name);
+                    sessionStorage.setItem("jobNumber",results.data.data.data.jobNumber);
                     var data = results.data;
                     if(data.success === true){
-                        sessionStorage.setItem("useName",that.ruleForm.username)
+                        sessionStorage.setItem("useName",that.ruleForm.username);
                         that.$goRoute("/home");
-                        console.log(1)
                     }else{
                         // 弹出 data.data.tipMsg;
                         that.dialogVisible=true;
@@ -167,7 +167,10 @@
             $(window).resize(() => {
                 this.setSize();
             });
-        }
+        },
+        destroyed() {
+        EventBus.$emit("headerUserData", this.EventData);
+    }
     }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">

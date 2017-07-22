@@ -132,7 +132,7 @@
 			<el-row>
 				<el-col :span="24">
 					<div class="list-table">
-						<el-table :data="staffTableData" style="width: 100%" @selection-change="handleSelectionChange">
+						<el-table :data="staffTableData" style="width: 100%">
 							<el-table-column prop="memberName" label="会员名称"></el-table-column>
 							<el-table-column prop="jobName" label="会员职务"></el-table-column>
 							<el-table-column prop="jobNumber" label="会员工号"></el-table-column>
@@ -150,7 +150,7 @@
 			
 			
 			<!--分页-->
-			<div class="block list-page fr">
+			<!-- <div class="block list-page fr">
 			    <el-pagination
 			            @size-change="handleSizeChange"
 			            @current-change="handleCurrentChange"
@@ -160,11 +160,11 @@
 			            layout="total, sizes, prev, pager, next"
 			            :total=page.total>
 			    </el-pagination>
-			</div>
+			</div> -->
 		</div>
 	</span>
 	</el-dialog> 
 </div>
 </template>
 <!-- 引入js -->
-<script src="./testOpt.js"></script>
+<script src="./orgManagementOpt.js"></script>

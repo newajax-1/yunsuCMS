@@ -1,5 +1,5 @@
 import Qs from 'qs'
-
+import Vue from "vue"
 export default {
     name: 'weekProdPlan',
     data() {
@@ -39,16 +39,16 @@ export default {
             isSaveNewPlan : true,
 
             // 新增页面表格数据组
-            newListData: [],
+            newListData: null,
 
             // 新增页排產計劃 周信息
             weekDate: [],
-
-            // 数据表格的id
-            tempID: '',
+            saveWeekId : undefined,
+            // 修改id
+            tempId: undefined,
             
             // 数据表格的title
-            titleValue: '新增',
+            titleValue: undefined,
             
             // 表格渲染对象
             SysDicListInfo: {
@@ -59,13 +59,15 @@ export default {
             },
 
             // 周计划时间
-            PlanBill : {
+            planBill : {
             },
 
             // 修改客户计划
             ModifyGuestInfo: null,
             ModifyFormData: null,
-            
+
+            deleteArray : [],
+            detailDataInfo : null,
             //全选框获取ID
             batchIds: '',
 
@@ -99,9 +101,7 @@ export default {
                 if (data.success === true) {
                     that.loadTable(data);
                 }
-            }).catch(function(error) {
-                console.log(error);
-            });
+            }).catch(function(error) {});
         },
 
         // 加载数据
@@ -140,9 +140,7 @@ export default {
                 if (data.success) {
                     that.loadTable(data);
                 }
-            }).catch(function(err) {
-                console.log(err);
-            });
+            }).catch(function(err) {});
         },
 
         // 重置
@@ -157,11 +155,12 @@ export default {
             that.$clearObject(that.searchForm);
             that.getData();
         },
-
+        
         // 新增周计划页面
         openAddWeekPlan() {
             var that = this;
             that.newCustom = true;
+            that.titleValue = "新增周计划";
             that.$ajax.get('week/queryWeekList').then(function(res) {
                  if(res.data.success){
                     that.loadWeekPlanTable(res.data.data)
@@ -169,20 +168,178 @@ export default {
             })
         },
 
+        // 新增周计划 加载表格
         loadWeekPlanTable(data){
-            this.weekDate = data.data;
+            this.weekDate = data.data || data.dataList[0].weekday;
             this.SysDicListInfo = data;
             this.isAddPlanBtn = true;
             this.isSaveNewPlan = false;
-            this.newListData = [];
-            this.addWorkplan();
+            if(data.dataList){
+                this.newListData = data.dataList || [];
+            }else{
+                this.newListData = [];
+                this.addWorkplan();
+            }
         },
 
         saveWeekNewPlan(){
+            var week,
+                data = [],
+                sendData = null;
             this.isAddPlanBtn = false;
             this.isSaveNewPlan = true;
             this.isDisabled = true;
-            console.log(this.newListData)
+            this.newListData.every(function(el){
+                for(var key in el){
+                    if(el.tempOrder && el.tempItem){
+                        delete el.tempItem;
+                        delete el.tempOrder;
+                    }
+                }
+                return data.push(el);
+            })
+            if(this.tempId){
+                sendData = {
+                    workplanWeekId : this.tempId,
+                    operationType : "update",
+                    detailList : data
+                }
+                this.sendWeekPlan(sendData);
+            }else{
+                week = this.weekDate.week.match(/[^\(\)]+(?=\))/g)[0];
+                sendData = {
+                    week : week,
+                    operationType : "add",
+                    detailList : data
+                }
+                this.sendWeekPlan(sendData);
+            }
+        },
+
+        sendWeekPlan(datas){
+            var that = this;
+            that.$ajax({
+                method: 'post',
+                url: 'week/saveWorkplan',
+                transformRequest: [function(data) {　　
+                    data = JSON.stringify(datas);
+                    return data;
+                }],
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function(res) {
+                if(res.data.success){
+                    that.saveWeekId = res.data.data.weekId;
+                }
+            }).catch(function() {});
+        },
+
+        getOrderList(val,index){
+            var that = this;
+            that.$ajax({
+                method: 'post',
+                url: 'week/getWeekDetail',
+                transformRequest: [function(data) {　　
+                    data = JSON.stringify({
+                        custNo : val
+                    });
+                    return data;
+                }],
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function(res) {
+                if(res.data.success){
+                    that.handleOrderData(res.data.data,index)
+                }
+            }).catch(function() {});
+        },
+
+        handleOrderData(data,index){
+            var that = this,
+                tempListData = that.newListData[index];
+            tempListData.tempOrder = data.orderList;
+            Vue.set(that.newListData,index,tempListData);
+        },
+
+        getProductData(val,index){
+            var that = this;
+            that.$ajax({
+                method: 'post',
+                url: 'week/getWeekDetail',
+                transformRequest: [function(data) {　　
+                    data = JSON.stringify({
+                        orderNo : val
+                    });
+                    return data;
+                }],
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function(res) {
+                if(res.data.success){
+                    that.handleProductData(res.data.data,index);
+                }
+            }).catch(function() {});
+        },
+
+        handleProductData(data,index){
+            var that = this,
+                tempListData = that.newListData[index];
+            tempListData.tempItem = data.bomList;
+            Vue.set(that.newListData,index,tempListData);
+        },
+
+        setProductName(val,index){
+            var that = this,
+                tempListData = that.newListData[index];
+            tempListData.tempItem.every(function(el){
+                if(el.itemNo === val){
+                    tempListData.itemName = el.itemName;
+                }
+            })
+            Vue.set(that.newListData,index,tempListData);
+        },
+
+        // 修改模态框
+        updateWeek(id) {
+            var that = this;
+            that.tempId = id;
+            that.titleValue = "修改周计划"
+            that.$ajax.get('week/queryWeekList',{
+                params: {
+                    workplanWeekId: id
+                }
+            }).then(function(res) {
+                if(res.data.success){
+                    that.newCustom = true;
+                    that.loadWeekPlanTable(res.data.data)
+                }
+            });            
+        },
+
+        // 刪除周計劃
+        deletelWeek(id) {
+            var that = this;
+            that.$ajax({
+                method: 'post',
+                url: 'week/deleteById',
+                transformRequest: [function(data) {　　
+                    data = JSON.stringify({
+                        workplanWeekId: id,
+                    });
+                    return data;
+                }],
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function(results) {
+                var data = results.data;
+                if (data.success === true) {
+                    that.search();
+                }
+            })
         },
 
         // 根据下发类型展示数据
@@ -224,97 +381,44 @@ export default {
                 })
         },
 
-        // 修改模态框
-        updateWeek(id) {
-            var that = this;
-            that.$ajax.get('week/queryWeekList',{
-                params: {
-                    workplanWeekId: id
-                }
-            }).then(function(res) {
-                that.titleValue = "编辑";
-                that.modifysaleplan = true;
-                that.tempID = id;
-                that.ModifyGuestInfo = res.data.data.dataList;
-                that.SysDicListInfo = null;
-                that.SysDicListInfo = res.data.data;
-            });            
-        },
 
-
-
-        // 刪除周計劃
-        deletelWeek(id) {
-            var that = this;
-            that.$ajax({
-                method: 'post',
-                url: 'week/deleteById',
-                transformRequest: [function(data) {　　
-                    data = JSON.stringify({
-                        workplanWeekId: id,
-                    });
-                    return data;
-                }],
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(function(results) {
-                var data = results.data;
-                if (data.success === true) {
-                    that.search();
-                }
-            })
-        },
-        
-        // 修改
-        lodeModifyInfo() {
-            var that = this;
-            that.$ajax.get('plan/updatePlanOnclick', {
-                params: {
-                    planId: that.tempID
-                }
-            }).then(function(res) {
-                that.ModifyGuestInfo = res.data.data.dataList;
-                that.ModifyFormData = res.data.data.data;
-                that.newListData = that.ModifyFormData.planDetailList;
-            })
-        },
 
         // 详情
         detailplan(id) {
             var that = this;
-            that.$ajax.get('plan/detailPlan', {
+            that.$ajax.get('week/queryWeekList', {
                 params: {
-                    planId: id
+                    workplanWeekId: id
                 }
             }).then(function(res) {
-                that.$goRoute("saleplaninfo")
-                that.EventData = {
-                    data: res.data.data.data,
-                    list: res.data.data.dataList
+                if(res.data.success){
+                    that.detailDataInfo ={
+                        weekDate : res.data.data.dataList[0].weekday,
+                        SysDicListInfo :  res.data.data
+                    }
+                    that.$goRoute("weekProdPlansInfo");
                 }
             })
         },
 
         // 下发周计划
         opearationWeekplan(){
-          var that = this;
-          var tempObj = {
-                  workplanWeekId:"1"
-                }
-               that.$ajax({
-                   method: 'post',
-                   url: 'week/operationWeekStatus',
-                   transformRequest: [function(data) {　　
-                       data = JSON.stringify(tempObj);
-                       return data;
-                   }],
-                   headers: {
-                       'Content-Type': 'application/json'
-                   }
-               }).then(function(results) {
-                   that.newListData = [];
-               })
+            var that = this;
+            that.$ajax({
+                method: 'post',
+                url: 'week/operationWeekStatus',
+                transformRequest: [function(data) {　　
+                    data = JSON.stringify({
+                        workplanWeekId : that.saveWeekId
+                    });
+                    return data;
+                }],
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            }).then(function(res) {
+                console.log(res)
+            })
         },
 
         deleteObject(){
@@ -334,7 +438,6 @@ export default {
                     'Content-Type': 'application/json'
                 }
             }).then(function (data) {
-                console.log(data);
                 if(data.data.success){
                   alert("删除成功");
                   that.dialogVisible = false;
@@ -347,41 +450,49 @@ export default {
 
         //删除排产计划、排产班次
         batchDeleteWorkplanData(){
-          var that = this;
-            if (that.batchIds == "") {
+            var that = this;
+            if (!that.deleteArray.length) {
               alert("请选择您要删除的数据");
               return;
             }
             that.deleteMsg="您确定要删除这些数据吗？";
-            that.dataList=that.batchIds;
+            that.dataList=that.deleteArray;
             that.dialogVisible=true;          
         },
 
         // 批量删除 获取被选中的排产计划id
-        handleSelectionChange(id,index) {
-            var val = [];
-            val.push(id);
-            val.push(index);
-            this.batchIds = val;
+        handleSelectionChange(item) {
+            var that = this;
+            item.every(function(el){
+                console.log(el.workplanDetailId);
+                that.deleteArray.push(el.workplanDetailId);
+            })
         },
 
         // 新增 排产计划
         addWorkplan(){
             var that = this;
             that.newListData.push({
-                type        :null,
-                lv          :null,
-                custName    :null,
-                ordrNo      :"",
-                itemNo      :"",
-                itemName    :"",
-                productNo   :"",
-                machine     :"",
-                moldingCycle:"",
-                mouldNo     :"",
-                materialGrade:"",
-                scndProc    :null,
-                PlanBill    :{
+                type        :undefined,
+                lv          :undefined,
+                custName    :undefined,
+                ordrNo      :undefined,
+                tempOrder   :undefined,
+                tempItem    :undefined,
+                itemNo      :undefined,
+                itemName    :undefined,
+                productNo   :undefined,
+                machine     :undefined,
+                moldingCycle:undefined,
+                mouldNo     :undefined,
+                materialGrade:undefined,
+                scndProc    :undefined,
+                sum         :undefined,
+                picking     :undefined,
+                delivery    :undefined,
+                inv         :undefined,
+                secInv      :undefined,
+                planBill    :{
                     monday : {
                         day:{
                             weekDate: that.weekDate.mondayDate,
@@ -466,16 +577,14 @@ export default {
                             quantity: ""
                         }
                     }
-                },
-                sum         :"",
-                picking     :"",
-                delivery    :"",
-                inv         :"",
-                secInv      :""
+                }
             });
         }
     },
     mounted() {
         this.getData();
+    },
+    destroyed() {
+        EventBus.$emit("setWeekDetailInfo", this.detailDataInfo);
     }
 }

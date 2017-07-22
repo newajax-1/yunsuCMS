@@ -106,7 +106,7 @@
             <div class="message clearfix">
                 <div class="fl">
                     <el-button class="btn-edit btn" @click="showAdd(adfasdasd)">保存</el-button>
-                    <el-button class="btn-save btn" @click="">取消</el-button>
+                    <el-button class="btn-save btn" @click="newCustom = false">取消</el-button>
                 </div>
             </div>
         </el-dialog>
@@ -146,35 +146,49 @@
                 data2: [
                     {
                         id: "1",
-                        label: '一级 1',
+                        label: '销售管理',
                         children: [
                             {
                                 id: "1-1",
-                                label: '二级 1-1',
-                            }
+                                label: '销售计划管理',
+                            },
+                            {
+                                id: "1-2",
+                                label: '客户信息管理',
+                            },
                         ]
                     }, {
                         id: "2",
-                        label: '一级 2',
+                        label: '生产计划',
                         children: [
                             {
                                 id: "2-1",
-                                label: '二级 2-1'
-                            }, {
+                                label: '生产资源状态监控'
+                            }, 
+                            {
                                 id: "2-2",
-                                label: '二级 2-2'
-                            }
+                                label: '周生产计划'
+                            },
+                            {
+                                id: "2-3",
+                                label: '库存预警'
+                            },
                         ]
                     }, {
                         id: "3",
-                        label: '一级 3',
+                        label: '系统管理',
                         children: [
                             {
                                 id: "3-1",
-                                label: '二级 3-1'
-                            }, {
+                                label: '用户管理'
+                            }, 
+                            {
                                 id: "3-2",
-                                label: '二级 3-2'
+                                label: '角色管理'
+                            },
+                            {
+                                id: "3-3",
+                                label: '组织管理'
                             }
                         ]
                     }

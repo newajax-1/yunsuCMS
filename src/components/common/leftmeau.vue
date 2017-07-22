@@ -84,6 +84,12 @@
                                 index: "3-2",
                                 class: "",
                             },
+                            {
+                                text: "组织管理",
+                                route: "/home/orgmanagement",
+                                index: "3-3",
+                                class: "",
+                            },
                         ],
                     },
                 ]

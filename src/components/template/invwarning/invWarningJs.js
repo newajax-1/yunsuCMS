@@ -23,7 +23,6 @@ import Qs from 'qs'
         	itemName:'',
         	materialFactory:'',
         	curInv:'',
-        	secInv:'',
         	invStsName:''
         }],
         
@@ -39,9 +38,9 @@ import Qs from 'qs'
 
         // 分页
         page: {
-          pageNum: '',
-          pageSize: '',
-          total: ''
+          pageNum: 1,
+          pageSize: 10,
+          total: 1
         },
         currentPage: 1,
 
@@ -81,15 +80,6 @@ import Qs from 'qs'
         showFactory:true,
         //更新是否显示供应商
         showFactoryUpdate:true,
-        warningDetail:false,
-        detailTable: {
-        	warningName:'',
-        	itemNo:'',
-        	itemName:'',
-        	materialFactory:'',
-        	secInv:''
-        },
-        showFactoryDetail:true,
       }
     },
     methods: {
@@ -218,11 +208,7 @@ import Qs from 'qs'
               }
           })
       },
-      search(){
-    	  var that=this;
-    	  that.page.pageNum = '1';
-    	  that.loadTable();
-      },
+
       // 刷新
       refresh() {
         var that = this;
@@ -266,25 +252,12 @@ import Qs from 'qs'
         	  that.eselectOp = data.data.data.dicData;
               that.eselectItemOp = data.data.data.dataList;
               that.editTable =  data.data.data.data;
-              that.editTable.warningType=data.data.data.data.warningType;
-              that.editTable.curIns=data.data.data.data.curInv;
               if(that.editTable.warningName=="成品"){
             	  that.showFactoryUpdate=false;
               }else{
             	  that.showFactoryUpdate=true;
               }
           })
-      },
-      detailtab(object){
-    	  var that=this;
-    	  that.warningDetail=true;
-    	  that.detailTable=object;
-    	  console.info(object.warningName=="原材料");
-    	  if(object.warningName=="原材料"){
-    		  that.showFactoryDetail=true;
-    	  }else{
-    		  that.showFactoryDetail=false;
-    	  }
       },
       //当改变库品编号的时候调用
       changeItemNo(id){
@@ -342,7 +315,6 @@ import Qs from 'qs'
               transformRequest: [function (data) {
               	console.info(that.addInfo.curIns);
                 data = JSON.stringify({
-                  warningType:that.editTable.warningType,
                   invWarningId:that.editTable.invWarningId,
               	  itemNo:that.editTable.itemNo,
               	  itemName:that.editTable.itemName,

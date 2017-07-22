@@ -18,8 +18,7 @@
   // 用户
   import userManagement from '../template/systemsMent/userManagement'
   import roleManagement from '../template/systemsMent/roleManagement'
-
-  import test from '../template/test'
+  import orgManagement from '../template/systemsMent/orgManagement'
 
   export default {
       name : "content",
@@ -32,8 +31,7 @@
           weekProdPlansInfo,
           invWarning,
           userManagement,
-          roleManagement,
-          test,
+          orgManagement,
       }
   }
 </script>

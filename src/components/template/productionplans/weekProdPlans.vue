@@ -85,7 +85,7 @@
                                 <el-button 
                                     type="text"
                                     size="small"
-                                    @click="">详情</el-button>
+                                    @click="detailplan(scope.row.workplanWeekId)">详情</el-button>
                                 <el-button 
                                     v-show = "showInfo[scope.$index].show"
                                     type="text"
@@ -111,7 +111,7 @@
             <!--新增弹框 start-->
             <el-dialog
                 size="full"
-                title="新增周计划"
+                :title="titleValue"
                 custom-class="pub-dialog"
                 :visible.sync="newCustom">
                 <div class="add-week-plan">
@@ -128,7 +128,8 @@
                             </div>
                             <el-table
                                 style="width: 100% "
-                                :data="newListData">
+                                :data="newListData"
+                                @selection-change="handleSelectionChange">
                                 <el-table-column
                                     type="selection"
                                     width="55">
@@ -160,7 +161,11 @@
 
                                 <el-table-column width="150" prop="custName" label="客户">
                                     <template scope="scope">
-                                        <el-select placeholder="选择客户" :disabled="isDisabled" v-model="scope.row.custName">
+                                        <el-select 
+                                            placeholder="选择客户" 
+                                            :disabled="isDisabled" 
+                                            v-model="scope.row.custName" 
+                                            @change="getOrderList(scope.row.custName,scope.$index)">
                                             <el-option  
                                                 v-for="item in SysDicListInfo.custList" 
                                                 :label="item.custName" 
@@ -172,25 +177,32 @@
 
                                 <el-table-column width="150" prop="ordrNo" label="订单编号">
                                     <template  scope="scope">
-                                        <el-select :disabled="isDisabled"  v-model="scope.row.ordrNo">
-                                            <el-option value="122">asd</el-option>
+                                        <el-select 
+                                            :disabled="isDisabled" 
+                                            v-model="scope.row.ordrNo"
+                                            @change="getProductData(scope.row.ordrNo,scope.$index)">
+                                            <el-option 
+                                                v-for="item in scope.row.tempOrder"
+                                                :label="item.orderNo"
+                                                :value="item.orderNo"></el-option>
                                         </el-select>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="150" prop="itemNo" label="产品型号">
                                     <template  scope="scope" >
-                                        <el-select :disabled="isDisabled" v-model="scope.row.itemNo">
-                                            <el-option value=""></el-option>
+                                        <el-select :disabled="isDisabled" v-model="scope.row.itemNo" @change="setProductName(scope.row.itemNo,scope.$index)">
+                                            <el-option 
+                                                v-for="item in scope.row.tempItem"
+                                                :label="item.itemNo"
+                                                :value="item.itemNo"></el-option>
                                         </el-select>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="150" prop="itemName" label="产品名称">
                                     <template  scope="scope">
-                                        <el-select :disabled="isDisabled" v-model="scope.row.itemName">
-                                            <el-option value=""></el-option>
-                                        </el-select>
+                                        <el-input disabled v-model="scope.row.itemName"></el-input>
                                     </template>
                                 </el-table-column>
 
@@ -235,12 +247,12 @@
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column prop="PlanBill" :label="weekDate.week">
+                                <el-table-column prop="planBill" :label="weekDate.week || weekDate.titel">
                                     <el-table-column width="150" :label="weekDate.mondayDate">
                                         <el-table-column label="白班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    v-model="scope.row.PlanBill.monday.day.quantity"
+                                                    v-model="scope.row.planBill.monday.day.quantity"
                                                     :disabled="isDisabled"
                                                     type="text">
                                                 </el-input>
@@ -249,7 +261,7 @@
                                         <el-table-column label="夜班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    v-model="scope.row.PlanBill.monday.night.quantity"
+                                                    v-model="scope.row.planBill.monday.night.quantity"
                                                     :disabled="isDisabled"
                                                     type="text">
                                                 </el-input>
@@ -262,7 +274,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.tuesday.day.quantity"
+                                                    v-model="scope.row.planBill.tuesday.day.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -270,7 +282,7 @@
                                         <el-table-column label="夜班">
                                             <template scope="scope">
                                                 <el-input :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.tuesday.night.quantity"
+                                                    v-model="scope.row.planBill.tuesday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -282,7 +294,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.wednesday.day.quantity"
+                                                    v-model="scope.row.planBill.wednesday.day.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -291,7 +303,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.wednesday.night.quantity"
+                                                    v-model="scope.row.planBill.wednesday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -303,7 +315,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.thursday.day.quantity"
+                                                    v-model="scope.row.planBill.thursday.day.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -312,7 +324,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.thursday.night.quantity"
+                                                    v-model="scope.row.planBill.thursday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -324,7 +336,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.friday.day.quantity"
+                                                    v-model="scope.row.planBill.friday.day.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -333,7 +345,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.friday.night.quantity"
+                                                    v-model="scope.row.planBill.friday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -345,7 +357,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.saturday.day.quantity"
+                                                    v-model="scope.row.planBill.saturday.day.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -354,7 +366,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.saturday.night.quantity"
+                                                    v-model="scope.row.planBill.saturday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -366,7 +378,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.sunday.day.quantity"
+                                                    v-model="scope.row.planBill.sunday.day.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -375,7 +387,7 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     :disabled="isDisabled"
-                                                    v-model="scope.row.PlanBill.sunday.night.quantity"
+                                                    v-model="scope.row.planBill.sunday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -446,260 +458,6 @@
                     </div>
                     <div class="fr">共有<span class="detailMsg">条下发计划</span></div>
                 </div>
-            </el-dialog>
-        
-             <!--编辑弹框 start-->
-            <el-dialog
-                size="full"
-                :title="titleValue"
-                custom-class="pub-dialog"
-                @close="clearData(ruleForm)"
-                :visible.sync="modifysaleplan">
-                <el-row>
-                    <div class="list-table sched-table">
-                        <el-table
-                            style="width: 100% "
-                            :data="ModifyGuestInfo"
-                            @selection-change="">
-                            <el-table-column prop="issUsr" label="类型">
-                                <template>
-                                    <el-select :disabled="isDisabled">
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="lv" label="优先级">
-                                <template>
-                                    <el-select :disabled="isDisabled">
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="custName" label="客户">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="ordrNo" label="订单编号">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="itemNo" label="产品型号">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="itemName" label="产品名称">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="productNo" label="生产批号">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="machine" label="机台归属">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="moldingCycle" label="单件周期">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="mouldNo" label="模具编号">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="materialGrade" label="原材料">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="scndProc" label="二次加工">
-                                <template>
-                                    <el-select :disabled="isDisabled" >
-                                        <el-option value=""></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-
-                            <el-table-column prop="issUsr" label="111">
-                                <el-table-column prop="issUsr" label="06-10">
-                                    <el-table-column label="白班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="夜班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                </el-table-column>
-                                <el-table-column prop="issUsr" label="06-11">
-                                    <el-table-column label="白班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="夜班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                </el-table-column>
-                                <el-table-column prop="issUsr" label="06-12">
-                                    <el-table-column label="白班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="夜班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                </el-table-column>
-                                <el-table-column prop="issUsr" label="06-13">
-                                    <el-table-column label="白班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="夜班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                </el-table-column>
-                                <el-table-column prop="issUsr" label="06-14">
-                                    <el-table-column label="白班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="夜班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                </el-table-column>
-                                <el-table-column prop="issUsr" label="06-15">
-                                    <el-table-column label="白班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="夜班">
-                                        <template scope="scope">
-                                            <el-input 
-                                                :disabled="isDisabled"
-                                                type="text">
-                                            </el-input>
-                                        </template>
-                                    </el-table-column>
-                                </el-table-column>
-                            </el-table-column>
-
-                            <el-table-column prop="sum" label="生产合计">
-                                <template>
-                                    <el-input 
-                                        :disabled="isDisabled"
-                                        type="text">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="picking" label="领料需求(kg)">
-                                <template>
-                                    <el-input 
-                                        :disabled="isDisabled"
-                                        type="text">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="delivery" label="本周交货量">
-                                <template>
-                                    <el-input 
-                                        :disabled="isDisabled"
-                                        type="text">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="inv" label="库存数">
-                                <template>
-                                    <el-input 
-                                        :disabled="isDisabled"
-                                        type="text">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="secInv" label="安全库存">
-                                <template>
-                                    <el-input 
-                                        :disabled="isDisabled"
-                                        type="text">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                </el-row>
             </el-dialog>
 
             <!-- 删除提示信息 start-->

@@ -15,13 +15,26 @@
                             <span class="num">16</span>
                         </a>
                         <a href="" class="right-nav-items">
-                            <span>范小强</span>
-                            <span class="work-id">工号：11013</span>
+                            <span>{{jobNumber}}</span>
+                            <span class="work-id">工号：{{name}}</span>
                         </a>
                         <a href="" class="right-nav-items">
                             <span>任务单</span>
                             <span class="num">16</span>
                         </a>
+                        <!--
+                        <div class="right-nav-items">
+                             <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark">
+                                <el-submenu index="1">
+                                    <template slot="title"><i class="el-icon-setting"></i></template>
+                                    <el-menu-item-group title="分组一">
+                                    </el-menu-item-group>
+                                    <el-menu-item-group title="分组2">
+                                    </el-menu-item-group>
+                                </el-submenu>
+                            </el-menu>
+                        </div>
+                        -->
                     </div>
 
                 </div>
@@ -36,8 +49,22 @@
         data() {
             return {
                 img :require( '../../assets/images/logo.png'),
+                jobNumber :'',
+                name :''
             };
-        }
+        },
+        methods: {
+            // handleOpen(key, keyPath) {
+            // console.log(key, keyPath);
+            // },
+            // handleClose(key, keyPath) {
+            // console.log(key, keyPath);
+            // }
+        },
+        created() {
+            this.name = sessionStorage.getItem("name");
+            this.jobNumber = sessionStorage.getItem("jobNumber");
+        },
     }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">

@@ -33,10 +33,9 @@
                         :data="tableData">
                         <el-table-column prop="name" label="用户名称"></el-table-column>
                         <el-table-column prop="account" label="手机"></el-table-column>
-                        <el-table-column prop="createUser" label="创建人"></el-table-column>
                         <el-table-column prop="jobNumber" label="工号"></el-table-column>
-                        <el-table-column prop="roleId" label="用户角色"></el-table-column>
-                        <el-table-column prop="orgId" label="所属部门"></el-table-column>
+                        <el-table-column prop="roleName" label="用户角色"></el-table-column>
+                        <el-table-column prop="orgName" label="所属部门"></el-table-column>
                         <el-table-column prop="status" label="状态"></el-table-column>
                         <el-table-column fixed="right"label="操作" width="200">
                             <template scope="scope">
@@ -79,7 +78,6 @@
                 <el-row>
                     <el-col :span="24">
                         <div class="pub-mask-wrap">
-
                             <!-- 校验规则必须写在 el-form 标签中 -->
                             <el-form :inline="true" class="">
 
@@ -104,20 +102,22 @@
                                             <span class="must-tips">*</span>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="8" v-if="!isScopeId">
                                         <el-form-item label="密码(默认)：">
-                                            <el-input :disabled="isDisabled"  :placeholder="addInfo.password || '123456'"></el-input>
+                                            <el-input disabled placeholder="123456"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-row :gutter="24">
                                     <el-col :span="8">
                                         <el-form-item label="用户角色：">
-                                            <el-select v-model="addInfo.roleId" :placeholder="addInfo.remark || '选择角色'">
+                                            <el-select 
+                                                v-model="addInfo.roleId" 
+                                                :placeholder="addInfo.roleName || '选择角色'" >
                                                 <el-option 
-                                                v-for="item in roleList"
-                                                :label="item.remark" 
-                                                :value="item.roleId"
+                                                    v-for="item in roleList"
+                                                    :label="item.roleName" 
+                                                    :value="item.roleId"
                                                 ></el-option>
                                             </el-select>
                                             <span class="must-tips">*</span>
@@ -144,7 +144,7 @@
 
             <div class="message clearfix">
                 <div class="fl">
-                    <el-button class="btn-edit btn" @click="addNewCustom()">保存</el-button>
+                    <el-button class="btn-edit btn" @click="addNewCustom(isScopeId)">保存</el-button>
                     <el-button class="btn-save btn" @click="newCustom = false">取消</el-button>
                 </div>
             </div>
@@ -177,12 +177,12 @@
                 currentPage: 1,
                 // 添加数据
                 addInfo: {
-                    // addName: "",  //名称
-                    // jobNumber: "",  //会员工号
-                    // addPassword: "123456",
-                    // account: "",  //号码
-                    // roleId: "",  //角色ID
-                    // orgId: "",  //组织ID
+                    addName: "",  //名称
+                    jobNumber: "",  //会员工号
+                    addPassword: "",
+                    account: "",  //号码
+                    roleId: "",  //角色ID
+                    orgId: "",  //组织ID
                 },
                 // 修改数据
                 upInfo: {},
@@ -269,9 +269,9 @@
                 }else {
                     var falg = "";
                     if(id) {
-                        falg = '/memberAccount/deleteAccount';
-                    }else {
                         falg = '/memberAccount/updateMemberAccount';
+                    }else {
+                        falg = '/memberAccount/addMemberAccount';
                     };
                     that.$ajax({
                         method: 'post',
@@ -284,7 +284,9 @@
                                 account : $.trim(that.addInfo.account),
                                 roleId : $.trim(that.addInfo.roleId),
                                 orgId : $.trim(that.addInfo.orgId),
+                                accountId: that.isScopeId,
                             });
+                            console.log(data)
                             return data;
                         }],
                         headers: {
@@ -294,7 +296,6 @@
                     .then(function(data){
                         console.log(data)
                         if(data.data.success) {
-                            console.log(data)
                             alert("保存成功！")
                             that.loadTable();
                         }

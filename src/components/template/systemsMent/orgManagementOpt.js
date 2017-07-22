@@ -223,6 +223,15 @@ export default {
               that.page.pageNum = val;
               that.loadStaffTable();
             },
+
+
+            handleOpen(key, keyPath) {
+              console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+              console.log(key, keyPath);
+            },
+
         },
         //当加载页面的时候调用
         mounted(){
