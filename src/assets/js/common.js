@@ -8,6 +8,44 @@ axios.defaults.baseURL = 'http://localhost:8080/ybs_mes/'
 // axios添加给Vue的原型方法
 Vue.prototype.$ajax = axios
 
+Vue.prototype.$ajaxWrap = function(option){
+    let opt = option || {},
+        that = this;
+    if(opt.type.toLowerCase() === "get"){
+        that.$ajax.get(opt.url, {
+            params: opt.data
+        }).then(function(res) {
+            if (res.data.success) {
+                opt.callback(res.data);
+            }else{
+                console.error(res);
+                return
+            }
+        })
+    }else if(opt.type.toLowerCase() === "post"){
+        that.$ajax({
+            method: "post",
+            url: opt.url,
+            transformRequest: [function(data) {　　
+                data = JSON.stringify(opt.data);
+                return data;
+            }],
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function(res) {
+            if (res.data.success) {
+                opt.callback(res.data);
+            }else{
+                console.error(res);
+                return
+            }
+        })
+    }else{
+        console.error("参数错误！");
+    }
+}
+
 // 非父子组件通信
 var EventBus = window.EventBus = new Vue();
 

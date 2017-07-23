@@ -105,13 +105,13 @@
         <!--分页 start-->
         <div class="block list-page fr">
             <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="pageList.pageNum"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size=pageList.pageSize
-                    layout="total, sizes, prev, pager, next"
-                    :total="pageList.total">
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="pageList.pageNum"
+                :page-sizes="[10, 20, 30, 40]"
+                :page-size=pageList.pageSize
+                layout="total, sizes, prev, pager, next"
+                :total="pageList.total">
             </el-pagination>
         </div>
         <!--分页 end-->
@@ -140,8 +140,8 @@
                                         <!-- 校验提示必须加上 prop 属性 -->
                                         <el-form-item label="客户名称：" prop="custName">
                                             <input type="hidden" value="guestInfo">
-                                            <el-select placeholder="选择客户" v-model="ruleForm.custName" >
-                                                <el-option v-for="item in guestInfo" :label="item.custName" :value="item"></el-option>
+                                            <el-select placeholder="选择客户" v-model="ruleForm.custName">
+                                                <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
                                             </el-select>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
@@ -158,9 +158,7 @@
                                             <el-date-picker
                                                 type="date"
                                                 placeholder="选择日期"
-                                                v-model="ruleForm.orderDate"
-                                                @change = "deliveryDatePicker"
-                                                :picker-options="pickerOptions">
+                                                v-model="ruleForm.orderDate">
                                             </el-date-picker>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
@@ -194,8 +192,7 @@
                                             <el-date-picker
                                                 type="date"
                                                 placeholder="选择日期"
-                                                v-model='ruleForm.deliveryDate'
-                                                :picker-options="deliveryPicker">
+                                                v-model='ruleForm.deliveryDate'>
                                             </el-date-picker>
                                             <span class="must-tips">*</span>
                                         </el-form-item>
@@ -218,7 +215,7 @@
                                     <el-col >
                                         <div class="mid-btn">
                                             <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
-                                            <el-button class="btn-close btn" @click="newCustom=false">关 闭</el-button>
+                                            <el-button class="btn-close btn" @click="closePlan()">关 闭</el-button>
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -245,7 +242,6 @@
                     height="250"
                     :data="newListData">
                     <el-table-column
-                        width="120"
                         prop="planType"
                         label="计划类型">
                         <template scope="scope">
@@ -258,19 +254,17 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        width="120"
                         prop="custName"
                         label="客户名称">
                         <template scope="scope">
                             <el-select 
                                 :disabled="editFlag"
                                 v-model="scope.row.custName">
-                                <el-option v-for = "item in guestInfo" :label="item.custName" :value="item"></el-option>
+                                <el-option v-for = "item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
                             </el-select>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        width="120"
                         prop="orderNo"
                         label="订单编号">
                         <template scope="scope">
@@ -283,7 +277,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="160"
                         prop="orderDate"
                         label="订单日期">
                         <template scope="scope">
@@ -297,7 +290,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="120"
                         prop="itemNo"
                         label="产品编号">
                         <template scope="scope">
@@ -309,7 +301,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="120"
                         prop="itemName"
                         label="产品名称">
                         <template scope="scope">
@@ -322,7 +313,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="120"
                         prop="quantity"
                         label="数量">
                         <template scope="scope">
@@ -335,7 +325,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="120"
                         prop="unit"
                         label="单位">
                         <template scope="scope">
@@ -347,7 +336,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="160"
                         prop="deliveryDate"
                         label="交货日期">
                         <template scope="scope">
@@ -371,24 +359,26 @@
             title="修改计划"
             custom-class="pub-dialog"
             :before-close="handleClose"
-            @open = "lodeModifyInfo()"
             :visible.sync="modifysaleplan">
             <div>
                 <el-row>
                     <el-col :span="24">
                         <div class="pub-mask-wrap">   
-                            <el-form :inline="true" class="">
+                            <el-form :inline="true" class="" 
+                                :model="ruleForm" 
+                                :rules="rules"
+                                ref="ruleForm">
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="客户名称：">
-                                            <el-select placeholder="选择客户" v-model="newFormData.custName" >
-                                                <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
+                                            <el-select placeholder="选择客户" v-model="ruleForm.custName" >
+                                                <el-option v-for="item in ModifyGuestInfo" :label="item.custName" :value="item.custNo"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label='订单编号：'>
-                                            <el-input  v-model='newFormData.orderNo'></el-input>
+                                            <el-input  v-model='ruleForm.orderNo'></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
@@ -396,8 +386,7 @@
                                             <el-date-picker
                                                 type="date"
                                                 placeholder="选择日期"
-                                                v-model="newFormData.orderDate"
-                                                :picker-options="pickerOptions">
+                                                v-model="ruleForm.orderDate">
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
@@ -406,12 +395,12 @@
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="产品名称：" >
-                                            <el-input v-model='newFormData.itemName'></el-input>
+                                            <el-input v-model='ruleForm.itemName'></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
                                         <el-form-item label="产品编号：" >
-                                            <el-input v-model='newFormData.itemNo'></el-input>
+                                            <el-input v-model='ruleForm.itemNo'></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -419,7 +408,7 @@
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="需求数量：">
-                                            <el-input v-model='newFormData.quantity'></el-input>
+                                            <el-input v-model='ruleForm.quantity'></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="8">
@@ -427,8 +416,7 @@
                                             <el-date-picker
                                                 type="date"
                                                 placeholder="选择日期"
-                                                v-model='newFormData.deliveryDate'
-                                                :picker-options="pickerOptions">
+                                                v-model='ruleForm.deliveryDate'>
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
@@ -437,7 +425,7 @@
                                 <el-row>
                                     <el-col :span="8">
                                         <el-form-item label="计划类型：">
-                                            <el-select placeholder="选择客户" v-model='newFormData.planType'>
+                                            <el-select placeholder="选择客户" v-model='ruleForm.planType'>
                                                 <el-option label="生产" value="01"></el-option>
                                                 <el-option label="库存" value="02"></el-option>
                                             </el-select>
@@ -449,7 +437,7 @@
                                     <el-col >
                                         <div class="mid-btn">
                                             <el-button class="btn-save btn" @click="addPlan()">完 成</el-button>
-                                            <el-button class="btn-close btn" @click="modifysaleplan=false">关 闭</el-button>
+                                            <el-button class="btn-close btn" @click="closePlan()">关 闭</el-button>
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -466,17 +454,15 @@
                     <el-button class="btn-save btn" @click="modifyEnsureSave()">保 存</el-button>
                     <el-button class="btn-publish btn" @click="modifyEnsurePublish()" >下 发</el-button>
                 </div>
-                <div class="fr">共有<span class="detailMsg" ></span>条下发计划</div>
+                <div class="fr">共有<span class="detailMsg" >{{detailMath}}</span>条下发计划</div>
             </div>
 
             <!-- 修改计划 可编辑table start-->
             <div class="table">
                 <el-table
-                    width="100%"
                     height="250"
                     :data="newListData">
                     <el-table-column
-                        width="120"
                         prop="planType"
                         label="计划类型">
                         <template scope="scope">
@@ -488,19 +474,17 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        width="120"
                         prop="custName"
                         label="客户名称">
                         <template scope="scope">
                             <el-select 
                                 :disabled="editFlag"
                                 v-model="scope.row.custName">
-                                <el-option v-for = "item in ModifyGuestInfo" :label="item.custName" :value="item.custNo     "></el-option>
+                                <el-option v-for = "item in ModifyGuestInfo" :label="item.custName" :value="item.custNo "></el-option>
                             </el-select>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        width="120"
                         prop="orderNo"
                         label="订单编号">
                         <template scope="scope">
@@ -513,7 +497,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="160"
                         prop="orderDate"
                         label="订单日期">
                         <template scope="scope">
@@ -527,7 +510,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="120"
                         prop="itemNo"
                         label="产品编号">
                         <template scope="scope">
@@ -539,7 +521,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="120"
                         prop="itemName"
                         label="产品名称">
                         <template scope="scope">
@@ -552,7 +533,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="120"
                         prop="quantity"
                         label="数量">
                         <template scope="scope">
@@ -565,7 +545,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="120"
                         prop="unit"
                         label="单位">
                         <template scope="scope">
@@ -577,7 +556,6 @@
                     </el-table-column>
 
                     <el-table-column
-                        width="160"
                         prop="deliveryDate"
                         label="交货日期">
                         <template scope="scope">

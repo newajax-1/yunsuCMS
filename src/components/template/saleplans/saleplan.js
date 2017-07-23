@@ -242,10 +242,8 @@ export default {
             for (var key in _searchData) {
                 if (typeof _searchData[key] === "object") {
                     _searchData[key] = (_searchData[key].toLocaleDateString()).replace(/\//g, "-");
-
                 }
             }
-
             that.$ajax.get('plan/loadTable', {
                 params: _searchData
             }).then(function(res) {
@@ -255,6 +253,16 @@ export default {
             });
         },
 
+        queryTable(data){
+            var that = this;
+            that.$ajax.get('plan/loadTable', {
+                params: data
+            }).then(function(res) {
+                if (res.data.success) that.loadTable(res.data.data,data.pageNum,data.pageSize);
+            }).catch(function(err) {
+                console.log(err);
+            });
+        },
         // 重置查询信息
         reset() {
             var that = this;
@@ -325,15 +333,20 @@ export default {
 
         // 数据表格 分页
         handleSizeChange(val) {
-            var that = this;
-            that.pageList.pageSize = val;
-            that.getData();
+            // var that = this,
+            //     temp = {
+            //         pageSize : val
+            //     };
+            // that.queryTable(temp);
         },
 
         handleCurrentChange(val) {
-            var that = this;
-            that.pageList.pageNum = val;
-            that.getData();
+            var that = this,
+                temp = {
+                    pageSize : 10,
+                    pageNum : val 
+                };
+            that.queryTable(temp);
         },
 
 
@@ -349,11 +362,11 @@ export default {
         },
 
         // 数据表格 加载 
-        loadTable(data) {
+        loadTable(data,val,num) {
             var that = this,
                 loadData = data.page;
-            that.pageList.pageNum = loadData.pageNum;
-            that.pageList.pageSize = loadData.pageSize;
+            that.pageList.pageNum = val || loadData.pageNum;
+            that.pageList.pageSize = num || loadData.pageSize;
             that.pageList.total = loadData.total;
             that.showInfo = [];
             loadData.list.every(function(el) {
@@ -389,7 +402,7 @@ export default {
                 _data = {};
             that.ruleForm.unit = "pcs";
             for (var key in that.ruleForm) {
-                if (!that.ruleForm[key]) {
+                if (!that.ruleForm[key]) {                    
                     alert("请完整填写信息");
                     return
                 }
@@ -399,6 +412,26 @@ export default {
             that.detailMath++;
             that.newListData.push(_data);
             that.clearData(that.ruleForm);
+        },
+
+        // 新建窗口关闭
+        closePlan(){
+            var that = this;
+            if(that.newListData.length){
+                that.$confirm("确定关闭吗？", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }).then(function() {
+                    that.newCustom = false;
+                    that.modifysaleplan=false
+                    that.$clearObject(that.ruleForm)
+                    that.newListData = [];
+                }).catch(function() {});
+            }else{
+                that.newCustom = false;
+                that.modifysaleplan=false
+            }
         },
 
         // 新增计划 保存与下发
@@ -419,10 +452,10 @@ export default {
                 return;
             }
             for (i = 0; i < len; i++) {
-                var el = that.newListData[i],
-                    custNo = el.custName.custNo;
-                el.custNo = custNo;
-                el.custName = el.custName.custName;
+                var el = that.newListData[i];
+                // custNo = el.custName.custNo;
+                // el.custNo = custNo;
+                // el.custName = el.custName.custName;
                 if (typeof el.orderDate === "object") {
                     var d = el.orderDate;
                     el.orderDate = d.getFullYear() + '-' + ((d.getMonth() + 1) < 10 ? ('0' + (d.getMonth() + 1)) : (d.getMonth() + 1)) + '-' + (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
@@ -436,19 +469,20 @@ export default {
             }
 
             if (that.tempID) tempObj.planId = that.tempID;
-            that.$ajax({
-                method: 'post',
-                url: url,
-                transformRequest: [function(data) {　　
-                    data = JSON.stringify(tempObj);
-                    return data;
-                }],
-                headers: {
-                    'Content-Type': 'application/json'
+            that.$ajaxWrap({
+                type : "post",
+                url : url,
+                data : tempObj,
+                callback : function(data){
+                    that.newListData = [];
                 }
-            }).then(function(res) {
-                if (res.data.success) that.newListData = [];
-            });
+            })
+        },
+
+        handleSelectCust(){
+            var tempObj = this.ruleForm.custName;
+            this.ruleForm.custNo = tempObj.custNo;
+            this.ruleForm.custName = tempObj.custName;
         },
 
         // 新建计划 关闭提示
@@ -460,22 +494,33 @@ export default {
                 type: "warning"
             }).then(function() {
                 done();
-                that.ruleForm = [];
+                that.$clearObject(that.ruleForm)
                 that.newListData = [];
             }).catch(function() {});
         },
 
         ensureSave() {
-            var that = this;
-            that.$confirm("确定保存吗", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).then(function() {
-                that.saveList();
-                that.newCustom = false;
-                that.getData()
-            }).catch(function() {});
+            var that = this,
+                flag = true;
+            that.newListData.every(function(el){
+                for(var key in el){
+                    if(!el[key]){
+                        alert("请完善数据！");
+                        flag = false;
+                    }
+                }
+            });
+            if(flag){
+                that.$confirm("确定保存吗", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }).then(function() {
+                    that.saveList();
+                    that.newCustom = false;
+                    that.getData()
+                }).catch(function() {});
+            }
         },
 
         ensurePublish() {
@@ -495,38 +540,50 @@ export default {
             var that = this;
             that.modifysaleplan = true;
             that.tempID = ids.row.planId;
+            that.editFlag = false;
+            that.lodeModifyInfo();
         },
 
         //修改计划
         lodeModifyInfo() {
             var that = this;
-            that.$ajax.get('plan/updatePlanOnclick', {
-                params: {
+            that.$ajaxWrap({
+                type : "get",
+                url : "plan/updatePlanOnclick",
+                data : {
                     planId: that.tempID
-                }
-            }).then(function(res) {
-                if (res.data.success) {
-
-                    // 客户列表 res.data.dataList;
-                    // 客户信息 res.data.data;
-                    that.ModifyGuestInfo = res.data.data.dataList;
-                    that.ModifyFormData = res.data.data.data;
+                },
+                callback : function(data){
+                    that.ModifyGuestInfo = data.data.dataList;
+                    that.ModifyFormData = data.data.data;
                     that.newListData = that.ModifyFormData.planDetailList;
+                    that.detailMath = that.newListData.length;
                 }
-            })
+            });
         },
 
         // 修改计划 确定下发与保存
         modifyEnsureSave() {
-            var that = this;
-            that.$confirm("确认保存吗", "提示", {
-                confirmButtonText: "确认",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).then(function() {
-                that.saveModifyList();
-                that.modifysaleplan = false;
-            })
+            var that = this,
+                flag = true;
+            that.newListData.every(function(el){
+                for(var key in el){
+                    if(el[key] === ""){
+                        alert("请完善数据！");
+                        flag = false;
+                    }
+                }
+            });
+            if(flag){
+                that.$confirm("确认保存吗", "提示", {
+                    confirmButtonText: "确认",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }).then(function() {
+                    that.saveModifyList();
+                    that.modifysaleplan = false;
+                })
+            }
         },
 
         modifyEnsurePublish() {
