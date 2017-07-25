@@ -20,8 +20,7 @@ export default {
                 deleteMsg:'',
                 tipMsg:'',
                //列表信息
-                staffList:false,
-                
+               /* staffList:false,*/
                 // 分页
                page: {
                   pageNum: '',
@@ -52,7 +51,6 @@ export default {
             	}).then(function(data){
             		if(data.data.success){
             			that.sysOrganization=data.data.data.data;
-            			console.log(that.sysOrganization)
             		}
             	})
             },
@@ -83,6 +81,7 @@ export default {
             	data.push({planNo:objectChild.orgName});
             	that.commonorgId=objectChild.orgId;
             	that.tableData=data;
+            	that.staffTableData = null;
             },
             isDeleteParent(object){
             	var that=this;
@@ -92,6 +91,7 @@ export default {
             		if(objectChilds[0].orgId==null){
             			data.push({planNo:object.orgName});
             			that.commonorgId=object.orgId;
+            			that.staffTableData = null;
             		}
             	}
             	that.tableData=data;
@@ -118,11 +118,17 @@ export default {
             addNewOrganization(){
             	var that=this;
             	if(that.addInfo.orgName==''){
-            		alert("请填写组织名称");
+            		that.$message({
+            	          message: '请填写组织名称',
+            	          type: 'success'
+            	        });
             		return;
             	}
             	if(that.sel_val==''){
-            		alert("请选择父级组织");
+            		that.$message({
+            	          message: '请选择父级组织',
+            	          type: 'success'
+            	        });
             		return ;
             	}
             	that.$ajax({
@@ -141,14 +147,24 @@ export default {
             		}
             	}).then(function(data){
             		if(data.data.success){
-            			alert("添加成功成功");
+            			that.$message({
+              	          message: '添加成功',
+              	          type: 'success'
+              	        });
             			that.newOrganization=false;
                     	that.loadTable();
             		}else{
             			if(data.data.tipMsg.indexOf("重复")!=-1){
-            				alert("信息重复");
+            				that.$message({
+                  	          message: '信息重复',
+                  	          type: 'success'
+                  	        });
             			}else{
-            				alert("添加失败");
+            				
+            				that.$message({
+                  	          message: '添加失败',
+                  	          type: 'success'
+                  	        });
             			}
             			
             		}
@@ -179,11 +195,19 @@ export default {
          	          /* baseURL: 'http://192.168.168.219:8080/' */
          	        }).then(function (data) {
          	        	if(data.data.success){
-         	          	  alert("删除成功");
-         	          	  that.dialogVisible = false
+         	        		that.$message({
+         	        	          message: '删除成功',
+         	        	          type: 'success'
+         	        	        });
+         	          	  that.dialogVisible = false;
+         	          	  that.tableData=null;
+      	          	      that.staffTableData=null;
          	          	  that.loadTable();
          	            }else{
-         	          	 alert("删除失败");
+         	            	that.$message({
+         	                   message: '删除失败',
+         	                   type: 'success'
+         	                 });
          	          	 that.dialogVisible = false
          	          	 that.loadTable();
          	            }
@@ -195,11 +219,17 @@ export default {
         	          /* baseURL: 'http://192.168.168.219:8080/' */
         	        }).then(function (data) {
         	        	if(data.data.success){
-        	          	  alert("删除成功");
+    	        		that.$message({
+    	        	          message: '删除成功',
+    	        	          type: 'success'
+    	        	        });
         	          	  that.dialogVisible = false
         	          	  that.loadStaffTable();
         	            }else{
-        	          	 alert("删除失败");
+        	            	that.$message({
+      	        	          message: '删除失败',
+      	        	          type: 'success'
+      	        	        });
         	          	 that.dialogVisible = false
         	          	 that.loadStaffTable();
         	            }
@@ -235,6 +265,7 @@ export default {
         },
         //当加载页面的时候调用
         mounted(){
-          this.loadTable();
+            this.staffTableData = null;
+        	this.loadTable();
         }
     }

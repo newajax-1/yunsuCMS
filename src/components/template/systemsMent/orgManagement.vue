@@ -52,10 +52,46 @@
                 </el-table>
             </div>
         </el-col>
-
-
+        <el-col :span="20" class="fr">
+			 <div class="pub-mask-wrap">
+				<el-row>
+					<el-col :span="24">
+						<div class="list-table">
+							<el-table :data="staffTableData" style="width: 100%">
+								<el-table-column prop="memberName" label="会员名称"></el-table-column>
+								<el-table-column prop="jobName" label="会员职务"></el-table-column>
+								<el-table-column prop="jobNumber" label="会员工号"></el-table-column>
+								<el-table-column fixed="right" label="操作" width="140">
+									<template scope="scope">
+										<el-button type="text" size="small" @click="deleteStaff(scope.row.accountOrgid)"> 删除</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+						</div>
+					</el-col>
+				</el-row>
+				
+							 
+				
+				
+				<!--分页-->
+				<!-- <div class="block list-page fr">
+				    <el-pagination
+				            @size-change="handleSizeChange"
+				            @current-change="handleCurrentChange"
+				            :current-page.sync=page.pageNum
+				            :page-sizes="[10, 20, 30, 40]"
+				            :page-size=page.pageSize
+				            layout="total, sizes, prev, pager, next"
+				            :total=page.total>
+				    </el-pagination>
+				</div> -->
+			</div>
+		</el-col>
 
     </el-row>
+   
+    
   <!--    新增弹框 -->
         <el-dialog
                 title="新增组织架构"
@@ -122,46 +158,13 @@
        
        
        <!--    查看员工信息 -->
-	<el-dialog
+	<!-- <el-dialog
 	        title="员工列表"
 	        :visible.sync="staffList"
 	        size="tiny"
 	        custom-class="pub-dialog">
-	<span>
-		<div class="pub-mask-wrap">
-			<el-row>
-				<el-col :span="24">
-					<div class="list-table">
-						<el-table :data="staffTableData" style="width: 100%">
-							<el-table-column prop="memberName" label="会员名称"></el-table-column>
-							<el-table-column prop="jobName" label="会员职务"></el-table-column>
-							<el-table-column prop="jobNumber" label="会员工号"></el-table-column>
-							<el-table-column fixed="right" label="操作" width="140">
-								<template scope="scope">
-									<el-button type="text" size="small" @click="deleteStaff(scope.row.accountOrgid)"> 删除</el-button>
-								</template>
-							</el-table-column>
-						</el-table>
-					</div>
-				</el-col>
-			</el-row>
-			
-						 
-			
-			
-			<!--分页-->
-			<!-- <div class="block list-page fr">
-			    <el-pagination
-			            @size-change="handleSizeChange"
-			            @current-change="handleCurrentChange"
-			            :current-page.sync=page.pageNum
-			            :page-sizes="[10, 20, 30, 40]"
-			            :page-size=page.pageSize
-			            layout="total, sizes, prev, pager, next"
-			            :total=page.total>
-			    </el-pagination>
-			</div> -->
-		</div>
+	<span> -->
+		
 	</span>
 	</el-dialog> 
 </div>

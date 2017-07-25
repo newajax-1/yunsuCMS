@@ -1,20 +1,17 @@
 <template>
 <div class="left-nav">
-   <el-row class="tac">
-   <el-col :span="3" >
-        <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark">
-
+    <el-row class="tac">
+        <el-col :span="3" >
+            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark">
                 <el-submenu v-for="item in link" :index="item.index">
                     <template slot="title">{{item.textName}}</template>
-
                         <el-menu-item v-for="it in item.child" :index="it.index">
                             <a class="left-item" @click="$goRoute(it.route)">{{it.text}}</a>
                             <i class="item.class"></i>
                         </el-menu-item>
-
                 </el-submenu>
-        </el-menu>
-       </el-col> 
+            </el-menu>
+        </el-col> 
     </el-row>
 </div>
 </template>
@@ -104,12 +101,12 @@
     }
 </script>
 <style lang="stylus">
-  @media screen and (max-width:1366px)
+@media screen and (max-width:1366px)
     .left-nav
-      width:180px !important
-      top 50px !important
+        width:180px !important
+        top 50px !important
 
-  .left-nav
+.left-nav
     position:fixed
     left 0px
     top 70px
@@ -118,13 +115,11 @@
     .tac.el-row,
     .el-col.el-col-3,
     .el-menu
-      height:100%
+        height:100%
     .el-col-3
-      width:100%
+        width:100%
     .el-menu--dark
-      background-color: #333743;
+        background-color: #333743;
     .left-item
-      display:block
-
-
+        display:block
 </style>

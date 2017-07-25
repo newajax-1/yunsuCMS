@@ -15,8 +15,8 @@
                             <span class="num">16</span>
                         </a>
                         <a href="" class="right-nav-items">
-                            <span>{{jobNumber}}</span>
-                            <span class="work-id">工号：{{name}}</span>
+                            <span>{{name}}</span>
+                            <span class="work-id">工号：{{jobNumber}}</span>
                         </a>
                         <a href="" class="right-nav-items">
                             <span>任务单</span>
@@ -33,8 +33,7 @@
                                     </el-menu-item-group>
                                 </el-submenu>
                             </el-menu>
-                        </div>
-                        -->
+                        </div>-->
                     </div>
 
                 </div>
@@ -49,17 +48,11 @@
         data() {
             return {
                 img :require( '../../assets/images/logo.png'),
-                jobNumber :'',
-                name :''
+                jobNumber : undefined,
+                name : undefined
             };
         },
         methods: {
-            // handleOpen(key, keyPath) {
-            // console.log(key, keyPath);
-            // },
-            // handleClose(key, keyPath) {
-            // console.log(key, keyPath);
-            // }
         },
         created() {
             this.name = sessionStorage.getItem("name");
@@ -68,52 +61,52 @@
     }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
-  @media screen and (max-width:1366px)
+@media screen and (max-width:1366px)
     .header
-      height:50px !important
+        height:50px !important
     .top-nav-content
-      line-height:50px !important
-      .logo,.nav-title
-        padding:0 5px !important
+        line-height:50px !important
+        .logo,.nav-title
+            padding:0 5px !important
   
-  .top-nav-content
+.top-nav-content
     line-height:70px
     background-color:#383d41
     .border-right
-      border-left:1px solid #2c2d2f
-      border-right:1px solid #2c2d2f
-    .top-nav-left
-      .logo,.nav-title
-        margin:0 
-        padding:0 12px
-        color: #fff
-    .top-nav-right
-      .right-nav-items
-        float:left
-        padding:0 45px
-        text-decoration:none
-        font-style:normal
-        color:#fff
         border-left:1px solid #2c2d2f
-        .num
-          display:inline-block
-          width:22px
-          height:22px 
-          margin:0 10px
-          font-size:14px
-          line-height:22px
-          text-align:center
-          border-radius:10%
-          background:#fd9a01
-      .work-id
-        position:relative
-        margin-left:20px
-      .work-id::before
-        content:""
-        position:absolute
-        top:3px
-        left:-11px
-        width:2px
-        height:16px
-        background-color:#fff
+        border-right:1px solid #2c2d2f
+    .top-nav-left
+        .logo,.nav-title
+            margin:0 
+            padding:0 12px
+            color: #fff
+    .top-nav-right
+        .right-nav-items
+            float:left
+            padding:0 45px
+            text-decoration:none
+            font-style:normal
+            color:#fff
+            border-left:1px solid #2c2d2f
+            .num
+                display:inline-block
+                width:22px
+                height:22px 
+                margin:0 10px
+                font-size:14px
+                line-height:22px
+                text-align:center
+                border-radius:10%
+                background:#fd9a01
+        .work-id
+            position:relative
+            margin-left:20px
+        .work-id::before
+            content:""
+            position:absolute
+            top:3px
+            left:-11px
+            width:2px
+            height:16px
+            background-color:#fff
 </style>

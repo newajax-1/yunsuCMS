@@ -2,15 +2,18 @@ import Vue from 'vue'
 import axios from 'axios'
 
 // axios配置请求根目录
-// axios.defaults.baseURL = 'http://192.168.168.66:8080/ybs_mes/'
 axios.defaults.baseURL = 'http://localhost:8080/ybs_mes/'
+
+// 非父子组件通信
+var EventBus = window.EventBus = new Vue();
 
 // axios添加给Vue的原型方法
 Vue.prototype.$ajax = axios
 
 Vue.prototype.$ajaxWrap = function(option){
     let opt = option || {},
-        that = this;
+        that = this,
+        error = opt.error || function(){};
     if(opt.type.toLowerCase() === "get"){
         that.$ajax.get(opt.url, {
             params: opt.data
@@ -37,7 +40,12 @@ Vue.prototype.$ajaxWrap = function(option){
             if (res.data.success) {
                 opt.callback(res.data);
             }else{
-                console.error(res);
+                error(res.data);
+            	that.$alert(res.data.tipMsp, '提示', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                    }
+            	});
                 return
             }
         })
@@ -46,8 +54,6 @@ Vue.prototype.$ajaxWrap = function(option){
     }
 }
 
-// 非父子组件通信
-var EventBus = window.EventBus = new Vue();
 
 // 路由跳转
 Vue.prototype.$goRoute = function(index) {
@@ -62,13 +68,5 @@ Vue.prototype.$clearObject = function(object){
                 object[key] = ""
             }
         }
-    }
-}
-
-// 清空数组
-Vue.prototype.$clearData = function(Arrays){
-    if(Arrays && Object.prototype.toString.call(Arrays) === "[object Array]"){
-        Arrays = null;
-        Arrays = [];
     }
 }

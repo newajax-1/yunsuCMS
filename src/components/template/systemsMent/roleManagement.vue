@@ -238,9 +238,10 @@
                 that.newCustom = true;
                 that.$clearObject(that.addInfo);
             },
+            // 新增或修改
             showAdd(id) {
                 var that = this;
-                var flag;
+                var flag = "";
                 if(id == "") {
                 	flag = '/role/addRole'
                 }else{
@@ -256,7 +257,6 @@
                             roleId: id,
                             stringId: that.$refs.tree.getCheckedKeys().join(","),
                         });
-                        console.log(data)
                         return data;
                     }],
                     headers: {
@@ -266,9 +266,13 @@
                 .then(function(data){
                     if(data.data.success) {
                         that.newCustom = false;
+                        that.$message({
+                            message: data.data.tipMsg,
+                            type: 'success'
+                        });
                      	that.loadTable();
                     }
-                     
+                    that.newCustom = false;
                 });
             },
             // 修改信息
@@ -300,28 +304,32 @@
             },
             // 删除信息
             deleteInfo(id) {
-             var that = this;
-                that.$ajax({
-                    method: 'post',
-                    url: '/role/deleteById',
-                    transformRequest: [function (data) {
-                        data = JSON.stringify({
-                              roleId: id,
-                              isDel: 1,
-                        });
-                        return data;
-                    }],
-                    headers: {
-                     'Content-Type': 'application/json'
-                    }
-                })
-                .then(function(data){
-                    if(data.data.success) {
-                        that.newCustom = false;
-                     	that.loadTable();
-                    }
-                     
-                });
+                var that = this;
+                that.$confirm("你确定删除么？", "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                }).then(function() {
+                    that.$ajax({
+                        method: 'post',
+                        url: '/role/deleteById',
+                        transformRequest: [function (data) {
+                            data = JSON.stringify({
+                                  roleId: id,
+                                  isDel: 1,
+                            });
+                            return data;
+                        }],
+                        headers: {
+                         'Content-Type': 'application/json'
+                        }
+                    }).then(function() {
+                        that.loadTable();
+                        that.$message({
+                          message: "删除成功！",
+                          type: 'success'
+                        }); 
+                    });
+                }).catch(function() {});
             },
             // 分页
             handleSizeChange(val) {

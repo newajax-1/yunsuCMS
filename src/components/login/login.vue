@@ -28,8 +28,7 @@
                                         <el-col :span="16"><el-input type="text" v-on:keyup.enter="login"  v-model="ruleForm.identify" auto-complete="off" placeholder="验证码"></el-input></el-col>
                                         <el-col :span="8"><img class="identify-img" :src="loginURL" @click="reImg()"></el-col>
                                     </el-row>
-                                </el-form-item>
-                                -->
+                                </el-form-item>-->
                                 <el-checkbox style="margin:0px 0px 35px 0px;">
                                     记住密码
                                 </el-checkbox>
@@ -46,9 +45,9 @@
                     </el-form>
                     <!--登陆错误提示 -->
                     <el-dialog
-                    title="提示"
-                    :visible.sync="dialogVisible" 
-                    size="tiny">
+                        title="提示"
+                        :visible.sync="dialogVisible" 
+                        size="tiny">
                         <span v-text="errorMsg"></span>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -66,7 +65,6 @@
 <script>
     import axios from 'axios'
     export default {
-
         name: "login",
         data() {
             var validateName = (rule, value, callback) => {
@@ -129,38 +127,26 @@
             },
             login(){
                 var that = this;
-                that.$ajax({
-                    method: 'post',
-                    url: 'memberAccount/toLogin',
-                    transformRequest: [function (data) {
-                    　　data = JSON.stringify({
-                            account:that.ruleForm.username,
-                            password:that.ruleForm.password,
-                        });
-                        return data;
-                    }],
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(function(results){
-                    sessionStorage.setItem("name",results.data.data.data.name);
-                    sessionStorage.setItem("jobNumber",results.data.data.data.jobNumber);
-                    var data = results.data;
-                    if(data.success === true){
-                        sessionStorage.setItem("useName",that.ruleForm.username);
-                        that.$goRoute("/home");
-                    }else{
-                        // 弹出 data.data.tipMsg;
-                        that.dialogVisible=true;
-                        that.errorMsg=data.tipMsg;
+                that.$ajaxWrap({
+                    type : "post",
+                    url : "memberAccount/toLogin",
+                    data : {
+                        account:that.ruleForm.username,
+                        password:that.ruleForm.password
+                    },
+                    callback(data){
+                        sessionStorage.setItem("name",data.data.data.name);
+                        sessionStorage.setItem("jobNumber",data.data.data.jobNumber);
+                        if(data.success === true){
+                            sessionStorage.setItem("useName",that.ruleForm.username);
+                            that.$goRoute("/home");
+                        }else{
+                            that.dialogVisible=true;
+                            that.errorMsg=data.tipMsg;
+                        }
                     }
                 })
             },
-            // reImg() {
-            //     var that = this;
-            //     that.loginURL = axios.defaults.baseURL + "memberAccount/AuthImg?nId" + Math.random();
-            // }
         },
         created() {
             this.setSize();

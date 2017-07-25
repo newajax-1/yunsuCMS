@@ -101,7 +101,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page.sync="page.pageNum"
-                    :page-sizes="[10, 20, 30, 40]"
+                    :page-sizes="[10]"
                     :page-size="page.pageSize"
                     layout="total, sizes, prev, pager, next"
                     :total="page.total">
@@ -116,9 +116,9 @@
                 custom-class="pub-dialog">
             <span>
                 <div class="pub-mask-wrap">
-                    <el-form :inline="true" class="subClass">
+                    <el-form :inline="true" class="">
                         <el-row :gutter="24">
-                            <el-col :span="16">
+                            <el-col :span="8">
                                 <el-form-item label="客户类型：">
                                     <el-select :placeholder="selectOp[0] && selectOp[0].dicName" v-model="sel_val">
                                         <el-option
@@ -131,23 +131,19 @@
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
-                            <el-col :span="16">
+                            <el-col :span="8">
                                 <el-form-item label="客户名称：">
                                     <el-input v-model="addInfo.selName"></el-input>
                                     <span class="must-tips">*</span>
                                 </el-form-item>
                             </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                        	 <el-col :span="16">
+                            <el-col :span="8">
                                 <el-form-item label="联系人：">
                                     <el-input v-model="addInfo.selContact"></el-input>
                                     <span class="must-tips">*</span>
                                 </el-form-item>
                             </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                        	<el-col :span="16">
+                            <el-col :span="8">
                                 <el-form-item label="手机号：">
                                     <el-input v-model="addInfo.selPhone"></el-input>
                                     <span class="must-tips">*</span>
@@ -482,11 +478,17 @@
     	          /* baseURL: 'http://192.168.168.219:8080/' */
     	        }).then(function (data) {
     	        	if(data.data.success){
-    	          	  alert("删除成功");
+    	        		that.$message({
+    	        	          message: '删除成功',
+    	        	          type: 'success'
+    	        	        });
     	          	  that.dialogVisible = false
     	          	  that.loadTable(0);
     	            }else{
-    	          	 alert("删除失败");
+    	            	that.$message({
+    	                    message: '删除失败',
+    	                    type: 'success'
+    	                  });
     	          	 that.dialogVisible = false
     	            }
     	        })
@@ -497,11 +499,17 @@
                  /*  baseURL: 'http://192.168.168.219:8080/', */
                 }).then(function (data) {
                   if(data.data.success){
-                	  alert("删除成功");
+                	  that.$message({
+                          message: '删除成功',
+                          type: 'success'
+                        });
                 	  that.dialogVisible=false;
                 	  that.loadTable(0);
                   }else{
-                	  alert("删除失败");
+                	  that.$message({
+                          message: '删除失败',
+                          type: 'success'
+                        });
                 	  that.dialogVisible=false;
                   }
                 }) 
@@ -510,9 +518,11 @@
       // 批量删除
       batchDelete() {
         var that = this;
-        console.log(that.batch_ids);
         if (that.batch_ids == "") {
-          alert("请选择要删除的记录");
+        	that.$message({
+                message: '请选择要删除的记录',
+                type: 'success'
+              });
           return;
         }
         that.deleteMsg="你确定要删除这些数据？";
@@ -526,15 +536,20 @@
         that.info.custNo = '';
         that.info.custName = '';
         that.info.contacts = '';
+        //that.loadTable();
       },
 
       // 复选框勾选
       handleSelectionChange(val) {
-        var batchIds="";
-        for (var i = 0; i < val.length; i++) {
-            batchIds =  batchIds + val[i].custId+",";
-        }
-        this.batch_ids = batchIds.substring(0,batchIds.lastIndexOf(","));
+          if (val.length > 0) {
+            var ids = [];
+            for (var i = 0; i < val.length; i++) {
+              ids.push(val[i].custId);
+            }
+            this.batch_ids = ids.join(',')
+          } else {
+            this.batch_ids = '';
+          }
       },
 
       //加载表格
@@ -653,10 +668,16 @@
      		||$.trim(that.editTable.phone)==""||s_province==""
      		||s_city==""||s_area==""
      		||$.trim(that.editTable.address)==""){
-     			alert("请将信息填写完整");
+			 that.$message({
+		          message: '请将信息填写完整',
+		          type: 'success'
+		        });
      			return;
 	     }else if(!/^1[34578]\d{9}$/.test($.trim(that.editTable.phone))){
-	     		alert("手机格式错误");
+	    	 that.$message({
+	             message: '手机格式错误',
+	             type: 'success'
+	           });
 	     		return;
 	     }else{
 		        that.$ajax({
@@ -686,7 +707,11 @@
 		        })
 		          .then(function(results){
 		        	if(results.data.success){
-			        	that.loadTable(0);
+		        		that.$message({
+	        		          message: '修改成功',
+	        		          type: 'success'
+	        		        });
+		        		that.loadTable(0);
 			            that.editCustom = false;
 			            that.sel_val = '';
 			            that.addInfo = '';
@@ -695,7 +720,10 @@
 			            that.f.cc = '';
 		        	}else {
 		        		if(results.data.tipMsg.indexOf("重复")!=-1){
-      						alert("用户信息重复");
+		        			that.$message({
+		        		          message: '用户信息重复',
+		        		          type: 'success'
+		        		        });
       						that.editCustom = true;
 	      				}else{
 	      					that.editCustom = false;
@@ -746,11 +774,17 @@
         		||$.trim(that.addInfo.selPhone)==""||flag3
         		||flag1||flag2
         		||$.trim(that.addInfo.address)==""){
-        	alert("请将信息填写完整");
+        	that.$message({
+                message: '请将信息填写完整',
+                type: 'success'
+              });
         	return;
         }else{
         	if(!/^1[34578]\d{9}$/.test($.trim(that.addInfo.selPhone))){
-        		alert("手机格式错误");
+        		that.$message({
+        	          message: '手机格式错误',
+        	          type: 'success'
+        	        });
         		return;
         	}else{
         		that.newCustom = false;
@@ -777,6 +811,10 @@
                   })
                     .then(function (data) {
           			if(data.data.success){
+                        that.$message({
+                              message: '添加成功',
+                              type: 'success'
+                            });
           				that.editCustom = false;
           	            that.loadTable(1);
           	            that.sel_val = '';
@@ -789,7 +827,10 @@
           	            that.f.cc = ''
           			}else{
           				if(data.data.tipMsg.indexOf("重复")!=-1){
-          					alert("用户信息重复");
+          					that.$message({
+          			          message: '用户信息重复',
+          			          type: 'success'
+          			        });
           					that.newCustom = true;
           				}else{
           					that.newCustom = false;
@@ -820,8 +861,6 @@
       handleCurrentChange(val) {
         var that = this;
         that.page.pageNum = val;
-        console.log("pageNum", that.page.pageNum)
-        console.log("pageSize",that.page.pageSize)
         that.loadTable(0);
       },
 
@@ -863,6 +902,5 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-.subClass label
-	width 100px
+
 </style>

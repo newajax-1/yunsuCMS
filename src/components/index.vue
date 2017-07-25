@@ -18,9 +18,6 @@
             Vcontent
         },
         methods:{
-            hashChange(){
-                // 登录拦截
-            }
         },
         mounted(){
         }

@@ -7,11 +7,11 @@ export default {
 
             // 查询条件 
             searchForm : {
-                issUsr: '',
-                creStartTime: '',
-                creEndTime: '',
-                issStartTime: '',
-                issEndTime: '',
+                issUsr: undefined,
+                creStartTime: undefined,
+                creEndTime: undefined,
+                issStartTime: undefined,
+                issEndTime: undefined
             },
 
             // 加载表格
@@ -74,7 +74,11 @@ export default {
             //弹框是否关闭
             dialogVisible: false,
             deleteMsg:'',
-            tipMsg:''
+            tipMsg:'',
+
+            // 
+            watchFlag : false
+
         }
     },
 
@@ -182,6 +186,7 @@ export default {
             }
         },
 
+        // 保存新增周计划
         saveWeekNewPlan(){
             var week,
                 data = [],
@@ -216,25 +221,20 @@ export default {
             }
         },
 
+        // 发送新增周计划
         sendWeekPlan(datas){
             var that = this;
-            that.$ajax({
-                method: 'post',
-                url: 'week/saveWorkplan',
-                transformRequest: [function(data) {　　
-                    data = JSON.stringify(datas);
-                    return data;
-                }],
-                headers: {
-                    'Content-Type': 'application/json'
+            that.$ajaxWrap({
+                type : "post",
+                url : 'week/saveWorkplan',
+                data : datas,
+                callback : function(data){
+                    that.saveWeekId = data.data.weekId;
                 }
-            }).then(function(res) {
-                if(res.data.success){
-                    that.saveWeekId = res.data.data.weekId;
-                }
-            }).catch(function() {});
+            });
         },
 
+        // 获取订单编号
         getOrderList(val,index){
             var that = this;
             that.$ajax({
@@ -256,6 +256,7 @@ export default {
             }).catch(function() {});
         },
 
+        // 处理订单编号
         handleOrderData(data,index){
             var that = this,
                 tempListData = that.newListData[index];
@@ -263,6 +264,7 @@ export default {
             Vue.set(that.newListData,index,tempListData);
         },
 
+        // 获取产品型号
         getProductData(val,index){
             var that = this;
             that.$ajax({
@@ -284,6 +286,7 @@ export default {
             }).catch(function() {});
         },
 
+        // 产品型号
         handleProductData(data,index){
             var that = this,
                 tempListData = that.newListData[index];
@@ -291,6 +294,7 @@ export default {
             Vue.set(that.newListData,index,tempListData);
         },
 
+        // 产品名称
         setProductName(val,index){
             var that = this,
                 tempListData = that.newListData[index];
@@ -306,7 +310,8 @@ export default {
         updateWeek(id) {
             var that = this;
             that.tempId = id;
-            that.titleValue = "修改周计划"
+            that.titleValue = "修改周计划";
+            that.isDisabled = false;
             that.$ajax.get('week/queryWeekList',{
                 params: {
                     workplanWeekId: id
@@ -579,6 +584,21 @@ export default {
                     }
                 }
             });
+        }
+    },
+    watch :{
+        newListData : function(newValue,oldValue){
+            var that = this;
+            if(that.watchFlag){
+                return ;
+            }
+            newValue.every(function(el,i){
+                if(el.custName){
+                    that.getOrderList(el.custName,i);
+                    that.watchFlag = true;
+                    return
+                }
+            })
         }
     },
     mounted() {

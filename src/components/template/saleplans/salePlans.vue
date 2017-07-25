@@ -9,22 +9,9 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="下发人：">
-                            <el-input placeholder="输入人员姓名" v-model='formData.operUser'></el-input>
+                            <el-input placeholder="输入人员姓名" v-model='formData.operUserName'></el-input>
                         </el-form-item>
                         <el-form-item label="生成时间：">
-                            <el-date-picker
-                                v-model="formData.operTimeStart"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
-                            <span style="padding: 0 10px">至</span>
-                            <el-date-picker
-                                v-model="formData.operTimeEnd"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
-                        </el-form-item>
-                        <el-form-item label="下发时间：">
                             <el-date-picker
                                 v-model="formData.createTimeStart"
                                 type="date"
@@ -33,6 +20,19 @@
                             <span style="padding: 0 10px">至</span>
                             <el-date-picker
                                 v-model="formData.createTimeEnd"
+                                type="date"
+                                placeholder="选择日期">
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="下发时间：">
+                            <el-date-picker
+                                v-model=" formData.operTimeStart"
+                                type="date"
+                                placeholder="选择日期">
+                            </el-date-picker>
+                            <span style="padding: 0 10px">至</span>
+                            <el-date-picker
+                                v-model="formData.operTimeEnd "
                                 type="date"
                                 placeholder="选择日期">
                             </el-date-picker>
@@ -51,7 +51,7 @@
             <!-- 刷新 or 新建 start -->
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="list-buttons" @click="getData()">
+                    <el-button class="list-buttons" @click="refreshSalePlan()">
                         <i class="fa fa-repeat"></i> 刷新
                     </el-button>
                     <el-button class="list-buttons" @click="newCustom = true">
@@ -74,7 +74,7 @@
                         style="width: 100% "
                         :data="tableData">
                         <el-table-column prop="planNo" label="销售计划编号"></el-table-column>
-                        <el-table-column prop="createTime" label="计划生产时间"></el-table-column>
+                        <el-table-column prop="createTime" label="计划生成时间"></el-table-column>
                         <el-table-column prop="operTime" label="下发时间"></el-table-column>
                         <el-table-column prop="operUserName" label="下发人"></el-table-column>
                         <el-table-column prop="operationName" label="下发状态"></el-table-column>
@@ -108,7 +108,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page.sync="pageList.pageNum"
-                :page-sizes="[10, 20, 30, 40]"
+                :page-sizes="[10]"
                 :page-size=pageList.pageSize
                 layout="total, sizes, prev, pager, next"
                 :total="pageList.total">
@@ -121,8 +121,8 @@
             size="large"
             title="新增计划"
             custom-class="pub-dialog"
-            :before-close="handleClose"
             @open="addGuestInfo()"
+            :before-close="handleClose"
             :visible.sync="newCustom">
             <div>
                 <el-row>
@@ -139,7 +139,6 @@
                                     
                                         <!-- 校验提示必须加上 prop 属性 -->
                                         <el-form-item label="客户名称：" prop="custName">
-                                            <input type="hidden" value="guestInfo">
                                             <el-select placeholder="选择客户" v-model="ruleForm.custName">
                                                 <el-option v-for="item in guestInfo" :label="item.custName" :value="item.custNo"></el-option>
                                             </el-select>
@@ -450,7 +449,6 @@
 
             <div class="message clearfix">
                 <div class="fl">
-                    <el-button class="btn-edit btn" @click="editTable()">编 辑</el-button>
                     <el-button class="btn-save btn" @click="modifyEnsureSave()">保 存</el-button>
                     <el-button class="btn-publish btn" @click="modifyEnsurePublish()" >下 发</el-button>
                 </div>
@@ -469,7 +467,8 @@
                             <el-select 
                                 :disabled="editFlag"
                                 v-model="scope.row.planType">
-                                <el-option value=""></el-option>
+                                <el-option label="生产" value="01"></el-option>
+                                <el-option label="库存" value="02"></el-option>
                             </el-select>
                         </template>
                     </el-table-column>

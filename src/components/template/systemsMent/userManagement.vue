@@ -216,8 +216,10 @@
                     if(data.data.success) {
                         that.tableData = data.data.data.page.list;
                         that.pageList.total = data.data.data.page.total;
+                        that.tableData.every(function(el){
+                            return el.status = el.status === 0 ? "正常" : "不正常";
+                        })
                     }
-                    that.$clearObject(that.info);
                 });
             },
             // 重置
@@ -249,7 +251,6 @@
                 that.tableDataName = "修改用户",
                 that.$ajax.get("/memberAccount/onClick?accountId=" + id).then(function(res) {
                     that.addInfo = res.data.data.data;
-                    console.log(that.addInfo)
                     that.roleList = res.data.data.roleList
                     that.ogrList = res.data.data.ogrList
                 }).catch(function(error) {
@@ -286,7 +287,6 @@
                                 orgId : $.trim(that.addInfo.orgId),
                                 accountId: that.isScopeId,
                             });
-                            console.log(data)
                             return data;
                         }],
                         headers: {
@@ -294,27 +294,32 @@
                         }
                     })
                     .then(function(data){
-                        console.log(data)
                         if(data.data.success) {
-                            alert("保存成功！")
                             that.loadTable();
                         }
                         that.newCustom = false;
-                        alert(data.data.tipMsg)
+                        that.$message({
+                          message: data.data.tipMsg,
+                          type: 'success'
+                        });
                     });
                 }
             },
             // 删除信息
             deleteInfo(id) {
                 var that = this;
-                if(confirm("你确定删除么？")) {
+                that.$confirm("你确定删除么？", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                }).then(function() {
                     that.$ajax.get("/memberAccount/deleteAccount?accountId=" + id).then(function(res) {
-                        alert("删除成功！")
+                        that.$message({
+                          message: "删除成功！",
+                          type: 'success'
+                        });
                         that.loadTable();
-                    }).catch(function(error) {
-                        console.log(error);
                     });
-                }
+                }).catch(function() {});
             },
             // 分页
             handleSizeChange(val) {
