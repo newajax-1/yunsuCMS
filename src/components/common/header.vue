@@ -1,7 +1,7 @@
 <template>
     <div class="top-nav">
         <el-row>
-            <el-col :span="24"style=" height: 80px;" class="header">
+            <el-col :span="24" class="header">
                 <div class="top-nav-content clearfix">
 
                     <div class="top-nav-left fl">
@@ -12,7 +12,7 @@
                     <div class="top-nav-right fr">
                         <a href="" class="right-nav-items">
                             <i class="fa fa-bell bell "></i>
-                            <span class="num">16</span>
+                            <span class="num">0</span>
                         </a>
                         <a href="" class="right-nav-items">
                             <span>{{name}}</span>
@@ -20,31 +20,21 @@
                         </a>
                         <a href="" class="right-nav-items">
                             <span>任务单</span>
-                            <span class="num">16</span>
+                            <span class="num">0</span>
                         </a>
-                        <!--
-                        <div class="right-nav-items">
-                             <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark">
-                                <el-submenu index="1">
-                                    <template slot="title"><i class="el-icon-setting"></i></template>
-                                    <el-menu-item-group title="分组一">
-                                    </el-menu-item-group>
-                                    <el-menu-item-group title="分组2">
-                                    </el-menu-item-group>
-                                </el-submenu>
-                            </el-menu>
-                        </div>-->
                     </div>
-
                 </div>
             </el-col>
         </el-row>
     </div>
 </template>
 <script>
-
     export default {
         name:"header",
+        created() {
+            this.name = sessionStorage.getItem("name");
+            this.jobNumber = sessionStorage.getItem("jobNumber");
+        },
         data() {
             return {
                 img :require( '../../assets/images/logo.png'),
@@ -53,24 +43,21 @@
             };
         },
         methods: {
-        },
-        created() {
-            this.name = sessionStorage.getItem("name");
-            this.jobNumber = sessionStorage.getItem("jobNumber");
-        },
+        }
     }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
 @media screen and (max-width:1366px)
-    .header
-        height:50px !important
-    .top-nav-content
-        line-height:50px !important
-        .logo,.nav-title
-            padding:0 5px !important
+    .top-nav
+        .top-nav-content
+            line-height:50px 
+            .top-nav-left
+                .logo,
+                .nav-title
+                    padding:0 5px 
   
 .top-nav-content
-    line-height:70px
+    line-height:80px
     background-color:#383d41
     .border-right
         border-left:1px solid #2c2d2f

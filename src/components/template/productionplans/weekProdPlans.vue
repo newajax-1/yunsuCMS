@@ -79,7 +79,7 @@
                         <el-table-column prop="creTm" label="计划生成时间"></el-table-column>
                         <el-table-column prop="issSts" label="下发状态"></el-table-column>
                         <el-table-column prop="issTm" label="下发时间"></el-table-column>
-                        <el-table-column prop="issUsr" label="下发人"></el-table-column>
+                        <el-table-column prop="issUsrName" label="下发人"></el-table-column>
                         <el-table-column fixed="right"label="操作" width="200">
                             <template scope="scope">
                                 <el-button 
@@ -111,8 +111,9 @@
             <!--新增弹框 start-->
             <el-dialog
                 size="full"
-                :title="titleValue"
                 custom-class="pub-dialog"
+                :title="titleValue"
+                :before-close="handleClose"
                 :visible.sync="newCustom">
                 <div class="add-week-plan">
                     <el-row>
@@ -239,6 +240,7 @@
                                 <el-table-column width="150" prop="scndProc" label="二次加工">
                                     <template  scope="scope">
                                         <el-select :disabled="isDisabled" placeholder="选择二次加工" v-model="scope.row.scndProc">
+                                            <el-option value="">请选择</el-option>
                                             <el-option  
                                                 v-for="item in SysDicListInfo.processList" 
                                                 :label="item.dicName" 
@@ -247,6 +249,8 @@
                                     </template>
                                 </el-table-column>
 
+                                <el-table-column width="100" label="<<">
+                                </el-table-column>
                                 <el-table-column prop="planBill" :label="weekDate.week || weekDate.titel">
                                     <el-table-column width="150" :label="weekDate.mondayDate">
                                         <el-table-column label="白班">
@@ -395,6 +399,8 @@
                                     </el-table-column>
                                 </el-table-column>
 
+                                <el-table-column width="100" label=">>">
+                                </el-table-column>
                                 <el-table-column width="150" prop="sum" label="生产合计">
                                     <template  scope="scope">
                                         <el-input 

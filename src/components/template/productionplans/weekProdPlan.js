@@ -172,6 +172,18 @@ export default {
             })
         },
 
+        handleClose(done){
+            var that = this;
+            that.$confirm("确定关闭吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(function() {
+                that.getData();
+                done();
+            }).catch(function() {});
+        },
+
         // 新增周计划 加载表格
         loadWeekPlanTable(data){
             this.weekDate = data.data || data.dataList[0].weekday;
@@ -230,6 +242,7 @@ export default {
                 data : datas,
                 callback : function(data){
                     that.saveWeekId = data.data.weekId;
+
                 }
             });
         },
@@ -469,8 +482,7 @@ export default {
         handleSelectionChange(item) {
             var that = this;
             item.every(function(el){
-                console.log(el.workplanDetailId);
-                that.deleteArray.push(el.workplanDetailId);
+                return that.deleteArray.push(el.workplanDetailId);
             })
         },
 

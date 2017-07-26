@@ -1,5 +1,5 @@
 <template>
-<div class="left-nav">
+<div class="left-nav fl">
     <el-row class="tac">
         <el-col :span="3" >
             <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark">
@@ -107,11 +107,10 @@
         top 50px !important
 
 .left-nav
-    position:fixed
-    left 0px
-    top 70px
-    height:100%
-    width:203px
+    position absolute
+    height 100%
+    width 200px
+    border-radius 0
     .tac.el-row,
     .el-col.el-col-3,
     .el-menu

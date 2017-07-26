@@ -1,33 +1,27 @@
 // 引入UI规范
 @import "uiStatic"
+
 // public css
 *
   margin 0px
   padding 0px
+
 .fl
-    float: left;
+    float left
 .fr
-    float: right;
+    float right
+
 .clearfix
     &::before,
     &::after
-        content: "";
-        display: table;
+        content ""
+        display table
     &::after
-        clear: both;
-
-// custom css
-.top-nav
-  position fixed
-  left 0
-  top 0
-  z-index 111
-  width 100%
+        clear both
 
 .content
-    margin-top 80px
-    margin-left 235px
-    padding 10px 20px 25px 25px
+    margin-left 200px
+    padding  20px 
     .content-title
         font-size 16px
         color #333333
@@ -109,11 +103,11 @@
 .must-tips
     color: red
     font-weight: bold
+
 //响应式
  @media screen and (max-width:1366px)
     .content
         margin-left 180px !important
-        margin-top 60px !important
-        padding 0 20px 25px 15px !important
+        padding 15px !important
     .el-menu-item
         min-width 0px !important

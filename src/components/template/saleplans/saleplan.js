@@ -2,6 +2,9 @@ import Qs from 'qs'
 
 export default {
     name: 'saleplan',
+    created() {
+        this.init();
+    },
     data() {
 
         // 新建计划 Form校验
@@ -57,8 +60,8 @@ export default {
         // Vue Data
         return {
 
-            // 查询 数据表单部分
-            formData: {
+            // 销售计划 查询条件
+            search_form_data: {
                 operUserName: undefined,
                 operTimeStart: undefined,
                 operTimeEnd: undefined,
@@ -66,67 +69,34 @@ export default {
                 createTimeEnd: undefined
             },
 
-            // 分页
-            pageList: {
-                pageNum: 1,
-                pageSize: 1,
-                total: 1
-            },
+            // 销售计划 表格数据
+            saleplan_table_data: [{}],
 
-            // 新建 时间选择器
-            pickerOptions: {
-                disabledDate(time) {
-                    return time.getTime() < Date.now() - 8.64e7;
-                }
-            },
-            deliveryPicker: {
-                disabledDate(time) {
-                    console.log(window.deliveryDate);
-                }
-            },
+            // 销售计划 表格下发或详情显示
 
-            // 下发 或 详情显示
-            showInfo: [{
+            saleplan_push_tips: [{
                 show: true
             }],
 
-            // 表格修改下发按钮
-            activeName: "first",
-
-            // 设置tab默认显示
-            activeName2: 'first',
-
-            // 对话框
-            newCustom: false,
-            modifysaleplan: false,
-
-            // 加载表格
-            tableData: [{}],
-
-            // 可编辑表格
-            editFlag: true,
-
-            // 新增页面表格的数据
-            newFormData: {
-                planType: undefined,
-                custName: undefined,
-                orderNo: undefined,
-                orderDate: undefined,
-                itemNo: undefined,
-                itemName: undefined,
-                quantity: undefined,
-                unit: 'pcs',
-                deliveryDate: undefined
+            // 销售计划 分页属性
+            sale_page_list: {
+                pageNum: 1,
+                pageSize: 10,
+                total: 0
             },
 
-            // 新增页面表格数据组
-            newListData: [],
+            // 销售计划 当前Tab页面id
+            saleChangeTips: undefined,
 
-            // 新增页客户信息
-            guestInfo: [],
+            // 销售计划 当前Tab页面name
+            saleChangeName: "all",
 
-            // 新增校验
-            ruleForm: {
+            // 新增或修改 显示隐藏
+            modal_show_tips: false,
+            modal_title: undefined,
+
+            // 新增或修改 表单数据
+            modal_form_data: {
                 planType: undefined,
                 custName: undefined,
                 orderNo: undefined,
@@ -138,7 +108,20 @@ export default {
                 unit: 'pcs'
             },
 
-            rules: {
+            // 新增或修改 表格数据
+            modal_table_data: [],
+
+            // 修改计划 表格可编辑
+            modal_table_edit: false,
+
+            // 新增或修改 客户名称
+            guest_name_data: null,
+
+            // 合计表格数量
+            modal_plan_length: undefined,
+
+            // 新增或修改 表单校验
+            modal_form_rules: {
                 planType: [
                     { validator: validateplanType, trigger: 'select' }
                 ],
@@ -163,228 +146,193 @@ export default {
                 deliveryDate: [
                     { validator: validatepublishDate, trigger: 'blur' }
                 ],
-            },
-            detailMath: 0,
-
-            //修改页面表格数据
-            modifyFormDate: {
-                planType: undefined,
-                custName: undefined,
-                orderNo: undefined,
-                orderDate: undefined,
-                itemNo: undefined,
-                itemName: undefined,
-                quantity: undefined,
-                unit: undefined,
-                orderStatus: undefined,
-                finishProcess: undefined,
-                finishrate: undefined,
-                deliveryDate: undefined
-            },
-
-            // 数据表格ID
-            tempID: undefined,
-
-            // operation
-            operation : undefined,
-
-            // 修改客户计划
-            ModifyGuestInfo: null,
-            ModifyFormData: null,
-            ModifyListData: null,
-
-            //详情表单数据
-            infoform: {
-                planNo: undefined,
-                createTime: undefined,
-                operationName: undefined,
-                operTime: undefined,
-                operUser: undefined
-            },
-
-            //详情列表数据
-            infolist: [{
-                planType: undefined,
-                custName: undefined,
-                orderNo: undefined,
-                orderDate: undefined,
-                itemNo: undefined,
-                itemName: undefined,
-                quantity: undefined,
-                unit: undefined,
-                orderStatus: undefined,
-                finishProcess: undefined,
-                finishrate: undefined,
-                deliveryDate: undefined
-            }],
-
-            // 保存提示
-            tipsVision: false,
-            tipsContent: '确认保存？',
+            }
         }
     },
 
     methods: {
 
-        // 查询条件
-        search() {
-            var that = this,
-                _searchData = that.formData;
-            _searchData.operation = that.operation;
-            _searchData.pageSize = '10';
-            _searchData.pageNum = '1';
-            for (var key in _searchData) {
-                if (typeof _searchData[key] === "object") {
-                    _searchData[key] = (_searchData[key].toLocaleDateString()).replace(/\//g, "-");
-                }
-            }
-
-            that.$ajaxWrap({
-                type :"get",
-                url : "plan/loadTable",
-                data : _searchData,
-                callback(data){
-                    that.loadTable(data.data)
-                }
-            });
-        },
-
-        queryTable(data){
-            var that = this;
-            if(that.operation){
-                data.operation = that.operation;
-            }
-            that.$ajax.get('plan/loadTable', {
-                params: data
-            }).then(function(res) {
-                if (res.data.success) that.loadTable(res.data.data,data.pageNum,data.pageSize);
-            }).catch(function(err) {
-                console.log(err);
-            });
-        },
-
-        // 重置查询信息
-        reset() {
-            var that = this;
-            that.$clearObject(that.formData);
-        },
-
-        // 刷新销售计划
-        refreshSalePlan(){
+        init() {
+            this.getSalePlanData();
             this.reset();
-            this.search();
         },
 
-        // Tab切换请求数据
-        loadTableStatus(id) {
-            var that = this;
-            that.operation = id ;
+        reset() {
+            let that = this;
+            that.$clearObject(that.search_form_data);
+        },
+
+        refresh() {
+            this.searchFormData();
+        },
+
+        getSalePlanData() {
+            let that = this;
             that.$ajaxWrap({
-                type : "get",
-                url : "plan/index",
-                data : {
-                    operation: id
-                },
-                callback : function(data){
-                    that.loadTable(data.data);
+                url: "plan/index",
+                success(res) {
+                    that.loadSaleTable(res.data);
                 }
             })
         },
 
-        // Tab切换事件
-        changeTableEffective(tab) {
-            switch (tab.name) {
-                case 'first':
-                    this.loadTableStatus();
+        loadSaleTable(data) {
+            let that = this,
+                loadTableData = data.page.list;
+            that.saleplan_push_tips = null; // 释放内存
+            that.saleplan_push_tips = [];
+
+            loadTableData.every(function(el) {
+                let isTips = el.operation === "01" ? true : false;
+                return that.saleplan_push_tips.push({ show: isTips });
+            });
+
+            that.saleplan_table_data = null;
+            that.saleplan_table_data = loadTableData;
+            that.sale_page_list.pageNum = data.page.pageNum;
+            that.sale_page_list.pageSize = data.page.pageSize;
+            that.sale_page_list.total = data.page.total;
+        },
+
+        searchFormData(pageval) {
+            let that = this,
+                searchData = that.search_form_data;
+            searchData.operation = that.saleChangeTips;
+            searchData.pageNum = pageval || that.sale_page_list.pageNum;
+            searchData.pageSize = that.sale_page_list.pageSize;
+
+            for (let key in searchData) {
+                if (typeof searchData[key] === "object") {
+                    searchData[key] = (searchData[key].toLocaleDateString()).replace(/\//g, "-");
+                }
+            }
+            that.$ajaxWrap({
+                url: "plan/loadTable",
+                data: searchData,
+                success(res) {
+                    that.loadSaleTable(res.data);
+                }
+            });
+        },
+
+        changeTableActive(changeTab) {
+            switch (changeTab.name) {
+                case "all":
+                    this.saleChangeTips = "";
+                    this.searchFormData();
                     break;
-                case 'second':
-                    this.loadTableStatus("01");
+                case "unIssue":
+                    this.saleChangeTips = "01";
+                    this.searchFormData();
                     break;
-                case 'third':
-                    this.loadTableStatus("02");
+                case "issued":
+                    this.saleChangeTips = "02";
+                    this.searchFormData();
                     break;
             }
         },
 
-        // 数据表格 下发
-        operationPlan(ids, index) {
-            var that = this;
-            that.$ajax({
-                method: 'post',
-                url: 'plan/operationPlan',
-                transformRequest: [function(data) {　　
-                    data = JSON.stringify({
-                        operationType: "issued",
-                        planId: ids,
-                    });
-                    return data;
-                }],
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(function(results) {
-                var data = results.data;
-                if (data.success === true) {
-                    that.showInfo[index].show = false
-                };
-                that.getData();
-            });
+        currentPageChange(val) {
+            if (this.saleplan_table_data.length) {
+                this.searchFormData(val);
+            }
         },
 
-        // 数据表格 下发提示
-        tipsOperationPlan(ids, index) {
-            var that = this;
-            that.$confirm("确认下发吗", "提示", {
+        operationSalePlan(planId, planIndex) {
+            let that = this;
+            that.$ajaxWrap({
+                type: "post",
+                url: "plan/operationPlan",
+                data: {
+                    operationType: "issued",
+                    planId: planId
+                },
+                success() {
+                    that.saleplan_push_tips[planIndex].show = false;
+                    that.refresh();
+                }
+            })
+        },
+
+        confirmOperation(planId, planIndex, tipsText) {
+            let that = this;
+            that.$confirm(`确认${tipsText}吗`, "提示", {
                 confirmButtonText: "确认",
                 cancelButtonText: "取消",
                 type: "warning"
             }).then(function() {
-                that.operationPlan(ids, index);
-            })
+                that.operationSalePlan(planId, planIndex);
+            }).catch(function() {});
         },
 
-        // 数据表格 分页
-        handleSizeChange(val) {
+        clearModalForm() {
+            this.modal_show_tips = false;
+            this.modal_table_data = [];
+            this.$clearObject(this.modal_form_data);
         },
 
-        handleCurrentChange(val) {
-            var that = this,
-                temp = {
-                    pageSize : 10,
-                    pageNum : val 
-                };
-            if(that.tableData.length){
-                that.queryTable(temp);	
+        confirmCloseModal() {
+            let that = this;
+            if (that.modal_table_data.length) {
+                that.$confirm("确定关闭吗？", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }).then(function() {
+                    that.clearModalForm();
+                }).catch(function() {});
+            } else {
+                that.clearModalForm();
+            }
+
+        },
+
+        openSalePlanModal(tipsText, PlanId) {
+            this.modal_title = tipsText;
+            this.modal_show_tips = true;
+            this.getModalData(PlanId);
+        },
+
+        getModalData(PlanId) {
+            let that = this;
+            if (!PlanId) {
+                that.$ajaxWrap({
+                    url: "plan/addPlanOnclick",
+                    success(res) {
+                        that.guest_name_data = res.data.dataList;
+                    }
+                })
+            } else {
+                that.$ajaxWrap({
+                    url: "plan/updatePlanOnclick",
+                    data: {
+                        planId: PlanId
+                    },
+                    success(res) {
+                        that.guest_name_data = res.data.dataList;
+                        that.modal_table_data = null;
+                        that.modal_table_data = res.data.data.planDetailList;
+                    }
+                })
             }
         },
 
+        addNewPlan() {
 
-        // 数据表格 获取
-        getData() {
-            var that = this;
-            that.tableData = null;
-            that.$ajax.get('plan/index').then(function(res) {
-                if (res.data.success) that.loadTable(res.data.data);
-            }).catch(function(error) {
-                console.log(error);
-            });
         },
 
-        // 数据表格 加载 
-        loadTable(data,val,num) {
-            var that = this,
-                loadData = data.page;
-            that.pageList.pageNum = val || loadData.pageNum;
-            that.pageList.pageSize = num || loadData.pageSize;
-            that.pageList.total = loadData.total;
-            that.showInfo = [];
-            loadData.list.every(function(el) {
-                var flag = el.operation === "01" ? true : false;
-                return that.showInfo.push({ show: flag });
+        handleModalData(tableData) {
 
-            })
-            that.tableData = loadData.list;
-        },
+            let len = tableData.length,
+                i, key;
+
+            for (i = 0; i < len; i++) {
+                for (key in tableData[i]) {
+
+                }
+            }
+        }
+        /*
 
         //新建计划 客户名称
         addGuestInfo() {
@@ -406,7 +354,7 @@ export default {
             that.ruleForm.unit = "pcs";
 
             for (var key in that.ruleForm) {
-                if (!that.ruleForm[key]) {                    
+                if (!that.ruleForm[key]) {
                     alert("请完整填写信息");
                     return
                 }
@@ -418,27 +366,27 @@ export default {
             that.$clearObject(that.ruleForm);
         },
 
-        handleCustName(){
+        handleCustName() {
 
         },
 
         // 新建窗口关闭
-        closePlan(){
+        closePlan() {
             var that = this;
-            if(that.newListData.length){
+            if (that.newListData.length) {
                 that.$confirm("确定关闭吗？", "提示", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning"
                 }).then(function() {
                     that.newCustom = false;
-                    that.modifysaleplan=false
+                    that.modifysaleplan = false
                     that.$clearObject(that.ruleForm)
                     that.newListData = [];
                 }).catch(function() {});
-            }else{
+            } else {
                 that.newCustom = false;
-                that.modifysaleplan=false
+                that.modifysaleplan = false
             }
         },
 
@@ -456,42 +404,55 @@ export default {
             var that = this;
             var i, len = that.newListData.length,
                 j, lens = that.guestInfo.length,
-                _temp,el,
-                _tempData={},
-                _dataList=[];
+                _temp, el,
+                _dataList = [];
             if (!len) {
                 alert("暂无数据，请添加计划");
                 return;
             }
             for (i = 0; i < len; i++) {
+                var _tempData = {};
                 el = that.newListData[i];
-                if(lens){
-                    for( j = 0 ; j < lens ; j++){
+                if (lens) {
+
+                    // 添加客户姓名与ID
+                    for (j = 0; j < lens; j++) {
                         _temp = that.guestInfo[j];
-                        if(el.custName === _temp.custNo){
+                        if (el.custName === _temp.custNo) {
                             el.custName = _temp.custName;
                             el.custNo = _temp.custNo;
                         }
                     };
                 }
 
-                for(var key in el){
-                    for(var keys in that.ruleForm){
-                        if(key === keys || key === "custNo" || key === "detailId"){
+
+                for (var key in el) {
+                    for (var keys in that.ruleForm) {
+                        if (key === keys || key === "custNo") {
                             _tempData[key] = el[key]
                         }
                     }
                 };
                 _tempData.planType = _tempData.planType === "库存" || _tempData.planType === "02" ? "02" : "01";
-                _dataList.push(_tempData);
-                if (typeof _dataList.orderDate === "object") {
-                    var d = _dataList.orderDate,
-                        e = _dataList.deliveryDate;
-                    _dataList.orderDate = d.getFullYear() + '-' + ((d.getMonth() + 1) < 10 ? ('0' + (d.getMonth() + 1)) : (d.getMonth() + 1)) + '-' + (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
-                    _dataList.deliveryDate = e.getFullYear() + '-' + ((e.getMonth() + 1) < 10 ? ('0' + (e.getMonth() + 1)) : (e.getMonth() + 1)) + '-' + (e.getDate() < 10 ? ('0' + e.getDate()) : e.getDate());
+
+                if (typeof _tempData.orderDate === "object") {
+                    var d = _tempData.orderDate,
+                        e = _tempData.deliveryDate;
+                    _tempData.orderDate = d.getFullYear() + '-' + ((d.getMonth() + 1) < 10 ? ('0' + (d.getMonth() + 1)) : (d.getMonth() + 1)) + '-' + (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
+                    _tempData.deliveryDate = e.getFullYear() + '-' + ((e.getMonth() + 1) < 10 ? ('0' + (e.getMonth() + 1)) : (e.getMonth() + 1)) + '-' + (e.getDate() < 10 ? ('0' + e.getDate()) : e.getDate());
                 }
+
+                if (el.detailId) {
+                    _tempData.detailId = el.detailId;
+                } else {
+                    _tempData.detailId = "";
+                }
+
+                _dataList.push(_tempData);
+                console.log(_tempData.detailId);
             }
 
+            console.log(_dataList)
             var tempObj = {
                 operation: id,
                 planDetailList: _dataList
@@ -499,10 +460,10 @@ export default {
 
             if (that.tempID) tempObj.planId = that.tempID;
             that.$ajaxWrap({
-                type : "post",
-                url : url,
-                data : tempObj,
-                callback : function(data){
+                type: "post",
+                url: url,
+                data: tempObj,
+                success(data) {
                     that.getData();
                     that.newListData = [];
                 }
@@ -526,15 +487,15 @@ export default {
         ensureSave() {
             var that = this,
                 flag = true;
-            that.newListData.every(function(el){
-                for(var key in el){
-                    if(!el[key]){
+            that.newListData.every(function(el) {
+                for (var key in el) {
+                    if (!el[key]) {
                         alert("请完善数据！");
                         flag = false;
                     }
                 }
             });
-            if(flag){
+            if (flag) {
                 that.$confirm("确定保存吗", "提示", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
@@ -572,12 +533,12 @@ export default {
         lodeModifyInfo() {
             var that = this;
             that.$ajaxWrap({
-                type : "get",
-                url : "plan/updatePlanOnclick",
-                data : {
+                type: "get",
+                url: "plan/updatePlanOnclick",
+                data: {
                     planId: that.tempID
                 },
-                callback : function(data){
+                success(data) {
                     that.ModifyGuestInfo = data.data.dataList;
                     that.ModifyFormData = data.data.data;
                     that.newListData = that.ModifyFormData.planDetailList;
@@ -590,15 +551,15 @@ export default {
         modifyEnsureSave() {
             var that = this,
                 flag = true;
-            that.newListData.every(function(el){
-                for(var key in el){
-                    if(el[key] === ""){
+            that.newListData.every(function(el) {
+                for (var key in el) {
+                    if (el[key] === "") {
                         alert("请完善数据！");
                         flag = false;
                     }
                 }
             });
-            if(flag){
+            if (flag) {
                 that.$confirm("确认保存吗", "提示", {
                     confirmButtonText: "确认",
                     cancelButtonText: "取消",
@@ -634,24 +595,24 @@ export default {
         // 计划详情
         detailplan(id) {
             var that = this;
-            that.$ajax.get('plan/detailPlan', {
-                params: {
+            that.$ajaxWrap({
+                type: "get",
+                url: "plan/detailPlan",
+                data: {
                     planId: id
+                },
+                success(data) {
+                    that.$goRoute("saleplaninfo");
+                    that.EventData = {
+                        data: data.data.data,
+                        list: data.data.dataList
+                    };
                 }
-            }).then(function(res) {
-                that.$goRoute("saleplaninfo");
-                that.EventData = {
-                    data: res.data.data.data,
-                    list: res.data.data.dataList
-                };
             });
-        }
+        }*/
     },
 
-    created() {
-        this.getData();
-    },
     destroyed() {
-        EventBus.$emit("setInfoData", this.EventData);
+        // EventBus.$emit("setInfoData", this.EventData);
     }
 }

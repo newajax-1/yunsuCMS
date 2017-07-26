@@ -134,7 +134,7 @@
                         account:that.ruleForm.username,
                         password:that.ruleForm.password
                     },
-                    callback(data){
+                    success(data){
                         sessionStorage.setItem("name",data.data.data.name);
                         sessionStorage.setItem("jobNumber",data.data.data.jobNumber);
                         if(data.success === true){

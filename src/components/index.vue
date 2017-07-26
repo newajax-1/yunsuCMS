@@ -1,5 +1,5 @@
 <template>
-    <div class="layoutPage">
+    <div class="layout-page">
         <Vheader></Vheader>
         <Vleftmeau></Vleftmeau>
         <Vcontent></Vcontent>
