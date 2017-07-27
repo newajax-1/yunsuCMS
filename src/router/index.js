@@ -7,11 +7,9 @@ import index from '../components/index'
 /**
  * @saleplan : 销售计划管理
  * @salersInfo : 客户信息管理
- * @saleplaninfo : 销售计划详情
  */
 
 import saleplan from '../components/template/saleplans/salePlans'
-import saleplaninfo from '../components/template/saleplans/saleplaninfo'
 import salersInfo from '../components/template/salersInfo'
 
 import prodPlansInfo from '../components/template/productionplans/prodPlansInfo'
@@ -50,10 +48,6 @@ export default new Router({
                     component: salersInfo
                 },
                 {
-                    path: 'saleplaninfo',
-                    component: saleplaninfo
-                },
-                {
                     path: 'prodplansinfo',
                     component: prodPlansInfo
                 },
@@ -62,23 +56,23 @@ export default new Router({
                     component: weekProdPlans
                 },
                 {
-                    path:'weekprodplansinfo',
+                    path: 'weekprodplansinfo',
                     component: weekProdPlansInfo
                 },
                 {
-                    path:'invwarning',
+                    path: 'invwarning',
                     component: invWarning
                 },
                 {
-                    path:'usermanagement',
+                    path: 'usermanagement',
                     component: userManagement
                 },
                 {
-                    path:'rolemanagement',
+                    path: 'rolemanagement',
                     component: roleManagement
                 },
                 {
-                    path:'orgManagement',
+                    path: 'orgManagement',
                     component: orgManagement
                 },
             ]

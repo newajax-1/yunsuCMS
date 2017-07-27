@@ -1,67 +1,58 @@
 <template>
-   <div class="sale-plan">
+   <div class="week-prod-plans">
         <el-row>
-            <!-- 周生产计划 start -->
             <el-col :span="24">
                 <div class="content-title">
                     <span>生产计划管理-周生产计划</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">
-                        <el-form-item label="下发人：">
-                            <el-input placeholder="输入人员姓名" v-model='searchForm.issUsr'></el-input>
+                        <el-form-item 
+                            label="下发人：">
+                            <el-input 
+                                placeholder="输入人员姓名" 
+                                v-model='search_form_data.issUsr'></el-input>
                         </el-form-item>
-
-                        <el-form-item label="生成时间：">
+                        <el-form-item 
+                            label="生成时间：">
                             <el-date-picker
-                                v-model="searchForm.creStartTime"
+                                v-model="search_form_data.creStartTime"
                                 type="date"
                                 placeholder="选择日期">
                             </el-date-picker>
-                            <span style="padding: 0 10px">至</span>
+                            <span class="pad-line-default">至</span>
                             <el-date-picker
-                                v-model="searchForm.creEndTime"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
-                        </el-form-item>
-
-                        <el-form-item label="下发时间：">
-                            <el-date-picker
-                                v-model="searchForm.issStartTime"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
-                            <span style="padding: 0 10px">至</span>
-                            <el-date-picker
-                                v-model="searchForm.issEndTime"
+                                v-model="search_form_data.creEndTime"
                                 type="date"
                                 placeholder="选择日期">
                             </el-date-picker>
                         </el-form-item>
-
-                        <el-form-item>
-                            <el-button @click='search()' class="search-btn">查询</el-button>
+                        <el-form-item 
+                            label="下发时间：">
+                            <el-date-picker
+                                v-model="search_form_data.issStartTime"
+                                type="date"
+                                placeholder="选择日期">
+                            </el-date-picker>
+                            <span class="pad-line-default">至</span>
+                            <el-date-picker
+                                v-model="search_form_data.issEndTime"
+                                type="date"
+                                placeholder="选择日期">
+                            </el-date-picker>
                         </el-form-item>
-
-                        <el-form-item>
-                            <el-button @click='reset()' class="reset-btn">重置</el-button>
-                        </el-form-item>
-
-                        <el-form-item>
-                            <el-button @click='refresh()' class="search-btn">刷新</el-button>
-                        </el-form-item>
-
-                        <el-form-item>
-                            <el-button @click="openAddWeekPlan()" class="search-btn">新增周计划</el-button>
-                        </el-form-item>
-
+                        <el-form-item><el-button class="btn btn-blue">查询</el-button></el-form-item>
+                        <el-form-item><el-button class="btn btn-yellow">重置</el-button></el-form-item>
                     </el-form>
                 </div>
             </el-col>
-            <!-- 周生产计划 end -->
+            
+            <el-col :span="24" class="content-buttons">
+                <el-button class="list-buttons" ><i class="fa fa-repeat"></i> 刷新</el-button>
+                <el-button class="list-buttons" ><i class="fa fa-user-plus"></i> 新建周计划</el-button>
+            </el-col>
 
-            <!-- 数据表格 start -->
+            <!-- 数据表格 start 
             <el-col :span="24">
                 <el-tabs  type="card" class="list-tab" @tab-click="changeTableEffective" v-model="activeTab">
                     <el-tab-pane label="全部" name="first" ></el-tab-pane>
@@ -108,7 +99,7 @@
             </el-col>
             <!-- 数据表格 end -->
                 
-            <!--新增弹框 start-->
+            <!--新增弹框 start
             <el-dialog
                 size="full"
                 custom-class="pub-dialog"
@@ -464,9 +455,9 @@
                     </div>
                     <div class="fr">共有<span class="detailMsg">条下发计划</span></div>
                 </div>
-            </el-dialog>
+            </el-dialog>-->
 
-            <!-- 删除提示信息 start-->
+            <!-- 删除提示信息 start
             <el-dialog
                 title="提示"
                 :visible.sync="dialogVisible" 
@@ -478,7 +469,7 @@
                         <input type="hidden" v-html='tipMsg' id="deleteId">取 消
                     </el-button>
                 </span>
-            </el-dialog> 
+            </el-dialog> -->
         </el-row>
     </div>
 </template>
@@ -490,5 +481,7 @@
     .sched-table
         td
             padding 6px 0
+    .new-line
+        margin-bottom 10px
 
 </style>

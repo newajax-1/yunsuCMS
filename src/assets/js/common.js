@@ -35,7 +35,7 @@ const $ajaxWrap = Vue.prototype.$ajaxWrap = function(option) {
         type = opt.type || "get",
         url = opt.url || "",
         datas = opt.data || {},
-        success = opt.success || function() {},
+        success = opt.success || el.callback || function() {},
         error = opt.error || function() {};
 
     if (type.toLowerCase() === "get") {
@@ -65,8 +65,8 @@ const $ajaxWrap = Vue.prototype.$ajaxWrap = function(option) {
                 success(res.data);
             } else {
                 error(res.data);
-                alert("请求失败，前往控制台查看失败原因");
-                console.log(res.data.tipMsp);
+                alert(res.data.tipMsp + "前往控制台查看失败原因");
+                console.log(res.data);
             };
         });
     };

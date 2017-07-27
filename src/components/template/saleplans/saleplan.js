@@ -1,5 +1,4 @@
-import Qs from 'qs'
-
+import Vue from "vue"
 export default {
     name: 'saleplan',
     created() {
@@ -86,10 +85,10 @@ export default {
             },
 
             // 销售计划 当前Tab页面id
-            saleChangeTips: undefined,
+            sale_change_tips: undefined,
 
             // 销售计划 当前Tab页面name
-            saleChangeName: "all",
+            sale_change_name: "all",
 
             // 新增或修改 显示隐藏
             modal_show_tips: false,
@@ -105,7 +104,7 @@ export default {
                 itemName: undefined,
                 quantity: undefined,
                 deliveryDate: undefined,
-                unit: 'pcs'
+                unit: undefined
             },
 
             // 新增或修改 表格数据
@@ -113,12 +112,19 @@ export default {
 
             // 修改计划 表格可编辑
             modal_table_edit: false,
+            modify_detail_id: undefined,
 
             // 新增或修改 客户名称
             guest_name_data: null,
 
             // 合计表格数量
             modal_plan_length: undefined,
+            isCreateNewPlan: undefined,
+
+            // 计划详情
+            sale_plan_info: false,
+            sale_info_form: {},
+            sale_info_table: [],
 
             // 新增或修改 表单校验
             modal_form_rules: {
@@ -178,37 +184,40 @@ export default {
 
         loadSaleTable(data) {
             let that = this,
-                loadTableData = data.page.list;
-            that.saleplan_push_tips = null; // 释放内存
+                load_table_data = data.page.list;
             that.saleplan_push_tips = [];
 
-            loadTableData.every(function(el) {
-                let isTips = el.operation === "01" ? true : false;
-                return that.saleplan_push_tips.push({ show: isTips });
+            load_table_data.every(function(el) {
+                let is_tips = el.operation === "01" ? true : false;
+                return that.saleplan_push_tips.push({ show: is_tips });
             });
 
-            that.saleplan_table_data = null;
-            that.saleplan_table_data = loadTableData;
+            that.saleplan_table_data = load_table_data;
             that.sale_page_list.pageNum = data.page.pageNum;
             that.sale_page_list.pageSize = data.page.pageSize;
             that.sale_page_list.total = data.page.total;
         },
 
-        searchFormData(pageval) {
+        searchFormData(pageval, pagesize) {
             let that = this,
-                searchData = that.search_form_data;
-            searchData.operation = that.saleChangeTips;
-            searchData.pageNum = pageval || that.sale_page_list.pageNum;
-            searchData.pageSize = that.sale_page_list.pageSize;
+                search_data = that.search_form_data;
+            search_data.operation = that.sale_change_tips;
+            if (pagesize === "num") {
+                search_data.pageNum = pageval || that.sale_page_list.pageNum;
+                search_data.pageSize = that.sale_page_list.pageSize;
+            } else {
+                search_data.pageNum = that.sale_page_list.pageNum;
+                search_data.pageSize = pageval || that.sale_page_list.pageSize;
+            }
 
-            for (let key in searchData) {
-                if (typeof searchData[key] === "object") {
-                    searchData[key] = (searchData[key].toLocaleDateString()).replace(/\//g, "-");
+            for (let key in search_data) {
+                if (typeof search_data[key] === "object") {
+                    search_data[key] = (search_data[key].toLocaleDateString()).replace(/\//g, "-");
                 }
             }
             that.$ajaxWrap({
                 url: "plan/loadTable",
-                data: searchData,
+                data: search_data,
                 success(res) {
                     that.loadSaleTable(res.data);
                 }
@@ -218,15 +227,15 @@ export default {
         changeTableActive(changeTab) {
             switch (changeTab.name) {
                 case "all":
-                    this.saleChangeTips = "";
+                    this.sale_change_tips = "";
                     this.searchFormData();
                     break;
                 case "unIssue":
-                    this.saleChangeTips = "01";
+                    this.sale_change_tips = "01";
                     this.searchFormData();
                     break;
                 case "issued":
-                    this.saleChangeTips = "02";
+                    this.sale_change_tips = "02";
                     this.searchFormData();
                     break;
             }
@@ -234,7 +243,13 @@ export default {
 
         currentPageChange(val) {
             if (this.saleplan_table_data.length) {
-                this.searchFormData(val);
+                this.searchFormData(val, "num");
+            }
+        },
+
+        currentSizeChange(val) {
+            if (this.saleplan_table_data.length) {
+                this.searchFormData(val, "size");
             }
         },
 
@@ -266,9 +281,13 @@ export default {
         },
 
         clearModalForm() {
-            this.modal_show_tips = false;
-            this.modal_table_data = [];
-            this.$clearObject(this.modal_form_data);
+            let that = this;
+            that.modal_show_tips = false;
+            that.modal_table_edit = false;
+            that.modify_detail_id = undefined;
+            that.modal_table_data = [];
+            that.$clearObject(that.modal_form_data);
+            that.refresh();
         },
 
         confirmCloseModal() {
@@ -284,13 +303,45 @@ export default {
             } else {
                 that.clearModalForm();
             }
-
         },
 
         openSalePlanModal(tipsText, PlanId) {
             this.modal_title = tipsText;
             this.modal_show_tips = true;
+            this.isCreateNewPlan = tipsText === "新建计划" ? "create" : "modify";
             this.getModalData(PlanId);
+        },
+
+        openSalePlanInfo(planId) {
+            let that = this;
+            that.sale_plan_info = true;
+            that.$ajaxWrap({
+                url: "plan/detailPlan",
+                data: {
+                    planId: planId
+                },
+                success(res) {
+                    let len;
+                    that.sale_info_form = res.data.data;
+                    that.sale_info_table = res.data.dataList;
+                    len = that.sale_info_table.length;
+                    for (let i = 0; i < len; i++) {
+                        let el = that.sale_info_table[i];
+                        el.finishrate = (100 * el.finishProcess / el.quantity) + "%";
+                        el.finishProcessText = el.finishProcess + "/" + el.quantity;
+                    }
+                }
+            })
+        },
+
+        closeSalePlanInfo() {
+            this.sale_plan_info = false;
+            this.sale_info_form = {};
+            this.sale_info_table = [];
+        },
+
+        editSalePlan() {
+            this.modal_table_edit = false;
         },
 
         getModalData(PlanId) {
@@ -310,309 +361,135 @@ export default {
                     },
                     success(res) {
                         that.guest_name_data = res.data.dataList;
-                        that.modal_table_data = null;
                         that.modal_table_data = res.data.data.planDetailList;
+                        that.modal_plan_length = that.modal_table_data.length;
+                        that.modify_detail_id = PlanId;
                     }
                 })
             }
         },
 
-        addNewPlan() {
+        addNewSalePlan() {
+            let that = this,
+                new_data = {},
+                len = that.guest_name_data.length;
+            that.modal_form_data.unit = "pcs";
 
-        },
-
-        handleModalData(tableData) {
-
-            let len = tableData.length,
-                i, key;
-
-            for (i = 0; i < len; i++) {
-                for (key in tableData[i]) {
-
+            // 保存 modal_form_data 没存储到的CustName;
+            for (let i = 0; i < len; i++) {
+                if (that.modal_form_data.custName === that.guest_name_data[i].custNo) {
+                    that.modal_form_data.custName = that.guest_name_data[i].custName;
+                    that.modal_form_data.custNo = that.guest_name_data[i].custNo;
                 }
             }
-        }
-        /*
 
-        //新建计划 客户名称
-        addGuestInfo() {
-            var that = this;
-            that.$ajax.get('plan/addPlanOnclick').then(function(res) {
-                that.guestInfo = res.data.data.dataList;
-            })
-        },
-
-        // 新增计划 编辑
-        editTable() {
-            this.editFlag = false;
-        },
-
-        // 新增计划 完成
-        addPlan() {
-            var that = this,
-                _data = {};
-            that.ruleForm.unit = "pcs";
-
-            for (var key in that.ruleForm) {
-                if (!that.ruleForm[key]) {
-                    alert("请完整填写信息");
-                    return
+            for (let key in that.modal_form_data) {
+                if (!that.modal_form_data[key]) {
+                    this.$alert('请完善表单信息', '提示', {
+                        confirmButtonText: '确定',
+                        callback() {}
+                    })
+                    return;
                 }
-                _data[key] = that.ruleForm[key];
+                new_data[key] = that.modal_form_data[key];
             }
 
-            that.detailMath++;
-            that.newListData.push(_data);
-            that.$clearObject(that.ruleForm);
+            that.modal_table_edit = true;
+            that.modal_table_data.push(new_data);
+            that.modal_plan_length = that.modal_table_data.length;
+            that.$clearObject(that.modal_form_data);
         },
 
-        handleCustName() {
 
-        },
+        confirmSendPlan(tips) {
+            let that = this,
+                sure_text = tips === "save" ? "保存" : "下发";
+            let old_table_data = that.modal_table_data;
 
-        // 新建窗口关闭
-        closePlan() {
-            var that = this;
-            if (that.newListData.length) {
-                that.$confirm("确定关闭吗？", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(function() {
-                    that.newCustom = false;
-                    that.modifysaleplan = false
-                    that.$clearObject(that.ruleForm)
-                    that.newListData = [];
-                }).catch(function() {});
-            } else {
-                that.newCustom = false;
-                that.modifysaleplan = false
-            }
-        },
+            that.handleModalData(old_table_data);
 
-        // 新增计划 保存与下发
-        saveList() {
-            this.handleTableData("01", "plan/addPlan");
-        },
+            let new_table_data = that.modal_table_data,
+                len = new_table_data.length;
 
-        publishList() {
-            this.handleTableData("02", "plan/addPlan");
-        },
-
-        // 新建计划 表格数据处理
-        handleTableData(id, url) {
-            var that = this;
-            var i, len = that.newListData.length,
-                j, lens = that.guestInfo.length,
-                _temp, el,
-                _dataList = [];
-            if (!len) {
-                alert("暂无数据，请添加计划");
-                return;
-            }
-            for (i = 0; i < len; i++) {
-                var _tempData = {};
-                el = that.newListData[i];
-                if (lens) {
-
-                    // 添加客户姓名与ID
-                    for (j = 0; j < lens; j++) {
-                        _temp = that.guestInfo[j];
-                        if (el.custName === _temp.custNo) {
-                            el.custName = _temp.custName;
-                            el.custNo = _temp.custNo;
-                        }
-                    };
-                }
-
-
-                for (var key in el) {
-                    for (var keys in that.ruleForm) {
-                        if (key === keys || key === "custNo") {
-                            _tempData[key] = el[key]
-                        }
+            for (let i = 0; i < len; i++) {
+                let el = new_table_data[i]
+                for (let key in el) {
+                    if (el[key] === "" || el[key] === null) {
+                        that.$alert('请完善表单信息', '提示', {
+                            confirmButtonText: '确定',
+                            callback() {}
+                        })
+                        return;
                     }
-                };
-                _tempData.planType = _tempData.planType === "库存" || _tempData.planType === "02" ? "02" : "01";
-
-                if (typeof _tempData.orderDate === "object") {
-                    var d = _tempData.orderDate,
-                        e = _tempData.deliveryDate;
-                    _tempData.orderDate = d.getFullYear() + '-' + ((d.getMonth() + 1) < 10 ? ('0' + (d.getMonth() + 1)) : (d.getMonth() + 1)) + '-' + (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
-                    _tempData.deliveryDate = e.getFullYear() + '-' + ((e.getMonth() + 1) < 10 ? ('0' + (e.getMonth() + 1)) : (e.getMonth() + 1)) + '-' + (e.getDate() < 10 ? ('0' + e.getDate()) : e.getDate());
                 }
-
-                if (el.detailId) {
-                    _tempData.detailId = el.detailId;
-                } else {
-                    _tempData.detailId = "";
-                }
-
-                _dataList.push(_tempData);
-                console.log(_tempData.detailId);
             }
 
-            console.log(_dataList)
-            var tempObj = {
-                operation: id,
-                planDetailList: _dataList
-            }
-
-            if (that.tempID) tempObj.planId = that.tempID;
-            that.$ajaxWrap({
-                type: "post",
-                url: url,
-                data: tempObj,
-                success(data) {
-                    that.getData();
-                    that.newListData = [];
-                }
-            })
-        },
-
-        // 新建计划 关闭提示
-        handleClose(done) {
-            var that = this;
-            that.$confirm("确定关闭吗？", "提示", {
+            that.$confirm(`确定${sure_text}吗？`, "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             }).then(function() {
-                done();
-                that.$clearObject(that.ruleForm)
-                that.newListData = [];
+                that.sendNewSalePlan(tips);
             }).catch(function() {});
         },
 
-        ensureSave() {
-            var that = this,
-                flag = true;
-            that.newListData.every(function(el) {
-                for (var key in el) {
-                    if (!el[key]) {
-                        alert("请完善数据！");
-                        flag = false;
+
+        handleModalData(tableData) {
+            let that = this,
+                len = tableData.length,
+                guest_len = that.guest_name_data.length;
+
+            for (let i = 0; i < len; i++) {
+                let el = tableData[i];
+                for (let j = 0; j < guest_len; j++) {
+                    if (el.custName === that.guest_name_data[i].custNo) {
+                        el.custName = that.guest_name_data[i].custName;
+                        el.custNo = that.guest_name_data[i].custNo;
                     }
                 }
-            });
-            if (flag) {
-                that.$confirm("确定保存吗", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(function() {
-                    that.saveList();
-                    that.newCustom = false;
-                    that.getData()
-                }).catch(function() {});
+
+                if (el.detailId) {
+                    let tempObj = {};
+                    tempObj.detailId = el.detailId;
+                    for (let key in that.modal_form_data) {
+                        tempObj[key] = el[key];
+                    }
+
+                    for (let j = 0; j < guest_len; j++) {
+                        if (tempObj.custName === that.guest_name_data[j].custNo) {
+                            tempObj.custName = that.guest_name_data[j].custName;
+                            tempObj.custNo = that.guest_name_data[j].custNo;
+                        }
+                    }
+
+                    tempObj.planType = tempObj.planType === "库存" || tempObj.planType === "02" ? "02" : "01";
+                    Vue.set(that.modal_table_data, i, tempObj);
+                }
             }
         },
 
-        ensurePublish() {
-            var that = this;
-            that.$confirm("确认下发吗", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).then(function() {
-                that.publishList();
-                that.newCustom = false;
-            }).catch(function() {})
-        },
-
-        // 修改模态框
-        openmodify(ids) {
-            var that = this;
-            that.modifysaleplan = true;
-            that.tempID = ids.row.planId;
-            that.editFlag = false;
-            that.lodeModifyInfo();
-        },
-
-        //修改计划
-        lodeModifyInfo() {
-            var that = this;
-            that.$ajaxWrap({
-                type: "get",
-                url: "plan/updatePlanOnclick",
-                data: {
-                    planId: that.tempID
-                },
-                success(data) {
-                    that.ModifyGuestInfo = data.data.dataList;
-                    that.ModifyFormData = data.data.data;
-                    that.newListData = that.ModifyFormData.planDetailList;
-                    that.detailMath = that.newListData.length;
+        sendNewSalePlan(tips) {
+            let that = this,
+                url = undefined,
+                send_data = {
+                    operation: undefined,
+                    planDetailList: that.modal_table_data
                 }
-            });
-        },
 
-        // 修改计划 确定下发与保存
-        modifyEnsureSave() {
-            var that = this,
-                flag = true;
-            that.newListData.every(function(el) {
-                for (var key in el) {
-                    if (el[key] === "") {
-                        alert("请完善数据！");
-                        flag = false;
-                    }
-                }
-            });
-            if (flag) {
-                that.$confirm("确认保存吗", "提示", {
-                    confirmButtonText: "确认",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(function() {
-                    that.saveModifyList();
-                    that.modifysaleplan = false;
-                })
+            if (that.modify_detail_id) {
+                send_data.planId = that.modify_detail_id;
             }
-        },
-
-        modifyEnsurePublish() {
-            var that = this;
-            that.$confirm("确认下发吗", "提示", {
-                confirmButtonText: "确认",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).then(function() {
-                that.publishModifyList();
-                that.modifysaleplan = false;
-            })
-        },
-
-        // 修改计划保存
-        saveModifyList() {
-            this.handleTableData("01", "plan/updatePlan");
-        },
-
-        publishModifyList() {
-            this.handleTableData("02", "plan/updatePlan");
-        },
-
-        // 计划详情
-        detailplan(id) {
-            var that = this;
+            send_data.operation = tips === "save" ? "01" : "02";
+            url = that.isCreateNewPlan === "create" ? "plan/addPlan" : "plan/updatePlan";
             that.$ajaxWrap({
-                type: "get",
-                url: "plan/detailPlan",
-                data: {
-                    planId: id
-                },
-                success(data) {
-                    that.$goRoute("saleplaninfo");
-                    that.EventData = {
-                        data: data.data.data,
-                        list: data.data.dataList
-                    };
+                type: "post",
+                url: url,
+                data: send_data,
+                success(res) {
+                    that.clearModalForm();
                 }
             });
-        }*/
-    },
 
-    destroyed() {
-        // EventBus.$emit("setInfoData", this.EventData);
+        }
     }
 }
