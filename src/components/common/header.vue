@@ -1,5 +1,5 @@
 <template>
-    <div class="top-nav">
+    <div class="layout-header">
         <el-row>
             <el-col :span="24" class="header">
                 <div class="top-nav-content clearfix">
@@ -46,17 +46,16 @@
         }
     }
 </script>
-<style lang="stylus" rel="stylesheet/stylus">
-@media screen and (max-width:1366px)
-    .top-nav
-        .top-nav-content
-            line-height:50px 
-            .top-nav-left
-                .logo,
-                .nav-title
-                    padding:0 5px 
-  
+<style lang="stylus" scoped rel="stylesheet/stylus">
+.layout-header
+    position fixed
+    top 0
+    left 0
+    z-index 100
+    width 100%
+
 .top-nav-content
+    font-size:16px
     line-height:80px
     background-color:#383d41
     .border-right
@@ -96,4 +95,13 @@
             width:2px
             height:16px
             background-color:#fff
+
+@media screen and (max-width:1366px)
+    .layout-header
+        .top-nav-content
+            line-height:50px 
+            .top-nav-left
+                .logo,
+                .nav-title
+                    padding:0 5px 
 </style>

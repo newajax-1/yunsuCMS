@@ -8,51 +8,35 @@ export default {
 
         // 新建计划 Form校验
         var validateplanType = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请选择计划类型'));
-            }
+            if (!value) { callback(new Error('请选择计划类型')); }
             callback();
         };
         var validatecustName = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请选择客户名称'));
-            }
+            if (!value) { callback(new Error('请选择客户名称')); }
             callback();
         };
         var validateorderNo = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请输入订单编号'));
-            }
+            if (!value) { callback(new Error('请输入订单编号')); }
             callback();
         };
         var validateorderDate = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请选择订单日期'));
-            }
+            if (!value) { callback(new Error('请选择订单日期')); }
             callback();
         };
         var validateitemNo = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请输入产品型号'));
-            }
+            if (!value) { callback(new Error('请输入产品型号')); }
             callback();
         };
         var validateproductName = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请输入产品名称'));
-            }
+            if (!value) { callback(new Error('请输入产品名称')); }
             callback();
         };
         var validateaccount = (rule, value, callback) => {
-            if (!value || value < 0) {
-                callback(new Error('请输入需求数量'));
-            }
+            if (!value || value < 0) { callback(new Error('请输入需求数量')); }
             callback();
         };
         var validatepublishDate = (rule, value, callback) => {
-            if (!value) {
-                callback(new Error('请选择交货日期'));
-            }
+            if (!value) { callback(new Error('请选择交货日期')); }
             callback();
         };
 
@@ -70,9 +54,6 @@ export default {
 
             // 销售计划 表格数据
             saleplan_table_data: [{}],
-
-            // 销售计划 表格下发或详情显示
-
             saleplan_push_tips: [{
                 show: true
             }],
@@ -86,18 +67,15 @@ export default {
 
             // 销售计划 当前Tab页面id
             sale_change_tips: undefined,
-
-            // 销售计划 当前Tab页面name
             sale_change_name: "all",
 
             // 新增或修改 显示隐藏
             modal_show_tips: false,
             modal_title: undefined,
-
-            // 新增或修改 表单数据
             modal_form_data: {
                 planType: undefined,
                 custName: undefined,
+                custNo: undefined,
                 orderNo: undefined,
                 orderDate: undefined,
                 itemNo: undefined,
@@ -109,17 +87,15 @@ export default {
 
             // 新增或修改 表格数据
             modal_table_data: [],
-
-            // 修改计划 表格可编辑
             modal_table_edit: false,
+            modal_plan_length: undefined,
             modify_detail_id: undefined,
 
             // 新增或修改 客户名称
             guest_name_data: null,
 
             // 合计表格数量
-            modal_plan_length: undefined,
-            isCreateNewPlan: undefined,
+            create_newplan: undefined,
 
             // 计划详情
             sale_plan_info: false,
@@ -169,6 +145,7 @@ export default {
         },
 
         refresh() {
+            this.reset();
             this.searchFormData();
         },
 
@@ -202,6 +179,7 @@ export default {
             let that = this,
                 search_data = that.search_form_data;
             search_data.operation = that.sale_change_tips;
+
             if (pagesize === "num") {
                 search_data.pageNum = pageval || that.sale_page_list.pageNum;
                 search_data.pageSize = that.sale_page_list.pageSize;
@@ -215,6 +193,7 @@ export default {
                     search_data[key] = (search_data[key].toLocaleDateString()).replace(/\//g, "-");
                 }
             }
+
             that.$ajaxWrap({
                 url: "plan/loadTable",
                 data: search_data,
@@ -255,6 +234,7 @@ export default {
 
         operationSalePlan(planId, planIndex) {
             let that = this;
+
             that.$ajaxWrap({
                 type: "post",
                 url: "plan/operationPlan",
@@ -271,6 +251,7 @@ export default {
 
         confirmOperation(planId, planIndex, tipsText) {
             let that = this;
+
             that.$confirm(`确认${tipsText}吗`, "提示", {
                 confirmButtonText: "确认",
                 cancelButtonText: "取消",
@@ -286,12 +267,14 @@ export default {
             that.modal_table_edit = false;
             that.modify_detail_id = undefined;
             that.modal_table_data = [];
+
             that.$clearObject(that.modal_form_data);
             that.refresh();
         },
 
         confirmCloseModal() {
             let that = this;
+
             if (that.modal_table_data.length) {
                 that.$confirm("确定关闭吗？", "提示", {
                     confirmButtonText: "确定",
@@ -308,7 +291,8 @@ export default {
         openSalePlanModal(tipsText, PlanId) {
             this.modal_title = tipsText;
             this.modal_show_tips = true;
-            this.isCreateNewPlan = tipsText === "新建计划" ? "create" : "modify";
+            this.create_newplan = tipsText === "新建计划" ? "create" : "modify";
+
             this.getModalData(PlanId);
         },
 
@@ -325,6 +309,7 @@ export default {
                     that.sale_info_form = res.data.data;
                     that.sale_info_table = res.data.dataList;
                     len = that.sale_info_table.length;
+
                     for (let i = 0; i < len; i++) {
                         let el = that.sale_info_table[i];
                         el.finishrate = (100 * el.finishProcess / el.quantity) + "%";
@@ -346,6 +331,7 @@ export default {
 
         getModalData(PlanId) {
             let that = this;
+
             if (!PlanId) {
                 that.$ajaxWrap({
                     url: "plan/addPlanOnclick",
@@ -397,9 +383,9 @@ export default {
             that.modal_table_edit = true;
             that.modal_table_data.push(new_data);
             that.modal_plan_length = that.modal_table_data.length;
+
             that.$clearObject(that.modal_form_data);
         },
-
 
         confirmSendPlan(tips) {
             let that = this,
@@ -433,6 +419,16 @@ export default {
             }).catch(function() {});
         },
 
+        handleDateObject(date) {
+            let year = date.getFullYear(),
+                month = date.getMonth() + 1,
+                day = date.getDate(),
+                date_str = undefined;
+            if (month < 10) month = "0" + month;
+            if (day < 10) day = "0" + day;
+            date = year + "-" + month + "-" + day;
+            return date
+        },
 
         handleModalData(tableData) {
             let that = this,
@@ -442,15 +438,25 @@ export default {
             for (let i = 0; i < len; i++) {
                 let el = tableData[i];
                 for (let j = 0; j < guest_len; j++) {
-                    if (el.custName === that.guest_name_data[i].custNo) {
-                        el.custName = that.guest_name_data[i].custName;
-                        el.custNo = that.guest_name_data[i].custNo;
+                    if (el.custName === that.guest_name_data[j].custNo) {
+                        el.custName = that.guest_name_data[j].custName;
+                        el.custNo = that.guest_name_data[j].custNo;
+                    }
+                }
+
+                if (typeof el.orderDate === "object" || typeof el.deliveryDate === "object") {
+                    if (el.orderDate.toLocaleDateString) {
+                        el.orderDate = that.handleDateObject(el.orderDate);
+                    }
+                    if (el.deliveryDate.toLocaleDateString) {
+                        el.deliveryDate = that.handleDateObject(el.deliveryDate);
                     }
                 }
 
                 if (el.detailId) {
                     let tempObj = {};
                     tempObj.detailId = el.detailId;
+
                     for (let key in that.modal_form_data) {
                         tempObj[key] = el[key];
                     }
@@ -479,8 +485,9 @@ export default {
             if (that.modify_detail_id) {
                 send_data.planId = that.modify_detail_id;
             }
+
             send_data.operation = tips === "save" ? "01" : "02";
-            url = that.isCreateNewPlan === "create" ? "plan/addPlan" : "plan/updatePlan";
+            url = that.create_newplan === "create" ? "plan/addPlan" : "plan/updatePlan";
             that.$ajaxWrap({
                 type: "post",
                 url: url,

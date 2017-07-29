@@ -1,139 +1,155 @@
 <template>
    <div class="week-prod-plans">
         <el-row>
+            <!-- 周计划 数据表格 start -->
             <el-col :span="24">
                 <div class="content-title">
                     <span>生产计划管理-周生产计划</span>
                 </div>
                 <div class="content-search">
-                    <el-form :inline="true" class="">
+                    <el-form :inline="true">
                         <el-form-item 
                             label="下发人：">
                             <el-input 
                                 placeholder="输入人员姓名" 
-                                v-model='search_form_data.issUsr'></el-input>
+                                v-model='search_form_data.issUsrName'></el-input>
                         </el-form-item>
+
                         <el-form-item 
                             label="生成时间：">
                             <el-date-picker
                                 v-model="search_form_data.creStartTime"
                                 type="date"
+                                :editable=false
                                 placeholder="选择日期">
                             </el-date-picker>
                             <span class="pad-line-default">至</span>
                             <el-date-picker
                                 v-model="search_form_data.creEndTime"
                                 type="date"
+                                :editable=false
                                 placeholder="选择日期">
                             </el-date-picker>
                         </el-form-item>
+
                         <el-form-item 
                             label="下发时间：">
                             <el-date-picker
                                 v-model="search_form_data.issStartTime"
                                 type="date"
+                                :editable=false
                                 placeholder="选择日期">
                             </el-date-picker>
                             <span class="pad-line-default">至</span>
                             <el-date-picker
                                 v-model="search_form_data.issEndTime"
                                 type="date"
+                                :editable=false
                                 placeholder="选择日期">
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item><el-button class="btn btn-blue">查询</el-button></el-form-item>
-                        <el-form-item><el-button class="btn btn-yellow">重置</el-button></el-form-item>
+
+                        <el-form-item><el-button class="btn btn-blue" @click="searchFormData()">查询</el-button></el-form-item>
+                        <el-form-item><el-button class="btn btn-orange" @click="reset">重置</el-button></el-form-item>
                     </el-form>
                 </div>
             </el-col>
             
             <el-col :span="24" class="content-buttons">
-                <el-button class="list-buttons" ><i class="fa fa-repeat"></i> 刷新</el-button>
-                <el-button class="list-buttons" ><i class="fa fa-user-plus"></i> 新建周计划</el-button>
+                <el-button class="btn btn-blue" @click="refresh"><i class="fa fa-repeat"></i> 刷新</el-button>
+                <el-button class="btn btn-blue" @click="openWeekplanPlanModal('新建周计划')"><i class="fa fa-user-plus"></i> 新建周计划</el-button>
             </el-col>
 
-            <!-- 数据表格 start 
             <el-col :span="24">
-                <el-tabs  type="card" class="list-tab" @tab-click="changeTableEffective" v-model="activeTab">
-                    <el-tab-pane label="全部" name="first" ></el-tab-pane>
-                    <el-tab-pane label="未下发" name="second" ></el-tab-pane>
-                    <el-tab-pane label="已下发" name="third"></el-tab-pane>
+                <el-tabs v-model="weekplan_change_name" type="card" class="list-tab" @tab-click="changeTableActive">
+                    <el-tab-pane label="全部" name="all" ></el-tab-pane>
+                    <el-tab-pane label="未下发" name="unIssue" ></el-tab-pane>
+                    <el-tab-pane label="已下发" name="issued"></el-tab-pane>
                 </el-tabs>
 
                 <div class="list-table">
                     <el-table
                         style="width: 100% "
-                        :data="tableData"
-                        @selection-change="">
+                        :data="weekplan_table_data">
                         <el-table-column prop="workplanNo" label="排产计划编号"></el-table-column>
                         <el-table-column prop="week" label="周"></el-table-column>
                         <el-table-column prop="creTm" label="计划生成时间"></el-table-column>
                         <el-table-column prop="issSts" label="下发状态"></el-table-column>
                         <el-table-column prop="issTm" label="下发时间"></el-table-column>
                         <el-table-column prop="issUsrName" label="下发人"></el-table-column>
-                        <el-table-column fixed="right"label="操作" width="200">
+                        <el-table-column label="操作" width="200">
                             <template scope="scope">
                                 <el-button 
+                                    @click="openWeekplanPlanModal('修改周计划',scope.row.workplanWeekId)"
+                                    v-show="weekplan_push_tips[scope.$index].show"
                                     type="text"
-                                    size="small"
-                                    @click="detailplan(scope.row.workplanWeekId)">详情</el-button>
+                                    size="small">修改</el-button>
                                 <el-button 
-                                    v-show = "showInfo[scope.$index].show"
+                                    @click="operationWeekplan(scope.row.workplanWeekId,scope.$index)"
+                                    v-show="weekplan_push_tips[scope.$index].show"
                                     type="text"
-                                    size="small"
-                                    @click="operationWeek(scope.row.workplanWeekId,scope.$index)">下发</el-button>
+                                    size="small">下发</el-button>
                                 <el-button 
-                                    v-show = "showInfo[scope.$index].show"
+                                    @click="deleteWeekplan(scope.row.workplanWeekId)"
+                                    v-show="weekplan_push_tips[scope.$index].show"
                                     type="text"
-                                    size="small"
-                                    @click="updateWeek(scope.row.workplanWeekId)">修改</el-button>
-                                <el-button 
-                                    v-show = "showInfo[scope.$index].show"
+                                    size="small">删除</el-button>
+                                <el-button
+                                    @click="openWeekplanInfo(scope.row.workplanWeekId)"
+                                    v-show="!weekplan_push_tips[scope.$index].show"
                                     type="text"
-                                    size="small"
-                                    @click="deletelWeek(scope.row.workplanWeekId)">删除</el-button>
+                                    size="small">详情</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </div>
             </el-col>
-            <!-- 数据表格 end -->
-                
-            <!--新增弹框 start
+            <!-- 周计划 数据表格 end -->
+
+            <div class="list-page fr">
+                <el-pagination
+                    layout="total, sizes, prev, pager, next"
+                    :current-page.sync="weekplan_page_list.pageNum"
+                    :page-sizes="[10,20,30,40]"
+                    :page-size="weekplan_page_list.pageSize"
+                    :total="weekplan_page_list.total"
+                    @size-change="currentSizeChange"
+                    @current-change="currentPageChange">
+                </el-pagination>
+            </div>
+
+            <!-- 周计划 新建或修改 start -->
             <el-dialog
                 size="full"
                 custom-class="pub-dialog"
-                :title="titleValue"
-                :before-close="handleClose"
-                :visible.sync="newCustom">
-                <div class="add-week-plan">
+                :title="modal_title"
+                :before-close="confirmCloseModal"
+                :visible.sync="modal_show_tips">
                     <el-row>
                         <div class="list-table sched-table">
-                            <div class="message clearfix">
+                            <div class="pad-middle-default clearfix">
                                 <div class="fl">
-                                    <el-button class="btn-edit btn" @click="" v-show="isAddPlanBtn">编 辑</el-button>
-                                    <el-button class="btn-save btn" @click="saveWeekNewPlan()" v-show="isAddPlanBtn">保 存</el-button>
-                                    <el-button class="btn-reset btn" @click="opearationWeekplan()" v-show="isSaveNewPlan">下 发</el-button>
-                                    <el-button class="btn-close btn" @click="batchDeleteWorkplanData()" v-show="isSaveNewPlan">删除</el-button>
-                                    <el-button class="btn-publish btn" @click="addWorkplan()" v-show="isAddPlanBtn">新增计划</el-button>
+                                    <el-button class="btn btn-orange">编 辑</el-button>
+                                    <el-button class="btn btn-green">保 存</el-button>
+                                    <el-button class="btn btn-yellow">下 发</el-button>
+                                    <el-button class="btn btn-red">删除</el-button>
+                                    <el-button class="btn btn-blue" @click="createWorkPlan">新增计划</el-button>
                                 </div>
                             </div>
                             <el-table
                                 style="width: 100% "
-                                :data="newListData"
+                                :data="modal_weekplan_table_data"
                                 @selection-change="handleSelectionChange">
-                                <el-table-column
-                                    type="selection"
-                                    width="55">
-                                </el-table-column>
+                                <el-table-column type="selection" width="55"> </el-table-column>
 
                                 <el-table-column width="150" prop="type" label="类型">
                                     <template  scope="scope">
-                                        <el-select  placeholder="选择类型"  :disabled="isDisabled" v-model="scope.row.type">
+                                        <el-select  placeholder="选择类型"  :disabled="modal_table_edit" v-model="scope.row.type">
                                             <el-option 
-                                                v-for="item in SysDicListInfo.typeList" 
+                                                v-for="item in modal_sync_data.typeList" 
                                                 :label="item.dicName" 
-                                                :value="item.dicValue">
+                                                :value="item.dicValue"
+                                                :key="item.dicValue">
                                             </el-option>
                                         </el-select>
                                     </template>
@@ -141,11 +157,12 @@
 
                                 <el-table-column width="150" prop="lv" label="优先级">
                                     <template  scope="scope">
-                                        <el-select  placeholder="选择优先级" :disabled="isDisabled" v-model="scope.row.lv">
+                                        <el-select  placeholder="选择优先级" :disabled="modal_table_edit" v-model="scope.row.lv">
                                             <el-option 
-                                                v-for="item in SysDicListInfo.priorityList" 
+                                                v-for="item in modal_sync_data.priorityList" 
                                                 :label="item.dicName" 
-                                                :value="item.dicValue">
+                                                :value="item.dicValue"
+                                                :key="item.dicValue">
                                             </el-option>
                                         </el-select>
                                     </template>
@@ -155,13 +172,13 @@
                                     <template scope="scope">
                                         <el-select 
                                             placeholder="选择客户" 
-                                            :disabled="isDisabled" 
-                                            v-model="scope.row.custName" 
-                                            @change="getOrderList(scope.row.custName,scope.$index)">
+                                            :disabled="modal_table_edit" 
+                                            v-model="scope.row.custName" >
                                             <el-option  
-                                                v-for="item in SysDicListInfo.custList" 
+                                                v-for="item in modal_sync_data.custList" 
                                                 :label="item.custName" 
-                                                :value="item.custNo">
+                                                :value="item.custNo"
+                                                :key="item.custNo">
                                             </el-option>
                                         </el-select>
                                     </template>
@@ -170,28 +187,32 @@
                                 <el-table-column width="150" prop="ordrNo" label="订单编号">
                                     <template  scope="scope">
                                         <el-select 
-                                            :disabled="isDisabled" 
-                                            v-model="scope.row.ordrNo"
-                                            @change="getProductData(scope.row.ordrNo,scope.$index)">
+                                            :disabled="modal_table_edit" 
+                                            v-model="scope.row.ordrNo">
                                             <el-option 
                                                 v-for="item in scope.row.tempOrder"
                                                 :label="item.orderNo"
-                                                :value="item.orderNo"></el-option>
+                                                :value="item.orderNo"
+                                                :key="item.orderNo"></el-option>
                                         </el-select>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="150" prop="itemNo" label="产品型号">
                                     <template  scope="scope" >
-                                        <el-select :disabled="isDisabled" v-model="scope.row.itemNo" @change="setProductName(scope.row.itemNo,scope.$index)">
+                                        <el-select 
+                                            :disabled="modal_table_edit" 
+                                            v-model="scope.row.itemNo" >
                                             <el-option 
                                                 v-for="item in scope.row.tempItem"
                                                 :label="item.itemNo"
-                                                :value="item.itemNo"></el-option>
+                                                :value="item.itemNo"
+                                                :key="item.itemNo"></el-option>
                                         </el-select>
                                     </template>
                                 </el-table-column>
 
+                                <!--
                                 <el-table-column width="150" prop="itemName" label="产品名称">
                                     <template  scope="scope">
                                         <el-input disabled v-model="scope.row.itemName"></el-input>
@@ -200,55 +221,57 @@
 
                                 <el-table-column width="150" prop="productNo" label="生产批号">
                                     <template  scope="scope">
-                                        <el-input :disabled="isDisabled" v-model="scope.row.productNo"></el-input>
+                                        <el-input :disabled="modal_table_edit" v-model="scope.row.productNo"></el-input>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="150" prop="machine" label="机台归属">
                                     <template  scope="scope">
-                                        <el-input :disabled="isDisabled" v-model="scope.row.machine"></el-input>
+                                        <el-input :disabled="modal_table_edit" v-model="scope.row.machine"></el-input>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="150" prop="moldingCycle" label="单件周期">
                                     <template  scope="scope">
-                                        <el-input :disabled="isDisabled" v-model="scope.row.moldingCycle"></el-input>
+                                        <el-input :disabled="modal_table_edit" v-model="scope.row.moldingCycle"></el-input>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="150" prop="mouldNo" label="模具编号">
                                     <template  scope="scope">
-                                        <el-input :disabled="isDisabled" v-model="scope.row.mouldNo"></el-input>
+                                        <el-input :disabled="modal_table_edit" v-model="scope.row.mouldNo"></el-input>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="150" prop="materialGrade" label="原材料">
                                     <template  scope="scope">
-                                        <el-input :disabled="isDisabled" v-model="scope.row.materialGrade"></el-input>
+                                        <el-input :disabled="modal_table_edit" v-model="scope.row.materialGrade"></el-input>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="150" prop="scndProc" label="二次加工">
                                     <template  scope="scope">
-                                        <el-select :disabled="isDisabled" placeholder="选择二次加工" v-model="scope.row.scndProc">
+                                        <el-select :disabled="modal_table_edit" placeholder="选择二次加工" v-model="scope.row.scndProc">
                                             <el-option value="">请选择</el-option>
                                             <el-option  
-                                                v-for="item in SysDicListInfo.processList" 
+                                                v-for="item in modal_sync_data.processList" 
                                                 :label="item.dicName" 
-                                                :value="item.dicValue"></el-option>
+                                                :value="item.dicValue"
+                                                :key="item.dicValue"></el-option>
                                         </el-select>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="100" label="<<">
                                 </el-table-column>
-                                <el-table-column prop="planBill" :label="weekDate.week || weekDate.titel">
-                                    <el-table-column width="150" :label="weekDate.mondayDate">
-                                        <el-table-column label="白班">
+                                -->
+                                <el-table-column prop="planBill" :label="modal_week_date.week">
+                                    <el-table-column width="150" :label="modal_week_date.mondayDate">
+                                         <el-table-column label="白班">
                                             <template scope="scope">
                                                 <el-input 
                                                     v-model="scope.row.planBill.monday.day.quantity"
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     type="text">
                                                 </el-input>
                                             </template>
@@ -257,18 +280,18 @@
                                             <template scope="scope">
                                                 <el-input 
                                                     v-model="scope.row.planBill.monday.night.quantity"
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     type="text">
                                                 </el-input>
                                             </template>
-                                        </el-table-column>
+                                        </el-table-column> 
                                     </el-table-column>
 
-                                    <el-table-column width="150" prop="issUsr" :label="weekDate.tuesdayDate">
-                                        <el-table-column label="白班">
+                                    <el-table-column width="150" prop="issUsr" :label="modal_week_date.tuesdayDate">
+                                         <el-table-column label="白班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.tuesday.day.quantity"
                                                     type="text">
                                                 </el-input>
@@ -276,19 +299,19 @@
                                         </el-table-column>
                                         <el-table-column label="夜班">
                                             <template scope="scope">
-                                                <el-input :disabled="isDisabled"
+                                                <el-input :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.tuesday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
-                                        </el-table-column>
+                                        </el-table-column> 
                                     </el-table-column>
 
-                                    <el-table-column width="150" prop="issUsr" :label="weekDate.wednesdayDate">
-                                        <el-table-column label="白班">
+                                    <el-table-column width="150" prop="issUsr" :label="modal_week_date.wednesdayDate">
+                                         <el-table-column label="白班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.wednesday.day.quantity"
                                                     type="text">
                                                 </el-input>
@@ -297,19 +320,19 @@
                                         <el-table-column label="夜班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.wednesday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
-                                        </el-table-column>
+                                        </el-table-column> 
                                     </el-table-column>
 
-                                    <el-table-column width="150" prop="issUsr" :label="weekDate.thursdayDate">
-                                        <el-table-column label="白班">
+                                    <el-table-column width="150" prop="issUsr" :label="modal_week_date.thursdayDate">
+                                         <el-table-column label="白班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.thursday.day.quantity"
                                                     type="text">
                                                 </el-input>
@@ -318,19 +341,19 @@
                                         <el-table-column label="夜班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.thursday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
-                                        </el-table-column>
+                                        </el-table-column> 
                                     </el-table-column>
 
-                                    <el-table-column width="150" prop="issUsr" :label="weekDate.fridayDate">
-                                        <el-table-column label="白班">
+                                    <el-table-column width="150" prop="issUsr" :label="modal_week_date.fridayDate">
+                                         <el-table-column label="白班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.friday.day.quantity"
                                                     type="text">
                                                 </el-input>
@@ -339,19 +362,19 @@
                                         <el-table-column label="夜班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.friday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
-                                        </el-table-column>
+                                        </el-table-column> 
                                     </el-table-column>
 
-                                    <el-table-column width="150" prop="issUsr" :label="weekDate.saturdayDate">
-                                        <el-table-column label="白班">
+                                    <el-table-column width="150" prop="issUsr" :label="modal_week_date.saturdayDate">
+                                         <el-table-column label="白班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.saturday.day.quantity"
                                                     type="text">
                                                 </el-input>
@@ -360,19 +383,19 @@
                                         <el-table-column label="夜班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.saturday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
-                                        </el-table-column>
+                                        </el-table-column> 
                                     </el-table-column>
 
-                                    <el-table-column width="150" prop="issUsr" :label="weekDate.sundayDate">
-                                        <el-table-column label="白班">
+                                    <el-table-column width="150" prop="issUsr" :label="modal_week_date.sundayDate">
+                                         <el-table-column label="白班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.sunday.day.quantity"
                                                     type="text">
                                                 </el-input>
@@ -381,22 +404,22 @@
                                         <el-table-column label="夜班">
                                             <template scope="scope">
                                                 <el-input 
-                                                    :disabled="isDisabled"
+                                                    :disabled="modal_table_edit"
                                                     v-model="scope.row.planBill.sunday.night.quantity"
                                                     type="text">
                                                 </el-input>
                                             </template>
-                                        </el-table-column>
+                                        </el-table-column> 
                                     </el-table-column>
                                 </el-table-column>
-
+                                <!--
                                 <el-table-column width="100" label=">>">
                                 </el-table-column>
                                 <el-table-column width="150" prop="sum" label="生产合计">
                                     <template  scope="scope">
                                         <el-input 
                                             v-model="scope.row.sum"
-                                            :disabled="isDisabled"
+                                            :disabled="modal_table_edit"
                                             type="text">
                                         </el-input>
                                     </template>
@@ -406,7 +429,7 @@
                                     <template  scope="scope">
                                         <el-input 
                                             v-model="scope.row.picking"
-                                            :disabled="isDisabled"
+                                            :disabled="modal_table_edit"
                                             type="text">
                                         </el-input>
                                     </template>
@@ -416,7 +439,7 @@
                                     <template  scope="scope">
                                         <el-input 
                                             v-model="scope.row.delivery"
-                                            :disabled="isDisabled"
+                                            :disabled="modal_table_edit"
                                             type="text">
                                         </el-input>
                                     </template>
@@ -425,7 +448,7 @@
                                     <template  scope="scope">
                                         <el-input 
                                             v-model="scope.row.inv"
-                                            :disabled="isDisabled"
+                                            :disabled="modal_table_edit"
                                             type="text">
                                         </el-input>
                                     </template>
@@ -435,27 +458,25 @@
                                     <template  scope="scope">
                                         <el-input 
                                             v-model="scope.row.secInv"
-                                            :disabled="isDisabled"
+                                            :disabled="modal_table_edit"
                                             type="text">
                                         </el-input>
                                     </template>
-                                </el-table-column>
+                                </el-table-column>-->
                             </el-table>
                         </div>
                     </el-row>
-                </div>
-
-                <div class="message clearfix">
-                    <div class="fl">
-                        <el-button class="btn-edit btn" @click="" v-show="isAddPlanBtn">编 辑</el-button>
-                        <el-button class="btn-save btn" @click="saveWeekNewPlan()" v-show="isAddPlanBtn">保 存</el-button>
-                        <el-button class="btn-reset btn" @click="opearationWeekplan()" v-show="isSaveNewPlan">下 发</el-button>
-                        <el-button class="btn-close btn" @click="batchDeleteWorkplanData()" v-show="isSaveNewPlan">删除</el-button>
-                        <el-button class="btn-publish btn" @click="addWorkplan()" v-show="isAddPlanBtn">新增计划</el-button>
+                    <div class="pad-middle-default clearfix">
+                        <div class="fl">
+                            <el-button class="btn btn-orange"  >编 辑</el-button>
+                            <el-button class="btn btn-green" >保 存</el-button>
+                            <el-button class="btn btn-yellow" >下 发</el-button>
+                            <el-button class="btn btn-red" >删除</el-button>
+                            <el-button class="btn btn-blue" >新增计划</el-button>
+                        </div>
                     </div>
-                    <div class="fr">共有<span class="detailMsg">条下发计划</span></div>
-                </div>
-            </el-dialog>-->
+
+            </el-dialog>
 
             <!-- 删除提示信息 start
             <el-dialog
@@ -476,12 +497,17 @@
 
 <script src="./weekProdPlan.js"></script>
 <style lang="stylus">
-    .message 
-        margin 10px 0
-    .sched-table
-        td
-            padding 6px 0
-    .new-line
-        margin-bottom 10px
-
+    .week-prod-plans
+        .el-table 
+            th
+                text-align center
+            .cell
+                text-align center
+                padding-left 6px
+                padding-right 6px
+        .el-dialog__wrapper
+            .el-input
+                width 100%
+            th>.cell
+                line-height 1
 </style>

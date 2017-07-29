@@ -27,11 +27,6 @@ Vue.use(Router)
 
 export default new Router({
     mode: "history",
-
-    /**
-     * @base : 服务器项目文件路径
-     */
-    base: '/ybs_mes/',
     routes: [{
             path: '/',
             component: login

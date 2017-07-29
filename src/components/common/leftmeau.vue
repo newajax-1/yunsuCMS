@@ -1,19 +1,14 @@
 <template>
-<div class="left-nav fl">
-    <el-row class="tac">
-        <el-col :span="3" >
-            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" theme="dark">
-                <el-submenu v-for="item in link" :index="item.index">
-                    <template slot="title">{{item.textName}}</template>
-                        <el-menu-item v-for="it in item.child" :index="it.index">
-                            <a class="left-item" @click="$goRoute(it.route)">{{it.text}}</a>
-                            <i class="item.class"></i>
-                        </el-menu-item>
-                </el-submenu>
-            </el-menu>
-        </el-col> 
-    </el-row>
-</div>
+    <div class="layout-menu">
+        <el-menu default-active="2" @open="handleOpen" @close="handleClose" theme="dark">
+            <el-submenu v-for="item in link" :index="item.index" :key="item.index">
+                <template slot="title">{{item.textName}}</template>
+                    <el-menu-item v-for="route in item.child" :index="route.index" :key="route.route" @click="$goRoute(route.route)">
+                        <a class="left-item" >{{route.text}}</a>
+                    </el-menu-item>
+            </el-submenu>
+        </el-menu>
+    </div>
 </template>
 
 <script>
@@ -100,25 +95,20 @@
         }
     }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
 @media screen and (max-width:1366px)
-    .left-nav
-        width:180px !important
-        top 50px !important
+    .layout-page
+        .layout-menu
+            width:180px 
+            top 50px 
 
-.left-nav
-    position absolute
+.layout-menu
+    position fixed
+    top 80px
+    left 0
     height 100%
     width 200px
-    border-radius 0
-    .tac.el-row,
-    .el-col.el-col-3,
     .el-menu
-        height:100%
-    .el-col-3
-        width:100%
-    .el-menu--dark
-        background-color: #333743;
-    .left-item
-        display:block
+        height 100%
+        border-radius 0
 </style>

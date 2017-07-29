@@ -35,7 +35,7 @@ const $ajaxWrap = Vue.prototype.$ajaxWrap = function(option) {
         type = opt.type || "get",
         url = opt.url || "",
         datas = opt.data || {},
-        success = opt.success || el.callback || function() {},
+        success = opt.success || opt.callback || function() {},
         error = opt.error || function() {};
 
     if (type.toLowerCase() === "get") {
@@ -45,8 +45,13 @@ const $ajaxWrap = Vue.prototype.$ajaxWrap = function(option) {
             if (res.data.success && res.status === 200) {
                 success(res.data);
             } else {
-                error(res.data);
-                console.log(res.data.tipMsp);
+                that.$alert(res.data.tipMsg || "操作失败！", '提示', {
+                    confirmButtonText: '确定',
+                    callback() {
+                        error(res.data);
+                        console.log(res.data);
+                    }
+                })
             };
         });
     } else if (type.toLowerCase() === "post") {
@@ -64,9 +69,13 @@ const $ajaxWrap = Vue.prototype.$ajaxWrap = function(option) {
             if (res.data.success && res.status === 200) {
                 success(res.data);
             } else {
-                error(res.data);
-                alert(res.data.tipMsp + "前往控制台查看失败原因");
-                console.log(res.data);
+                that.$alert(res.data.tipMsg || "操作失败！", '提示', {
+                    confirmButtonText: '确定',
+                    callback() {
+                        error(res.data);
+                        console.log(res.data);
+                    }
+                })
             };
         });
     };

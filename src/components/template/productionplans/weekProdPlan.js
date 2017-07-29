@@ -9,7 +9,7 @@ export default {
 
             // 周计划 查询条件 
             search_form_data: {
-                issUsr: undefined,
+                issUsrName: undefined,
                 creStartTime: undefined,
                 creEndTime: undefined,
                 issStartTime: undefined,
@@ -19,85 +19,165 @@ export default {
             // 周计划 表格数据
             weekplan_table_data: [],
 
+            // 周计划 修改下发详情按钮显示
             weekplan_push_tips: [{
                 show: true
             }],
-            // // 加载表格
-            // tableData: [{}],
 
-            // // 新增对话框
-            // newCustom: false,
+            // 周计划 表格分页
+            weekplan_page_list: {
+                pageNum: 0,
+                pageSize: 10,
+                total: undefined
+            },
 
-            // // 下发 与 详情显示
-            // showInfo: [{
-            //     show: true
-            // }],
+            // 周计划 当前Tab页面id
+            weekplan_change_tips: undefined,
+            weekplan_change_name: "all",
 
-            // // 设置tab默认显示
-            // activeTab: 'first',
+            // 周计划 新建
+            create_new_plan: undefined,
 
-            // // 修改对话框
-            // modifysaleplan: false,
+            // 周计划 模态框显示
+            modal_show_tips: false,
+            modal_title: undefined,
 
-            // // 可编辑表格
-            // isDisabled: false,
+            // 周计划 模态框表格数据
+            modal_weekplan_table_data: [],
 
-            // // 新增按钮显示 
-            // isAddPlanBtn : true,
-            // isSaveNewPlan : true,
-
-            // // 新增页面表格数据组
-            // newListData: null,
-
-            // // 新增页排產計劃 周信息
-            // weekDate: [],
-            // saveWeekId : undefined,
-            // // 修改id
-            // tempId: undefined,
-
-            // // 数据表格的title
-            // titleValue: undefined,
-
-            // // 表格渲染对象
-            // SysDicListInfo: {
-            //     processList : [],
-            //     typeList : [],
-            //     priorityList : [],
-            //     custList : []
-            // },
-
-            // // 周计划时间
-            // planBill : {
-            // },
-
-            // // 修改客户计划
-            // ModifyGuestInfo: null,
-            // ModifyFormData: null,
-
-            // deleteArray : [],
-            // detailDataInfo : null,
-            // //全选框获取ID
-            // batchIds: '',
-
-            // //弹框是否关闭
-            // dialogVisible: false,
-            // deleteMsg:'',
-            // tipMsg:'',
-
-            // // 
-            // watchFlag : false
-
+            modal_table_row_data: {
+                type: undefined,
+                lv: undefined,
+                custName: undefined,
+                ordrNo: undefined,
+                tempOrder: undefined,
+                tempItem: undefined,
+                itemNo: undefined,
+                itemName: undefined,
+                productNo: undefined,
+                machine: undefined,
+                moldingCycle: undefined,
+                mouldNo: undefined,
+                materialGrade: undefined,
+                scndProc: undefined,
+                sum: undefined,
+                picking: undefined,
+                delivery: undefined,
+                inv: undefined,
+                secInv: undefined,
+                planBill: null
+            },
+            modal_plan_bill: {
+                monday: {
+                    day: {
+                        weekDate: undefined,
+                        clas: "01",
+                        quantity: undefined
+                    },
+                    night: {
+                        weekDate: undefined,
+                        clas: "02",
+                        quantity: undefined
+                    }
+                },
+                tuesday: {
+                    day: {
+                        weekDate: undefined,
+                        clas: "01",
+                        quantity: ""
+                    },
+                    night: {
+                        weekDate: undefined,
+                        clas: "02",
+                        quantity: undefined
+                    }
+                },
+                wednesday: {
+                    day: {
+                        weekDate: undefined,
+                        clas: "01",
+                        quantity: undefined
+                    },
+                    night: {
+                        weekDate: undefined,
+                        clas: "02",
+                        quantity: ""
+                    }
+                },
+                thursday: {
+                    day: {
+                        weekDate: undefined,
+                        clas: "01",
+                        quantity: undefined
+                    },
+                    night: {
+                        weekDate: undefined,
+                        clas: "02",
+                        quantity: undefined
+                    }
+                },
+                friday: {
+                    day: {
+                        weekDate: undefined,
+                        clas: "01",
+                        quantity: undefined
+                    },
+                    night: {
+                        weekDate: undefined,
+                        clas: "02",
+                        quantity: undefined
+                    }
+                },
+                saturday: {
+                    day: {
+                        weekDate: undefined,
+                        clas: "01",
+                        quantity: undefined
+                    },
+                    night: {
+                        weekDate: undefined,
+                        clas: "02",
+                        quantity: undefined
+                    }
+                },
+                sunday: {
+                    day: {
+                        weekDate: undefined,
+                        clas: "01",
+                        quantity: undefined
+                    },
+                    night: {
+                        weekDate: undefined,
+                        clas: "02",
+                        quantity: undefined
+                    }
+                }
+            },
+            modal_sync_data: {},
+            modal_week_date: {},
+            modal_table_edit: false
         }
     },
 
     methods: {
-
         init() {
+            this.reset();
             this.getWeekPlanData();
+        },
+
+        reset() {
+            let that = this;
+            that.$clearObject(that.search_form_data);
+        },
+
+        refresh() {
+            this.reset();
+            this.searchFormData();
         },
 
         getWeekPlanData() {
             let that = this;
+
             that.$ajaxWrap({
                 type: "post",
                 url: "week/index",
@@ -117,92 +197,201 @@ export default {
             that.weekplan_push_tips = [];
 
             load_table_data.every(function(el) {
-                // let isTips = el.operation === "01" ? true : false;
-                // return that.weekplan_push_tips.push({ show: isTips });
+                let is_tips = el.issSts === "01" ? true : false;
+                return that.weekplan_push_tips.push({ show: is_tips });
             });
 
-            // that.saleplan_table_data = load_table_data;
-            // that.sale_page_list.pageNum = data.page.pageNum;
-            // that.sale_page_list.pageSize = data.page.pageSize;
-            // that.sale_page_list.total = data.page.total;
+            that.weekplan_table_data = load_table_data;
+            that.weekplan_page_list.pageNum = data.page.pageNum;
+            that.weekplan_page_list.pageSize = data.page.pageSize;
+            that.weekplan_page_list.total = data.page.total;
         },
 
-        // 获取数据数据表格
-        // getData() {
-        //     var that = this;
-        //     that.$ajax({
-        //         method: 'post',
-        //         url: 'week/index',
-        //         transformRequest: [function(data) {　　
-        //             data = JSON.stringify({
-        //                 pageNum: "1",
-        //                 pageSize: "10"
-        //             });
-        //             return data;
-        //         }],
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     }).then(function(results) {
-        //         var data = results.data;
-        //         if (data.success === true) {
-        //             that.loadTable(data);
-        //         }
-        //     }).catch(function(error) {});
-        // },
+        searchFormData(pageval, pagesize) {
+            let that = this,
+                search_data = that.search_form_data;
 
-        // // 加载数据
-        // loadTable(data) {
-        //     var that = this,
-        //         loadData = data.data.page;
-        //     that.showInfo = [];
+            search_data.issSts = that.weekplan_change_tips;
+            if (pagesize === "num") {
+                search_data.pageNum = pageval || that.weekplan_page_list.pageNum;
+                search_data.pageSize = that.weekplan_page_list.pageSize;
+            } else {
+                search_data.pageNum = that.weekplan_page_list.pageNum;
+                search_data.pageSize = pageval || that.weekplan_page_list.pageSize;
+            }
 
-        //     loadData.list.every(function(el) {
-        //         var flag = el.issSts === "01" ? true : false;
-        //         el.issSts = el.issSts === "01" ? '未下发' : '已下发';
-        //         return that.showInfo.push({ show: flag });
-        //     })
-        //     that.tableData = loadData.list;
-        // },
+            that.$ajaxWrap({
+                url: "week/loadTable",
+                data: search_data,
+                success(res) {
+                    that.loadWeekPlanTable(res.data);
+                }
+            });
+        },
 
-        // // 查询
-        // search(type) {
-        //     var that = this,
-        //         searchData = that.searchForm;
+        changeTableActive(changeTab) {
+            switch (changeTab.name) {
+                case "all":
+                    this.weekplan_change_tips = "";
+                    this.searchFormData();
+                    break;
+                case "unIssue":
+                    this.weekplan_change_tips = "01";
+                    this.searchFormData();
+                    break;
+                case "issued":
+                    this.weekplan_change_tips = "02";
+                    this.searchFormData();
+                    break;
+            }
+        },
 
-        //     searchData.pageSize = '10';
-        //     searchData.pageNum = '1';
-        //     searchData.issSts = type;
+        currentPageChange(val) {
+            if (this.weekplan_table_data.length) {
+                this.searchFormData(val, "num");
+            }
+        },
 
-        //     for (var key in searchData) {
-        //         if (typeof searchData[key] === "object") {
-        //             searchData[key] = (searchData[key].toLocaleDateString()).replace(/\//g, "-");
-        //         }
-        //     }
+        currentSizeChange(val) {
+            if (this.weekplan_table_data.length) {
+                this.searchFormData(val, "size");
+            }
+        },
 
-        //     that.$ajax.get('week/loadTable', {
-        //         params: searchData
-        //     }).then(function(res) {
-        //         var data = res.data;
-        //         if (data.success) {
-        //             that.loadTable(data);
-        //         }
-        //     }).catch(function(err) {});
-        // },
+        openWeekplanPlanModal(modal_title, plan_id) {
+            this.modal_title = modal_title;
+            this.modal_show_tips = true;
+            this.create_new_plan = modal_title === "新建周计划" ? "create" : "modify";
 
-        // // 重置
-        // reset() {
-        //     var that = this;
-        //     that.$clearObject(that.searchForm);
-        // },
+            this.getModalData(plan_id);
+        },
 
-        // // 刷新
-        // refresh() {
-        //     var that = this;
-        //     that.$clearObject(that.searchForm);
-        //     that.getData();
-        // },
+        aboutWeekplanWarn(tips, done) {
+            let that = this;
 
+            that.$alert(tips, '提示', {
+                confirmButtonText: '确定',
+                callback() {
+                    if (typeof done === "function") done();
+                    that.refresh();
+                }
+            })
+        },
+
+        deleteWeekplan(plan_id) {
+            let that = this;
+
+            that.$ajaxWrap({
+                type: "post",
+                url: "week/deleteById",
+                data: {
+                    workplanWeekId: plan_id,
+                },
+                success(res) {
+                    that.aboutWeekplanWarn("删除成功！")
+                }
+            });
+        },
+
+        // 周计划表格 下发
+        operationWeekplan(plan_id, index) {
+            var that = this;
+
+            that.$ajaxWrap({
+                type: "post",
+                url: "week/operationWeekStatus",
+                data: {
+                    workplanWeekId: plan_id
+                },
+                success(res) {
+                    that.aboutWeekplanWarn("下发成功！", function() {
+                        that.weekplan_push_tips[index].show = false;
+                    })
+                }
+            })
+        },
+
+        getModalData(plan_id) {
+            let that = this;
+
+            if (!plan_id) {
+                that.$ajaxWrap({
+                    url: "week/queryWeekList",
+                    success(res) {
+                        that.loadModalTableData(res.data);
+                    }
+                })
+            } else {
+                that.$ajaxWrap({
+                    url: "week/queryWeekList",
+                    data: {
+                        workplanWeekId: plan_id
+                    },
+                    success(res) {
+                        that.loadModalTableData(res.data);
+                    }
+                })
+            }
+        },
+
+        loadModalTableData(data) {
+            this.modal_week_date = data.data;
+            this.modal_sync_data = data;
+            if (data.dataList.length) {
+                this.modal_weekplan_table_data = data.dataList;
+            } else {
+                this.createWorkPlan();
+            }
+        },
+
+        createWorkPlan() {
+            let that = this,
+                plan_bill = that.modal_plan_bill,
+                table_row_data = {};
+            that.modal_table_row_data.planBill = plan_bill;
+
+            for (let key in that.modal_table_row_data) {
+                table_row_data[key] = that.modal_table_row_data[key];
+            }
+
+            that.modal_weekplan_table_data.push(table_row_data);
+        },
+
+        confirmCloseModal() {
+            let that = this;
+
+            if (that.modal_weekplan_table_data.length) {
+                that.$confirm("确定关闭吗？", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }).then(function() {
+                    that.clearModalForm();
+                }).catch(function() {});
+            } else {
+                that.clearModalForm();
+            }
+        },
+
+        clearModalForm() {
+            let that = this;
+            that.modal_show_tips = false;
+            that.modal_weekplan_table_data = [];
+
+            that.refresh();
+        },
+
+        weekplanModalData(data) {
+            console.log(data);
+        },
+
+        handleSelectionChange() {
+
+        },
+
+        openWeekplanInfo(weekplan_id) {
+            console.log(weekplan_id);
+        }
         // // 新增周计划页面
         // openAddWeekPlan() {
         //     var that = this;
@@ -380,67 +569,7 @@ export default {
         //     });
         // },
 
-        // // 刪除周計劃
-        // deletelWeek(id) {
-        //     var that = this;
-        //     that.$ajax({
-        //         method: 'post',
-        //         url: 'week/deleteById',
-        //         transformRequest: [function(data) {　　
-        //             data = JSON.stringify({
-        //                 workplanWeekId: id,
-        //             });
-        //             return data;
-        //         }],
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     }).then(function(results) {
-        //         var data = results.data;
-        //         if (data.success === true) {
-        //             that.search();
-        //         }
-        //     })
-        // },
 
-        // // 根据下发类型展示数据
-        // changeTableEffective(tab) {
-        //     switch (tab.name) {
-        //         case 'first':
-        //             this.search();
-        //             break;
-        //         case 'second':
-        //             this.search("01");
-        //             break;
-        //         case 'third':
-        //             this.search("02");
-        //             break;
-        //     }
-        // },
-
-        // // 数据表格 下发Event
-        // operationWeek(id, index) {
-        //     var that = this;
-        //     that.$ajax({
-        //         method: 'post',
-        //         url: 'week/operationWeekStatus',
-        //         transformRequest: [function(data) {　　
-        //             data = JSON.stringify({
-        //                 workplanWeekId: id,
-        //             });
-        //             return data;
-        //         }],
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     }).then(function(results) {
-        //         var data = results.data;
-        //         if (data.success) {
-        //             that.showInfo[index].show = false
-        //             that.search();
-        //         }
-        //     })
-        // },
 
 
 
@@ -462,25 +591,6 @@ export default {
         //     })
         // },
 
-        // // 下发周计划
-        // opearationWeekplan() {
-        //     var that = this;
-        //     that.$ajax({
-        //         method: 'post',
-        //         url: 'week/operationWeekStatus',
-        //         transformRequest: [function(data) {　　
-        //             data = JSON.stringify({
-        //                 workplanWeekId: that.saveWeekId
-        //             });
-        //             return data;
-        //         }],
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     }).then(function(res) {
-        //         console.log(res)
-        //     })
-        // },
 
         // deleteObject() {
         //     var that = this;
