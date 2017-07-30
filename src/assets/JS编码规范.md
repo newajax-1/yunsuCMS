@@ -14,12 +14,14 @@
     send : 发送给后台数据
     handle : 处理JS数据
     add : 添加某数据
-    remove : 移除数据
+    remove : 移除属性
+    delete : 删除数据
     create : 创建
     reset : 重置
     clear : 清除
     refresh : 刷新
     search : 查找
+    update : 修改
 
 ## 变量命名
     
@@ -27,6 +29,9 @@
 
     ### 函数私有变量
     变量名前下划线
+
+    cust_name
+    temp_list
     临时数据对象: _data
     临时对象 : _temp
 
@@ -38,8 +43,14 @@ Vue.$ajaxWrap({
     data : data ,
     callback : function(data){
         //do success function 
+    },
+    error() {
+        //do error function
     }
 })
+
+## 清除数据
+    Vue.$clearObject()
 
 ## 提示框
     
@@ -54,3 +65,14 @@ Vue.$ajaxWrap({
 
     ### 错误框
     Vue.$message.error("这是一条错误消息");
+
+
+## 删除关闭提示
+
+    Vue.$confirm("你确定删除么？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+    }).then(function() {
+    
+        })
+    }).catch(function() {});

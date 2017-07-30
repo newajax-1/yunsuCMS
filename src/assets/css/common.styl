@@ -1,3 +1,7 @@
+/**
+ * coding by Alex 
+ */
+ 
 // 引入UI规范
 @import "uiStatic"
 
@@ -24,7 +28,7 @@ html
         clear both
 
 .content
-    margin-top 80px
+    margin-top 70px
     margin-left 200px
     padding  20px 
     .content-title
@@ -74,6 +78,14 @@ html
             padding 15px 
 
 // 弹窗
+.asterisk
+    position relative
+.asterisk:after
+    color red
+    position absolute
+    content "*"
+    top 0px
+    right -10px
 
 .pub-dialog
     .el-dialog__header
@@ -92,11 +104,14 @@ html
 
 .pub-mask-wrap
     .el-input
-        width 150px
+        width 100%
 
 .must-tips
     color: red
     font-weight: bold
+
+.el-button+.el-button
+    margin 0 
 
 // 响应式
 @media screen and (max-width:1366px)

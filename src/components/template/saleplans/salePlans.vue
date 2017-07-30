@@ -130,29 +130,27 @@
                             <el-row :gutter="24">
                                 <el-col :span="8">
                                     <el-form-item label="客户名称：" prop="custName">
-                                        <el-select placeholder="选择客户" v-model="modal_form_data.custName">
+                                        <el-select placeholder="选择客户" v-model="modal_form_data.custName" class="asterisk">
                                             <el-option v-for="item in guest_name_data" :label="item.custName" :value="item.custNo" :key="item.custNo"></el-option>  
                                         </el-select>
-                                        <span class="must-tips">*</span>
                                     </el-form-item>
                                 </el-col>
 
                                 <el-col :span="8">
                                     <el-form-item label='订单编号：' prop="orderNo">
-                                        <el-input  v-model='modal_form_data.orderNo'></el-input>
-                                        <span class="must-tips">*</span>
+                                        <el-input  v-model='modal_form_data.orderNo' class="asterisk"></el-input>
                                     </el-form-item>
                                 </el-col>
 
                                 <el-col :span="8">
                                     <el-form-item label="订单日期：" prop="orderDate">
                                         <el-date-picker
+                                            class="asterisk"
                                             type="date"
                                             :editable=false
                                             placeholder="选择日期"
                                             v-model="modal_form_data.orderDate">
                                         </el-date-picker>
-                                        <span class="must-tips">*</span>
                                     </el-form-item>
                                 </el-col>
                                 
@@ -161,14 +159,12 @@
                             <el-row :gutter="24">
                                 <el-col :span="8">
                                     <el-form-item label="产品型号：" prop="itemNo">
-                                        <el-input v-model='modal_form_data.itemNo'></el-input>
-                                        <span class="must-tips">*</span>
+                                        <el-input v-model='modal_form_data.itemNo' class="asterisk"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="8">
                                     <el-form-item label="产品名称：" prop="itemName">
-                                        <el-input v-model='modal_form_data.itemName'></el-input>
-                                        <span class="must-tips">*</span>
+                                        <el-input v-model='modal_form_data.itemName' class="asterisk"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -176,19 +172,18 @@
                             <el-row :gutter="24">
                                 <el-col :span="8">
                                     <el-form-item label="需求数量：" prop="quantity">
-                                        <el-input v-model='modal_form_data.quantity'></el-input>
-                                        <span class="must-tips">*</span>
+                                        <el-input v-model='modal_form_data.quantity' class="asterisk"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="8">
                                     <el-form-item label="交货日期：" prop="deliveryDate">
                                         <el-date-picker
                                             type="date"
+                                            class="asterisk"
                                             :editable=false
                                             placeholder="选择日期"
                                             v-model='modal_form_data.deliveryDate'>
                                         </el-date-picker>
-                                        <span class="must-tips">*</span>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -196,11 +191,10 @@
                             <el-row>
                                 <el-col :span="8">
                                     <el-form-item label="计划类型：" prop="planType">
-                                        <el-select placeholder="选择客户" v-model='modal_form_data.planType'>
+                                        <el-select placeholder="选择客户" v-model='modal_form_data.planType' class="asterisk">
                                             <el-option label="生产" value="01"></el-option>
                                             <el-option label="库存" value="02"></el-option>
-                                        </el-select>
-                                        <span class="must-tips">*</span>
+                                        </el-select>                                        
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -238,6 +232,7 @@
                         label="计划类型">
                         <template scope="scope">
                             <el-select 
+                                class="asterisk" 
                                 :disabled="modal_table_edit"
                                 v-model="scope.row.planType">
                                 <el-option label="生产" value="01"></el-option>
@@ -262,7 +257,8 @@
                         prop="orderNo"
                         label="订单编号">
                         <template scope="scope">
-                            <el-input 
+                            <el-input
+                                class="asterisk" 
                                 type="text" 
                                 :disabled="modal_table_edit"
                                 v-model="scope.row.orderNo" >
@@ -275,6 +271,7 @@
                         label="订单日期">
                         <template scope="scope">
                             <el-date-picker 
+                                class="asterisk" 
                                 type="date" 
                                 style="width: 100%;"
                                 placeholder="选择日期" 
@@ -290,6 +287,7 @@
                         <template scope="scope">
                             <el-input 
                                 type="text" 
+                                class="asterisk" 
                                 v-model="scope.row.itemNo" 
                                 :disabled="modal_table_edit">
                             </el-input>
@@ -302,6 +300,7 @@
                         <template scope="scope">
                             <el-input
                                 type="text" 
+                                class="asterisk" 
                                 :disabled="modal_table_edit"
                                 v-model="scope.row.itemName">
                             </el-input>
@@ -314,6 +313,7 @@
                         <template scope="scope">
                             <el-input 
                                 type="text"
+                                class="asterisk" 
                                 :disabled="modal_table_edit"
                                 v-model="scope.row.quantity" >
                             </el-input>
@@ -326,6 +326,7 @@
                         <template scope="scope">
                             <el-input 
                                 type="text" 
+                                class="asterisk" 
                                 :disabled="modal_table_edit"
                                 v-model="scope.row.unit">
                             </el-input>
@@ -337,6 +338,7 @@
                         label="交货日期">
                         <template scope="scope">
                             <el-date-picker 
+                                class="asterisk" 
                                 type="date" 
                                 style="width: 100%;"
                                 placeholder="选择日期" 
@@ -445,7 +447,7 @@
                     </el-col>
                     <div class="content-buttons fl">
                         <el-col :span="24">
-                            <el-button class="list-buttons" @click="closeSalePlanInfo()"><i class="fa fa-repeat" ></i> 返回</el-button>
+                            <el-button class="btn btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-repeat" ></i> 返回</el-button>
                         </el-col>
                     </div>
                 </el-row>

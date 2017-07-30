@@ -56,7 +56,7 @@
 
 .top-nav-content
     font-size:16px
-    line-height:80px
+    line-height:70px
     background-color:#383d41
     .border-right
         border-left:1px solid #2c2d2f

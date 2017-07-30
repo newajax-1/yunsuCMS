@@ -1,3 +1,6 @@
+/**
+ * coding by Alex of 2017-07-24
+ */
 import Vue from "vue"
 export default {
     name: 'saleplan',
@@ -40,7 +43,6 @@ export default {
             callback();
         };
 
-        // Vue Data
         return {
 
             // 销售计划 查询条件
@@ -133,10 +135,9 @@ export default {
     },
 
     methods: {
-
         init() {
-            this.getSalePlanData();
             this.reset();
+            this.getSalePlanData();
         },
 
         reset() {
@@ -151,6 +152,7 @@ export default {
 
         getSalePlanData() {
             let that = this;
+
             that.$ajaxWrap({
                 url: "plan/index",
                 success(res) {
@@ -252,13 +254,9 @@ export default {
         confirmOperation(planId, planIndex, tipsText) {
             let that = this;
 
-            that.$confirm(`确认${tipsText}吗`, "提示", {
-                confirmButtonText: "确认",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).then(function() {
+            that.$baseConfirm(`确认${tipsText}吗`, function() {
                 that.operationSalePlan(planId, planIndex);
-            }).catch(function() {});
+            });
         },
 
         clearModalForm() {
@@ -276,13 +274,9 @@ export default {
             let that = this;
 
             if (that.modal_table_data.length) {
-                that.$confirm("确定关闭吗？", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(function() {
+                that.$baseConfirm("确定关闭吗？", function() {
                     that.clearModalForm();
-                }).catch(function() {});
+                })
             } else {
                 that.clearModalForm();
             }

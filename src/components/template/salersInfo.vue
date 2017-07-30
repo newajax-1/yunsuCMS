@@ -17,19 +17,19 @@
                             <el-input placeholder="输入联系人" v-model='info.contacts' prop="contacts"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable(1)" class="search-btn">查询</el-button>
+                            <el-button @click="loadTable(1)" class="btn btn-blue">查询</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click='reset()' class="reset-btn">重置</el-button>
+                            <el-button @click='reset()' class="btn btn-orange">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="list-buttons" @click="refresh()"><i class="fa fa-repeat"></i> 刷新</el-button>
-                    <el-button class="list-buttons" @click="batchDelete()"><i class="fa fa-trash-o"></i> 批量删除</el-button>
-                    <el-button class="list-buttons" @click="toAdd()"><i class="fa fa-user-plus"></i> 新建客户</el-button>
+                    <el-button class="btn btn-blue" @click="refresh()"><i class="fa fa-repeat"></i> 刷新</el-button>
+                    <el-button class="btn btn-red" @click="batchDelete()"><i class="fa fa-trash-o"></i> 批量删除</el-button>
+                    <el-button class="btn btn-blue" @click="toAdd()"><i class="fa fa-user-plus"></i> 新建客户</el-button>
                 </el-col>
             </div>
 
@@ -66,7 +66,6 @@
                         </el-table-column>
 
                         <el-table-column
-                                fixed="right"
                                 label="操作"
                                 width="140">
                             <template scope="scope">
@@ -101,7 +100,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page.sync="page.pageNum"
-                    :page-sizes="[10]"
+                    :page-sizes="[10,20,30,40]"
                     :page-size="page.pageSize"
                     layout="total, sizes, prev, pager, next"
                     :total="page.total">
@@ -112,15 +111,16 @@
         <el-dialog
                 title="新增客户信息"
                 :visible.sync="newCustom"
-                size="tiny"
-                custom-class="pub-dialog">
+                size="small"
+                custom-class="pub-dialog"
+                :before-close="closeDialog">
             <span>
                 <div class="pub-mask-wrap">
                     <el-form :inline="true" class="">
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="12">
                                 <el-form-item label="客户类型：">
-                                    <el-select :placeholder="selectOp[0] && selectOp[0].dicName" v-model="sel_val">
+                                    <el-select :placeholder="selectOp[0] && selectOp[0].dicName" v-model="sel_val" class="asterisk">
                                         <el-option
                                                 v-for="item in selectOp"
                                                 :label="item.dicName"
@@ -129,31 +129,28 @@
                                     </el-select>
                                 </el-form-item>
                             </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="12">
                                 <el-form-item label="客户名称：">
-                                    <el-input v-model="addInfo.selName"></el-input>
-                                    <span class="must-tips">*</span>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="联系人：">
-                                    <el-input v-model="addInfo.selContact"></el-input>
-                                    <span class="must-tips">*</span>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="手机号：">
-                                    <el-input v-model="addInfo.selPhone"></el-input>
-                                    <span class="must-tips">*</span>
+                                    <el-input v-model="addInfo.selName" class="asterisk"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
-                            <el-col :span="24">
+                            <el-col :span="12">
+                                <el-form-item label="　联系人：">
+                                    <el-input v-model="addInfo.selContact" class="asterisk"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="　手机号：">
+                                    <el-input v-model="addInfo.selPhone" class="asterisk"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="24">
+                            <el-col　:span="24">
                                 <el-form-item label="送货地址：">
-                                    <el-select placeholder="选择省份" v-model="f.p" @change="selpro">
+                                    <el-select placeholder="选择省份" v-model="f.p" @change="selpro" class="asterisk">
                                         <el-option
                                                 :label="v.name"
                                                 v-for="(v,i) in pro"
@@ -161,7 +158,7 @@
                                                 prop="pro">
                                         </el-option>
                                     </el-select>
-                                    <el-select placeholder="选择市" v-model="f.c" @change="selcity">
+                                    <el-select placeholder="选择市" v-model="f.c" @change="selcity" class="asterisk">
                                         <el-option
                                                 :label="v.name"
                                                 v-for="(v,i) in city"
@@ -170,7 +167,7 @@
                                         </el-option>
                                     </el-select>
                                     <el-select placeholder="选择区" v-model="f.cc" v-show="county.length>0"
-                                               @change="result">
+                                               @change="result" class="asterisk">
                                         <el-option
                                                 :label="v.name"
                                                 v-for="(v,i) in county"
@@ -178,10 +175,7 @@
                                                 prop="county">
                                         </el-option>
                                     </el-select>
-                                    <div style="margin-top: 15px;">
-                                        <el-input style="width: 300px" v-model="addInfo.address"></el-input>
-                                        <span class="must-tips">*</span>
-                                    </div>
+                                    <el-input style="width: 300px" v-model="addInfo.address" class="asterisk"></el-input>
 
                                 </el-form-item>
                             </el-col>
@@ -191,8 +185,8 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn-save btn" @click="addNewCustom()">提交</el-button>
-                <el-button class="btn-close btn" @click="newCustom = false">取 消</el-button>
+                <el-button class="btn btn-blue" @click="addNewCustom()">提交</el-button>
+                <el-button class="btn btn-red" @click="closeDialog">取 消</el-button>
             </span>
         </el-dialog>
 
@@ -200,8 +194,9 @@
       <el-dialog
         title="修改客户信息"
         :visible.sync="editCustom"
-        size="tiny"
-        custom-class="pub-dialog">
+        size="large"
+        custom-class="pub-dialog"
+        :before-close="closeDialog">
             <span>
                 <div class="pub-mask-wrap">
                     <el-form :inline="true" class="">
@@ -209,7 +204,7 @@
                             <el-col :span="8">
                                 <el-form-item label="客户类型：">
                                    <input type="hidden" v-html='editTable.custType' id="custType">
-                                    <el-select v-model="editsel_val"  :placeholder="editTable.custValue" >
+                                    <el-select v-model="editsel_val"  :placeholder="editTable.custValue" class="asterisk">
                                         <el-option
                                                 v-for="item in editSelectOp"
                                                 :label="item.dicName"
@@ -223,32 +218,28 @@
                                     <p v-html="editTable.custNo"></p>
                                 </el-form-item>
                             </el-col>
-                        </el-row>
-
-                        <el-row :gutter="24">
                             <el-col :span="8">
                                 <el-form-item label="客户名称：">
-                                    <el-input v-model="editTable.custName"></el-input>
-                                  <span class="must-tips">*</span>
+                                    <el-input v-model="editTable.custName" class="asterisk"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="24">
+                            <el-col :span="8">
+                                <el-form-item label="　联系人：">
+                                    <el-input v-model="editTable.contacts" class="asterisk"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
-                                <el-form-item label="联系人：">
-                                    <el-input v-model="editTable.contacts"></el-input>
-                                  <span class="must-tips">*</span>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="手机号：">
-                                    <el-input v-model="editTable.phone"></el-input>
-                                    <span class="must-tips">*</span>
+                                <el-form-item label="　手机号：">
+                                    <el-input v-model="editTable.phone" class="asterisk"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
                             <el-col :span="24">
                                 <el-form-item label="送货地址：">
-                                    <el-select placeholder="选择省份" v-model="f.p" @change="selpro">
+                                    <el-select placeholder="选择省份" v-model="f.p" @change="selpro" class="asterisk">
                                         <el-option
                                           :label="v.name"
                                           v-for="(v,i) in pro"
@@ -256,7 +247,7 @@
                                           prop="pro">
                                         </el-option>
                                     </el-select>
-                                    <el-select placeholder="选择市" v-model="f.c" @change="selcity">
+                                    <el-select placeholder="选择市" v-model="f.c" @change="selcity" class="asterisk">
                                         <el-option
                                           :label="v.name"
                                           v-for="(v,i) in city"
@@ -265,7 +256,7 @@
                                         </el-option>
                                     </el-select>
                                     <el-select placeholder="选择区" v-model="f.cc" v-show="county.length>0"
-                                               @change="result">
+                                               @change="result" class="asterisk">
                                         <el-option
                                           :label="v.name"
                                           v-for="(v,i) in county"
@@ -273,10 +264,7 @@
                                           prop="county">
                                         </el-option>
                                     </el-select>
-                                    <div style="margin-top: 15px;">
-                                        <el-input style="width: 300px" v-model="editTable.address"></el-input>
-                                      	<span class="must-tips">*</span>
-                                    </div>
+                                    <el-input style="width: 300px" v-model="editTable.address" class="asterisk"></el-input>
 
                                 </el-form-item>
                             </el-col>
@@ -286,8 +274,8 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn-save btn" @click="UpdateCustom()">提交</el-button>
-                <el-button class="btn-close btn" @click="editCustom = false">取 消</el-button>
+                <el-button class="btn btn-blue" @click="UpdateCustom()">提交</el-button>
+                <el-button class="btn btn-red" @click="closeDialog">取 消</el-button>
             </span>
       </el-dialog>
 
@@ -295,7 +283,7 @@
         <el-dialog
                 title="客户信息详情"
                 :visible.sync="customDetail"
-                size="tiny"
+                size="large"
                 custom-class="pub-dialog">
             <span>
                 <div class="pub-mask-wrap">
@@ -341,7 +329,7 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn-close btn" @click="customDetail = false">关 闭</el-button>
+                <el-button class="btn btn-red" @click="customDetail = false">关 闭</el-button>
             </span>
         </el-dialog>
         
@@ -844,6 +832,17 @@
         }
         
       },
+      // 点击关闭
+    closeDialog() {
+        var that = this;
+        this.$confirm("你确定关闭么？", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+        }).then(function() {
+            that.editCustom = false;
+            that.newCustom = false;
+        }).catch(function() {});
+    },
 
       //查看详情
       lookInfo(obj){

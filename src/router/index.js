@@ -1,3 +1,7 @@
+/**
+ * coding by Alex of 2017-07-24
+ */
+
 import Vue from 'vue'
 import Router from 'vue-router'
 
