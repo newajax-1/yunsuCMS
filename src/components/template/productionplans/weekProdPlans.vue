@@ -95,7 +95,7 @@
                                     type="text"
                                     size="small">删除</el-button>
                                 <el-button
-                                    @click="openWeekplanInfo(scope.row.workplanWeekId)"
+                                    @click="openWeekplanInfo(scope.row.workplanWeekId,'周计划详情')"
                                     v-show="!weekplan_push_tips[scope.$index].show"
                                     type="text"
                                     size="small">详情</el-button>
@@ -129,11 +129,11 @@
                         <div class="list-table sched-table">
                             <div class="pad-middle-default clearfix">
                                 <div class="fl"  v-show="!weekplan_info_show">
-                                    <el-button class="btn btn-yellow" @click="editWorkplan">编 辑</el-button>
                                     <el-button class="btn btn-green" @click="confirmSendPlan('save')">保 存</el-button>
-                                    <el-button class="btn btn-orange" @click="confirmSendPlan('push')">下 发</el-button>
+                                    <el-button class="btn btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
                                     <el-button class="btn btn-red" @click="deleteWorkArray">删除</el-button>
                                     <el-button class="btn btn-blue" @click="createWorkplan">新增计划</el-button>
+                                    <!-- <el-button class="btn btn-blue" @click="nextWeekplan('pre')" v-show="modal_btn_show">上一周</el-button> -->
                                 </div>
                             </div>
                             <el-table
@@ -142,7 +142,7 @@
                                 @selection-change="handleSelectionChange">
                                 <el-table-column type="selection" width="55"> </el-table-column>
 
-                                <el-table-column width="150" prop="type" label="类型">
+                                <el-table-column width="120" prop="type" label="类型">
                                     <template  scope="scope">
                                         <el-select  placeholder="选择类型"  :disabled="modal_table_edit" v-model="scope.row.type">
                                             <el-option 
@@ -155,7 +155,7 @@
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column width="150" prop="lv" label="优先级">
+                                <el-table-column width="120" prop="lv" label="优先级">
                                     <template  scope="scope">
                                         <el-select  placeholder="选择优先级" :disabled="modal_table_edit" v-model="scope.row.lv">
                                             <el-option 
@@ -221,9 +221,9 @@
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column width="80" prop="productNo" label="生产批号">
+                                <el-table-column width="120" prop="productNo" label="生产批号">
                                     <template  scope="scope">
-                                        <el-input :disabled="modal_table_edit" v-model="scope.row.productNo"></el-input>
+                                        <el-input disabled v-model="scope.row.productNo"></el-input>
                                     </template>
                                 </el-table-column>
 
@@ -262,9 +262,6 @@
                                                 :key="item.dicValue"></el-option>
                                         </el-select>
                                     </template>
-                                </el-table-column>
-
-                                <el-table-column width="50" label="<<">
                                 </el-table-column>
 
                                 <el-table-column prop="planBill" :label="modal_week_date.week">
@@ -415,9 +412,6 @@
                                     </el-table-column>
                                 </el-table-column>
 
-                                <el-table-column width="60" label=">>">
-                                </el-table-column>
-
                                 <el-table-column width="150" prop="sum" label="生产合计">
                                     <template  scope="scope">
                                         <el-input 
@@ -472,11 +466,11 @@
                     </el-row>
                     <div class="pad-middle-default clearfix">
                         <div class="fl"  v-show="!weekplan_info_show">
-                            <el-button class="btn btn-yellow" @click="editWorkplan">编 辑</el-button>
                             <el-button class="btn btn-green" @click="confirmSendPlan('save')">保 存</el-button>
-                            <el-button class="btn btn-orange" @click="confirmSendPlan('push')">下 发</el-button>
-                            <el-button class="btn btn-red">删除</el-button>
+                            <el-button class="btn btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
+                            <el-button class="btn btn-red" @click="deleteWorkArray">删除</el-button>
                             <el-button class="btn btn-blue" @click="createWorkplan">新增计划</el-button>
+                            <!-- <el-button class="btn btn-blue" @click="nextWeekplan('next')" v-show="modal_btn_show">下一周</el-button> -->
                         </div>
                     </div>
 
@@ -496,8 +490,13 @@
                 padding-left 6px
                 padding-right 6px
         .el-dialog__wrapper
+            .el-table__header-wrapper
+                th
+                    height 30px
             .el-input
                 width 100%
+                font-size 12px
             th>.cell
                 line-height 1
+
 </style>

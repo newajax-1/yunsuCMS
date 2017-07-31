@@ -10,7 +10,6 @@
 
   import prodPlansInfo from '../template/productionplans/prodPlansInfo'
   import weekProdPlans from '../template/productionplans/weekProdPlans'
-  import weekProdPlansInfo from '../template/productionplans/weekProdPlansInfo'
 
   import invWarning from '../template/invwarning/invWarning'
 
@@ -26,7 +25,6 @@
           salersInfo,
           prodPlansInfo,
           weekProdPlans,
-          weekProdPlansInfo,
           invWarning,
           userManagement,
           orgManagement,

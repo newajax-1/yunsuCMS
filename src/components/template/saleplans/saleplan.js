@@ -413,17 +413,6 @@ export default {
             }).catch(function() {});
         },
 
-        handleDateObject(date) {
-            let year = date.getFullYear(),
-                month = date.getMonth() + 1,
-                day = date.getDate(),
-                date_str = undefined;
-            if (month < 10) month = "0" + month;
-            if (day < 10) day = "0" + day;
-            date = year + "-" + month + "-" + day;
-            return date
-        },
-
         handleModalData(tableData) {
             let that = this,
                 len = tableData.length,
@@ -440,10 +429,10 @@ export default {
 
                 if (typeof el.orderDate === "object" || typeof el.deliveryDate === "object") {
                     if (el.orderDate.toLocaleDateString) {
-                        el.orderDate = that.handleDateObject(el.orderDate);
+                        el.orderDate = that.$handleDateObject(el.orderDate);
                     }
                     if (el.deliveryDate.toLocaleDateString) {
-                        el.deliveryDate = that.handleDateObject(el.deliveryDate);
+                        el.deliveryDate = that.$handleDateObject(el.deliveryDate);
                     }
                 }
 

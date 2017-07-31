@@ -18,7 +18,6 @@ import salersInfo from '../components/template/salersInfo'
 
 import prodPlansInfo from '../components/template/productionplans/prodPlansInfo'
 import weekProdPlans from '../components/template/productionplans/weekProdPlans'
-import weekProdPlansInfo from '../components/template/productionplans/weekProdPlansInfo'
 
 import invWarning from '../components/template/invwarning/invWarning'
 
@@ -53,10 +52,6 @@ export default new Router({
                 {
                     path: 'weekprodplans',
                     component: weekProdPlans
-                },
-                {
-                    path: 'weekprodplansinfo',
-                    component: weekProdPlansInfo
                 },
                 {
                     path: 'invwarning',
