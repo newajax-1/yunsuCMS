@@ -7,6 +7,7 @@ import axios from 'axios'
 
 // axios 配置请求根目录
 axios.defaults.baseURL = 'http://localhost:8080/ybs_mes/'
+    // axios.defaults.baseURL = 'http://localhost:8080/'
 
 // 非父子组件通信 [慎用-可考虑Vuex代替]
 const EventBus = window.EventBus = new Vue();
@@ -111,18 +112,27 @@ VueProto.$vueExtend({
                     "Content-Type": "application/json"
                 }
             }).then(function(res) {
-                if (res.data.success && res.status === 200) {
-                    success(res.data);
-                } else {
-                    that.$baseWarn(res.data.tipMsg || "操作失败！", function() {
-                        error(res.data);
-                        console.log(res.data);
-                    })
-                };
+                if (res.status === 200) {
+                    if (res.data.status === "0") {
+                        if (res.data.success) {
+                            success(res.data);
+                        } else {
+                            that.$baseWarn(res.data.tipMsg || "操作失败！", function() {
+                                error(res.data);
+                                console.log(res.data);
+                            })
+                        };
+                    } else {
+                        that.$baseWarn("登录超时,请重新登陆！", function() {
+                            that.$goRoute("/");
+                        })
+                    }
+                }
             });
         }
     },
 
+    // 日期截取
     $handleDateObject(date) {
         let year = date.getFullYear(),
             month = date.getMonth() + 1,
@@ -132,5 +142,11 @@ VueProto.$vueExtend({
         if (day < 10) day = "0" + day;
         date = year + "-" + month + "-" + day;
         return date
+    },
+
+    // 字符串截取
+    $trim(str) {
+        return str.replace(/^\s*/, '').replace(/\s*$/, '');
     }
+
 })

@@ -47,8 +47,8 @@
                         </el-date-picker>
                     </el-form-item>
 
-                    <el-form-item><el-button class="btn btn-blue" @click="searchFormData()">查询</el-button></el-form-item>
-                    <el-form-item><el-button class="btn btn-orange" @click="reset">重置</el-button></el-form-item>
+                    <el-form-item><el-button class="btn btn-small btn-blue" @click="searchFormData()">查询</el-button></el-form-item>
+                    <el-form-item><el-button class="btn btn-small btn-orange" @click="reset">重置</el-button></el-form-item>
 
                 </el-form>
             </div>
@@ -202,8 +202,8 @@
                             <el-row>
                                 <el-col >
                                     <div class="message" style="border-top: 0;">
-                                        <el-button class="btn btn-green" @click="addNewSalePlan()">完 成</el-button>
-                                        <el-button class="btn btn-red" @click="confirmCloseModal()">关 闭</el-button>
+                                        <el-button class="btn btn-small btn-green" @click="addNewSalePlan()">完 成</el-button>
+                                        <el-button class="btn btn-small btn-red" @click="confirmCloseModal()">关 闭</el-button>
                                     </div>
                                 </el-col>
                             </el-row>
@@ -215,9 +215,9 @@
 
             <div class="message clearfix">
                 <div class="fl">
-                    <el-button class="btn btn-yellow" @click="editSalePlan()">编 辑</el-button>
-                    <el-button class="btn btn-green" @click="confirmSendPlan('save')">保 存</el-button>
-                    <el-button class="btn btn-blue" @click="confirmSendPlan('push')">下 发</el-button>
+                    <el-button class="btn btn-small btn-yellow" @click="editSalePlan()">编 辑</el-button>
+                    <el-button class="btn btn-small btn-green" @click="confirmSendPlan('save')">保 存</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')">下 发</el-button>
                 </div>
                 <div class="fr">共有<span class="detailMsg">{{modal_plan_length}}</span>条下发计划</div>
             </div>
@@ -447,7 +447,7 @@
                     </el-col>
                     <div class="content-buttons fl">
                         <el-col :span="24">
-                            <el-button class="btn btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-repeat" ></i> 返回</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-repeat" ></i> 返回</el-button>
                         </el-col>
                     </div>
                 </el-row>

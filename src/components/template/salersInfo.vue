@@ -17,10 +17,10 @@
                             <el-input placeholder="输入联系人" v-model='info.contacts' prop="contacts"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable(1)" class="btn btn-blue">查询</el-button>
+                            <el-button @click="loadTable(1)" class="btn btn-small btn-blue">查询</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click='reset()' class="btn btn-orange">重置</el-button>
+                            <el-button @click='reset()' class="btn btn-small btn-orange">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -185,8 +185,8 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn btn-blue" @click="addNewCustom()">提交</el-button>
-                <el-button class="btn btn-red" @click="closeDialog">取 消</el-button>
+                <el-button class="btn btn-small btn-blue" @click="addNewCustom()">提交</el-button>
+                <el-button class="btn btn-small btn-red" @click="closeDialog">取 消</el-button>
             </span>
         </el-dialog>
 
@@ -274,8 +274,8 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn btn-blue" @click="UpdateCustom()">提交</el-button>
-                <el-button class="btn btn-red" @click="closeDialog">取 消</el-button>
+                <el-button class="btn btn-small btn-blue" @click="UpdateCustom()">提交</el-button>
+                <el-button class="btn btn-small btn-red" @click="closeDialog">取 消</el-button>
             </span>
       </el-dialog>
 
@@ -329,7 +329,7 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn btn-red" @click="customDetail = false">关 闭</el-button>
+                <el-button class="btn btn-small btn-red" @click="customDetail = false">关 闭</el-button>
             </span>
         </el-dialog>
         

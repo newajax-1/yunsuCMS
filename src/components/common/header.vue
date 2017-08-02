@@ -10,15 +10,15 @@
                     </div>
 
                     <div class="top-nav-right fr">
-                        <a href="" class="right-nav-items">
+                        <a href="javascript:void(0);" class="right-nav-items">
                             <i class="fa fa-bell bell "></i>
                             <span class="num">0</span>
                         </a>
-                        <a href="" class="right-nav-items">
+                        <a href="javascript:void(0);" class="right-nav-items">
                             <span>{{name}}</span>
                             <span class="work-id">工号：{{jobNumber}}</span>
                         </a>
-                        <a href="" class="right-nav-items">
+                        <a href="javascript:void(0);" class="right-nav-items">
                             <span>任务单</span>
                             <span class="num">0</span>
                         </a>
@@ -55,8 +55,8 @@
     width 100%
 
 .top-nav-content
-    font-size:16px
-    line-height:70px
+    font-size:14px
+    line-height:50px
     background-color:#383d41
     .border-right
         border-left:1px solid #2c2d2f
@@ -79,7 +79,7 @@
                 width:22px
                 height:22px 
                 margin:0 10px
-                font-size:14px
+                font-size:12px
                 line-height:22px
                 text-align:center
                 border-radius:10%

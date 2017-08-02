@@ -104,11 +104,13 @@
 
 .layout-menu
     position fixed
-    top 70px
+    top 50px
     left 0
     height 100%
-    width 200px
+    width 180px
     .el-menu
         height 100%
         border-radius 0
+.el-submenu .el-menu-item
+    min-width 180px
 </style>

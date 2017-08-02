@@ -49,8 +49,8 @@
                             </el-date-picker>
                         </el-form-item>
 
-                        <el-form-item><el-button class="btn btn-blue" @click="searchFormData()">查询</el-button></el-form-item>
-                        <el-form-item><el-button class="btn btn-orange" @click="reset">重置</el-button></el-form-item>
+                        <el-form-item><el-button class="btn btn-small btn-blue" @click="searchFormData()">查询</el-button></el-form-item>
+                        <el-form-item><el-button class="btn btn-small btn-orange" @click="reset">重置</el-button></el-form-item>
                     </el-form>
                 </div>
             </el-col>
@@ -129,11 +129,11 @@
                         <div class="list-table sched-table">
                             <div class="pad-middle-default clearfix">
                                 <div class="fl"  v-show="!weekplan_info_show">
-                                    <el-button class="btn btn-green" @click="confirmSendPlan('save')">保 存</el-button>
-                                    <el-button class="btn btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
-                                    <el-button class="btn btn-red" @click="deleteWorkArray">删除</el-button>
-                                    <el-button class="btn btn-blue" @click="createWorkplan">新增计划</el-button>
-                                    <!-- <el-button class="btn btn-blue" @click="nextWeekplan('pre')" v-show="modal_btn_show">上一周</el-button> -->
+                                    <el-button class="btn btn-small btn-green" @click="confirmSendPlan('save')">保 存</el-button>
+                                    <el-button class="btn btn-small btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
+                                    <el-button class="btn btn-small btn-red" @click="deleteWorkArray">删除</el-button>
+                                    <el-button class="btn btn-small btn-blue" @click="createWorkplan">新增计划</el-button>
+                                     <!-- <el-button class="btn btn-small btn-blue" @click="nextWeekplan('pre')" >上一周</el-button>  -->
                                 </div>
                             </div>
                             <el-table
@@ -168,13 +168,13 @@
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column width="150" prop="custName" label="客户">
+                                <el-table-column width="150" prop="custNo" label="客户">
                                     <template scope="scope">
                                         <el-select 
                                             placeholder="选择客户" 
                                             :disabled="modal_table_edit" 
-                                            v-model="scope.row.custName" 
-                                            @change="getOrderDataList(scope.row.custName,scope.$index)">
+                                            v-model="scope.row.custNo" 
+                                            @change="getOrderDataList(scope.row.custNo,scope.$index)">
                                             <el-option  
                                                 v-for="item in modal_sync_data.custList" 
                                                 :label="item.custName" 
@@ -415,8 +415,8 @@
                                 <el-table-column width="150" prop="sum" label="生产合计">
                                     <template  scope="scope">
                                         <el-input 
-                                            v-model="scope.row.sum"
                                             :disabled="modal_table_edit"
+                                            v-model="scope.row.sum"
                                             type="text">
                                         </el-input>
                                     </template>
@@ -466,11 +466,11 @@
                     </el-row>
                     <div class="pad-middle-default clearfix">
                         <div class="fl"  v-show="!weekplan_info_show">
-                            <el-button class="btn btn-green" @click="confirmSendPlan('save')">保 存</el-button>
-                            <el-button class="btn btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
-                            <el-button class="btn btn-red" @click="deleteWorkArray">删除</el-button>
-                            <el-button class="btn btn-blue" @click="createWorkplan">新增计划</el-button>
-                            <!-- <el-button class="btn btn-blue" @click="nextWeekplan('next')" v-show="modal_btn_show">下一周</el-button> -->
+                            <el-button class="btn btn-small btn-green" @click="confirmSendPlan('save')">保 存</el-button>
+                            <el-button class="btn btn-small btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
+                            <el-button class="btn btn-small btn-red" @click="deleteWorkArray">删除</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="createWorkplan">新增计划</el-button>
+                            <!-- <el-button class="btn btn-small btn-blue" @click="nextWeekplan('next')" v-show="modal_btn_show">下一周</el-button> -->
                         </div>
                     </div>
 

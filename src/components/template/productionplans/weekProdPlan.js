@@ -44,7 +44,7 @@ export default {
             modal_table_row_data: {
                 type: undefined,
                 lv: undefined,
-                custName: undefined,
+                custNo: undefined,
                 ordrNo: undefined,
                 tempOrder: undefined,
                 tempItem: undefined,
@@ -161,7 +161,8 @@ export default {
             // 周计划 新建
             create_new_plan: undefined,
             delete_work_array: [],
-            weekplan_info_show: false
+            weekplan_info_show: false,
+            new_workplan_index: []
         }
     },
 
@@ -232,6 +233,7 @@ export default {
             }
 
             search_data.issSts = that.weekplan_change_tips;
+
             if (pagesize === "num") {
                 search_data.pageNum = pageval || that.weekplan_page_list.pageNum;
                 search_data.pageSize = that.weekplan_page_list.pageSize;
@@ -328,6 +330,7 @@ export default {
             this.modal_table_edit = false;
             this.weekplan_info_show = false;
             this.modal_btn_show = false;
+            this.work_plan_id = undefined;
             this.refresh();
         },
 
@@ -364,6 +367,7 @@ export default {
                 })
             } else {
                 that.work_plan_id = plan_id;
+
                 that.$ajaxWrap({
                     url: "week/queryWeekList",
                     data: {
@@ -380,10 +384,19 @@ export default {
         loadModalTableData(data) {
             this.modal_week_date = data.data;
             this.modal_sync_data = data;
+
             if (data.dataList.length) {
+                this.modal_weekplan_table_data = null;
                 this.modal_weekplan_table_data = data.dataList;
+                this.getProductInfoData(data.dataList);
             } else {
                 this.createWorkplan();
+            }
+        },
+
+        getProductInfoData(data) {
+            for (let i = 0; i < data.length; i++) {
+                this.getOrderDataList(data[i].custNo, i);
             }
         },
 
@@ -414,12 +427,14 @@ export default {
             temp_workplan_data.productNo = data.productNo;
             temp_workplan_data.itemNo = "";
             temp_workplan_data.itemName = "";
+
             Vue.set(that.modal_weekplan_table_data, index, temp_workplan_data);
         },
 
         setProductName(val, index) {
             let that = this,
                 temp_workplan_data = that.modal_weekplan_table_data[index];
+
             if (temp_workplan_data.tempItem && temp_workplan_data.tempItem.length) {
                 temp_workplan_data.tempItem.every(function(el) {
                     if (el.itemNo === val) {
@@ -434,13 +449,14 @@ export default {
         handleWorkplanData() {
             let that = this,
                 old_workplan_data = that.modal_weekplan_table_data,
-                len = old_workplan_data.length,
-                send_data = [];
+                len = old_workplan_data.length;
+
             for (let i = 0; i < len; i++) {
                 let el = old_workplan_data[i];
                 for (let key in el) {
                     delete el.tempItem;
                     delete el.tempOrder;
+                    delete el.index
                 }
             }
         },
@@ -457,7 +473,10 @@ export default {
             for (let i = 0; i < len; i++) {
                 let el = new_table_data[i]
                 for (let key in el) {
-                    if (el[key] === "") {
+                    if (key === "scndProc") {
+                        continue
+                    }
+                    if ((el[key] === "" || el[key] === undefined) && el[key] !== null) {
                         that.$alert('请完善表单信息', '提示', {
                             confirmButtonText: '确定',
                             callback() {}
@@ -508,6 +527,10 @@ export default {
                 success(res) {
                     if (typeof done === "function") done();
                     that.clearModalForm();
+                    that.work_plan_id = undefined;
+                },
+                error() {
+                    this.modal_table_edit = true;
                 }
             });
         },
@@ -537,12 +560,16 @@ export default {
 
             that.setModalWeekDate();
 
+            let index = that.modal_weekplan_table_data.length;
+            table_row_data.index = index;
+
             plan_bill = JSON.parse(JSON.stringify(that.modal_plan_bill));
             that.modal_table_row_data.planBill = plan_bill;
 
             for (let key in that.modal_table_row_data) {
                 table_row_data[key] = that.modal_table_row_data[key];
             }
+
             that.modal_weekplan_table_data.push(table_row_data);
         },
 
@@ -570,29 +597,40 @@ export default {
         },
 
         handleSelectionChange(item) {
-            let temp_delete_array = [];
+            let temp_delete_array = [],
+                temp_delete_index = [];
 
-            item.every(function(el, i) {
-                return temp_delete_array[i] = el.workplanDetailId;
-            });
+            for (let i = 0; i < item.length; i++) {
+                let el = item[i];
+                if (el.workplanDetailId) {
+                    temp_delete_array.push(el.workplanDetailId);
+                }
 
+                if (!isNaN(el.index)) {
+                    temp_delete_index.push(el.index);
+                }
+            }
+
+            this.new_workplan_index = temp_delete_index.sort((a, b) => a < b ? 1 : -1);
             this.delete_work_array = temp_delete_array;
         },
 
         deleteWorkArray() {
             let that = this;
-            if (!that.delete_work_array.length) {
+
+            if (that.delete_work_array.length || that.new_workplan_index.length) {
+
+                that.$baseConfirm("您确定要删除这些数据吗？", function() {
+                    if (that.delete_work_array.length) {
+                        that.deleteWorkplanArray();
+                    }
+                    that.reloadModalTableData();
+                });
+            } else {
                 that.$alert("请选择要删除的数据！", '提示', {
                     confirmButtonText: '确定',
                     callback() {
                         return
-                    }
-                });
-            } else {
-                that.$alert("您确定要删除这些数据吗？", '提示', {
-                    confirmButtonText: '确定',
-                    callback() {
-                        that.deleteWorkplanArray();
                     }
                 });
             }
@@ -601,7 +639,6 @@ export default {
         deleteWorkplanArray() {
             let that = this,
                 send_data = that.delete_work_array;
-
             that.$ajaxWrap({
                 type: 'post',
                 url: "/week/operationWeek",
@@ -614,6 +651,48 @@ export default {
             });
         },
 
+        reloadModalTableData() {
+            let len_work_id = this.delete_work_array.length,
+                len_new_id = this.new_workplan_index.length,
+                len_modal_data = this.modal_weekplan_table_data.length;
+
+            let ret = this.modal_sync_data,
+                res = this.modal_weekplan_table_data,
+                temp_data = [];
+
+            for (let i = 0; i < len_modal_data; i++) {
+                let opt = res[i];
+
+                if (opt.workplanDetailId) {
+                    for (let j = 0; j < len_work_id; j++) {
+                        if (this.delete_work_array[j] === opt.workplanDetailId) {
+                            res.splice(i, 1, "");
+                        }
+                    }
+                }
+            }
+
+            for (let i = 0; i < len_modal_data; i++) {
+                let opt = res[i];
+
+                if (!isNaN(opt.index)) {
+                    for (let k = 0; k < len_new_id; k++) {
+                        if (this.new_workplan_index[k] === opt.index) {
+                            res.splice(i, 1, "");
+                        }
+                    }
+                }
+            }
+
+            for (let i = 0; i < res.length; i++) {
+                if (res[i]) {
+                    temp_data.push(res[i])
+                }
+            }
+
+            this.modal_weekplan_table_data = temp_data;
+        },
+
         openWeekplanInfo(weekplan_id, title) {
             let that = this;
             that.modal_title = title;
@@ -623,8 +702,8 @@ export default {
                     workplanWeekId: weekplan_id
                 },
                 success(res) {
-
                     that.loadModalTableData(res.data);
+
                     that.modal_show_tips = true;
                     that.modal_table_edit = true;
                     that.weekplan_info_show = true;
@@ -635,7 +714,6 @@ export default {
         nextWeekplan(val) {
             let that = this,
                 temp_data = that.modal_week_date.indexOfWeek;
-
             temp_data = val === "next" ? temp_data++ : temp_data--;
 
             that.$ajaxWrap({
@@ -644,7 +722,7 @@ export default {
                     indexOfWeek: temp_data
                 },
                 success(res) {
-                    that.loadModalTableData(res.data);
+
                 }
             })
 
