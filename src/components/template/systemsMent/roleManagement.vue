@@ -8,7 +8,7 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item>
-                            <el-button @click="toAdd()" class="btn btn-yellow">新增</el-button>
+                            <el-button @click="toAdd()" class="btn btn-blue">新增</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -103,7 +103,7 @@
             </div>
 
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn btn-blue" @click="showAdd(adfasdasd)">保存</el-button>
+                <el-button class="btn btn-green" @click="showAdd(adfasdasd)">保存</el-button>
                 <el-button class="btn btn-red" @click="closeDialog">取消</el-button>
             </span>
         </el-dialog>

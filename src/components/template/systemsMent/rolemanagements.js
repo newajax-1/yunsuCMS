@@ -7,9 +7,11 @@ export default {
             page_list: {
               page_num: 1,
               page_size: 10,
-              total: 1
+              total: 0
             },
             current_page: 1,
+            search_pageNum : undefined,
+            search_pageSize : undefined,
             adfasdasd: undefined,
             title_name: undefined,
             // 查询
@@ -86,16 +88,19 @@ export default {
         // 数据加载和搜索
         loadTable() {
             var that = this;
+            this.page_list.total = 14;
             this.$ajaxWrap({
                 type : "post",
                 url : "/role/loadTable",
                 data : {
-                    pageNum: that.page_list.page_num,
-                    pageSize: that.page_list.page_size
+                    pageNum: that.search_pageNum || 1,
+                    pageSize: that.search_pageSize || 10
                 } ,
                 callback : function(data){
                     that.table_data = data.data.page.list;
                     that.page_list.total = data.data.page.total; 
+                    that.page_list.page_num = data.data.page.pageNum;
+                    that.page_list.page_size = data.data.page.pageSize;
                 }
             })
         },
@@ -133,10 +138,7 @@ export default {
                     that.loadTable(); 
                 },
                 error(data) {
-                    that.$message({
-                        message: data.tipMsg,
-                        type: "warning"
-                    });
+                    
                 }
             })
         },
@@ -156,10 +158,7 @@ export default {
                     that.loadTable();
                 },
                 error() {
-                    that.$message({
-                        message: data.data.tipMsg,
-                        type: "warning"
-                    });
+                    
                 }
             })
         },
@@ -185,10 +184,7 @@ export default {
                         }); 
                     },
                     error() {
-                        that.$message({
-                          message: "删除失败！",
-                          type: 'warning'
-                        });
+                        
                     }
                 })
             }).catch(function() {});
@@ -203,15 +199,30 @@ export default {
                 that.new_custom = false;
             }).catch(function() {});
         },
+
+        searchFormData(pageval, pagesize) {
+            var that = this;
+            if (pagesize === "num") {
+                that.search_pageNum = pageval || that.page_list.page_num;
+                that.search_pageSize = that.page_list.page_size;
+            } else {
+                that.search_pageNum = that.page_list.page_num;
+                that.search_pageSize = pageval || that.page_list.page_size;
+            }
+            that.loadTable();
+        },
+        
         // 分页
         handleSizeChange(val) {
-            this.page_list.page_size = val;
-            this.loadTable();
+            if (this.table_data.length) {
+                this.searchFormData(val, "size");
+            };
         },
         // -----------------------------------------------------------------------------------------------------------------------------------      
         handleCurrentChange(val) {
-            this.page_list.page_num = val;
-            this.loadTable();
+            if (this.table_data.length) {
+                this.searchFormData(val, "num");
+            };
         },
         // 设置默认权限项
         setCheckedNodes() {

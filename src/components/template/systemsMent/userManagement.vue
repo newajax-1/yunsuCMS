@@ -20,7 +20,7 @@
                             <el-button @click="reset()" class="btn btn-orange">重置</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="toAdd()" class="btn btn-yellow">新增</el-button>
+                            <el-button @click="toAdd()" class="btn btn-blue">新增</el-button>
                         </el-form-item>
                     </el-form>
                 </div>

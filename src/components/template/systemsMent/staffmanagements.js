@@ -6,6 +6,8 @@ export default {
         return {
             table_data : [],
             work_table_data : [],
+            search_pageNum : undefined,
+            search_pageSize : undefined,
 
             // 弹框标题
             dialog_name : undefined,
@@ -28,7 +30,7 @@ export default {
             page : {
                 page_num : 1,
                 page_size : 10,
-                total : 1,
+                total : 0,
             },
             show_emp_id : false,
             new_custom : false,
@@ -39,18 +41,21 @@ export default {
         // 加载数据
         loadTable() {
             var that = this;
+            this.page.total = 0;
             this.$ajaxWrap({
                 type : "post",
                 url : "/emp/queryList",
                 data : {
-                    pageNum : that.page.page_num,
-                    pageSize : that.page.page_size,
+                    pageNum : that.search_pageNum || 1,
+                    pageSize : that.search_pageSize || 10,
                     empNo : that.search_info.emp_no,
                     empNm : that.search_info.emp_nm,
                 } ,
                 success : function(data){
-                    console.log(data)
                     that.table_data = data.data.page.list;
+                    that.page.total = data.data.page.total;
+                    that.page.page_num = data.data.page.pageNum;
+                    that.page.page_size = data.data.page.pageSize;
                 },
                 error() {
                     //do error function
@@ -139,10 +144,7 @@ export default {
                         });
                     },
                     error() {
-                        that.$message({
-                            message: data.tipMsg,
-                            type: "warning"
-                        });
+                        
                     }
                 })
             }).catch(function() {});
@@ -176,10 +178,7 @@ export default {
                     that.loadTable();
                 },
                 error(data) {
-                    that.$message({
-                        message: data.tipMsg,
-                        type: "warning"
-                    });
+                    
                 }
             })
         },
@@ -210,16 +209,30 @@ export default {
 
         },
 
+        searchFormData(pageval, pagesize) {
+            var that = this;
+            if (pagesize === "num") {
+                that.search_pageNum = pageval || that.page.page_num;
+                that.search_pageSize = that.page.page_size;
+            } else {
+                that.search_pageNum = that.page.page_num;
+                that.search_pageSize = pageval || that.page.page_size;
+            }
+            that.loadTable();
+        },
+
         // 改变分页数目的时候调用
         handleSizeChange(val) {
-            this.page.page_size = val;
-            this.loadTable();
+            if (this.table_data.length) {
+                this.searchFormData(val, "size");
+            };
         },
 
         //改变页码的时候调用
         handleCurrentChange(val) {
-            this.page.page_num = val;
-            this.loadTable();
+            if (this.table_data.length) {
+                this.searchFormData(val, "size");
+            };
         },
 
     },

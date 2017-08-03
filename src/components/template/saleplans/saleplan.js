@@ -90,7 +90,7 @@ export default {
             // 新增或修改 表格数据
             modal_table_data: [],
             modal_table_edit: false,
-            modal_plan_length: undefined,
+            modal_plan_length: 0,
             modify_detail_id: undefined,
 
             // 新增或修改 客户名称
@@ -264,6 +264,7 @@ export default {
             that.modal_show_tips = false;
             that.modal_table_edit = false;
             that.modify_detail_id = undefined;
+            that.modal_plan_length = 0;
             that.modal_table_data = [];
 
             that.$clearObject(that.modal_form_data);
@@ -272,14 +273,9 @@ export default {
 
         confirmCloseModal() {
             let that = this;
-
-            if (that.modal_table_data.length) {
-                that.$baseConfirm("确定关闭吗？", function() {
-                    that.clearModalForm();
-                })
-            } else {
+            that.$baseConfirm("确定关闭吗？", function() {
                 that.clearModalForm();
-            }
+            })
         },
 
         openSalePlanModal(tipsText, PlanId) {

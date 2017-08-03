@@ -8,6 +8,8 @@ export default {
             sys_organization : [],
             child_organization : [],
             commonorg_id : undefined,
+            search_pageNum : undefined,
+            search_pageSize : undefined,
             new_organization : false,
             add_info:{
                 org_name : undefined,
@@ -24,9 +26,9 @@ export default {
            
             // 分页
             page: {
-                page_num : undefined,
-                page_size : undefined,
-                total : undefined
+                page_num : 1,
+                page_size : 10,
+                total : 0
             },
 
             //表单数据开始start
@@ -55,17 +57,20 @@ export default {
         // 加载部门员工数据
         loadStaffTable() {
             var that = this;
+            this.page.total = 0;
             this.$ajaxWrap({
                 type : "post",
                 url : "sysOrganization/queryStaffList",
                 data : {
-                    pageNum: that.page.page_num,
-                    pageSize: that.page.page_size,
+                    pageNum: that.search_pageNum || 1,
+                    pageSize: that.search_pageSize || 10,
                     orgId:that.commonorg_id,
                 } ,
                 callback : function(data){
                     that.staff_table_data = data.data.page.list,
-                    that.page.total = data.data.page.total 
+                    that.page.total = data.data.page.total
+                    that.page.page_num = data.data.page.pageNum;
+                    that.page.page_size = data.data.page.pageSize; 
                 }
             })
         },
@@ -149,17 +154,7 @@ export default {
                     that.loadTable(); 
                 },
                 error(data) {
-                    if(data.tipMsg.indexOf("重复")!=-1){
-                        that.$message({
-                           message: '信息重复',
-                           type: 'warning'
-                        });
-                    }else{
-                        that.$message({
-                           message: '添加失败',
-                           type: 'warning'
-                        });
-                    }
+                    
                 }
             })
         },
@@ -198,12 +193,7 @@ export default {
                     that.loadTable();
                 },
                 error(data) {
-                    that.$message({
-                        message: '删除失败',
-                        type: 'success'
-                    });
-                    that.dialog_visible = false
-                    that.loadTable();
+                    
                 }
             })
              
@@ -225,16 +215,30 @@ export default {
             this.loadStaffTable();
         },
 
+        searchFormData(pageval, pagesize) {
+            var that = this;
+            if (pagesize === "num") {
+                that.search_pageNum = pageval || that.page.page_num;
+                that.search_pageSize = that.page.page_size;
+            } else {
+                that.search_pageNum = that.page.page_num;
+                that.search_pageSize = pageval || that.page.page_size;
+            }
+            that.loadStaffTable();
+        },
+
         // 改变分页数目的时候调用
         handleSizeChange(val) {
-          this.page.pageSize = val;
-          this.loadStaffTable();
+            if (this.table_data.length) {
+                this.searchFormData(val, "size");
+            };
         },
 
         //改变页码的时候调用
         handleCurrentChange(val) {
-          this.page.pageNum = val;
-          this.loadStaffTable();
+            if (this.table_data.length) {
+                this.searchFormData(val, "num");
+            };
         },
 
 

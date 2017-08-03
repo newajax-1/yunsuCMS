@@ -14,12 +14,11 @@ import index from '../components/index'
  */
 
 import saleplan from '../components/template/saleplans/salePlans'
-import salersInfo from '../components/template/salersInfo'
+import salersInfo from '../components/template/saleplans/salersInfo'
 
 import prodPlansInfo from '../components/template/productionplans/prodPlansInfo'
 import weekProdPlans from '../components/template/productionplans/weekProdPlans'
 
-import invWarning from '../components/template/invwarning/invWarning'
 
 //用户管理
 import userManagement from '../components/template/systemsMent/userManagement'
@@ -52,10 +51,6 @@ export default new Router({
                 {
                     path: 'weekprodplans',
                     component: weekProdPlans
-                },
-                {
-                    path: 'invwarning',
-                    component: invWarning
                 },
                 {
                     path: 'usermanagement',

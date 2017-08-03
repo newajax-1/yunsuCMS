@@ -10,6 +10,10 @@
   margin 0px
   padding 0px
 
+ul,ol,li{
+    list-style none
+}
+
 html 
     font-size: 12px
     color: $g3
@@ -125,3 +129,86 @@ html
             padding 15px
         .el-menu-item
             min-width 0px
+
+
+
+.login-form-base{
+    margin-top 24px
+    font-size 0;
+
+    .login{
+        padding 42px 46px
+        background-color #fff
+    }
+    /* 清除ele-ui 默认样式 */ 
+    .el-tabs__header{
+        margin 0
+        border-bottom 0
+    }
+    .el-tabs__nav{
+        width 100%
+        .el-tabs__active-bar{
+            background transparent
+        }
+        .el-tabs__item{
+            width 50%
+            height 56px
+            color #a4a4a4
+            font-size 18px
+            line-height 56px
+            text-align center
+            background rgba(0,0,0,0.3);
+            &.is-active{
+                color #444
+                background-color #fff
+            }
+        }
+    }
+    .el-form-item{
+        margin-bottom 0
+        &.is-error{
+            margin-bottom 0
+        }
+        .el-input{
+            width 100%
+            input{
+                padding 12px 20px
+                height 100%
+                line-height 1
+                background-color #fff !important
+            }
+            input:-webkit-autofill {
+                -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+            }
+        }
+
+        .el-form-item__content{
+            &:hover{
+                z-index 2;
+            }
+        }
+        &.password{
+            .el-form-item__content{
+                top -1px
+            }
+        }
+    }
+    .login-form-shadow{
+        box-shadow 0 0 8px #e1e1e1
+    }
+    .btn-wrap{
+        margin-top 24px
+        .btn-login{
+            width 100%
+            font-size 16px
+            color #fff 
+            background-color #158cff
+            border-radius 2px
+            transition all 0.3s
+            &:hover{
+                transition all 0.3s
+                background-color #00c0ff
+            }
+        }
+    }
+}

@@ -26,7 +26,7 @@
                             <el-button @click="deleteInfo()" class="btn btn-red">删除</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="showDialog()" class="btn btn-yellow">增加员工</el-button>
+                            <el-button @click="showDialog()" class="btn btn-blue">增加员工</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -85,7 +85,7 @@
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn btn-blue" @click="saveInfo()">保 存</el-button>
+                <el-button class="btn btn-green" @click="saveInfo()">保 存</el-button>
                 <el-button class="btn btn-red" @click="closeDialog()">关 闭</el-button>
             </span>
         </el-dialog>

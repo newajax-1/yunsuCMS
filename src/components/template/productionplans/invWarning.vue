@@ -81,7 +81,7 @@
                     @current-change="handleCurrentChange"
                     :current-page.sync="page.page_num"
                     :page-sizes="[10, 20, 30, 40]"
-                    :page-size=page.page_size
+                    :page-size="page.page_size"
                     layout="total, sizes, prev, pager, next"
                     :total="page.total">
             </el-pagination>
@@ -100,7 +100,7 @@
                         <el-row :gutter="24">
                             <el-col :span="12">
                                 <el-form-item label="库品类型：">
-                                    <el-select :placeholder="select_op[0] && select_op[0].dicName" v-model="add_info.sel_val" @change="changeSelValue()" class="asterisk">
+                                    <el-select placeholder="原材料" v-model="add_info.sel_val" @change="changeSelValue()" class="asterisk">
                                         <el-option
                                                 v-for="item in select_op"
                                                 :label="item.dicName"
@@ -157,7 +157,7 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn btn-blue" @click="addNewWarning()">提交</el-button>
+                <el-button class="btn btn-green" @click="addNewWarning()">提交</el-button>
                 <el-button class="btn btn-red" @click="closeDialog">取 消</el-button>
             </span>
         </el-dialog>
@@ -227,7 +227,7 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn btn-blue" @click="updateInvWarning()">提交</el-button>
+                <el-button class="btn btn-green" @click="updateInvWarning()">提交</el-button>
                 <el-button class="btn btn-red" @click="closeDialog">取 消</el-button>
             </span>
       </el-dialog>
@@ -302,7 +302,7 @@
                 </div>
             </span>
             <span slot="footer" class="dialog-footer">
-                <el-button class="btn-close btn" @click="detail_warning = false">返回</el-button>
+                <el-button class="btn-blue btn" @click="detail_warning = false">返回</el-button>
             </span>
         </el-dialog>
     </div>

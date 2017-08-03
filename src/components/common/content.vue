@@ -6,12 +6,10 @@
 <script>
 
   import saleplan from '../template/saleplans/salePlans'
-  import salersInfo from '../template/salersInfo'
+  import salersInfo from '../template/saleplans/salersInfo'
 
   import prodPlansInfo from '../template/productionplans/prodPlansInfo'
   import weekProdPlans from '../template/productionplans/weekProdPlans'
-
-  import invWarning from '../template/invwarning/invWarning'
 
   // 用户
   import userManagement from '../template/systemsMent/userManagement'
@@ -25,7 +23,6 @@
           salersInfo,
           prodPlansInfo,
           weekProdPlans,
-          invWarning,
           userManagement,
           orgManagement,
       }

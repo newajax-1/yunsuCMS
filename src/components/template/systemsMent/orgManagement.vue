@@ -8,7 +8,7 @@
                 <div class="content-search">
 	                <el-form :inline="true" class="">
 		                <el-form-item>
-		                    <el-button @click='toAdd()' class="btn btn-yellow">新增</el-button>
+		                    <el-button @click='toAdd()' class="btn btn-blue">新增</el-button>
 		                </el-form-item>
 		            </el-form>
 		        </div>
@@ -71,7 +71,7 @@
 				
 				
 				<!--分页-->
-				<!-- <div class="block list-page fr">
+				<div class="block list-page fr">
 				    <el-pagination
 				            @size-change="handleSizeChange"
 				            @current-change="handleCurrentChange"
@@ -79,9 +79,10 @@
 				            :page-sizes="[10, 20, 30, 40]"
 				            :page-size=page.pageSize
 				            layout="total, sizes, prev, pager, next"
-				            :total=page.total>
+				            :total="page.total">
 				    </el-pagination>
-				</div> -->
+				</div>
+
 			</div>
 		</el-col>
 

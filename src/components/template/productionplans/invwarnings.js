@@ -9,6 +9,8 @@ import Qs from 'qs'
                 item_name: undefined,
                 inv_sts: undefined
             },
+            search_pageNum : undefined,
+            search_pageSize : undefined,
             select_inv_sts:[],
             //end 
             //选择开始 start
@@ -32,7 +34,7 @@ import Qs from 'qs'
             page: {
                 page_num: 1,
                 page_size: 10,
-                total: 1
+                total: 0
             },
             current_page: 1,
             // 批量删除ids
@@ -140,12 +142,7 @@ import Qs from 'qs'
                     that.loadTable(); 
                 },
                 error(data){
-                    that.$message({
-                        message: '删除失败!',
-                        type: 'warning',
-                    });
-                    that.dialog_visible = false
-                    that.loadTable();
+
                 }
             })
         },
@@ -195,42 +192,38 @@ import Qs from 'qs'
         //加载表格
         loadTable(){
             var that = this;
+            console.log("1页数=",that.search_pageNum)
+            this.page.total = 12;
             var _warning_name = "";
             (this.active_name == "first") ? (_warning_name = "原材料") : (_warning_name = "成品");
             this.$ajaxWrap({
                 type : "post",
                 url : "/invWarning/queryList",
                 data : {
-                    pageNum: that.page.page_num,
-                    pageSize: that.page.page_size,
+                    pageNum: that.search_pageNum || 1,
+                    pageSize: that.search_pageSize || 10,
                     warningName: _warning_name,
                     itemName: that.warning.item_name,
                     invSts: that.warning.inv_sts,
                 },
                 callback(data) {
-                    if(data.data.page.total == 0){
-                        that.table_data = null;
-                    }else{
-                        that.table_data = data.data.page.list;
-                        that.page.total = data.data.page.total
-                        that.show_info = [];
-                        for(var i = 0;i < that.table_data.length;i ++){
-                            console.info(that.table_data[i].invStsName + "@@");
-                            if(that.table_data[i].invStsName === "预警"){
-                                that.show_info.push({ show : true });
-                            }else{
-                                that.show_info.push({ show : false });
-                            }
+                    that.table_data = data.data.page.list;that.show_info = [];
+                    for(var i = 0;i < that.table_data.length;i ++){
+                        console.info(that.table_data[i].invStsName + "@@");
+                        if(that.table_data[i].invStsName === "预警"){
+                            that.show_info.push({ show : true });
+                        }else{
+                            that.show_info.push({ show : false });
                         }
                     }
+                    that.page.page_num = data.data.page.pageNum;
+                    that.page.page_size = data.data.page.pageSize;
                 }
             })
         },
 
         // 刷新
         refresh() {
-            this.page.page_num = 1;
-            this.page.page_size = 10;
             this.warning.item_name=  undefined;
             this.warning.inv_sts=  undefined;
             this.loadTable();
@@ -240,7 +233,7 @@ import Qs from 'qs'
         toAdd() {
             var that = this;
             this.new_warning = true;
-            this.add_info.sel_val = undefined;
+            this.add_info.sel_val = "01";
             this.add_info.item_no = undefined;
             this.add_info.item_name = undefined;
             this.add_info.material_factory = undefined;
@@ -350,27 +343,13 @@ import Qs from 'qs'
                     that.$clearObject(that.edit_table)
                 },
                 error(data) {
-                    if(data.tipMsg.indexOf("重复") != -1){
-                        that.$message({
-                            message: '用户信息重复',
-                            type: 'warning'
-                        });
-                        that.edit_warning = true;
-                    }else{
-                        that.$message({
-                            message: '更新失败',
-                            type: 'warning'
-                        });
-                        that.edit_warning = false;
-                        that.loadTable();
-                    }
+                    
                 }
             });
         },
         // 保存提交预警信息
         addNewWarning(){
             var that = this;
-            var _warning_type = (this.add_info.sel_val ? this.add_info.sel_val : this.select_op[0].dicValue);
             if(this.add_info.item_no == ""){
                 this.$message({
                     message: '请选择库品编码',
@@ -397,7 +376,7 @@ import Qs from 'qs'
                 type :"post",
                 url : "/invWarning/addOrEditInvWarning",
                 data : {
-                    warningType : _warning_type,
+                    warningType : that.add_info.sel_val,
                     itemNo : that.add_info.item_no,
                     itemName : that.add_info.item_name,
                     materialFactory : that.add_info.material_factory,
@@ -415,21 +394,7 @@ import Qs from 'qs'
                     that.$clearObject(that.add_info);
                 },
                 error(data) {
-                    if(data.tipMsg.indexOf("重复") != -1){
-                        that.$message({
-                            message: '用户信息重复',
-                            type: 'warning'
-                        });
-                        that.new_warning = true;
-                    }else{
-                        that.$message({
-                            message: '添加失败',
-                            type: 'warning'
-                        });
-                        that.new_warning = false;
-                        that.page.page_num = 1;
-                        that.loadTable();
-                    }
+                    
                 }
             });
         },
@@ -445,16 +410,30 @@ import Qs from 'qs'
                 that.edit_warning = false;
             }).catch(function() {});
         },
+
+        searchFormData(pageval, pagesize) {
+            var that = this;
+            if (pagesize === "num") {
+                that.search_pageNum = pageval || that.page.page_num;
+                that.search_pageSize = that.page.page_size;
+            } else {
+                that.search_pageNum = that.page.page_num;
+                that.search_pageSize = pageval || that.page.page_size;
+            }
+            that.loadTable();
+        },
         
         // 改变分页数目的时候调用
         handleSizeChange(val) {
-            this.page.page_size = val;
-            this.loadTable();
+            if (this.table_data.length) {
+                this.searchFormData(val, "size");
+            };
         },
         //改变页码的时候调用
         handleCurrentChange(val) {
-            this.page.page_num = val;
-            this.loadTable();
+            if (this.table_data.length) {
+                this.searchFormData(val, "num");
+            };
         },
     },
     //当加载页面的时候调用

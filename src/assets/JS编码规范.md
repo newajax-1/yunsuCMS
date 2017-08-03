@@ -41,7 +41,7 @@ Vue.$ajaxWrap({
     type : "get" or "post",
     url : url,
     data : data ,
-    callback : function(data){
+    success : function(data){
         //do success function 
     },
     error() {
