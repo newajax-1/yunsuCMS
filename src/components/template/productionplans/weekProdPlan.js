@@ -330,19 +330,23 @@ export default {
             this.modal_table_edit = false;
             this.weekplan_info_show = false;
             this.modal_btn_show = false;
+            this.modal_title = undefined;
             this.work_plan_id = undefined;
             this.refresh();
         },
 
         confirmCloseModal() {
             let that = this;
-
-            if (that.modal_weekplan_table_data.length) {
-                that.$baseConfirm("确定关闭吗？", function() {
-                    that.clearModalForm();
-                });
-            } else {
+            if (that.modal_title === "周计划详情") {
                 that.clearModalForm();
+            } else {
+                if (that.modal_weekplan_table_data.length) {
+                    that.$baseConfirm("确定关闭吗？", function() {
+                        that.clearModalForm();
+                    });
+                } else {
+                    that.clearModalForm();
+                }
             }
         },
 
@@ -375,7 +379,7 @@ export default {
                     },
                     success(res) {
                         that.loadModalTableData(res.data);
-                        that.editWorkplan()
+                        that.modal_table_edit = false;
                     }
                 })
             }
@@ -388,21 +392,17 @@ export default {
             if (data.dataList.length) {
                 this.modal_weekplan_table_data = null;
                 this.modal_weekplan_table_data = data.dataList;
-                this.getProductInfoData(data.dataList);
+                // this.getProductInfoData(data.dataList);
             } else {
                 this.createWorkplan();
             }
         },
 
-        getProductInfoData(data) {
-            for (let i = 0; i < data.length; i++) {
-                this.getOrderDataList(data[i].custNo, i);
-            }
-        },
-
-        editWorkplan() {
-            this.modal_table_edit = false;
-        },
+        // getProductInfoData(data) {
+        //     for (let i = 0; i < data.length; i++) {
+        //         this.getOrderDataList(data[i].custNo, i);
+        //     }
+        // },
 
         getProductData(val, index) {
             let that = this;
@@ -487,7 +487,6 @@ export default {
             }
 
             that.$baseConfirm(`确定${sure_text}吗？`, function() {
-                that.modal_table_edit = true;
                 that.sendWorkplanData(tips);
             });
         },
@@ -530,7 +529,7 @@ export default {
                     that.work_plan_id = undefined;
                 },
                 error() {
-                    this.modal_table_edit = true;
+                    this.modal_table_edit = false;
                 }
             });
         },
@@ -726,6 +725,16 @@ export default {
                 }
             })
 
+        }
+    },
+    watch: {
+        modal_weekplan_table_data: function(old_value, new_value) {
+            let that = this;
+            old_value.every(function(el, i) {
+                if (that.modal_title === "修改周计划") {
+                    console.log(1);
+                }
+            })
         }
     }
 }

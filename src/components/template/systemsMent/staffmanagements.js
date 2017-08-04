@@ -41,7 +41,6 @@ export default {
         // 加载数据
         loadTable() {
             var that = this;
-            this.page.total = 0;
             this.$ajaxWrap({
                 type : "post",
                 url : "/emp/queryList",

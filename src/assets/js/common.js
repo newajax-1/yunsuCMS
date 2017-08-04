@@ -46,7 +46,10 @@ VueProto.$vueExtend({
         that.$alert(tips, '提示', {
             confirmButtonText: '确定',
             callback() {
-                if (typeof done === "function") done();
+                if (typeof done === "function") {
+                    done();
+                    return;
+                }
                 if (that.refresh) that.refresh();
             }
         });
@@ -97,19 +100,25 @@ VueProto.$vueExtend({
 
         const callback = function(res) {
             if (res.status === 200) {
-                if (res.data.status === "0") {
-                    if (res.data.success) {
-                        success(res.data);
-                    } else {
-                        that.$baseWarn(res.data.tipMsg || "操作失败！", function() {
-                            error(res.data);
-                            console.log(res.data);
-                        })
-                    };
-                } else if (res.data.status === "1") {
-                    that.$baseWarn("登录超时,请重新登陆！", function() {
-                        that.$goRoute("/");
-                    })
+                switch (res.data.status) {
+                    case "0":
+                        if (res.data.success) {
+                            success(res.data);
+                        } else {
+                            that.$baseWarn(res.data.tipMsg || "操作失败！", function() {
+                                error(res.data);
+                                console.log(res.data);
+                            })
+                        };
+                        break;
+                    case "1":
+                        if (res.data.success) {
+                            that.$baseWarn("登录超时,请重新登陆！", function() {
+                                that.$goRoute("/");
+                                return;
+                            })
+                        }
+                        break;
                 }
             }
         }

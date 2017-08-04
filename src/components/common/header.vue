@@ -20,9 +20,10 @@
                             <transition name="fade">
                                 <div class="member-list" v-show="show_member">
                                     <a @click="editPassword">修改密码</a>
-                                    <a @click="$goRoute('/')">退出登录</a>
+                                    <a @click="logout">退出登录</a>
                                 </div> 
                             </transition>
+                            <i class="el-icon-setting" style="margin: 0 6px;"></i>
                         </li>
                         <li class="right-nav-items">
                             <span>任务单</span>
@@ -35,36 +36,42 @@
                 <el-dialog
                     title="修改密码"
                     custom-class="pub-dialog edit-password-dialog"
-                    style="width:inherit"
-                    :visible.sync="edit_password">
+                    :visible.sync="edit_password"
+                    @close="inhertIndex()">
                     <div class="login-form-base edit-password">
                         <el-row>
                             <el-col :span="24">
-                                <el-form :inline="true"  class="">
+                                <el-form :inline="true"                                
+                                        :model="edit_form" 
+                                        :rules="login_rules"
+                                        ref="edit_form">
                                     <div class="login-form-shadow">
                                     <el-form-item prop='username'>
                                         <el-input 
                                             type="text" 
                                             placeholder="原始密码"
-                                            auto-complete="off"  ></el-input>
+                                            auto-complete="off" 
+                                            v-model="edit_form.oldPassword"></el-input>
                                     </el-form-item>
 
                                     <el-form-item prop='password' class="password" >
                                         <el-input 
                                             type="password" 
                                             placeholder="新密码"
-                                            auto-complete="off" ></el-input>
+                                            auto-complete="off"
+                                            v-model="edit_form.password" ></el-input>
                                     </el-form-item>
 
                                     <el-form-item prop='password' class="password" >
                                         <el-input 
                                             type="password" 
                                             placeholder="确认密码"
-                                            auto-complete="off" ></el-input>
+                                            auto-complete="off"
+                                            v-model="edit_form.confirmPassword"></el-input>
                                     </el-form-item>
                                     </div>
-                                    <el-form-item class="btn-wrap fr">
-                                        <el-button class="btn-login" >确认修改</el-button>
+                                    <el-form-item class="btn-wrap ">
+                                        <el-button class="btn-login" @click="surePassword()">确认修改</el-button>
                                     </el-form-item>
                                 </el-form>
                             </el-col>
@@ -83,22 +90,109 @@
             this.jobNumber = sessionStorage.getItem("jobNumber");
         },
         data() {
+            var validateOldPass = (rule, value, callback) => {
+                if (!value) callback(new Error('请输入旧密码'));
+                callback();
+            };
+
+            var validatePass = (rule, value, callback) => {
+                if (!value) {
+                    callback(new Error('请输入新密码'));
+                } else {
+                    if (this.edit_form.oldPassword) {
+                        this.$refs.edit_form.validateField('oldPassword');
+                    }
+                    callback();
+                }
+            };
+
+            var validateConfirmPass = (rule, value, callback) => {
+                if (!value) {
+                    callback(new Error('请确认密码'));
+                } else {
+                    if (this.edit_form.confirmPassword) {
+                        this.$refs.edit_form.validateField('password');
+                    }
+                    callback();
+                }
+            };
+
             return {
                 img :require( '../../assets/images/logo.png'),
                 jobNumber : undefined,
                 name : undefined,
                 show_member : false,
-                edit_password : false
+                edit_password : false,
+                z_index : 2001,
+                edit_form : {
+                    oldPassword : undefined,
+                    password : undefined,
+                    confirmPassword : undefined
+                },
+                login_rules: {
+                    oldPassword: [
+                        { validator: validateOldPass, trigger: 'blur' }
+                    ],
+                    password: [
+                        { validator: validatePass, trigger: 'blur' }
+                    ],
+                    confirmPassword: [
+                        { validator: validateConfirmPass, trigger: 'blur' }
+                    ]
+                }
             };
         },
         methods: {
+            logout(){
+                let that = this;
+                that.$ajaxWrap({
+                    url : "memberAccount/logout",
+                    success(res){
+                        if(res.success){
+                            that.$baseWarn("退出成功！",function(){
+                                that.$goRoute("/");
+                            })
+                        }
+                    }
+                })
+            },
+
             editPassword(){
-                this.edit_password = true;
+                let header = document.querySelectorAll(".layout-header")[0],
+                    that = this,
+                    z_index = that.z_index;
+                    z_index+=100
+                    that.z_index = z_index;
+                header.style.zIndex = z_index;
+                that.edit_password = true;
+            },
+
+            surePassword(){
+                let that = this,
+                    send_data = that.edit_form;
+                that.$ajaxWrap({
+                    type : "post",
+                    url : "memberAccount/changePassword",
+                    data : send_data,
+                    success(res){
+                        if(res.success){
+                            that.$baseWarn("修改成功，返回登录页重新登录！",function(){
+                                that.$goRoute("/");
+                                that.$clearObject(that.edit_form);
+                            })
+                        }
+                    }
+                })
+            },
+
+            inhertIndex(){
+                let header = document.querySelectorAll(".layout-header")[0];
+                header.style.zIndex = 100;
             }
         }
     }
 </script>
-<style lang="stylus" scoped rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s
 }
@@ -111,18 +205,8 @@
     position fixed
     top 0
     left 0
-    z-index 5000
+    z-index 2000
     width 100%
-.edit-password-dialog
-    width 15% !important
-.edit-password
-    margin-top 0
-    .el-form-item
-        display block
-        margin-right 0
-        .el-form-item__content
-            display block
-            width 100%
 
 .top-nav-content
     font-size:14px
@@ -193,6 +277,27 @@
             border-right 5px transparent solid
 
         }
+
+.edit-password-dialog
+    width 300px !important
+    .el-dialog__body
+        padding-bottom 20px
+    .login-form-base
+        margin-top 0
+        .el-form-item
+            display block
+            margin-right 0
+            &:last-child
+                .el-form-item__content
+                    top -2px
+            .el-form-item__content
+                width 100%
+        .el-input__inner
+                &:hover
+                    border-color #158cff
+    .btn-wrap
+        margin-top 20px
+
 
 @media screen and (max-width:1366px)
     .layout-header

@@ -57,7 +57,6 @@ export default {
         // 加载部门员工数据
         loadStaffTable() {
             var that = this;
-            this.page.total = 0;
             this.$ajaxWrap({
                 type : "post",
                 url : "sysOrganization/queryStaffList",

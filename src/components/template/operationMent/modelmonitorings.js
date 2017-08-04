@@ -24,7 +24,6 @@ export default {
         // 页面加载
         loadTable() {
             var that = this;
-            that.page_list.total = 0;
             this.$ajaxWrap({
                 type : "post",
                 url : "/mouldopt/loadTable",

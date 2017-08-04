@@ -26,7 +26,6 @@ export default {
         // 页面加载
         loadTable() {
             var that = this;
-            that.page_list.total = 12;
             this.$ajaxWrap({
                 type : "post",
                 url : "/workPlanContrl/queryList",
@@ -54,6 +53,7 @@ export default {
         reset() {
             this.$clearObject(this.seach_info);
         },
+        
         showDetail(obj) {
             var that = this;
             this.new_custom = true;
@@ -65,7 +65,7 @@ export default {
                     billNo : obj.billNo
                 } ,
                 callback : function(data){
-                    that.bad_table_data = data.data.page.list;
+                    that.bad_table_data = data.data.data;
                 },
                 error(res) {
                     //do error function

@@ -4,10 +4,7 @@
             <h1>Y-Mens</h1>
             <p>让工业·更敏捷</p>
             <el-form 
-                class="login-form-base"
-                :model="login_form" 
-                :rules="login_rules"
-                ref="login_form">
+                class="login-form-base">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="登 录" name="login" class="login">
                         <div class="login-form-shadow">
@@ -112,9 +109,6 @@
                         if(data.success === true){
                             sessionStorage.setItem("useName",that.login_form.username);
                             that.$goRoute("/home");
-                        }else{
-                            that.dialogVisible=true;
-                            that.errorMsg=data.tipMsg;
                         }
                     }
                 })

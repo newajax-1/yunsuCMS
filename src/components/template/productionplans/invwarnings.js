@@ -192,8 +192,6 @@ import Qs from 'qs'
         //加载表格
         loadTable(){
             var that = this;
-            console.log("1页数=",that.search_pageNum)
-            this.page.total = 12;
             var _warning_name = "";
             (this.active_name == "first") ? (_warning_name = "原材料") : (_warning_name = "成品");
             this.$ajaxWrap({
@@ -216,6 +214,7 @@ import Qs from 'qs'
                             that.show_info.push({ show : false });
                         }
                     }
+                    that.page.total = data.data.page.total;
                     that.page.page_num = data.data.page.pageNum;
                     that.page.page_size = data.data.page.pageSize;
                 }

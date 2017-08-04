@@ -18,19 +18,33 @@ import salersInfo from '../components/template/saleplans/salersInfo'
 
 import prodPlansInfo from '../components/template/productionplans/prodPlansInfo'
 import weekProdPlans from '../components/template/productionplans/weekProdPlans'
-
+import invWarning from '../components/template/productionplans/invWarning'
 
 //用户管理
 import userManagement from '../components/template/systemsMent/userManagement'
 import roleManagement from '../components/template/systemsMent/roleManagement'
 import orgManagement from '../components/template/systemsMent/orgManagement'
+import staffManagement from '../components/template/systemsMent/staffManagement'
+
+// 生产作业管理
+import proMonitoring from '../components/template/operationMent/proMonitoring'
+import workMonitoring from '../components/template/operationMent/workMonitoring'
+import workMonitoringInfo from '../components/template/operationMent/workMonitoringInfo'
+import warningFacMonitoring from '../components/template/operationMent/warningFacMonitoring'
+import warningQuaMonitoring from '../components/template/operationMent/warningQuaMonitoring'
+import modelMonitoring from '../components/template/operationMent/modelMonitoring'
 
 Vue.use(Router)
 
 export default new Router({
-    mode: "history",
+    mode: "hash",
+
     routes: [{
             path: '/',
+            redirect: "/login"
+        },
+        {
+            path: "/login",
             component: login
         },
         {
@@ -61,8 +75,36 @@ export default new Router({
                     component: roleManagement
                 },
                 {
-                    path: 'orgManagement',
+                    path: 'orgmanagement',
                     component: orgManagement
+                },
+                {
+                    path: 'staffmanagement',
+                    component: staffManagement
+                },
+                {
+                    path: 'promonitoring',
+                    component: proMonitoring
+                },
+                {
+                    path: 'workmonitoring',
+                    component: workMonitoring
+                },
+                {
+                    path: 'workmonitoringinfo',
+                    component: workMonitoringInfo
+                },
+                {
+                    path: 'warningfacmonitoring',
+                    component: warningFacMonitoring
+                },
+                {
+                    path: 'warningquamonitoring',
+                    component: warningQuaMonitoring
+                },
+                {
+                    path: 'modelmonitoring',
+                    component: modelMonitoring
                 },
             ]
         },

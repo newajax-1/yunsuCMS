@@ -156,7 +156,6 @@ export default {
         //加载表格
         loadTable(){
             var that = this;
-            this.page.total = 0;
             var send_data = {
                 pageNum: that.search_pageNum || 1,
                 pageSize: that.search_pageSize || 10,
@@ -173,7 +172,7 @@ export default {
                     that.page.total = data.data.page.total;
                     that.table_data.every(function(el) {
                         // return el.delivery.substring(0,16)
-                        return el.delivery = el.delivery.length>16?el.delivery.substring(0,16) + "...":el.delivery;
+                        return el.delivery = el.delivery.length > 16 ? el.delivery.substring(0,16) + "...":el.delivery;
                     });
                     that.page.page_num = data.data.page.pageNum;
                     that.page.page_size = data.data.page.pageSize;

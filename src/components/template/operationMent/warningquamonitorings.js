@@ -28,8 +28,7 @@ export default {
     methods: {
         // 页面加载
         loadTable() {
-            var that = this
-            this.page_list.total = 0;            
+            var that = this           
             this.$ajaxWrap({
                 type : "post",
                 url : "/machineAlarm/queryList",

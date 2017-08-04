@@ -38,7 +38,7 @@
                     <el-table-column prop="empId" label="NO"></el-table-column>
                     <el-table-column prop="empNo" label="员工工号"></el-table-column>
                     <el-table-column prop="empNm" label="员工姓名"></el-table-column>
-                    <el-table-column fixed="right"label="操作">
+                    <el-table-column label="操作">
                         <template scope="scope">
                             <el-button  
                                 type="text"

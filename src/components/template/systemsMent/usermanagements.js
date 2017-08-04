@@ -56,7 +56,6 @@ export default {
         // 数据加载和搜索
         loadTable() {
             var that = this;
-            this.page_list.total = 0;
             this.$ajaxWrap({
                 type : "post",
                 url : "/memberAccount/index",

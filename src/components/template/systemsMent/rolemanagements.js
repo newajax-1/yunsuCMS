@@ -88,7 +88,6 @@ export default {
         // 数据加载和搜索
         loadTable() {
             var that = this;
-            this.page_list.total = 14;
             this.$ajaxWrap({
                 type : "post",
                 url : "/role/loadTable",
