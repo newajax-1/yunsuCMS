@@ -136,6 +136,7 @@
                                      <!-- <el-button class="btn btn-small btn-blue" @click="nextWeekplan('pre')" >上一周</el-button>  -->
                                 </div>
                             </div>
+                            <div  id = "workPlanTable">
                             <el-table
                                 style="width: 100% "
                                 :data="modal_weekplan_table_data"
@@ -462,6 +463,7 @@
                                     </template>
                                 </el-table-column>
                             </el-table>
+                            </div>
                         </div>
                     </el-row>
                     <div class="pad-middle-default clearfix">

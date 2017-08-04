@@ -2,6 +2,9 @@
  * coding by Alex of 2017-07-20
  */
 import Vue from "vue"
+
+import inputs from "./inputFocus.js";
+
 export default {
     name: 'weekProdPlan',
     created() {
@@ -558,7 +561,8 @@ export default {
                 table_row_data = {};
 
             that.setModalWeekDate();
-
+            
+            inputs("workPlanTable");
             let index = that.modal_weekplan_table_data.length;
             table_row_data.index = index;
 
