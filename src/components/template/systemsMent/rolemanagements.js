@@ -5,13 +5,13 @@ export default {
             new_custom: false,
             // 分页
             page_list: {
-              page_num: 1,
-              page_size: 10,
-              total: 0
+                page_num: 1,
+                page_size: 10,
+                total: 0
             },
             current_page: 1,
-            search_pageNum : undefined,
-            search_pageSize : undefined,
+            search_pageNum: undefined,
+            search_pageSize: undefined,
             adfasdasd: undefined,
             title_name: undefined,
             // 查询
@@ -28,76 +28,34 @@ export default {
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////
-            data2: [
-                {
-                    id: "1",
-                    label: '销售管理',
-                    children: [
-                        {
-                            id: "1-1",
-                            label: '销售计划管理',
-                        },
-                        {
-                            id: "1-2",
-                            label: '客户信息管理',
-                        },
-                    ]
-                }, {
-                    id: "2",
-                    label: '生产计划',
-                    children: [
-                        {
-                            id: "2-1",
-                            label: '生产资源状态监控'
-                        }, 
-                        {
-                            id: "2-2",
-                            label: '周生产计划'
-                        },
-                        {
-                            id: "2-3",
-                            label: '库存预警'
-                        },
-                    ]
-                }, {
-                    id: "3",
-                    label: '系统管理',
-                    children: [
-                        {
-                            id: "3-1",
-                            label: '用户管理'
-                        }, 
-                        {
-                            id: "3-2",
-                            label: '角色管理'
-                        },
-                        {
-                            id: "3-3",
-                            label: '组织管理'
-                        }
-                    ]
-                }
-            ],
+            data2: [],
             defaultProps: {
-                children: 'children',
-                label: 'label'
-            }
+                children: 'menuList',
+                label: 'name'
+            },
+            role_check_arr: [],
+            addAdmin: false
         }
     },
     methods: {
+        setCheckedKeys() {
+            let temp = this.role_check_arr;
+
+            this.$refs.tree.setCheckedKeys(temp);
+        },
         // 数据加载和搜索
         loadTable() {
             var that = this;
             this.$ajaxWrap({
-                type : "post",
-                url : "/role/loadTable",
-                data : {
+                type: "post",
+                url: "/role/loadTable",
+                data: {
                     pageNum: that.search_pageNum || 1,
                     pageSize: that.search_pageSize || 10
-                } ,
-                callback : function(data){
+                },
+                callback: function(data) {
                     that.table_data = data.data.page.list;
-                    that.page_list.total = data.data.page.total; 
+                    that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
                     that.page_list.page_size = data.data.page.pageSize;
                 }
@@ -107,83 +65,117 @@ export default {
         reset() {
             this.$clearObject(that.info);
         },
+
         // 新增弹框显示
         toAdd() {
-            this.adfasdasd = undefined;
-            this.title_name = "新增";
-            this.new_custom = true;
-            this.$clearObject(this.add_info);
+            let that = this;
+            that.adfasdasd = undefined;
+            that.title_name = "新增";
+            that.new_custom = true;
+            that.addAdmin = false;
+            that.$ajaxWrap({
+                type: "post",
+                url: "/role/queryById",
+                data: { roleId: "" },
+                success(data) {
+                    that.data2 = data.data.menuList;
+                    that.new_custom = true;
+                }
+            })
         },
+
         // 新增或修改保存
         showAdd(id) {
             var that = this;
             var flag = undefined;
             id ? flag = ("/role/update") : (flag = "/role/addRole");
             this.$ajaxWrap({
-                type : "post",
-                url : flag,
-                data : {
+                type: "post",
+                url: flag,
+                data: {
                     roleName: that.add_info.roleName,
                     remark: that.add_info.remark,
                     roleId: id,
-                    stringId: that.$refs.tree.getCheckedKeys().join(","),
-                } ,
-                callback : function(data){
+                    menuIds: that.$refs.tree.getCheckedKeys().join(","),
+                },
+                callback: function(data) {
                     that.new_custom = false;
                     that.$message({
                         message: data.tipMsg,
                         type: "success"
                     });
-                    that.loadTable(); 
+                    that.loadTable();
                 },
                 error(data) {
-                    
+
                 }
             })
         },
+
         // 修改信息
         updateCustom(id) {
             this.adfasdasd = id;
             this.title_name = "修改";
             var that = this;
+            that.addAdmin = true;
+            that.role_check_arr = [];
             this.$ajaxWrap({
-                type : "post",
-                url : "/role/queryById",
-                data : { roleId: id } ,
-                callback : function(data){
+                type: "post",
+                url: "/role/queryById",
+                data: { roleId: id },
+                success(data) {
                     that.add_info.roleName = data.data.data.roleName
                     that.add_info.remark = data.data.data.remark
+                    that.data2 = data.data.menuList;
+
+                    that.checkedMenu(that.data2);
                     that.new_custom = true;
-                    that.loadTable();
-                },
-                error() {
-                    
                 }
             })
         },
+
+        checkedMenu(data) {
+            let temp = [];
+            for (let i = 0; i < data.length; i++) {
+                let el = data[i];
+                if (el.selected) {
+                    temp.push(el.menuId);
+                }
+                if (el.menuList.length) {
+                    let child = el.menuList;
+                    for (let j = 0; j < child.length; j++) {
+                        if (child[j].selected) {
+                            temp.push(child[j].menuId);
+                        }
+                    }
+                }
+            }
+            this.role_check_arr = temp;
+        },
+
         // 删除信息
         deleteInfo(id) {
             var that = this;
             this.$confirm("你确定删除这条数据吗？", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
             }).then(function() {
                 that.$ajaxWrap({
-                    type : "post",
-                    url : "/role/deleteById",
-                    data : {
+                    type: "post",
+                    url: "/role/deleteById",
+                    data: {
                         roleId: id,
                         isDel: 1
-                    } ,
-                    callback : function(data){
+                    },
+                    callback: function(data) {
                         that.loadTable();
                         that.$message({
-                          message: "删除成功！",
-                          type: 'success'
-                        }); 
+                            message: "删除成功！",
+                            type: 'success'
+                        });
                     },
                     error() {
-                        
+
                     }
                 })
             }).catch(function() {});
@@ -210,7 +202,7 @@ export default {
             }
             that.loadTable();
         },
-        
+
         // 分页
         handleSizeChange(val) {
             if (this.table_data.length) {
@@ -226,19 +218,17 @@ export default {
         // 设置默认权限项
         setCheckedNodes() {
             this.$refs.tree.setCheckedNodes(
-                [
-                    {
-                        id: 5,
-                        label: '二级 2-1'
-                    }, {
-                        id: 9,
-                        label: '三级 1-1-1'
-                    }
-                ]
+                [{
+                    id: 5,
+                    label: '二级 2-1'
+                }, {
+                    id: 9,
+                    label: '三级 1-1-1'
+                }]
             );
         },
     },
-    mounted(){
+    mounted() {
         //当组件模板挂载时数据显示到上面去。
         this.loadTable();
     },

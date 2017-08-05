@@ -114,8 +114,10 @@
                                                 :placeholder="add_info.roleName || '选择角色'" class="asterisk">
                                                 <el-option 
                                                     v-for="item in role_list"
+                                                    :key="item.roleId"
                                                     :label="item.roleName" 
-                                                    :value="item.roleId"
+                                                    :value="item.roleId" 
+                                                    :key="item.roleId"
                                                 ></el-option>
                                             </el-select>
                                         </el-form-item>
@@ -125,8 +127,10 @@
                                             <el-select v-model="add_info.orgId" :placeholder="add_info.orgName || '选择部门'" class="asterisk">
                                                 <el-option 
                                                     v-for="item in ogr_list"
+                                                    :key="item.roleId"
                                                     :label="item.orgName" 
-                                                    :value="item.orgId"></el-option>
+                                                    :value="item.orgId"
+                                                    :key="item.orgId"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>

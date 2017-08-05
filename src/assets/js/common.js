@@ -5,6 +5,11 @@
 import Vue from 'vue'
 import axios from 'axios'
 
+
+/**
+ * 请保留以下所有代码，勿修改
+ */
+
 const BaseUrl = window.BaseUrl = "http://localhost:8080/ybs_mes/";
 
 // 非父子组件通信 [慎用-可考虑Vuex代替]

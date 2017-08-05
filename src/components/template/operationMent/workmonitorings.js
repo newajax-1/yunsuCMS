@@ -60,7 +60,6 @@ export default {
             this.other_table_data = [];
             this.second_table_data = [];
             this.first_table_data = [];
-            that.page_list.total = 0;
             this.$ajaxWrap({
                 type : "get",
                 url : "/week/loadTable",
@@ -87,7 +86,6 @@ export default {
         },
         loadTableFirst() {
             var that = this;
-            this.page_list.total = 0;
             this.other_table_data = [];
             this.second_table_data = [];
             this.first_table_data = [];
@@ -102,6 +100,9 @@ export default {
                 } ,
                 callback : function(data){
                     that.first_table_data = data.data.page.list;
+                    that.first_table_data.every(function(el) {
+                    	return el.planIssSts = el.planIssSts + "%"
+                    })
                     that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
                     that.page_list.page_size = data.data.page.pageSize;
@@ -116,7 +117,6 @@ export default {
             this.other_table_data = [];
             this.second_table_data = [];
             this.first_table_data = [];
-            this.page_list.total = 0;
             this.$ajaxWrap({
                 type : "get",
                 url : "/bill/loadTable",
@@ -159,6 +159,7 @@ export default {
         // 终止
         stopWorkInfo(id) {
             var that = this;
+            this.stop_data = [];
             this.stop_custom = true;
             this.$ajaxWrap({
                 type : "post",
@@ -178,6 +179,15 @@ export default {
         // 终止提交
         stopWork() {
             var that = this;
+            if(this.stop_data_info.radio === "06") {
+                if(!this.stop_data_info.comment) {
+                    this.$message({
+                        message: "请填写其他原因",
+                        type: "warning"
+                    });
+                    return;
+                }
+            }
             this.$ajaxWrap({
                 type : "post",
                 url : "/bill/operationWorkOrderBill",
@@ -268,10 +278,11 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning"
             }).then(function() {
-                done();
-                that.$clearObject(that.ruleForm)
+                that.stop_custom = false;
+                that.$clearObject(that.ruleForm);
                 that.newListData = [];
                 that.stop_data = [];
+                done();
             }).catch(function() {});
         },
 

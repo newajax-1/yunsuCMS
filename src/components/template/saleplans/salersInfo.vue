@@ -124,7 +124,8 @@
                                         <el-option
                                                 v-for="item in select_op"
                                                 :label="item.dicName"
-                                                :value="item.dicValue">
+                                                :value="item.dicValue"
+                                                :key="item.dicValue">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
@@ -155,7 +156,8 @@
                                                 v-for="(v,i) in pro"
                                                 :label="v.name"
                                                 :value="i"
-                                                prop="pro">
+                                                prop="pro"
+                                                :key="i">
                                         </el-option>
                                     </el-select>
                                     <el-select placeholder="选择市" v-model="f.c" @change="selcity" class="asterisk">
@@ -163,7 +165,8 @@
                                                 v-for="(v,i) in city"
                                                 :label="v.name"
                                                 :value="i"
-                                                prop="city">
+                                                prop="city"
+                                                :key="i">
                                         </el-option>
                                     </el-select>
                                     <el-select placeholder="选择区" v-model="f.cc"
@@ -172,7 +175,8 @@
                                                 v-for="(v,i) in county"
                                                 :label="v.name"
                                                 :value="i"
-                                                prop="county">
+                                                prop="county"
+                                                :key ="i">
                                         </el-option>
                                     </el-select>
                                     <el-input style="width: 300px" v-model="add_info.address" class="asterisk"></el-input>
@@ -208,7 +212,8 @@
                                         <el-option
                                                 v-for="item in edit_select_op"
                                                 :label="item.dicName"
-                                                :value="item.dicValue">
+                                                :value="item.dicValue"
+                                                :key="item.dicValue">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
@@ -244,6 +249,7 @@
                                           :label="v.name"
                                           v-for="(v,i) in pro"
                                           :value="i"
+                                          :key="i"
                                           prop="pro">
                                         </el-option>
                                     </el-select>
@@ -252,6 +258,7 @@
                                           :label="v.name"
                                           v-for="(v,i) in city"
                                           :value="i"
+                                          :key="i"
                                           prop="city">
                                         </el-option>
                                     </el-select>
@@ -261,6 +268,7 @@
                                           :label="v.name"
                                           v-for="(v,i) in county"
                                           :value="i"
+                                          :key="i"
                                           prop="county">
                                         </el-option>
                                     </el-select>
@@ -291,7 +299,7 @@
                         <el-row :gutter="24">
                             <el-col :span="8">
                                 <el-form-item label="客户类型：" prop="">
-                                    <p v-html="edit_table.custType"></p>
+                                    <p v-html="edit_table.custValue"></p>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">

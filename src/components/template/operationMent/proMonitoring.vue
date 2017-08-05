@@ -95,9 +95,7 @@
 		                    <el-table
 		                        style="width: 100% "
 		                        :data="bad_table_data">
-		                        <el-table-column prop="billNo" label="不良工单号"></el-table-column>
-                                <el-table-column prop="workPlanBillProductNo" label="不良生产批号"></el-table-column>
-                                <el-table-column prop="rjctType" label="不良类型"></el-table-column>
+                                <el-table-column prop="rjctType" label="不良项目"></el-table-column>
 		                        <el-table-column prop="rjctNum" label="不良数"></el-table-column>
 		                    </el-table>
 		                </div>

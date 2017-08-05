@@ -15,11 +15,11 @@
 		    </el-col>
         <!-- 下拉部门 -->
         <el-col :span="3">
-            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" v-for="item in sys_organization">
+            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" v-for="item in sys_organization"  :key="item.orgName">
                		<div v-on:click.stop="isDeleteParent(item)">
 	 					<el-submenu  index="">
 	                    	<template slot="title">{{item.orgName}}</template>
-	                    	<div   v-for="it in item.childs" v-if="it.orgId != null"  v-on:click.stop="getObject(it)">
+	                    	<div   v-for="it in item.childs" :key="it.orgId" v-if="it.orgId != null"  v-on:click.stop="getObject(it)">
 	                    		<el-menu-item index="">
 	                           	 	<a class="left-item">{{it.orgName}}</a>
 	                           		 <i class="item.class"></i>
@@ -110,6 +110,7 @@
 									<el-select v-model="sel_val" class="asterisk">
 										<el-option
 										v-for="item in select_op"
+										:key="item.orgId"
 										:label="item.orgName"
 										:value="item.orgId">
 										</el-option>

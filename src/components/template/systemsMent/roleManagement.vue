@@ -86,13 +86,13 @@
                                               :data="data2"
                                               show-checkbox
                                               default-expand-all
-                                              node-key="id"
+                                              node-key="menuId"
                                               ref="tree"
                                               highlight-current
                                               :props="defaultProps"
                                               class="bigTree">
                                             </el-tree>
-                                            <span class="must-tips">*</span>
+                                            <el-button @click="setCheckedKeys" v-if = "addAdmin" style="margin-top: 10px;">显示已有权限</el-button>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>

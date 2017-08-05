@@ -59,7 +59,7 @@
                         <el-table-column prop="week" label="周"></el-table-column>
                         <el-table-column prop="planIssSts" label="下发进度"></el-table-column>
                         <el-table-column prop="issTm" label="下发时间"></el-table-column>
-                        <el-table-column prop="issUsr" label="下发人"></el-table-column>
+                        <el-table-column prop="issUsrName" label="下发人"></el-table-column>
                         <el-table-column label="操作">
                             <template scope="scope">
                                 <el-button  
@@ -87,7 +87,7 @@
                         <el-table-column prop="clas" label="班次"></el-table-column>
                         <el-table-column prop="worker" label="班次工人"></el-table-column>
                         <el-table-column prop="quantity" label="计划产量"></el-table-column>
-                        <el-table-column prop="secInv" label="生产状态"></el-table-column>
+                        <el-table-column prop="prodSts" label="生产状态"></el-table-column>
                         <el-table-column prop="operTime" label="下发时间"></el-table-column>
                         <el-table-column prop="operUserName" label="下发人"></el-table-column>
                         <el-table-column label="操作">
@@ -116,7 +116,7 @@
                         <el-table-column prop="clas" label="班次"></el-table-column>
                         <el-table-column prop="worker" label="班次工人"></el-table-column>
                         <el-table-column prop="quantity" label="计划产量"></el-table-column>
-                        <el-table-column prop="secInv" label="生产状态"></el-table-column>
+                        <el-table-column prop="prodSts" label="生产状态"></el-table-column>
                         <el-table-column prop="operTime" label="下发时间"></el-table-column>
                         <el-table-column prop="trmtTm" label="停止时间"></el-table-column>
                         <el-table-column prop="operUserName" label="下发人"></el-table-column>
@@ -149,12 +149,12 @@
                 <el-row>
                     <el-col :span="24">
                         <div class="other-table">
-		                    <el-table :data="stop_data" style="width: 100%" @selection-change="">
+		                    <el-table :data="stop_data" style="width: 100%">
 		                        <el-table-column prop="weekDate" label="日期"></el-table-column>
 		                        <el-table-column prop="clas" label="班次"></el-table-column>
 		                        <el-table-column prop="billNo" label="工单号"></el-table-column>
 		                        <el-table-column prop="quantity" label="计件量"></el-table-column>
-		                        <el-table-column prop="worker" label="工人姓名"></el-table-column>
+		                        <el-table-column prop="empName" label="工人姓名"></el-table-column>
 		                    </el-table>
 		                </div>
                     </el-col>
@@ -170,14 +170,12 @@
                     <el-radio class="radio" v-model="stop_data_info.radio" label="05">人员调整</el-radio>
                     <el-radio class="radio" v-model="stop_data_info.radio" label="06">其他</el-radio>
                 </template>
-			  	<el-input placeholder="请简单描述终止原因" class="radio-input" v-model="stop_data_info.comment"></el-input>
+			  	<el-input placeholder="请简单描述终止原因" class="radio-input" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'asterisk' : ''"></el-input>
             </div>
-            <div class="message clearfix">
-                <div>
+            <span slot="footer" class="dialog-footer">
                     <el-button class="btn btn-save" @click="stopWork()">提 交</el-button>
-                    <el-button class="btn btn-publish" @click="stop_custom = false">关 闭</el-button>
-                </div>
-            </div>
+                    <el-button class="btn btn-publish" @click="handleClose">关 闭</el-button>
+             </span>
         </el-dialog>
 	    <!-- 终止工单弹框 end -->
 	</div>

@@ -2,9 +2,6 @@
  * coding by Alex of 2017-07-20
  */
 import Vue from "vue"
-
-import inputs from "./inputFocus.js";
-
 export default {
     name: 'weekProdPlan',
     created() {
@@ -71,90 +68,90 @@ export default {
             modal_weekplan_table_data: [],
             modal_table_edit: false,
             work_plan_id: undefined,
-
+            new_week_date: true,
             modal_plan_bill: {
                 monday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: undefined
+                        quantity: 0
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: undefined
+                        quantity: 0
                     }
                 },
                 tuesday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: ""
+                        quantity: 0
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: undefined
+                        quantity: 0
                     }
                 },
                 wednesday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: undefined
+                        quantity: 0
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: ""
+                        quantity: 0
                     }
                 },
                 thursday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: undefined
+                        quantity: 0
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: undefined
+                        quantity: 0
                     }
                 },
                 friday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: undefined
+                        quantity: 0
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: undefined
+                        quantity: 0
                     }
                 },
                 saturday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: undefined
+                        quantity: 0
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: undefined
+                        quantity: 0
                     }
                 },
                 sunday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: undefined
+                        quantity: 0
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: undefined
+                        quantity: 0
                     }
                 }
             },
@@ -335,6 +332,7 @@ export default {
             this.modal_btn_show = false;
             this.modal_title = undefined;
             this.work_plan_id = undefined;
+            this.new_week_date = true;
             this.refresh();
         },
 
@@ -393,21 +391,28 @@ export default {
             this.modal_sync_data = data;
 
             if (data.dataList.length) {
-                this.modal_weekplan_table_data = null;
-                this.modal_weekplan_table_data = data.dataList;
-                // this.getProductInfoData(data.dataList);
+                this.modal_weekplan_table_data = [];
+                this.getProductInfoData(data.dataList);
             } else {
                 this.createWorkplan();
             }
         },
 
-        // getProductInfoData(data) {
-        //     for (let i = 0; i < data.length; i++) {
-        //         this.getOrderDataList(data[i].custNo, i);
-        //     }
-        // },
+        getProductInfoData(data) {
+            let that = this;
+            for (let i = 0; i < data.length; i++) {
+                let temp_data = data[i];
+                that.getOrderDataList(temp_data.custNo, i, function(res) {
+                    temp_data.tempOrder = res.orderList;
+                    that.getProductData(temp_data.ordrNo, i, function(res) {
+                        temp_data.tempItem = res.bomList;
+                        Vue.set(that.modal_weekplan_table_data, i, temp_data);
+                    });
+                });
+            }
+        },
 
-        getProductData(val, index) {
+        getProductData(val, index, done) {
             let that = this;
 
             that.$ajaxWrap({
@@ -417,7 +422,11 @@ export default {
                     orderNo: val
                 },
                 success(res) {
-                    that.handleProductData(res.data, index);
+                    if (typeof done === "function") {
+                        done(res.data, index);
+                    } else {
+                        that.handleProductData(res.data, index);
+                    }
                 }
             });
         },
@@ -561,8 +570,7 @@ export default {
                 table_row_data = {};
 
             that.setModalWeekDate();
-            
-            inputs("workPlanTable");
+
             let index = that.modal_weekplan_table_data.length;
             table_row_data.index = index;
 
@@ -576,7 +584,7 @@ export default {
             that.modal_weekplan_table_data.push(table_row_data);
         },
 
-        getOrderDataList(val, index) {
+        getOrderDataList(val, index, done) {
             let that = this;
             that.$ajaxWrap({
                 type: "post",
@@ -585,7 +593,11 @@ export default {
                     custNo: val
                 },
                 success(res) {
-                    that.handleOrderData(res.data, index);
+                    if (typeof done === "function") {
+                        done(res.data, index);
+                    } else {
+                        that.handleOrderData(res.data, index);
+                    }
                 }
             })
         },
@@ -717,28 +729,23 @@ export default {
         nextWeekplan(val) {
             let that = this,
                 temp_data = that.modal_week_date.indexOfWeek;
-            temp_data = val === "next" ? temp_data++ : temp_data--;
 
+            if (val === "next") {
+                temp_data++
+            } else {
+                temp_data--
+            }
+            that.new_week_date = !that.new_week_date;
             that.$ajaxWrap({
                 url: "week/queryWeekList",
                 data: {
                     indexOfWeek: temp_data
                 },
                 success(res) {
-
+                    // Vue.set(that.mode)
                 }
             })
 
-        }
-    },
-    watch: {
-        modal_weekplan_table_data: function(old_value, new_value) {
-            let that = this;
-            old_value.every(function(el, i) {
-                if (that.modal_title === "修改周计划") {
-                    console.log(1);
-                }
-            })
         }
     }
 }
