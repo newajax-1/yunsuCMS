@@ -741,14 +741,18 @@ export default {
             } else {
                 temp_data--
             }
+
             that.new_week_date = !that.new_week_date;
+
+            console.log(temp_data);
             that.$ajaxWrap({
                 url: "week/queryWeekList",
                 data: {
                     indexOfWeek: temp_data
                 },
                 success(res) {
-                    // Vue.set(that.mode)
+                    console.log(res.data);
+                    that.modal_week_date = res.data.data
                 }
             })
 

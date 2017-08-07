@@ -166,6 +166,10 @@ VueProto.$vueExtend({
     // 字符串截取
     $trim(str) {
         return str.replace(/^\s*/, '').replace(/\s*$/, '');
+    },
+
+    $sort(arr) {
+        return arr.sort((a, b) => a < b ? 1 : -1);
     }
 
 })

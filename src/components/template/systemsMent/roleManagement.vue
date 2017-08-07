@@ -75,7 +75,7 @@
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="角色描述：">
-                                            <el-input v-model="add_info.remark" placeholder="请输入角色描述" class="asterisk"></el-input>
+                                            <el-input v-model="add_info.remark" placeholder="请输入角色描述" class=""></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>

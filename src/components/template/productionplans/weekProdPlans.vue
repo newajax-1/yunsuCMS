@@ -133,8 +133,8 @@
                                     <el-button class="btn btn-small btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
                                     <el-button class="btn btn-small btn-red" @click="deleteWorkArray">删除</el-button>
                                     <el-button class="btn btn-small btn-blue" @click="createWorkplan">新增计划</el-button>
-                                    <!-- <el-button class="btn btn-small btn-blue" v-if="new_week_date" @click="nextWeekplan('pre')" >上一周</el-button>  
-                                    <el-button class="btn btn-small btn-blue" v-else @click="nextWeekplan('next')" >下一周</el-button>   -->
+                                    <el-button class="btn btn-small btn-blue" v-if="new_week_date" @click="nextWeekplan('pre')" >上一周</el-button>  
+                                    <el-button class="btn btn-small btn-blue" v-else @click="nextWeekplan('next')" >下一周</el-button>   
                                 </div>
                             </div>
                             <el-table

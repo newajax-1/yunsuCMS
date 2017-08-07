@@ -3,6 +3,7 @@ export default {
     data() {
         return {
             new_custom: false,
+
             // 分页
             page_list: {
                 page_num: 1,
@@ -14,6 +15,7 @@ export default {
             search_pageSize: undefined,
             adfasdasd: undefined,
             title_name: undefined,
+
             // 查询
             info: {
                 info_name: undefined,
@@ -37,14 +39,17 @@ export default {
         }
     },
     methods: {
+
         setCheckedKeys() {
             let temp = this.role_check_arr;
 
             this.$refs.tree.setCheckedKeys(temp);
         },
+
         // 数据加载和搜索
         loadTable() {
             var that = this;
+
             this.$ajaxWrap({
                 type: "post",
                 url: "/role/loadTable",
@@ -60,6 +65,7 @@ export default {
                 }
             })
         },
+
         // 重置
         reset() {
             this.$clearObject(that.info);
@@ -73,6 +79,7 @@ export default {
             that.new_custom = true;
             that.addAdmin = false;
             that.checked_arr = [];
+
             that.$clearObject(that.add_info);
             that.$ajaxWrap({
                 type: "post",
@@ -90,6 +97,7 @@ export default {
             var that = this;
             var flag = undefined;
             id ? flag = ("/role/update") : (flag = "/role/addRole");
+
             this.$ajaxWrap({
                 type: "post",
                 url: flag,
@@ -99,16 +107,13 @@ export default {
                     roleId: id,
                     menuIds: that.$refs.tree.getCheckedKeys().join(","),
                 },
-                callback: function(data) {
+                success(data) {
                     that.new_custom = false;
                     that.$message({
                         message: data.tipMsg,
                         type: "success"
                     });
                     that.loadTable();
-                },
-                error(data) {
-
                 }
             })
         },
@@ -120,6 +125,7 @@ export default {
             var that = this;
             that.addAdmin = true;
             that.role_check_arr = [];
+
             this.$ajaxWrap({
                 type: "post",
                 url: "/role/queryById",
@@ -136,21 +142,45 @@ export default {
         },
 
         checkedMenu(data) {
-            let temp = [];
+            let temp = [],
+                parents_arr = [];
+
             for (let i = 0; i < data.length; i++) {
                 let el = data[i];
                 if (el.selected) {
                     temp.push(el.menuId);
                 }
                 if (el.menuList.length) {
-                    let child = el.menuList;
+                    let child = el.menuList,
+                        tips = 0,
+                        flag = true;
                     for (let j = 0; j < child.length; j++) {
                         if (child[j].selected) {
+                            tips++;
                             temp.push(child[j].menuId);
                         }
                     }
+
+                    if (tips > 0) {
+                        parents_arr.push(el.menuId);
+                    }
                 }
             }
+
+
+            for (let k = 0; k < temp.length; k++) {
+                let only = temp[k];
+                for (let l = 0; l < parents_arr.length; l++) {
+                    let father_id = parents_arr[l];
+                    if (only === father_id) {
+                        temp.splice(k, 1);
+                    }
+                }
+            }
+
+            console.log(temp);
+
+
             this.checked_arr = temp;
         },
 
@@ -168,19 +198,17 @@ export default {
                         roleId: id,
                         isDel: 1
                     },
-                    callback: function(data) {
+                    success(data) {
                         that.loadTable();
                         that.$message({
                             message: "删除成功！",
                             type: 'success'
                         });
-                    },
-                    error() {
-
                     }
                 })
             }).catch(function() {});
         },
+
         // 点击关闭
         closeDialog() {
             var that = this;
@@ -210,12 +238,13 @@ export default {
                 this.searchFormData(val, "size");
             };
         },
-        // -----------------------------------------------------------------------------------------------------------------------------------      
+
         handleCurrentChange(val) {
             if (this.table_data.length) {
                 this.searchFormData(val, "num");
             };
         },
+
         // 设置默认权限项
         setCheckedNodes() {
             this.$refs.tree.setCheckedNodes(
@@ -230,7 +259,8 @@ export default {
         },
     },
     mounted() {
+
         //当组件模板挂载时数据显示到上面去。
         this.loadTable();
-    },
+    }
 }
