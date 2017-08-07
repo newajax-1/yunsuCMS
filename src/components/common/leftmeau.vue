@@ -15,108 +15,34 @@
     </div>
 </template>
 
-<script>
+<script>    
     export default {
         name:"leftmeau",
+        created(){
+            var that = this;
+
+            let link = sessionStorage.getItem("menuList");
+            if(!link){
+                EventBus.$on("MenuList",function(data){
+                    if(data){
+                        for(let i = 0 ; i < data.length ; i++){
+                            that.link.push(data[i]);
+                        }
+                    }
+                })
+            }else{
+                let link_arr = JSON.parse(link);
+                for(let i = 0 ; i < link_arr.length ; i++){
+                    that.link.push(link_arr[i]);
+                }
+            }
+        },
+        destory(){
+            EventBus.$off("MenuList");
+        },
         data() {
             return {
-                activeIndex: '1',
-                link:[
-                    {
-                        textName: "销售管理",
-                        index: "1",
-                        child: [
-                            {
-                                text: "销售计划管理",
-                                route: "/home/saleplan",
-                                index: "1-1",
-                            },
-                            {
-                                text: "客户信息管理",
-                                route: "/home/salersInfo",
-                                index: "1-2",
-                            },
-                        ],
-                    },
-                    {
-                        textName: "生产计划",
-                        index: "2",
-                        child: [
-                            {
-                                text: "生产资源状态监控",
-                                route: "/home/prodplansinfo",
-                                index: "2-1",
-                            },
-                            {
-                                text: "周生产计划",
-                                route: "/home/weekprodplans",
-                                index: "2-2",
-                            },
-                            {
-                                text: "库存预警",
-                                route: "/home/invwarning",
-                                index: "2-3",
-                            },
-                        ],
-                    },
-                    {
-                        textName: "系统管理",
-                        index: "3",
-                        child: [
-                            {
-                                text: "用户管理",
-                                route: "/home/usermanagement",
-                                index: "3-1",
-                            },
-                            {
-                                text: "角色管理",
-                                route: "/home/rolemanagement",
-                                index: "3-2",
-                            },
-                            {
-                                text: "组织管理",
-                                route: "/home/orgmanagement",
-                                index: "3-3",
-                            },
-                            {
-                                text: "员工管理",
-                                route: "/home/staffmanagement",
-                                index: "3-4",
-                            },
-                        ],
-                    },
-                    {
-                        textName: "生产作业",
-                        index: "4",
-                        child: [
-                            {
-                                text: "生产进度监控",
-                                route: "/home/promonitoring",
-                                index: "4-1",
-                            },
-                            {
-                                text: "工单管理",
-                                route: "/home/workmonitoring",
-                                index: "4-2",
-                            },
-                            {
-                                text: "设备报警",
-                                route: "/home/warningfacmonitoring",
-                                index: "4-3",
-                            },
-                            {
-                                text: "质量报警",
-                                route: "/home/warningquamonitoring",
-                                index: "4-4",
-                            },
-                            {
-                                text: "模具作业管理",
-                                route: "/home/modelmonitoring",
-                                index: "4-5",
-                            },
-                        ],
-                    },
-                ]
+                link : []
             };
         },
         methods: {

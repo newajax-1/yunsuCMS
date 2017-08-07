@@ -74,84 +74,84 @@ export default {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: 0
+                        quantity: ""
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: 0
+                        quantity: ""
                     }
                 },
                 tuesday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: 0
+                        quantity: ""
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: 0
+                        quantity: ""
                     }
                 },
                 wednesday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: 0
+                        quantity: ""
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: 0
+                        quantity: ""
                     }
                 },
                 thursday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: 0
+                        quantity: ""
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: 0
+                        quantity: ""
                     }
                 },
                 friday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: 0
+                        quantity: ""
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: 0
+                        quantity: ""
                     }
                 },
                 saturday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: 0
+                        quantity: ""
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: 0
+                        quantity: ""
                     }
                 },
                 sunday: {
                     day: {
                         weekDate: undefined,
                         clas: "01",
-                        quantity: 0
+                        quantity: ""
                     },
                     night: {
                         weekDate: undefined,
                         clas: "02",
-                        quantity: 0
+                        quantity: ""
                     }
                 }
             },
@@ -292,6 +292,7 @@ export default {
                 success(res) {
                     that.$baseWarn("下发成功！", function() {
                         that.weekplan_push_tips[index].show = false;
+                        that.refresh();
                     })
                 }
             })
@@ -458,43 +459,49 @@ export default {
             Vue.set(that.modal_weekplan_table_data, index, temp_workplan_data);
         },
 
-        handleWorkplanData() {
-            let that = this,
-                old_workplan_data = that.modal_weekplan_table_data,
-                len = old_workplan_data.length;
-
-            for (let i = 0; i < len; i++) {
-                let el = old_workplan_data[i];
-                for (let key in el) {
-                    delete el.tempItem;
-                    delete el.tempOrder;
-                    delete el.index
-                }
-            }
-        },
 
         confirmSendPlan(tips) {
             let that = this,
                 sure_text = tips === "save" ? "保存" : "下发";
 
-            that.handleWorkplanData();
 
             let new_table_data = that.modal_weekplan_table_data,
                 len = new_table_data.length;
 
+
             for (let i = 0; i < len; i++) {
                 let el = new_table_data[i]
                 for (let key in el) {
+
+                    el.sum = (el.planBill.monday.day.quantity - 0) +
+                        (el.planBill.monday.night.quantity - 0) +
+                        (el.planBill.tuesday.day.quantity - 0) +
+                        (el.planBill.tuesday.night.quantity - 0) +
+                        (el.planBill.wednesday.day.quantity - 0) +
+                        (el.planBill.wednesday.night.quantity - 0) +
+                        (el.planBill.thursday.day.quantity - 0) +
+                        (el.planBill.thursday.night.quantity - 0) +
+                        (el.planBill.friday.day.quantity - 0) +
+                        (el.planBill.friday.night.quantity - 0) +
+                        (el.planBill.saturday.day.quantity - 0) +
+                        (el.planBill.saturday.night.quantity - 0) +
+                        (el.planBill.sunday.day.quantity - 0) +
+                        (el.planBill.sunday.night.quantity - 0)
+
                     if (key === "scndProc") {
                         continue
                     }
                     if ((el[key] === "" || el[key] === undefined) && el[key] !== null) {
+                        console.log(key);
                         that.$alert('请完善表单信息', '提示', {
                             confirmButtonText: '确定',
                             callback() {}
                         })
                         return;
                     }
+
+                    delete el.tempItem;
+                    delete el.tempOrder;
                 }
             }
 
@@ -541,7 +548,7 @@ export default {
                     that.work_plan_id = undefined;
                 },
                 error() {
-                    this.modal_table_edit = false;
+                    that.modal_table_edit = false;
                 }
             });
         },
@@ -671,8 +678,7 @@ export default {
                 len_new_id = this.new_workplan_index.length,
                 len_modal_data = this.modal_weekplan_table_data.length;
 
-            let ret = this.modal_sync_data,
-                res = this.modal_weekplan_table_data,
+            let res = this.modal_weekplan_table_data,
                 temp_data = [];
 
             for (let i = 0; i < len_modal_data; i++) {

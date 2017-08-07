@@ -83,16 +83,16 @@
                                     <el-col :span="12">
                                         <el-form-item label="权限分配：">
                                             <el-tree
-                                              :data="data2"
-                                              show-checkbox
-                                              default-expand-all
-                                              node-key="menuId"
-                                              ref="tree"
-                                              highlight-current
-                                              :props="defaultProps"
-                                              class="bigTree">
+                                                :data="data2"
+                                                show-checkbox
+                                                node-key="menuId"
+                                                ref="tree"
+                                                :default-checked-keys="checked_arr"
+                                                highlight-current
+                                                :props="defaultProps"
+                                                class="bigTree">
                                             </el-tree>
-                                            <el-button @click="setCheckedKeys" v-if = "addAdmin" style="margin-top: 10px;">显示已有权限</el-button>
+                                            <!-- <el-button @click="setCheckedKeys" v-if = "addAdmin" style="margin-top: 10px;">显示已有权限</el-button> -->
                                         </el-form-item>
                                     </el-col>
                                 </el-row>

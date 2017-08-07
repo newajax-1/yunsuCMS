@@ -1,7 +1,7 @@
 <template>
     <div class="login-page">
         <div class="login-form-wrap">
-            <h1>Y-Mens</h1>
+            <h1>Y-Mes</h1>
             <p>让工业·更敏捷</p>
             <el-form 
                 class="login-form-base">
@@ -88,11 +88,34 @@
                     password:'',
                     identify:''
                 },
+                menu_list : []
             }
         },
         methods: {
             
             handleClick() {
+            },
+            handleLink(data){
+                let link_arr = []
+                for(let i = 0 ; i < data.length ; i++){
+                    let el = data[i],
+                        opt = {};
+                    opt.textName = el.name;
+                    opt.index = i+"";
+                    if(el.menuList.length){
+                        opt.child = [];
+                        for(let j = 0 ; j < el.menuList.length ; j++){
+                            let ret = el.menuList[j],
+                                opt_child = {};
+                                opt_child.text = ret.name;
+                                opt_child.route = ret.url;
+                                opt_child.index = i+"-"+(j+1);
+                            opt.child.push(opt_child);
+                        }
+                    }
+                    link_arr.push(opt);
+                }
+                return link_arr;
             },
             login(){
                 var that = this;
@@ -110,12 +133,18 @@
                             sessionStorage.setItem("useName",that.login_form.username);
                             that.$goRoute("/home");
                         }
+                        let menu_list = that.handleLink(data.data.menuList),
+                            JSON_link = JSON.stringify(menu_list);
+                        
+                        that.menu_list = menu_list;
+
+                        sessionStorage.setItem("menuList",JSON_link);
                     }
                 })
             },
         },
         destroyed() {
-            EventBus.$emit("headerUserData", this.EventData);
+            EventBus.$emit("MenuList", this.menu_list);
         }
     }
 </script>

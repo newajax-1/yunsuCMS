@@ -36,6 +36,7 @@
             <div class="list-table">
                 <el-table :data="table_data">
                     <el-table-column :span="15" prop="planNo" label="部门名称"></el-table-column>
+                    <el-table-column :span="15" prop="remarks" label="备注"></el-table-column>
                     <el-table-column　label="操作" width="200">
                     	<input type="hidden" v-html="commonorg_id" id="curIns">
                         <template scope="scope">

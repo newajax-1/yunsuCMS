@@ -117,7 +117,6 @@
                                                     :key="item.roleId"
                                                     :label="item.roleName" 
                                                     :value="item.roleId" 
-                                                    :key="item.roleId"
                                                 ></el-option>
                                             </el-select>
                                         </el-form-item>
@@ -129,8 +128,7 @@
                                                     v-for="item in ogr_list"
                                                     :key="item.roleId"
                                                     :label="item.orgName" 
-                                                    :value="item.orgId"
-                                                    :key="item.orgId"></el-option>
+                                                    :value="item.orgId"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>

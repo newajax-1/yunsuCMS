@@ -27,13 +27,12 @@ export default {
             },
 
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
             data2: [],
             defaultProps: {
                 children: 'menuList',
                 label: 'name'
             },
-            role_check_arr: [],
+            checked_arr: [],
             addAdmin: false
         }
     },
@@ -73,6 +72,8 @@ export default {
             that.title_name = "新增";
             that.new_custom = true;
             that.addAdmin = false;
+            that.checked_arr = [];
+            that.$clearObject(that.add_info);
             that.$ajaxWrap({
                 type: "post",
                 url: "/role/queryById",
@@ -150,7 +151,7 @@ export default {
                     }
                 }
             }
-            this.role_check_arr = temp;
+            this.checked_arr = temp;
         },
 
         // 删除信息
