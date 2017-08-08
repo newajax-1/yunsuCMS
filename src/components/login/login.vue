@@ -48,10 +48,12 @@
 </template>
 
 <script>
-    import axios from 'axios'
     export default {
+
         name: "login",
+
         data() {
+
             var validateName = (rule, value, callback) => {
                 if (!value) callback(new Error('请输入用户名'));
                 callback();
@@ -88,6 +90,7 @@
                     password:'',
                     identify:''
                 },
+
                 menu_list : []
             }
         },
@@ -95,8 +98,10 @@
             
             handleClick() {
             },
+
             handleLink(data){
-                let link_arr = []
+                let link_arr = [];
+
                 for(let i = 0 ; i < data.length ; i++){
                     let el = data[i],
                         opt = {};
@@ -117,8 +122,11 @@
                 }
                 return link_arr;
             },
+
             login(){
-                var that = this;
+
+                let that = this;
+
                 that.$ajaxWrap({
                     type : "post",
                     url : "memberAccount/toLogin",
@@ -129,10 +137,12 @@
                     success(data){
                         sessionStorage.setItem("name",data.data.data.name);
                         sessionStorage.setItem("jobNumber",data.data.data.jobNumber);
+
                         if(data.success === true){
                             sessionStorage.setItem("useName",that.login_form.username);
                             that.$goRoute("/home");
                         }
+
                         let menu_list = that.handleLink(data.data.menuList),
                             JSON_link = JSON.stringify(menu_list);
                         
@@ -143,12 +153,13 @@
                 })
             },
         },
+
         destroyed() {
             EventBus.$emit("MenuList", this.menu_list);
         }
     }
 </script>
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus">
 .login-page{
     position  absolute
     top 0
@@ -191,6 +202,7 @@
             padding 42px 46px
             background-color #fff
         }
+
         /* 清除ele-ui 默认样式 */ 
         .el-tabs__header{
             margin 0
@@ -215,6 +227,7 @@
                 }
             }
         }
+
         .el-form-item{
             margin-bottom 0
             &.is-error{
@@ -226,13 +239,13 @@
                     padding 12px 20px
                     height 100%
                     line-height 1
+                    border-radius 0
                     background-color #fff !important
                 }
                 input:-webkit-autofill {
                     -webkit-box-shadow: 0 0 0px 1000px white inset !important;
                 }
             }
-
             .el-form-item__content{
                 &:hover{
                     z-index 2;
@@ -244,9 +257,11 @@
                 }
             }
         }
+        
         .login-form-shadow{
             box-shadow 0 0 8px #e1e1e1
         }
+
         .btn-wrap{
             margin-top 24px
             .btn-login{

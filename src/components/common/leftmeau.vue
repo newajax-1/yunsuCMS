@@ -1,17 +1,24 @@
 <template>
-    <div class="layout-menu">
-        <el-menu default-active="2" 
-            unique-opened
-            @open="handleOpen" 
-            @close="handleClose" 
-            theme="dark">
-            <el-submenu v-for="item in link" :index="item.index" :key="item.index">
-                <template slot="title">{{item.textName}}</template>
-                    <el-menu-item v-for="route in item.child" :index="route.index" :key="route.route" @click="$goRoute(route.route)">
-                        <a class="left-item" >{{route.text}}</a>
-                    </el-menu-item>
-            </el-submenu>
-        </el-menu>
+    <div class="template">        
+        <div class="layout-menu fixed">
+            <el-menu 
+                unique-opened
+                theme="dark">
+                <el-submenu 
+                    v-for="item in link" 
+                    :index="item.index" 
+                    :key="item.index">
+                    <template slot="title">{{item.textName}}</template>
+                        <el-menu-item 
+                            v-for="route in item.child" 
+                            :index="route.index" 
+                            :key="route.route" 
+                            @click="$goRoute(route.route)">
+                            <a class="left-item" >{{route.text}}</a>
+                        </el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </div>
     </div>
 </template>
 
@@ -37,38 +44,42 @@
                 }
             }
         },
+
         destory(){
             EventBus.$off("MenuList");
         },
+
         data() {
             return {
                 link : []
             };
-        },
-        methods: {
-            handleOpen(key, keyPath) {
-            },
-            handleClose(key, keyPath) {
-            }
         }
     }
 </script>
-<style lang="stylus" scoped>
-@media screen and (max-width:1366px)
-    .layout-page
-        .layout-menu
-            width:180px 
-            top 50px 
+<style lang="stylus">
+
+/* variable */ 
+$menu_hover_bgcolor = #1f8ae9;
+$gf = #fff;
 
 .layout-menu
-    position fixed
     top 50px
-    left 0
     height 100%
-    width 180px
+    width 150px
+    color $gf
+    .el-submenu__title
+    .left-item
+        font-size 12px
+        color $gf
     .el-menu
         height 100%
-        border-radius 0
-.el-submenu .el-menu-item
-    min-width 180px
+        border-radius 0        
+        .el-menu-item
+            padding-left 30px !important /* 替换 ele-ui js 样式 */
+            min-width 150px
+            font-size 12px
+            &:hover,
+            &.is-active
+                color $gf
+                background-color $menu_hover_bgcolor
 </style>

@@ -16,10 +16,6 @@
             Vheader,
             Vleftmeau,
             Vcontent
-        },
-        methods:{
-        },
-        mounted(){
         }
     }
 </script>

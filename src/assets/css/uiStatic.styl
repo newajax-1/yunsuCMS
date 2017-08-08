@@ -2,136 +2,105 @@
  * coding by Alex of 2017-07-24
  */
 
-// default color
-$blue = #148aed
-$strBlue = #0a7ad7
-$dark = #383d41
-$black = #333743
-$yellow = #f4ce2c
-$green = #50a347
-$orange = #fa9400
-$strOrange = #f78d03
-$black-light = #333
-$gray = #999
-$white = #e5e5e5
-$red = #ff4949
-$gf = #fff
-$g3 = #333
-$g69 = #696969
-$dc = #dcdcdc
-$e5 = #e5e5e5
-$f7 = #f7f7f7
+/* variable */ 
+$gf = #fff;
+$g3 = #333;
+$e5 = #e5e5e5;
+$_g69 = #696969;
 
-$border-default = 1px solid $white
+$default_blue = #148aed;
+$default_bd_blue = #0176d6;
+$default_blue_hover = #0a7ad7;
+$default_bd_blue_hover = #0166ba;
 
-.btn
-    display inline-block
-    width 105px
-    height 30px
-    margin 0
-    padding 0
-    color $gf !important
-    line-height 30px
-    text-align center
-    border-radius 0
-    border-width 1px
-    border-style solid 
-    border-color $blue
-    background-color $strBlue
-    white-space nowrap
-    cursor pointer
-    &.btn-small
-        width 75px
-    &:hover
-    &.active
-        color $gf
-        background-color $strBlue
+$default_green = #a4d43e;
+$default_bd_green = #85b61d;
+$default_green_hover = #8bbc22;
+$default_bd_green_hover = $default_bd_green;
 
-    &.btn-green
-        color $gf
-        border-color $green
-        background-color $green
-        &:hover
-        &.active
-            color $gf
-            background-color $green
-    &.btn-blue
-        border-color $blue
-        background-color: $blue
-        &:hover
-        &.active
-            color $gf
-            background-color $strBlue
-    &.btn-orange
-        border-color $orange
-        background-color $orange
-        &:hover
-        &.active
-            color $gf
-            background-color $strOrange
-    &.btn-yellow
-        color $gf
-        border-color $yellow
-        background-color $yellow
-        &:hover,
-        &.active
-            color $gf
-            background-color $yellow
-    &.btn-red
-        color $gf
-        border-color $red
-        background-color $red
-        &:hover
-        &.active
-            color $gf
-            background-color $red
-    &.btn-white
-        color $gf
-        border-color $white
-        background-color $white
-        &:hover
-        &.active
-            color $gf
-            background-color $white
+$default_orange = #fa9400;
+$default_bd_orange = #e28703;
+$default_orange_hover = #f78d03;
+$default_bd_orange_hover = #d75c02;
 
-.pad-line-default
-    padding 0 10px
+$default_gray = #bdbdbd;
+$default_bd_gray = #a6a6a6;
+$default_gray_hover = #a9a9a9;
+$default_bd_gray_hover = $default_bd_blue;
 
-.pad-middle-default
-    padding 10px 0
+$table_header_bgcolor = #e4f3ff;
+$dialog_blue = #00a8ff;
 
-.el-input
-    width 105px
-    &.el-date-editor
-        width 150px
-    &.import
-        &::after
-            content "*"
-            position absolute
-            top center
-            right 2
-            color $red
+.layout-content
+    background: $gf;
+    
+    /* 水平 padding */ 
+    .pad-line-default
+        padding: 0 12px
+    
+    /* 公共按钮 */
+    .btn
+        display: inline-block
+        padding: 0
+        margin-bottom: 0
+
+        /* 统一宽高 */ 
+        width: 75px;
+        height: 30px;
+        color: $gf
+
+        font-size: 14px
+        font-weight: 400
+        line-height: 30px
+        text-align: center
+        white-space: nowrap
+        vertical-align: middle
+        -ms-touch-action: manipulation
+        touch-action: manipulation
+        cursor: pointer
+        -ms-user-select: none
+        -moz-user-select: none
+        -webkit-user-select: none
+        user-select: none
+        background-image: none
+        border: 1px solid transparent
+        &.btn-large
+            width: 105px
+        &.btn-small
+            width: 75px
+            height: 30px
+        &.btn-blue
+            background-color: $default_blue
+            border-color: $default_bd_blue
+            &:hover
+                background-color: $default_blue_hover
+                border-color: $default_bd_blue_hover
+        &.btn-green
+            background-color: $default_green
+            border-color: $default_bd_green
+            &:hover
+                background-color: $default_green_hover
+                border-color: $default_bd_green_hover
+        &.btn-orange
+            background-color: $default_orange
+            border-color: $default_bd_orange
+            &:hover
+                background-color: $default_orange_hover
+                border-color: $default_bd_orange_hover
+        &.btn-gray
+            background-color: $default_gray
+            border-color: $default_bd_gray
+            &:hover
+                background-color: $default_gray_hover
+                border-color: $default_bd_gray_hover
+
+        /* 默认锐角按钮 */ 
+        border-radius: 0px;
+    
+    .el-button+.el-button
+        margin: 0
+
+    /* 清除ele-ui表单样式 */
     .el-input__inner
-        height 30px
-        border-radius 0
+        border-radius: 0
 
-.el-dialog__wrapper
-    .el-table 
-        th
-            text-align center
-        .cell
-            text-align center
-            padding-left 1px
-            padding-right 1px
-        .el-table__header-wrapper
-            th
-                height 30px
-        .el-input
-            width 100%
-            font-size 12px
-            .el-input__inner
-                border 0 none
-                padding 3px
-                text-align center
-        th>.cell
-            line-height 1
