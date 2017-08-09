@@ -30,7 +30,7 @@
                             <strong>10</strong>
                         </p>
                     </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="空闲：10" placement="top-end">
+                    <el-tooltip class="text" effect="dark" content="故障：10" placement="top-end">
                         <p class="prod-text">
                             <span>故障：</span>
                             <strong>10</strong>
@@ -47,13 +47,13 @@
                             <strong>10</strong>
                         </p>
                     </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="生产：10" placement="top">
+                    <el-tooltip class="text" effect="dark" content="生产中：10" placement="top">
                         <p class="prod-text">
                             <span>生产中：</span>
                             <strong>10</strong>
                         </p>
                     </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="空闲：10" placement="top-end">
+                    <el-tooltip class="text" effect="dark" content="维修保养中：10" placement="top-end">
                         <p class="prod-text">
                             <span>维修保养中：</span>
                             <strong>10</strong>
@@ -64,19 +64,19 @@
             <el-col :span="24" class="box"> 
                 <p class="prod-title">原材料</p>
                 <div class="prod-table">
-                    <el-tooltip class="text" effect="dark" content="全部：10" placement="top-start">
+                    <el-tooltip class="text" effect="dark" content="种类：10" placement="top-start">
                         <p class="prod-text">
                             <span>种类：</span>
                             <strong>10</strong>
                         </p>
                     </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="生产：10" placement="top">
+                    <el-tooltip class="text" effect="dark" content="正常库存：10" placement="top">
                         <p class="prod-text">
                             <span>正常库存：</span>
                             <strong>10</strong>
                         </p>
                     </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="空闲：10" placement="top-end">
+                    <el-tooltip class="text" effect="dark" content="库存告警：10" placement="top-end">
                         <p class="prod-text">
                             <span>库存告警：</span>
                             <strong>10</strong>

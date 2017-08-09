@@ -49,7 +49,6 @@ export default {
             custom_detail: false,
             edit_custom: false,
 
-            // 表格当前页数据
             table_data: [],
 
             // 分页

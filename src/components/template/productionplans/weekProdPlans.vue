@@ -56,19 +56,20 @@
             </el-col>
             
             <el-col :span="24" class="content-buttons">
-                <el-button class="btn btn-blue" @click="refresh"><i class="fa fa-repeat"></i> 刷新</el-button>
-                <el-button class="btn btn-blue" @click="openWeekplanModal('新建周计划')"><i class="fa fa-user-plus"></i> 新建周计划</el-button>
+                <el-button class="btn btn-blue btn-samll" @click="refresh"><i class="fa fa-repeat"></i> 刷新</el-button>
+                <el-button class="btn btn-blue btn-large" @click="openWeekplanModal('新建周计划')"><i class="fa fa-user-plus"></i> 新建周计划</el-button>
             </el-col>
 
             <el-col :span="24">
-                <el-tabs v-model="weekplan_change_name" type="card" class="list-tab" @tab-click="changeTableActive">
+                <el-tabs v-model="weekplan_change_name" type="card" class="tab-title" @tab-click="changeTableActive">
                     <el-tab-pane label="全部" name="all" ></el-tab-pane>
                     <el-tab-pane label="未下发" name="unIssue" ></el-tab-pane>
                     <el-tab-pane label="已下发" name="issued"></el-tab-pane>
                 </el-tabs>
 
-                <div class="list-table">
+                <div class="table-wrap">
                     <el-table
+                        border
                         style="width: 100% "
                         :data="weekplan_table_data">
                         <el-table-column prop="workplanNo" label="排产计划编号"></el-table-column>
@@ -106,7 +107,7 @@
             </el-col>
             <!-- 周计划 数据表格 end -->
 
-            <div class="list-page fr">
+            <div class="table-page fr">
                 <el-pagination
                     layout="total, sizes, prev, pager, next"
                     :current-page.sync="weekplan_page_list.pageNum"
@@ -121,25 +122,25 @@
             <!-- 周计划 新建或修改 start -->
             <el-dialog
                 size="full"
-                custom-class="pub-dialog"
+                class="default-dialog"
                 :title="modal_title"
                 :before-close="confirmCloseModal"
                 :visible.sync="modal_show_tips">
                     <el-row>
-                        <div class="list-table sched-table">
-                            <div class="pad-middle-default clearfix">
+                        <div class="table-wrap">
+                            <div class="message clearfix">
                                 <div class="fl"  v-show="!weekplan_info_show">
                                     <el-button class="btn btn-small btn-green" @click="confirmSendPlan('save')">保 存</el-button>
                                     <el-button class="btn btn-small btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
-                                    <el-button class="btn btn-small btn-red" @click="deleteWorkArray">删除</el-button>
-                                    <el-button class="btn btn-small btn-blue" @click="createWorkplan">新增计划</el-button>
+                                    <el-button class="btn btn-small btn-gray" @click="deleteWorkArray">删除</el-button>
+                                    <el-button class="btn btn-large btn-blue" @click="createWorkplan">新增计划</el-button>
                                     <el-button class="btn btn-small btn-blue" v-if="new_week_date" @click="nextWeekplan('pre')" >上一周</el-button>  
                                     <el-button class="btn btn-small btn-blue" v-else @click="nextWeekplan('next')" >下一周</el-button>    
                                 </div>
                             </div>
                             <el-table
-                                width="auto"
                                 border
+                                width="auto"
                                 :data="modal_weekplan_table_data"
                                 @selection-change="handleSelectionChange">
                                 <el-table-column type="selection" width="40"></el-table-column>
@@ -495,12 +496,12 @@
                             </el-table>
                         </div>
                     </el-row>
-                    <div class="pad-middle-default clearfix">
+                    <div class="message clearfix" style=" margin-top: 10px;">
                         <div class="fl"  v-show="!weekplan_info_show">
                             <el-button class="btn btn-small btn-green" @click="confirmSendPlan('save')">保 存</el-button>
                             <el-button class="btn btn-small btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
-                            <el-button class="btn btn-small btn-red" @click="deleteWorkArray">删除</el-button>
-                            <el-button class="btn btn-small btn-blue" @click="createWorkplan">新增计划</el-button>
+                            <el-button class="btn btn-small btn-gray" @click="deleteWorkArray">删除</el-button>
+                            <el-button class="btn btn-large btn-blue" @click="createWorkplan">新增计划</el-button>
                             <el-button class="btn btn-small btn-blue" v-if="new_week_date" @click="nextWeekplan('pre')" >上一周</el-button>  
                             <el-button class="btn btn-small btn-blue" v-else @click="nextWeekplan('next')" >下一周</el-button>   
                         </div>
@@ -514,9 +515,27 @@
 <script src="./weekProdPlan.js"></script>
 <style lang="stylus">
 .week-prod-plans
-    .el-table
-        width 1431px
-    .el-icon-caret-top:before{
-        content ""
-    }
+    .el-dialog__body
+        padding: 15px;
+        .el-table
+            width: 1431px
+            th,
+            td
+                height: 30px
+                font-size: 12px
+            td                
+                padding: 0 2px
+                text-align: center
+            .cell            
+                padding: 0 2px    
+                line-height: 1
+            .el-input__inner
+                width: 100%
+                padding: 0
+                text-align: center
+            .el-input__icon
+                &::before
+                    content: ""
+                &::after
+                    content: ""
 </style>

@@ -207,13 +207,15 @@ import Qs from 'qs'
                 callback(data) {
                     that.table_data = data.data.page.list;that.show_info = [];
                     for(var i = 0;i < that.table_data.length;i ++){
-                        console.info(that.table_data[i].invStsName + "@@");
                         if(that.table_data[i].invStsName === "预警"){
                             that.show_info.push({ show : true });
                         }else{
                             that.show_info.push({ show : false });
                         }
                     }
+                    that.table_data.every(function(el) {
+                    	return el.materialFactory = el.materialFactory.length > 16 ? el.materialFactory.substring(0,16) + "..." : el.materialFactory;
+                    })
                     that.page.total = data.data.page.total;
                     that.page.page_num = data.data.page.pageNum;
                     that.page.page_size = data.data.page.pageSize;

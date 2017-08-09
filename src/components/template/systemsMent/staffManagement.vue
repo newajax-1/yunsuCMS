@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="staff-manage">
 	    <el-row>
 	    	<el-col :span="24">
 				<div class="content-title">
@@ -14,27 +14,26 @@
                             <el-input placeholder="输入员工姓名" v-model="search_info.emp_nm"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="search()" class="btn btn-blue">查询</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button @click="reset()" class="btn btn-orange">重置</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button @click="refresh()" class="btn btn-blue">刷新</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button @click="deleteInfo()" class="btn btn-red">删除</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button @click="showDialog()" class="btn btn-blue">增加员工</el-button>
+                            <el-button @click="search()" class="btn btn-small btn-blue">查询</el-button>
+                            <el-button @click="reset()" class="btn btn-small btn-orange">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
-            <el-col :span="24">
+
+            <el-col :span="24" class="content-buttons">
+                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
+                <el-button @click="deleteInfo()" class="btn btn-small btn-gray "><i class="el-icon-delete"></i> 删除</el-button>
+                <el-button @click="showDialog()" class="btn btn-large btn-blue"><i class="fa fa-user-plus"></i>增加员工</el-button>
+            </el-col>
+
+            <el-col :span="24" class="table-wrap">
 	            <!-- 列表开始  start -->
-                <el-table :data="table_data" style="width: 100%" @selection-change="handleSelectionChange">
-                	<el-table-column type="selection" width="55"></el-table-column>
+                <el-table 
+                    border
+                    :data="table_data"
+                    @selection-change="handleSelectionChange">
+                	<el-table-column type="selection" width="45"></el-table-column>
                     <el-table-column prop="empId" label="NO"></el-table-column>
                     <el-table-column prop="empNo" label="员工工号"></el-table-column>
                     <el-table-column prop="empNm" label="员工姓名"></el-table-column>
@@ -61,11 +60,12 @@
             </el-col>
             <!-- 列表开始  end -->
 	    </el-row> 
+
 	    <!--增加/修改员工弹框 start-->
         <el-dialog
             size="small"
             :title="dialog_name"
-            custom-class="pub-dialog"
+            class="default-dialog dialog-small"
             :visible.sync="new_custom"
             :before-close="closeDialog">
             <div>
@@ -84,17 +84,18 @@
 	                </el-row>
                 </el-form>
             </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button class="btn btn-green" @click="saveInfo()">保 存</el-button>
-                <el-button class="btn btn-red" @click="closeDialog()">关 闭</el-button>
-            </span>
+			<div class="message fr">
+                <el-button class="btn btn-green btn-small" @click="saveInfo()">保 存</el-button>
+                <el-button class="btn btn-gray btn-small" @click="closeDialog()">关 闭</el-button>
+            </div>
         </el-dialog>
         <!--增加/修改员工弹框 end-->
+
 	    <!--详情弹框 start-->
         <el-dialog
             size="large"
             title="员工详情"
-            custom-class="pub-dialog"
+            class="default-dialog dialog-small"
             :visible.sync="details_custom"
             :before-close="closeDialog">
             <div class="content-search">
@@ -142,8 +143,9 @@
             </div>
         </el-dialog>
         <!--详情弹框 end-->
+        
         <!--分页 start-->
-        <div class="block list-page fr">
+        <div class="table-page fr">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -157,8 +159,5 @@
         <!-- 分页 end -->
 	</div>
 </template>
-
-<style lang="stylus" rel="stylesheet/stylus">
-</style>
 <!-- 引入js -->
 <script src="./staffmanagements.js"></script>

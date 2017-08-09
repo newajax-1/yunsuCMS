@@ -1,6 +1,6 @@
 <template>
     <el-row class="sale-plan">
-        <!-- sale_plan_form start  -->
+        
         <el-col :span="24">
             <div class="content-title">
                 <span>销售管理-销售计划</span>
@@ -128,7 +128,7 @@
                         :model="modal_form_data" 
                         :rules="modal_form_rules">
                         <el-row :gutter="24">
-                            <el-col :span="8">
+                            <el-col :span="6">
                                 <el-form-item label="客户名称：" prop="custName">
                                     <el-select placeholder="选择客户" v-model="modal_form_data.custName" >
                                         <el-option v-for="item in guest_name_data" :label="item.custName" :value="item.custNo" :key="item.custNo"></el-option>  
@@ -136,13 +136,13 @@
                                 </el-form-item>
                             </el-col>
 
-                            <el-col :span="8">
+                            <el-col :span="6">
                                 <el-form-item label='订单编号：' prop="orderNo">
                                     <el-input  v-model='modal_form_data.orderNo' ></el-input>
                                 </el-form-item>
                             </el-col>
 
-                            <el-col :span="8">
+                            <el-col :span="6">
                                 <el-form-item label="订单日期：" prop="orderDate">
                                     <el-date-picker
                                         
@@ -154,28 +154,7 @@
                                 </el-form-item>
                             </el-col>
                             
-                        </el-row>
-
-                        <el-row :gutter="24">
-                            <el-col :span="8">
-                                <el-form-item label="产品型号：" prop="itemNo">
-                                    <el-input v-model='modal_form_data.itemNo' ></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="产品名称：" prop="itemName">
-                                    <el-input v-model='modal_form_data.itemName' ></el-input>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-row :gutter="24">
-                            <el-col :span="8">
-                                <el-form-item label="需求数量：" prop="quantity">
-                                    <el-input v-model='modal_form_data.quantity' ></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
+                            <el-col :span="6">
                                 <el-form-item label="交货日期：" prop="deliveryDate">
                                     <el-date-picker
                                         type="date"
@@ -188,13 +167,28 @@
                             </el-col>
                         </el-row>
 
-                        <el-row>
-                            <el-col :span="8">
+                        <el-row :gutter="24">
+                            <el-col :span="6">
                                 <el-form-item label="计划类型：" prop="planType">
                                     <el-select placeholder="选择客户" v-model='modal_form_data.planType' >
                                         <el-option label="生产" value="01"></el-option>
                                         <el-option label="库存" value="02"></el-option>
                                     </el-select>                                        
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="产品型号：" prop="itemNo">
+                                    <el-input v-model='modal_form_data.itemNo' ></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="产品名称：" prop="itemName">
+                                    <el-input v-model='modal_form_data.itemName' ></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="需求数量：" prop="quantity">
+                                    <el-input v-model='modal_form_data.quantity' ></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -215,8 +209,8 @@
             <div class="message clearfix">
                 <div class="fl">
                     <el-button class="btn btn-small btn-blue" @click="editSalePlan()">编 辑</el-button>
-                    <el-button class="btn btn-small btn-green" @click="confirmSendPlan('save')">保 存</el-button>
-                    <el-button class="btn btn-small btn-orange" @click="confirmSendPlan('push')">下 发</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')">保 存</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')">下 发</el-button>
                 </div>
                 <div class="fr">共有<span class="detailMsg">{{modal_plan_length}}</span>条下发计划</div>
             </div>
@@ -347,103 +341,98 @@
 
         <el-dialog
             size="large"
-            custom-class="pub-dialog"
+            class="default-dialog dialog-large dialog-more"
             title="销售计划-计划详情" 
             @click="closeSalePlanInfo()"
             :visible.sync="sale_plan_info">
-
-            <div class="sale-plan-info">
-                <el-row>
-                    <el-col :span="24">
-                        <el-row>
-                            <el-col :span="24">
-                                <el-form :inline="true" >
-                                    <el-row>
-                                        <el-col :span="8">
-                                            <el-form-item label="计划编号："><span>{{sale_info_form.planNo}}</span></el-form-item>
-                                        </el-col>
-                                        <el-col :span="8">
-                                            <el-form-item label="计划生成时间："><span>{{sale_info_form.createTime}}</span></el-form-item>
-                                        </el-col>
-                                    </el-row>
-
-                                    <el-row>
-                                        <el-col :span="8">
-                                            <el-form-item label="计划状态：" ><span>{{sale_info_form.operationName}}</span></el-form-item>
-                                        </el-col>
-                                        <el-col :span="8">
-                                            <el-form-item label="计划下发时间：" ><span>{{sale_info_form.operTime || "无"}}</span></el-form-item>
-                                        </el-col>
-                                        <el-col :span="8">
-                                            <el-form-item label="计划下发人："><span>{{sale_info_form.operUserName || "无"}}</span></el-form-item>
-                                        </el-col>
-                                    </el-row>
-                                </el-form>
-                            </el-col>
-                        </el-row>
-                    </el-col>
-                    <el-col :span="24">
-                        <div class="list-table">
-                            <el-table  
-                                style="width: 100%"
-                                :data = "sale_info_table">
-                                <el-table-column
-                                    prop="planType"
-                                    label="计划类型">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="custName"
-                                    label="客户名称">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="orderNo"
-                                    label="订单编号">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="orderDate"
-                                    label="订单日期">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="itemNo"
-                                    label="产品型号">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="itemName" 
-                                    label="产品名称">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="quantity"
-                                    label="数量">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="unit"
-                                    label="单位">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="orderStatus"
-                                    label="订单状态">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="finishProcessText"
-                                    label="完成进度">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="finishrate"
-                                    label="完成率">
-                                </el-table-column>
-                                <el-table-column
-                                    prop="deliveryDate"
-                                    label="交货日期">
-                                </el-table-column>
-                            </el-table>
-                        </div>
-                    </el-col>
-                    <div class="content-buttons fl">
+            <el-row>
+                <el-col :span="24">
+                    <el-row>
                         <el-col :span="24">
-                            <el-button class="btn btn-small btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-repeat" ></i> 返回</el-button>
+                            <el-form :inline="true" >
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label="计划编号："><span>{{sale_info_form.planNo}}</span></el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="计划生成时间："><span>{{sale_info_form.createTime}}</span></el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="计划状态：" ><span>{{sale_info_form.operationName}}</span></el-form-item>
+                                    </el-col>
+                                </el-row>
+
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-form-item label="计划下发时间：" ><span>{{sale_info_form.operTime || "无"}}</span></el-form-item>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-form-item label="计划下发人："><span>{{sale_info_form.operUserName || "无"}}</span></el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
                         </el-col>
+                    </el-row>
+                </el-col>
+                <el-col :span="24">
+                    <div class="table-wrap">
+                        <el-table 
+                            style="width: 100%"
+                            :data="sale_info_table">
+                            <el-table-column
+                                prop="planType"
+                                label="计划类型">
+                            </el-table-column>
+                            <el-table-column
+                                prop="custName"
+                                label="客户名称">
+                            </el-table-column>
+                            <el-table-column
+                                prop="orderNo"
+                                label="订单编号">
+                            </el-table-column>
+                            <el-table-column
+                                prop="orderDate"
+                                label="订单日期">
+                            </el-table-column>
+                            <el-table-column
+                                prop="itemNo"
+                                label="产品型号">
+                            </el-table-column>
+                            <el-table-column
+                                prop="itemName" 
+                                label="产品名称">
+                            </el-table-column>
+                            <el-table-column
+                                prop="quantity"
+                                label="数量">
+                            </el-table-column>
+                            <el-table-column
+                                prop="unit"
+                                label="单位">
+                            </el-table-column>
+                            <el-table-column
+                                prop="orderStatus"
+                                label="订单状态">
+                            </el-table-column>
+                            <el-table-column
+                                prop="finishProcessText"
+                                label="完成进度">
+                            </el-table-column>
+                            <el-table-column
+                                prop="finishrate"
+                                label="完成率">
+                            </el-table-column>
+                            <el-table-column
+                                prop="deliveryDate"
+                                label="交货日期">
+                            </el-table-column>
+                        </el-table>
                     </div>
-                </el-row>
+                </el-col>
+            </el-row>
+            <div class="message fr" style="margin-top: 10px;">
+                <el-button class="btn btn-small btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-repeat" ></i> 返回</el-button>
             </div>
         </el-dialog>
     </el-row>

@@ -1,5 +1,5 @@
 /**
- * coding by Alex of 2017-07-20
+ * coding by Alex of 2017-08-08
  */
 import Vue from "vue"
 export default {

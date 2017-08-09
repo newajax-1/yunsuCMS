@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="work-monitoring">
 	    <el-row>
 	    	<el-col :span="24">
                 <div class="content-title">
@@ -33,28 +33,30 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="search()" class="btn btn-search">查询</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button @click="reset()" class="btn btn-reset">重置</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button @click="refresh()" class="btn btn-close">刷新</el-button>
+                            <el-button @click="search()" class="btn btn-small btn-blue">查询</el-button>
+                            <el-button @click="reset()" class="btn btn-small btn-orange">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
+                    
+                <el-col :span="24" class="content-buttons">
+                    <el-button class="btn btn-blue btn-small" @click="refresh"><i class="fa fa-repeat"></i> 刷 新</el-button>
+                </el-col>
             </el-col>
             <el-col :span="24">
-                <!-- 原料库存  成品库存  选择开始start -->
-                <el-tabs v-model="sale_change_name" type="card" class="list-tab" @tab-click="changeTableActive">
+
+                <el-tabs v-model="sale_change_name" type="card" class="tab-title" @tab-click="changeTableActive">
                     <el-tab-pane label="未下发" name="first" ></el-tab-pane>
                     <el-tab-pane label="已下发" name="second"></el-tab-pane>
                     <el-tab-pane label="已停止" name="other"></el-tab-pane>
                 </el-tabs>              
-                <!-- 原料库存  成品库存  选择开始end -->
+
                 <!-- 列表开始  start -->
-                <div class="list-table">
-                    <el-table :data="first_table_data" style="width: 100%" v-if="first_table_show">
+                <div class="table-wrap">
+                    <el-table 
+                        border
+                        :data="first_table_data"
+                        v-if="first_table_show">
                         <el-table-column prop="workplanNo" label="排产计划编号"></el-table-column>
                         <el-table-column prop="week" label="周"></el-table-column>
                         <el-table-column prop="planIssSts" label="下发进度"></el-table-column>
@@ -71,9 +73,12 @@
                     </el-table>
                 </div>
 
-                <div class="second-table">
+                <div class="second-table table-wrap">
                     <h1 v-if="second_table_text_show">请输入检索条件查询已下发工单内容</h1>
-                    <el-table :data="second_table_data" style="width: 100%" v-if="second_table_show">
+                    <el-table 
+                        border
+                        :data="second_table_data"
+                        v-if="second_table_show">
                         <el-table-column prop="itemNo" label="产品型号"></el-table-column>
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
                         <el-table-column prop="productNo" label="生产批号"></el-table-column>
@@ -101,8 +106,11 @@
                     </el-table>
                 </div>
 
-                <div class="other-table">
-                    <el-table :data="other_table_data" style="width: 100%" v-if="other_table_show">
+                <div class="other-table table-wrap">
+                    <el-table 
+                        border
+                        :data="other_table_data" 
+                        v-if="other_table_show">
                         <el-table-column prop="itemNo" label="产品型号"></el-table-column>
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
                         <el-table-column prop="productNo" label="生产批号"></el-table-column>
@@ -125,8 +133,9 @@
                  <!-- 列表开始  end -->
             </el-col>
 	    </el-row>
+
         <!--分页 start-->
-        <div class="block list-page fr" v-if="!second_table_text_show">
+        <div class="table-page fr" v-if="!second_table_text_show">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -138,6 +147,7 @@
             </el-pagination>
         </div>
         <!--分页 end-->
+
 	    <!-- 终止工单弹框 start -->
 	    <el-dialog
             size="small"

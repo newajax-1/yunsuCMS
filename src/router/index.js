@@ -63,8 +63,16 @@ export default new Router({
                     component: prodPlansInfo
                 },
                 {
+                    path: 'invwarning',
+                    component: invWarning
+                },
+                {
                     path: 'weekprodplans',
                     component: weekProdPlans
+                },
+                {
+                    path: 'invWarning',
+                    component: invWarning
                 },
                 {
                     path: 'usermanagement',

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="pro-monitoring">
    		<el-row>
     		<el-col :span="24">
                 <div class="content-title">
@@ -27,19 +27,18 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-search">查询</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button @click="reset()" class="btn btn-reset">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-small btn-blue">查询</el-button>
+                            <el-button @click="reset()" class="btn btn-small btn-orange">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
+
             <!-- 数据表格 start -->
             <el-col :span="24">
-                <div class="list-table">
+                <div class="table-wrap">
                     <el-table
-                        style="width: 100% "
+                        border
                         :data="table_data">
                         <el-table-column prop="itemNo" label="产品型号"></el-table-column>
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
@@ -69,8 +68,9 @@
             </el-col>
             <!-- 数据表格 end -->
     	</el-row>
+
     	<!--分页 start-->
-        <div class="block list-page fr">
+        <div class="table-page fr">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -82,18 +82,19 @@
             </el-pagination>
         </div>
         <!--分页 end-->
+
 		<!--详情弹框 start-->
         <el-dialog
             size="small"
             title="不良记录"
-            custom-class="pub-dialog"
+            class="default-dialog dialog-small"
             :visible.sync="new_custom">
             <div>
                 <el-row>
                     <el-col :span="24">
-                        <div class="list-table">
+                        <div class="table-wrap">
 		                    <el-table
-		                        style="width: 100% "
+                                border
 		                        :data="bad_table_data">
                                 <el-table-column prop="rjctType" label="不良项目"></el-table-column>
 		                        <el-table-column prop="rjctNum" label="不良数"></el-table-column>

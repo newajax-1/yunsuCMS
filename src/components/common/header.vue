@@ -38,7 +38,7 @@
         <!--修改密码-->
         <el-dialog
             title="修改密码"
-            custom-class="pub-dialog edit-password-dialog"
+            custom-class="edit-password-dialog"
             :visible.sync="edit_password">
             <div class="login-form-base edit-password">
                 <el-form 
@@ -63,7 +63,7 @@
                                 v-model="edit_form.password" ></el-input>
                         </el-form-item>
 
-                        <el-form-item prop='password' class="password" >
+                        <el-form-item prop='password' class="confirm_password" >
                             <el-input 
                                 type="password" 
                                 placeholder="确认密码"
@@ -205,6 +205,40 @@ $icon_tips_bgcolor = #fd9a01;
 .layout-header
     z-index: 1
     width: 100%
+.edit-password-dialog
+    width: 240px
+    background-color: $gf
+    .el-dialog__header
+        padding: 10px 15px 
+        background-color: $default_blue
+        .el-dialog__title,
+        .el-dialog__close
+            color: $gf
+            font-weight: 400
+    .el-dialog__body
+        padding 15px
+        .el-form-item
+            width: 100%
+            margin: 0
+            &.password
+                position: relative
+                top: -1px
+            &.confirm_password
+                position: relative
+                top: -2px
+        .btn-wrap
+            .btn-login
+                width: 100%
+                margin-top: 16px
+                color: $gf
+                border-radius : 0
+                background-color: $default_blue
+        .el-form-item__content
+            width: 100%
+        .el-input__inner
+            border-radius: 0
+
+
 
 .top-nav-content
     height: 50px

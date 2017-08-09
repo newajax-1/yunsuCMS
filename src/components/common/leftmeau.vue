@@ -58,7 +58,6 @@
 </script>
 <style lang="stylus">
 
-/* variable */ 
 $menu_hover_bgcolor = #1f8ae9;
 $gf = #fff;
 
