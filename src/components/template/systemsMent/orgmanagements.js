@@ -190,7 +190,7 @@ export default {
                     that.dialog_visible = false;
                     that.table_data = null;
                     that.staff_table_data = null;
-                    that.loadTable();
+                    that.loadStaffTable();
                 },
                 error(data) {
 

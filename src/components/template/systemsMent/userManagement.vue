@@ -1,5 +1,5 @@
 <template>
-    <div class="use-management">
+    <div class="user-manage">
         <el-row>
             <el-col :span="24">
                 <div class="content-title">
@@ -14,13 +14,18 @@
                             <el-input placeholder="输入工号" v-model="info.info_num"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-small btn-blue">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-small btn-orange">重置</el-button>
-                            <el-button @click="toAdd()" class="btn btn-large btn-blue"><i class="fa fa-user-plus"></i>新增用户</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue btn-small">查询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
+            
+            <div class="content-buttons fl">
+                <el-col :span="24" class="content-buttons">
+                    <el-button @click="toAdd()" class="btn btn-blue btn-small"><i class="fa fa-user-plus"></i> 新增</el-button>
+                </el-col>
+            </div>
 
             <!-- 数据表格 start -->
             <el-col :span="24">
@@ -43,6 +48,7 @@
                                 <el-button 
                                     type="text"
                                     size="small"
+                                    v-if="scope.row.isAdmin != '0'"
                                     @click="deleteInfo(scope.row.accountId)">删除</el-button>
                             </template>
                         </el-table-column>
@@ -51,17 +57,15 @@
             </el-col>
             <!-- 数据表格 end -->
         </el-row>
-
         <!--分页 start-->
         <div class="table-page fr">
             <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="page_list.page_num"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size=page_list.page_size
-                    layout="total, sizes, prev, pager, next"
-                    :total="page_list.total">
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="page_list.page_num"
+                :page-size=page_list.page_size
+                layout="total, prev, pager, next"
+                :total="page_list.total">
             </el-pagination>
         </div>
         <!--分页 end-->
@@ -73,69 +77,79 @@
             class="default-dialog dialog-small"
             :visible.sync="new_custom"
             :before-close="closeDialog">
+            <el-row>
+                <el-col :span="24">
+                    <div class="pub-mask-wrap">
+                        <!-- 校验规则必须写在 el-form 标签中 -->
+                        <el-form :inline="true" class="">
 
-            <!-- 校验规则必须写在 el-form 标签中 -->
-            <el-form :inline="true" class="">
-                <el-row :gutter="24">
-                    <el-col :span="12">
-                        <el-form-item label="用户名称：">
-                            <el-input v-model="add_info.name" placeholder="请输入用户名称" class="asterisk"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="工　　号：">
-                            <el-input v-model="add_info.jobNumber" placeholder="请输入工号" class="asterisk"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="24">
-                    <el-col :span="12">
-                        <el-form-item label="手　　机：">
-                            <el-input v-model="add_info.account" placeholder="请输入手机号" class="asterisk"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12" v-if="!is_scope_id">
-                        <el-form-item label="默认密码：">
-                            <el-input disabled placeholder="123456"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="24">
-                    <el-col :span="12">
-                        <el-form-item label="用户角色：">
-                            <el-select 
-                                v-model="add_info.roleId" 
-                                :placeholder="add_info.roleName || '选择角色'" class="asterisk">
-                                <el-option 
-                                    v-for="item in role_list"
-                                    :key="item.roleId"
-                                    :label="item.roleName" 
-                                    :value="item.roleId" 
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="所属部门：">
-                            <el-select v-model="add_info.orgId" :placeholder="add_info.orgName || '选择部门'" class="asterisk">
-                                <el-option 
-                                    v-for="item in ogr_list"
-                                    :key="item.roleId"
-                                    :label="item.orgName" 
-                                    :value="item.orgId"></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
+                            <el-row :gutter="24">
+                                <el-col :span="12">
+                                    <el-form-item label="用户名称：">
+                                        <el-input v-model="add_info.name" placeholder="请输入用户名称" class="asterisk"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="工　　号：">
+                                        <el-input v-model="add_info.jobNumber" placeholder="请输入工号" class="asterisk"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="24">
+                                <el-col :span="12">
+                                    <el-form-item label="手　　机：">
+                                        <el-input v-model="add_info.account" placeholder="请输入手机号" class="asterisk"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12" v-if="!is_scope_id">
+                                    <el-form-item label="默认密码：">
+                                        <el-input disabled placeholder="123456"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="24">
+                                <el-col :span="12">
+                                    <el-form-item label="用户角色：">
+                                        <el-select 
+                                            v-model="add_info.roleId" 
+                                            :placeholder="add_info.roleName || '选择角色'" class="asterisk">
+                                            <el-option 
+                                                v-for="item in role_list"
+                                                :key="item.roleId"
+                                                :label="item.roleName" 
+                                                :value="item.roleId" 
+                                            ></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="所属部门：">
+                                        <el-select v-model="add_info.orgId" :placeholder="add_info.orgName || '选择部门'" class="asterisk">
+                                            <el-option 
+                                                v-for="item in ogr_list"
+                                                :key="item.roleId"
+                                                :label="item.orgName" 
+                                                :value="item.orgId"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </div>
+                </el-col>
+            </el-row>
 
-			<div class="message fr">
+            <div class="message center">
                 <el-button class="btn btn-small btn-green" @click="createNewCustom(is_scope_id)">保存</el-button>
-                <el-button class="btn btn-small btn-gray" @click="closeDialog()">取消</el-button>
+                <el-button class="btn btn-small btn-blue" @click="closeDialog()">关 闭</el-button>
             </div>
         </el-dialog>
         <!--新增弹框 end-->
     </div>
 </template>
-
+<style lang="stylus">
+.user-manage
+    .content-buttons
+        padding 5px 0 3px 0
+</style>
 <script src="./usermanagements.js"></script>

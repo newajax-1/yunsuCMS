@@ -35,17 +35,14 @@
             </el-col>
         </el-row>
 
-        <!--修改密码-->
         <el-dialog
             title="修改密码"
-            custom-class="edit-password-dialog"
+            custom-class="pub-dialog edit-password-dialog"
             :visible.sync="edit_password">
             <div class="login-form-base edit-password">
                 <el-form 
                     :inline="true"                                
-                    :model="edit_form" 
-                    :rules="login_rules"
-                    ref="edit_form">
+                    :model="edit_form" >
                     <div class="login-form-shadow">
                         <el-form-item prop='username'>
                             <el-input 
@@ -196,49 +193,18 @@
 $gf = #fff;
 $g3 = #333;
 $default_blue = #158cff;
+$default_bd_blue = #0176d6;
 $default_border_color = #e5e5e5;
 $header_bgcolor = #383d41;
 $header_bdcolor = #2c2d2f;
 $header_hover_color = #2a2f32;
 $icon_tips_bgcolor = #fd9a01;
 
+
+
 .layout-header
     z-index: 1
     width: 100%
-.edit-password-dialog
-    width: 240px
-    background-color: $gf
-    .el-dialog__header
-        padding: 10px 15px 
-        background-color: $default_blue
-        .el-dialog__title,
-        .el-dialog__close
-            color: $gf
-            font-weight: 400
-    .el-dialog__body
-        padding 15px
-        .el-form-item
-            width: 100%
-            margin: 0
-            &.password
-                position: relative
-                top: -1px
-            &.confirm_password
-                position: relative
-                top: -2px
-        .btn-wrap
-            .btn-login
-                width: 100%
-                margin-top: 16px
-                color: $gf
-                border-radius : 0
-                background-color: $default_blue
-        .el-form-item__content
-            width: 100%
-        .el-input__inner
-            border-radius: 0
-
-
 
 .top-nav-content
     height: 50px
@@ -318,4 +284,38 @@ $icon_tips_bgcolor = #fd9a01;
             .member-list-items
                 &:hover
                     background-color: $default_border_color
+
+.edit-password-dialog
+    width: 240px
+    background-color: $gf
+    .el-dialog__header
+        padding: 10px 15px 
+        background-color: $default_blue
+        .el-dialog__title,
+        .el-dialog__close
+            color: $gf
+            font-weight: 400
+    .el-dialog__body
+        padding 15px
+        .el-form-item
+            width: 100%
+            margin: 0
+            &.password
+                position: relative
+                top: -1px
+            &.confirm_password
+                position: relative
+                top: -2px
+        .btn-wrap
+            .btn-login
+                width: 100%
+                margin-top: 16px
+                color: $gf
+                border-radius : 0
+                border-color: $default_bd_blue
+                background-color: $default_blue
+        .el-form-item__content
+            width: 100%
+        .el-input__inner
+            border-radius: 0
 </style>

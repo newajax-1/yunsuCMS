@@ -24,6 +24,7 @@ export default {
                 empId : undefined,
                 empNo : undefined, 
                 empNm : undefined,
+                password : undefined,
             },
 
             // 分页数据
@@ -66,6 +67,7 @@ export default {
         showDialog(id) {
             var that = this;
             this.new_custom = true;
+            this.show_emp_id = false;
             this.$clearObject(this.add_info);
             this.$clearObject(this.initial_info);
             id ? (this.dialog_name = "修改员工") : (this.dialog_name = "增加员工");
@@ -79,6 +81,7 @@ export default {
                     } ,
                     callback : function(data){
                         that.initial_info = data.data.data;
+                        that.initial_info.password = undefined;
                     },
                     error() {
                         //do error function
@@ -152,7 +155,13 @@ export default {
         // 保存信息
         saveInfo() {
             var that = this;
-            if(that.initial_info.empNo === "" || that.initial_info.empNm ===""){
+            var _flag = undefined;
+            if(this.show_emp_id) {
+            	_flag = !that.initial_info.empNo || !that.initial_info.empNm;
+            }else{
+            	_flag = !that.initial_info.empNo || !that.initial_info.empNm || !that.initial_info.password
+            }
+            if(_flag){
                 this.$message({
                     message: "请将信息填写完整",
                     type: "warning"
@@ -167,6 +176,7 @@ export default {
                     empId : that.initial_info.empId || "",
                     empNo : that.initial_info.empNo,
                     empNm : that.initial_info.empNm,
+                    password : that.initial_info.password,
                 } ,
                 callback : function(data){
                     that.new_custom = false;

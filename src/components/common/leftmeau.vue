@@ -62,7 +62,7 @@ $menu_hover_bgcolor = #1f8ae9;
 $gf = #fff;
 
 .layout-menu
-    top 50px
+    top 50px !important
     height 100%
     width 150px
     color $gf

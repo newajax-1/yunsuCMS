@@ -52,7 +52,6 @@ export default {
                 this.second_table_show = true;
             }else{
                 this.second_table_show = false;
-                this.second_table_text_show = true;
             }
         },
         searchFirst() {
@@ -135,9 +134,9 @@ export default {
                     }else {
                         that.other_table_data = data.data.page.list;
                     }
-                    that.page_list.total = data.data.page.total;
-                    that.page_list.page_num = data.data.page.pageNum;
-                    that.page_list.page_size = data.data.page.pageSize;
+                    that.page_list.total = data.data.page.total || 0;
+                    that.page_list.page_num = data.data.page.pageNum || 1;
+                    that.page_list.page_size = data.data.page.pageSize || search_pageSize;
                 },
                 error() {
                     //do error function
@@ -146,7 +145,7 @@ export default {
         },
         // 重置
         reset() {
-            var _seach_info_bill_sts = this.this.seach_info.bill_sts;
+            var _seach_info_bill_sts = this.seach_info.bill_sts;
             this.$clearObject(this.seach_info);
             this.seach_info.bill_sts = _seach_info_bill_sts;
         },
@@ -159,6 +158,8 @@ export default {
         // 终止
         stopWorkInfo(id) {
             var that = this;
+            this.stop_data_info.radio = "01";
+            this.stop_data_info.comment = undefined;
             this.stop_data = [];
             this.stop_custom = true;
             this.$ajaxWrap({
@@ -207,7 +208,6 @@ export default {
                         type: "success"
                     });
                     that.stop_custom = false;
-                    that.that = [];
                     that.loadTable();
                 },
                 error(data) {
@@ -256,17 +256,14 @@ export default {
                 case "first":
                     this.seach_info.bill_sts = 0;
                     this.showTable();
-                    this.loadTable();
                     break;
                 case "second":
                     this.seach_info.bill_sts = 1;
                     this.showTable();
-                    this.loadTable();
                     break;
                 case "other":
                     this.seach_info.bill_sts = 2;
                     this.showTable();
-                    this.loadTable();
                     break;
             }
         },
@@ -299,11 +296,15 @@ export default {
         },
         // 分页
         handleSizeChange(val) {
-            this.searchFormData(val, "size");
+        	if(this.first_table_data.length || this.second_table_data.length || this.other_table_data.length) {
+        		this.searchFormData(val, "size");
+        	}
         },
         // -----------------------------------------------------------------------------------------------------------------------------------      
         handleCurrentChange(val) {
-            this.searchFormData(val, "num");
+        	if(this.first_table_data.length || this.second_table_data.length || this.other_table_data.length) {
+        		this.searchFormData(val, "num");
+        	}
         },
     },
     mounted(){

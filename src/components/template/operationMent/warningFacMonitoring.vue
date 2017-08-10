@@ -1,5 +1,5 @@
 <template>
-	<div class="warning-fac">
+	<div class="warning_fac_mon">
 	    <el-row>
     		<el-col :span="24">
                 <div class="content-title">
@@ -30,28 +30,33 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-small btn-blue">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-small btn-orange">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue btn-small">查询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
+                        </el-form-item>
+                        <el-form-item>
                         </el-form-item>
                     </el-form>
                 </div>
-                    
-                <el-col :span="24" class="content-buttons">
-                    <el-button class="btn btn-blue btn-small" @click="refresh"><i class="fa fa-repeat"></i> 刷 新</el-button>
-                </el-col>
             </el-col>
-            <el-col :span="24">
 
+            <div class="content-buttons fl">
+                <el-col :span="24" class="content-buttons">
+                    <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
+                </el-col>
+            </div>
+
+            <el-col :span="24">
+                <!-- 原料库存  成品库存  选择开始start -->
                 <el-tabs v-model="sale_change_name" type="card" class="tab-title" @tab-click="changeTableActive">
                     <el-tab-pane label="未解除" name="first" ></el-tab-pane>
                     <el-tab-pane label="已处理" name="second"></el-tab-pane>
                 </el-tabs>              
-
+                <!-- 原料库存  成品库存  选择开始end -->
                 <!-- 列表开始  start -->
                 <div class="table-wrap">
                     <el-table 
-                        border
-                        :data="table_data">
+                        :data="table_data" 
+                        border>
                         <el-table-column prop="alarmNo" label="设备报警编号"></el-table-column>
                         <el-table-column prop="machine" label="机台归属"></el-table-column>
                         <el-table-column prop="billNo" label="工单号"></el-table-column>
@@ -69,16 +74,20 @@
         <!--分页 start-->
         <div class="table-page fr">
             <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="page_list.page_num"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size=page_list.page_size
-                    layout="total, sizes, prev, pager, next"
-                    :total="page_list.total">
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="page_list.page_num"
+                :page-size=page_list.page_size
+                layout="total, prev, pager, next"
+                :total="page_list.total">
             </el-pagination>
         </div>
         <!--分页 end-->
 	</div>
 </template>
+<style lang="stylus">
+.warning_fac_mon
+    .content-buttons
+        padding 10px 0 10px 0
+</style>
 <script src="./warningfacmonitorings.js"></script>

@@ -13,7 +13,6 @@
                     </el-form>
                 </div>
 		    </el-col>
-
 	        <!-- 数据表格 start -->
             <el-col :span="24">
                 <div class="table-wrap">
@@ -42,13 +41,12 @@
     	<!--分页 start-->
         <div class="table-page fr">
             <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="page_list.page_num"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size=page_list.page_size
-                    layout="total, sizes, prev, pager, next"
-                    :total="page_list.total">
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="page_list.page_num"
+                :page-size=page_list.page_size
+                layout="total, prev, pager, next"
+                :total="page_list.total">
             </el-pagination>
         </div>
         <!--分页 end-->
@@ -60,51 +58,57 @@
             class="default-dialog dialog-small"
             :visible.sync="new_custom"
             :before-close="closeDialog">
-            <el-row>
-                <el-col :span="24">
-                    <!-- 校验规则必须写在 el-form 标签中 -->
-                    <el-form :inline="true" class="" >
-                        <el-row :gutter="24">
-                            <el-col :span="12">
-                                <el-form-item label="角色名称：">
-                                    <el-input v-model="add_info.roleName" placeholder="请输入角色名称" class="asterisk"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="角色描述：">
-                                    <el-input v-model="add_info.remark" placeholder="请输入角色描述" class=""></el-input>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="12">
-                                <el-form-item label="权限分配：" class="only-role">
-                                    <el-tree
-                                        :data="data2"
-                                        show-checkbox
-                                        node-key="menuId"
-                                        ref="tree"
-                                        :default-checked-keys="checked_arr"
-                                        highlight-current
-                                        :props="defaultProps"
-                                        class="bigTree">
-                                    </el-tree>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-form>
-                </el-col>
-            </el-row>
+            <div>
+                <el-row>
+                    <el-col :span="24">
+                        <!-- 校验规则必须写在 el-form 标签中 -->
+                        <el-form :inline="true" class="" >
 
-			<div class="message fr">
-                <el-button class="btn btn-small btn-green" @click="showAdd(adfasdasd)">保存</el-button>
-                <el-button class="btn btn-small btn-gray" @click="closeDialog">取消</el-button>
+                            <el-row :gutter="24">
+                                <el-col :span="12">
+                                    <el-form-item label="角色名称：">
+                                        <el-input v-model="add_info.roleName" placeholder="请输入角色名称" class="asterisk"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="角色描述：">
+                                        <el-input v-model="add_info.remark" placeholder="请输入角色描述" class=""></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="24">
+                                <el-col :span="12">
+                                    <el-form-item label="权限分配：" class="only-role">
+                                        <el-tree
+                                            :data="data2"
+                                            show-checkbox
+                                            node-key="menuId"
+                                            ref="tree"
+                                            :default-checked-keys="checked_arr"
+                                            highlight-current
+                                            :props="defaultProps"
+                                            class="bigTree">
+                                        </el-tree>
+                                        <!-- <el-button @click="setCheckedKeys" v-if = "addAdmin" style="margin-top: 10px;">显示已有权限</el-button> -->
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
+                            <div class="message center">
+                                <el-button class="btn btn-small btn-green" @click="showAdd(adfasdasd)">完 成</el-button>
+                                <el-button class="btn btn-small btn-gray" @click="closeDialog">关 闭</el-button>
+                            </div>
+                        </el-form>
+                    </el-col>
+                </el-row>
             </div>
         </el-dialog>
         <!--新增弹框 end-->
     </div>
 </template>
+
 <script src="./rolemanagements.js"></script>
+
 <style lang="stylus">
 .bigTree
     width: 200px;

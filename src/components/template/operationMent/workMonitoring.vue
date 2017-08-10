@@ -33,29 +33,33 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="search()" class="btn btn-small btn-blue">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-small btn-orange">重置</el-button>
+                            <el-button @click="search()" class="btn btn-blue btn-small">查询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
-                    
-                <el-col :span="24" class="content-buttons">
-                    <el-button class="btn btn-blue btn-small" @click="refresh"><i class="fa fa-repeat"></i> 刷 新</el-button>
-                </el-col>
             </el-col>
-            <el-col :span="24">
 
+            <div class="content-buttons fl">
+                <el-col :span="24">
+                    <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
+                </el-col>
+            </div>
+
+            <el-col :span="24">
+                <!-- 原料库存  成品库存  选择开始start -->
                 <el-tabs v-model="sale_change_name" type="card" class="tab-title" @tab-click="changeTableActive">
                     <el-tab-pane label="未下发" name="first" ></el-tab-pane>
                     <el-tab-pane label="已下发" name="second"></el-tab-pane>
                     <el-tab-pane label="已停止" name="other"></el-tab-pane>
                 </el-tabs>              
-
+                <!-- 原料库存  成品库存  选择开始end -->
                 <!-- 列表开始  start -->
                 <div class="table-wrap">
                     <el-table 
                         border
-                        :data="first_table_data"
+                        :data="first_table_data" 
+                        style="width: 100%" 
                         v-if="first_table_show">
                         <el-table-column prop="workplanNo" label="排产计划编号"></el-table-column>
                         <el-table-column prop="week" label="周"></el-table-column>
@@ -73,11 +77,12 @@
                     </el-table>
                 </div>
 
-                <div class="second-table table-wrap">
+                <div class="second-table">
                     <h1 v-if="second_table_text_show">请输入检索条件查询已下发工单内容</h1>
                     <el-table 
                         border
-                        :data="second_table_data"
+                        :data="second_table_data" 
+                        style="width: 100%" 
                         v-if="second_table_show">
                         <el-table-column prop="itemNo" label="产品型号"></el-table-column>
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
@@ -90,7 +95,7 @@
                         <el-table-column prop="createTime" label="计划生产日期"></el-table-column>
                         <el-table-column prop="week" label="周"></el-table-column>
                         <el-table-column prop="clas" label="班次"></el-table-column>
-                        <el-table-column prop="worker" label="班次工人"></el-table-column>
+                        <el-table-column prop="empName" label="班次工人"></el-table-column>
                         <el-table-column prop="quantity" label="计划产量"></el-table-column>
                         <el-table-column prop="prodSts" label="生产状态"></el-table-column>
                         <el-table-column prop="operTime" label="下发时间"></el-table-column>
@@ -106,10 +111,11 @@
                     </el-table>
                 </div>
 
-                <div class="other-table table-wrap">
+                <div class="other-table">
                     <el-table 
                         border
                         :data="other_table_data" 
+                        style="width: 100%" 
                         v-if="other_table_show">
                         <el-table-column prop="itemNo" label="产品型号"></el-table-column>
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
@@ -122,7 +128,7 @@
                         <el-table-column prop="createTime" label="计划生产日期"></el-table-column>
                         <el-table-column prop="week" label="周"></el-table-column>
                         <el-table-column prop="clas" label="班次"></el-table-column>
-                        <el-table-column prop="worker" label="班次工人"></el-table-column>
+                        <el-table-column prop="empName" label="班次工人"></el-table-column>
                         <el-table-column prop="quantity" label="计划产量"></el-table-column>
                         <el-table-column prop="prodSts" label="生产状态"></el-table-column>
                         <el-table-column prop="operTime" label="下发时间"></el-table-column>
@@ -133,33 +139,33 @@
                  <!-- 列表开始  end -->
             </el-col>
 	    </el-row>
-
         <!--分页 start-->
         <div class="table-page fr" v-if="!second_table_text_show">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page.sync="page_list.page_num"
-                    :page-sizes="[10, 20, 30, 40]"
                     :page-size=page_list.page_size
-                    layout="total, sizes, prev, pager, next"
+                    layout="total, prev, pager, next"
                     :total="page_list.total">
             </el-pagination>
         </div>
         <!--分页 end-->
-
 	    <!-- 终止工单弹框 start -->
 	    <el-dialog
             size="small"
             title="终止工单"
-            custom-class="pub-dialog"
+            class="default-dialog dialog-small"
             :before-close="handleClose"
             :visible.sync="stop_custom">
             <div>
                 <el-row>
                     <el-col :span="24">
-                        <div class="other-table">
-		                    <el-table :data="stop_data" style="width: 100%">
+                        <div class="other-table table-wrap">
+		                    <el-table 
+                                border
+                                :data="stop_data" 
+                                style="width: 100%">
 		                        <el-table-column prop="weekDate" label="日期"></el-table-column>
 		                        <el-table-column prop="clas" label="班次"></el-table-column>
 		                        <el-table-column prop="billNo" label="工单号"></el-table-column>
@@ -170,28 +176,35 @@
                     </el-col>
                 </el-row>
             </div>
-            <div>
-            	<p>请选择终止原因并提交</p>
-                <template>
-                    <el-radio class="radio" v-model="stop_data_info.radio" label="01">注塑机故障</el-radio>
-                    <el-radio class="radio" v-model="stop_data_info.radio" label="02">其他设备故障</el-radio>
-                    <el-radio class="radio" v-model="stop_data_info.radio" label="03">模具故障</el-radio>
-                    <el-radio class="radio" v-model="stop_data_info.radio" label="04">原材料短缺</el-radio>
-                    <el-radio class="radio" v-model="stop_data_info.radio" label="05">人员调整</el-radio>
-                    <el-radio class="radio" v-model="stop_data_info.radio" label="06">其他</el-radio>
-                </template>
-			  	<el-input placeholder="请简单描述终止原因" class="radio-input" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'asterisk' : ''"></el-input>
+            <div class="stop-message">
+            	<p class="stop-message">请选择终止原因并提交</p>
+                <el-radio class="radio" v-model="stop_data_info.radio" label="01">注塑机故障</el-radio>
+                <el-radio class="radio" v-model="stop_data_info.radio" label="02">其他设备故障</el-radio>
+                <el-radio class="radio" v-model="stop_data_info.radio" label="03">模具故障</el-radio>
+                <el-radio class="radio" v-model="stop_data_info.radio" label="04">原材料短缺</el-radio>
+                <el-radio class="radio" v-model="stop_data_info.radio" label="05">人员调整</el-radio>
             </div>
-            <span slot="footer" class="dialog-footer">
-                    <el-button class="btn btn-save" @click="stopWork()">提 交</el-button>
-                    <el-button class="btn btn-publish" @click="handleClose">关 闭</el-button>
-             </span>
+            <div class="stop-message">
+                <el-radio class="radio" v-model="stop_data_info.radio" label="06">其他</el-radio>
+                <el-input placeholder="请简单描述终止原因" class="radio-input change-inline" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'asterisk' : ''"></el-input>
+            </div>
+            <div class="message center">
+                <el-button class="btn btn-small btn-green" @click="stopWork()">完 成</el-button>
+                <el-button class="btn btn-small btn-gray" @click="handleClose()">关 闭</el-button>
+            </div>
         </el-dialog>
 	    <!-- 终止工单弹框 end -->
 	</div>
 </template>
 <script src="./workmonitorings.js"></script>
-<style lang="stylus" scoped>
-.radio-input
-    width 200px
+<style lang="stylus">
+.work-monitoring
+    .stop-message
+        margin 20px 0
+        .el-input__inner
+            width 400px
+    .change-inline
+        width 420px
+        display inline-block
+
 </style>

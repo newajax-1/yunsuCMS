@@ -47,28 +47,41 @@ export default {
             }) 
         },
 
-        // 上模
+        // 上下模
         changeMould(id, type) {
-            var _oprtTyp = (type == "01" ? "02" : "03");
+            var _oprtTyp = undefined;
+            var _msg = undefined;
+            if(type == "01") {
+                _oprtTyp = "02";
+                _msg = "上模";
+            }else{
+                _oprtTyp = "03";
+                _msg = "下模";
+            }
             var that = this;
-            this.$ajaxWrap({
-                type : "post",
-                url : "/mouldopt/operationMouldOpt",
-                data : {
-                    mouldOptId : id,
-                    oprtTyp : _oprtTyp,
-                } ,
-                success : function(data){
-                    that.$message({
-                        message: data.tipMsg,
-                        type: "success"
-                    });
-                    that.loadTable();
-                },
-                error(res) {
-                    //do error function
-                }
-            }) 
+            this.$confirm("你确定" + _msg + "吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+            }).then(function() {
+                that.$ajaxWrap({
+                    type : "post",
+                    url : "/mouldopt/operationMouldOpt",
+                    data : {
+                        mouldOptId : id,
+                        oprtTyp : _oprtTyp,
+                    } ,
+                    success : function(data){
+                        that.$message({
+                            message: data.tipMsg,
+                            type: "success"
+                        });
+                        that.loadTable();
+                    },
+                    error(res) {
+                        //do error function
+                    }
+                })
+            }).catch(function() {});
         },
 
         // 重置
@@ -117,6 +130,11 @@ export default {
                 case "other":
                     this.seach_info.oprt_typ = "03";
                     this.is_show = false;
+                    this.loadTable();
+                    break;
+                default :
+                    this.seach_info.oprt_typ = "01";
+                    this.is_show = true;
                     this.loadTable();
                     break;
             }

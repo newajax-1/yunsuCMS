@@ -17,9 +17,8 @@
                 <!-- 列表开始  start -->
                 <div class="table-wrap">
                     <el-table
-                        border
-                        :data="detail_data"
-                        @selection-change="handleSelectionChange">
+                    :data="detail_data"
+                    @selection-change="handleSelectionChange">
                         <el-table-column type="selection" width="45"></el-table-column>
                         <el-table-column width="30" prop="type" label="类型"></el-table-column>
                         <el-table-column width="45" prop="lv" label="优先级"></el-table-column>
@@ -224,7 +223,6 @@
                 </el-col>
             </div>
 	    </el-row>
-
         <!-- 修改排班弹框 start -->
         <el-dialog
             size="large"
@@ -236,8 +234,8 @@
                 <el-row>
                     <el-col :span="24">
                         <el-table
-                            border
-                            :data="update_data">
+                            :data="update_data"
+                            style="width: 100%">
                             <el-table-column
                                     prop="weekDate"
                                     label="日期">
@@ -280,7 +278,6 @@
         <!-- 修改排班弹框 end -->
 	</div>
 </template>
-<script src="./workmonitoringinfos.js"></script>
 <style lang="stylus">
 .work-mon-info
     .table-wrap
@@ -306,3 +303,4 @@
                 &::after
                     content: ""
 </style>
+<script src="./workmonitoringinfos.js"></script>

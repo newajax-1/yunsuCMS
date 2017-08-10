@@ -9,7 +9,7 @@ export default {
 
             // 搜索条件
             seach_info : {
-                oprt_type : 1,
+                oprt_type : 0,
                 machine : undefined,
                 bill_no : undefined,
                 rpter : undefined,
@@ -97,13 +97,17 @@ export default {
         changeTableActive(val) {
             switch (val.name) {
                 case "first":
-                    this.seach_info.oprt_type = 1;
-                    this.loadTable();
+                    this.seach_info.oprt_type = 0;
+                    this.refresh();
                     break;
                 case "second":
-                    this.seach_info.oprt_type = 2;
-                    this.loadTable();
+                    this.seach_info.oprt_type = 1;
+                    this.refresh();
                     break;
+                default :
+                	this.seach_info.oprt_type = 0;
+	                this.refresh();
+	                break;
             }
         },
     },

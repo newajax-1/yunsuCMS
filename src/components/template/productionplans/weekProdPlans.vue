@@ -109,9 +109,8 @@
 
             <div class="table-page fr">
                 <el-pagination
-                    layout="total, sizes, prev, pager, next"
+                    layout="total, prev, pager, next"
                     :current-page.sync="weekplan_page_list.pageNum"
-                    :page-sizes="[10,20,30,30]"
                     :page-size="weekplan_page_list.pageSize"
                     :total="weekplan_page_list.total"
                     @size-change="currentSizeChange"
@@ -130,12 +129,13 @@
                         <div class="table-wrap">
                             <div class="message clearfix">
                                 <div class="fl"  v-show="!weekplan_info_show">
-                                    <el-button class="btn btn-small btn-green" @click="confirmSendPlan('save')">保 存</el-button>
-                                    <el-button class="btn btn-small btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
-                                    <el-button class="btn btn-small btn-gray" @click="deleteWorkArray">删除</el-button>
-                                    <el-button class="btn btn-large btn-blue" @click="createWorkplan">新增计划</el-button>
+                                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')">保 存</el-button>
+                                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
+                                    <el-button class="btn btn-small btn-blue" @click="deleteWorkArray">删除</el-button>
+                                    <el-button class="btn btn-large btn-blue" @click="createWorkplan"><i class="fa fa-user-plus"></i>新增计划</el-button>
+                                    <!-- 
                                     <el-button class="btn btn-small btn-blue" v-if="new_week_date" @click="nextWeekplan('pre')" >上一周</el-button>  
-                                    <el-button class="btn btn-small btn-blue" v-else @click="nextWeekplan('next')" >下一周</el-button>    
+                                    <el-button class="btn btn-small btn-blue" v-else @click="nextWeekplan('next')" >下一周</el-button>     -->
                                 </div>
                             </div>
                             <el-table
@@ -498,12 +498,13 @@
                     </el-row>
                     <div class="message clearfix" style=" margin-top: 10px;">
                         <div class="fl"  v-show="!weekplan_info_show">
-                            <el-button class="btn btn-small btn-green" @click="confirmSendPlan('save')">保 存</el-button>
-                            <el-button class="btn btn-small btn-orange" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
-                            <el-button class="btn btn-small btn-gray" @click="deleteWorkArray">删除</el-button>
-                            <el-button class="btn btn-large btn-blue" @click="createWorkplan">新增计划</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')">保 存</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="deleteWorkArray">删除</el-button>
+                            <el-button class="btn btn-large btn-blue" @click="createWorkplan"><i class="fa fa-user-plus"></i>新增计划</el-button>
+                            <!-- 
                             <el-button class="btn btn-small btn-blue" v-if="new_week_date" @click="nextWeekplan('pre')" >上一周</el-button>  
-                            <el-button class="btn btn-small btn-blue" v-else @click="nextWeekplan('next')" >下一周</el-button>   
+                            <el-button class="btn btn-small btn-blue" v-else @click="nextWeekplan('next')" >下一周</el-button>    -->
                         </div>
                     </div>
 

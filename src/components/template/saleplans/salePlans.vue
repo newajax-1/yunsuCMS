@@ -103,9 +103,8 @@
 
         <div class="table-page fr">
             <el-pagination
-                layout="total, sizes, prev, pager, next"
+                layout="total, prev, pager, next"
                 :current-page.sync="sale_page_list.pageNum"
-                :page-sizes="[10,20,30,40]"
                 :page-size="sale_page_list.pageSize"
                 :total="sale_page_list.total"
                 @size-change="currentSizeChange"
@@ -195,7 +194,7 @@
 
                         <el-row>
                             <el-col >
-                                <div class="message">
+                                <div class="message center">
                                     <el-button class="btn btn-small btn-green" @click="addNewSalePlan()">完 成</el-button>
                                     <el-button class="btn btn-small btn-gray" @click="confirmCloseModal()">关 闭</el-button>
                                 </div>
@@ -431,7 +430,7 @@
                     </div>
                 </el-col>
             </el-row>
-            <div class="message fr" style="margin-top: 10px;">
+            <div class="message center" style="margin-top: 10px;">
                 <el-button class="btn btn-small btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-repeat" ></i> 返回</el-button>
             </div>
         </el-dialog>

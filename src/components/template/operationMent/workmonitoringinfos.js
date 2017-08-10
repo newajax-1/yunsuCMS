@@ -100,6 +100,9 @@ export default {
                 },
                 callback : function(data) {
                     that.update_data = data.data.dataList;
+                    that.update_data.every(function(el) {
+                        return el.clas = el.clas == "01" ? "白班" : "夜班";
+                    });
                     that.worker_list = data.data.empList;
                     that.update_data.every(function(el) {
                         return that.worker.push({

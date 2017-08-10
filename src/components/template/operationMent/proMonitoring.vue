@@ -33,7 +33,6 @@
                     </el-form>
                 </div>
             </el-col>
-
             <!-- 数据表格 start -->
             <el-col :span="24">
                 <div class="table-wrap">
@@ -60,7 +59,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="showDetail(scope.row)">查看不良记录</el-button>
+                                    @click="showDetail(scope.row)">不良记录</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -68,21 +67,18 @@
             </el-col>
             <!-- 数据表格 end -->
     	</el-row>
-
     	<!--分页 start-->
         <div class="table-page fr">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page.sync="page_list.page_num"
-                    :page-sizes="[10, 20, 30, 40]"
                     :page-size=page_list.page_size
-                    layout="total, sizes, prev, pager, next"
+                    layout="total, prev, pager, next"
                     :total="page_list.total">
             </el-pagination>
         </div>
         <!--分页 end-->
-
 		<!--详情弹框 start-->
         <el-dialog
             size="small"
@@ -92,15 +88,19 @@
             <div>
                 <el-row>
                     <el-col :span="24">
-                        <div class="table-wrap">
+                        <div class="list-table">
 		                    <el-table
-                                border
+		                        style="width: 100% "
 		                        :data="bad_table_data">
-                                <el-table-column prop="rjctType" label="不良项目"></el-table-column>
+                                <el-table-column prop="rjctType" label="不良类型"></el-table-column>
 		                        <el-table-column prop="rjctNum" label="不良数"></el-table-column>
 		                    </el-table>
 		                </div>
                     </el-col>
+
+                    <div class="message center">
+                        <el-button class="btn btn-small btn-blue" @click="new_custom = false">返 回</el-button>
+                    </div>
                 </el-row>
             </div>
         </el-dialog>

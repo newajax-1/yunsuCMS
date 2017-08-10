@@ -93,9 +93,8 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page.sync="page.page_num"
-                :page-sizes="[10, 20, 30, 40]"
                 :page-size="page.page_size"
-                layout="total, sizes, prev, pager, next"
+                layout="total, prev, pager, next"
                 :total="page.total">
             </el-pagination>
         </div>
@@ -187,7 +186,7 @@
 
                 </div>
             </span>
-            <div class="message fr ">
+            <div class="message center">
                 <el-button class="btn btn-small btn-green" @click="addNewCustom()">提交</el-button>
                 <el-button class="btn btn-small btn-gray" @click="closeDialog">取 消</el-button>
             </div>
