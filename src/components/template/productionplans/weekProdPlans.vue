@@ -526,7 +526,7 @@
             th,
             td
                 height: 30px
-                font-size: 12px
+                font-size: 12px !important
             td                
                 padding: 0 2px !important
                 text-align: center

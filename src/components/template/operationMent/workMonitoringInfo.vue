@@ -283,11 +283,10 @@
 .work-mon-info
     .table-wrap
         .el-table
-            width: 1431px
             th,
             td
                 height: 30px
-                font-size: 12px
+                font-size: 12px !important
             td                
                 padding: 0 2px
                 text-align: center

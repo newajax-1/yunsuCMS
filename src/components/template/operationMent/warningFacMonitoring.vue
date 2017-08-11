@@ -33,8 +33,6 @@
                             <el-button @click="loadTable()" class="btn btn-blue btn-small">查询</el-button>
                             <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
                         </el-form-item>
-                        <el-form-item>
-                        </el-form-item>
                     </el-form>
                 </div>
             </el-col>

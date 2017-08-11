@@ -402,8 +402,10 @@ export default {
         },
 
         loadModalTableData(data) {
+            this.modal_week_date = data.data;
+            this.modal_sync_data = data;
+
             if (data.dataList.length) {
-                this.modal_weekplan_table_data = [];
 
                 // 联动代码 勿删
                 // this.getProductInfoData(data.dataList);
@@ -414,8 +416,6 @@ export default {
                 this.createWorkplan();
             }
 
-            this.modal_week_date = data.data;
-            this.modal_sync_data = data;
         },
 
         // 联动代码 勿删

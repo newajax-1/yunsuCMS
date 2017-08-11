@@ -177,8 +177,8 @@
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-                                <el-form-item>
-                                    <el-input v-model="add_info.address"></el-input>
+                                <el-form-item class="input-large">
+                                    <el-input v-model="add_info.address" ></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -275,7 +275,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item>
+                        <el-form-item class="input-large">
                             <el-input v-model="edit_table.address" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -352,7 +352,7 @@
 </template>
 
 <script src="./salersinfos.js"></script>
-<style lang="stylus" scoped>
+<style lang="stylus">
     .saler-info
         .layout-content 
             .default-dialog 
@@ -362,4 +362,7 @@
                     width: auto
         .el-form-item
             margin-right 5px
+        .input-large
+            .el-input__inner
+                width: 210px
 </style>
