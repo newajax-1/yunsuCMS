@@ -288,8 +288,9 @@ $icon_tips_bgcolor = #fd9a01;
                     background-color: $default_border_color
 
 .edit-password-dialog
-    width: 240px
-    background-color: $gf
+    &.el-dialog
+        width: 240px 
+        background-color: $gf 
     .el-dialog__header
         padding: 10px 15px 
         background-color: $default_blue

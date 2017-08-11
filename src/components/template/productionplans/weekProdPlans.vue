@@ -199,7 +199,7 @@
                                             <el-input
                                                 :disabled="modal_table_edit" 
                                                 v-model="scope.row.ordrNo"
-                                                @change="getProductData(scope.row.ordrNo,scope.$index)">
+                                                @blur="getProductData(scope.row.ordrNo,scope.$index)">
                                             </el-input>
                                         </el-tooltip>
                                     </template>
@@ -221,8 +221,7 @@
                                             </el-select> -->
                                             <el-input
                                                 :disabled="modal_table_edit" 
-                                                v-model="scope.row.itemNo"
-                                                @change="setProductName(scope.row.itemNo,scope.$index)">
+                                                v-model="scope.row.itemNo">
                                             </el-input>
                                         </el-tooltip>
                                     </template>

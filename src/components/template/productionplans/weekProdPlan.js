@@ -42,26 +42,28 @@ export default {
             modal_show_tips: false,
             modal_title: undefined,
             modal_table_row_data: {
-                type: undefined,
-                lv: undefined,
-                custNo: undefined,
-                ordrNo: undefined,
-                tempOrder: undefined,
-                tempItem: undefined,
-                itemNo: undefined,
-                itemName: undefined,
-                productNo: undefined,
-                machine: undefined,
-                moldingCycle: undefined,
-                mouldNo: undefined,
-                materialGrade: undefined,
-                scndProc: undefined,
-                sum: undefined,
-                picking: undefined,
-                delivery: undefined,
-                inv: undefined,
-                secInv: undefined,
-                planBill: null
+                type: "",
+                lv: "",
+                custNo: "",
+                scndProc: "",
+                ordrNo: "",
+                itemNo: "",
+                itemName: "",
+                productNo: "",
+                machine: "",
+                moldingCycle: "",
+                mouldNo: "",
+                materialGrade: "",
+                sum: "",
+                picking: "",
+                delivery: "",
+                inv: "",
+                secInv: "",
+                planBill: "",
+
+                // 联动代码 勿删
+                // tempOrder: undefined,
+                // tempItem: undefined,
             },
 
             // 周计划 模态框表格数据
@@ -310,7 +312,9 @@ export default {
                     workplanWeekId: plan_id,
                 },
                 success(res) {
-                    that.$baseWarn("删除成功！")
+                    that.$baseWarn("删除成功！", function() {
+                        that.refresh();
+                    });
                 }
             });
         },
@@ -398,30 +402,37 @@ export default {
         },
 
         loadModalTableData(data) {
-            this.modal_week_date = data.data;
-            this.modal_sync_data = data;
-
             if (data.dataList.length) {
                 this.modal_weekplan_table_data = [];
-                this.getProductInfoData(data.dataList);
+
+                // 联动代码 勿删
+                // this.getProductInfoData(data.dataList);
+
+                this.modal_weekplan_table_data = data.dataList;
+
             } else {
                 this.createWorkplan();
             }
+
+            this.modal_week_date = data.data;
+            this.modal_sync_data = data;
         },
 
-        getProductInfoData(data) {
-            let that = this;
-            for (let i = 0; i < data.length; i++) {
-                let temp_data = data[i];
-                that.getOrderDataList(temp_data.custNo, i, function(res) {
-                    temp_data.tempOrder = res.orderList;
-                    that.getProductData(temp_data.ordrNo, i, function(res) {
-                        temp_data.tempItem = res.bomList;
-                        Vue.set(that.modal_weekplan_table_data, i, temp_data);
-                    });
-                });
-            }
-        },
+        // 联动代码 勿删
+        // getProductInfoData(data) {
+        //     let that = this;
+        //     for (let i = 0; i < data.length; i++) {
+        //         let temp_data = data[i];
+
+        //         that.getOrderDataList(temp_data.custNo, i, function(res) {
+        //             temp_data.tempOrder = res.orderList;
+        //             that.getProductData(temp_data.ordrNo, i, function(res) {
+        //                 temp_data.tempItem = res.bomList;
+        //                 Vue.set(that.modal_weekplan_table_data, i, temp_data);
+        //             });
+        //         });
+        //     }
+        // },
 
         getProductData(val, index, done) {
             let that = this;
@@ -448,8 +459,10 @@ export default {
 
             temp_workplan_data.tempItem = data.bomList;
             temp_workplan_data.productNo = data.productNo;
-            temp_workplan_data.itemNo = "";
-            temp_workplan_data.itemName = "";
+
+            // 联动代码 勿删
+            // temp_workplan_data.itemNo = "";
+            // temp_workplan_data.itemName = "";
 
             Vue.set(that.modal_weekplan_table_data, index, temp_workplan_data);
         },
@@ -510,7 +523,9 @@ export default {
                     }
 
                     delete el.tempItem;
-                    delete el.tempOrder;
+
+                    // 联动代码 勿删
+                    // delete el.tempOrder;
                 }
             }
 
@@ -600,29 +615,32 @@ export default {
             that.modal_weekplan_table_data.push(table_row_data);
         },
 
-        getOrderDataList(val, index, done) {
-            let that = this;
-            that.$ajaxWrap({
-                type: "post",
-                url: "week/getWeekDetail",
-                data: {
-                    custNo: val
-                },
-                success(res) {
-                    if (typeof done === "function") {
-                        done(res.data, index);
-                    } else {
-                        that.handleOrderData(res.data, index);
-                    }
-                }
-            })
-        },
+        // 联动代码 勿删
+        // getOrderDataList(val, index, done) {
+        //     let that = this;
+        //     that.$ajaxWrap({
+        //         type: "post",
+        //         url: "week/getWeekDetail",
+        //         data: {
+        //             custNo: val
+        //         },
+        //         success(res) {
+        //             if (typeof done === "function") {
+        //                 done(res.data, index);
+        //             } else {
+        //                 that.handleOrderData(res.data, index);
+        //             }
+        //         }
+        //     })
+        // },
 
         handleOrderData(data, index) {
             var that = this,
                 temp_modal_data = that.modal_weekplan_table_data[index];
 
-            temp_modal_data.tempOrder = data.orderList;
+            // 联动代码 勿删
+            // temp_modal_data.tempOrder = data.orderList;
+
             temp_modal_data.ordrNo = "";
             Vue.set(that.modal_weekplan_table_data, index, temp_modal_data);
         },
@@ -764,10 +782,13 @@ export default {
                 },
                 success(res) {
                     let ret = that.modal_sync_data;
+
                     ret.dataList = that.modal_weekplan_table_data;
                     ret.data = res.data.data;
 
-                    that.loadModalTableData(ret);
+                    let temp = JSON.parse(JSON.stringify(ret))
+
+                    that.loadModalTableData(temp);
                 }
             })
 

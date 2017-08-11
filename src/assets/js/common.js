@@ -87,7 +87,6 @@ VueProto.$vueExtend({
         } else {
             let arr = [];
             return arr;
-
         }
     },
 
