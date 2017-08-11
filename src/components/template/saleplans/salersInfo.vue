@@ -187,8 +187,8 @@
                 </div>
             </span>
             <div class="message center">
-                <el-button class="btn btn-small btn-green" @click="addNewCustom()">提交</el-button>
-                <el-button class="btn btn-small btn-gray" @click="closeDialog">取 消</el-button>
+                <el-button class="btn btn-small btn-green" @click="addNewCustom()">保 存</el-button>
+                <el-button class="btn btn-small btn-gray" @click="closeDialog">关 闭</el-button>
             </div>
         </el-dialog>
 
@@ -281,9 +281,9 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <div class="message fr ">
-                <el-button class="btn btn-green" @click="updateCustom()">提交</el-button>
-                <el-button class="btn btn-gray" @click="closeDialog">取 消</el-button>
+            <div class="message center">
+                <el-button class="btn btn-green" @click="updateCustom()">保 存</el-button>
+                <el-button class="btn btn-gray" @click="closeDialog">关 闭</el-button>
             </div>
       </el-dialog>
 
@@ -313,7 +313,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="联 系 人：" prop="">
+                        <el-form-item label="　联系人：" prop="">
                             <p v-html="edit_table.contacts"></p>
                         </el-form-item>
                     </el-col>
@@ -331,7 +331,7 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <div class="message fr ">
+            <div class="message center">
                 <el-button class="btn btn-small btn-gray" @click="custom_detail = false">关 闭</el-button>
             </div>
         </el-dialog>
@@ -360,4 +360,6 @@
                     width: auto
                 .el-form-item__content
                     width: auto
+        .el-form-item
+            margin-right 5px
 </style>

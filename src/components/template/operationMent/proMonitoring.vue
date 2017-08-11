@@ -88,20 +88,19 @@
             <div>
                 <el-row>
                     <el-col :span="24">
-                        <div class="list-table">
+                        <div class="table-wrap">
 		                    <el-table
-		                        style="width: 100% "
+		                        border
 		                        :data="bad_table_data">
                                 <el-table-column prop="rjctType" label="不良类型"></el-table-column>
 		                        <el-table-column prop="rjctNum" label="不良数"></el-table-column>
 		                    </el-table>
 		                </div>
                     </el-col>
-
-                    <div class="message center">
-                        <el-button class="btn btn-small btn-blue" @click="new_custom = false">返 回</el-button>
-                    </div>
                 </el-row>
+            </div>
+            <div class="message mt-10 center">
+                <el-button class="btn btn-small btn-gray" @click="new_custom = false">关 闭</el-button>
             </div>
         </el-dialog>
         <!--详情弹框 end-->

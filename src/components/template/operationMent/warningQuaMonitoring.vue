@@ -38,9 +38,7 @@
             </el-col>
 
             <div class="content-buttons fl">
-                <el-col :span="24" class="content-buttons">
-                    <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
-                </el-col>
+                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
             </div>
 
             <el-col :span="24">

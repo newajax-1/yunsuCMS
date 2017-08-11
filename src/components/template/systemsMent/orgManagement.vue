@@ -128,7 +128,7 @@
 				</el-row>
             </el-form>
             <div class="message center">
-				<el-button class="btn-small btn-green btn" @click="addNewOrganization()">提交</el-button>
+				<el-button class="btn-small btn-green btn" @click="addNewOrganization()">保 存</el-button>
 				<el-button class="btn-small btn-gray btn" @click="closeDialog">取 消</el-button>
 			</div>
         </el-dialog> 

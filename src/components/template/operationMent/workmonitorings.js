@@ -11,7 +11,6 @@ export default {
                 product_no : undefined,
                 item_no : undefined,
                 bill_sts : 1,
-                end_time : undefined,
                 workplan_no : undefined,
                 week : undefined,
                 issStartTime : undefined,
@@ -123,8 +122,8 @@ export default {
                     productNo : that.seach_info.product_no ,
                     itemNo : that.seach_info.item_no,
                     billSts : that.seach_info.bill_sts,
-                    creStartTime : that.seach_info.start_time && this.$handleDateObject(that.seach_info.start_time),
-                    creEndTime : that.seach_info.end_time && this.$handleDateObject(that.seach_info.end_time),
+                    creStartTime : that.seach_info.issStartTime && this.$handleDateObject(that.seach_info.issStartTime),
+                    creEndTime : that.seach_info.issEndTime && this.$handleDateObject(that.seach_info.issEndTime),
                     pageSize : that.search_pageSize || 10,
                     pageNum : that.search_pageNum || 1
                 } ,

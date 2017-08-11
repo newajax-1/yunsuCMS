@@ -205,15 +205,6 @@
                 </el-col>
             </el-row>
 
-            <div class="message clearfix">
-                <div class="fl">
-                    <el-button class="btn btn-small btn-blue" @click="editSalePlan()">编 辑</el-button>
-                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')">保 存</el-button>
-                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')">下 发</el-button>
-                </div>
-                <div class="fr">共有<span class="detailMsg">{{modal_plan_length}}</span>条下发计划</div>
-            </div>
-
             <div class="table-wrap">
                 <el-table
                     border
@@ -335,6 +326,15 @@
                     </el-table-column>
                 </el-table>
             </div>
+
+            <div class="message mt-10 clearfix">
+                <div class="fl">
+                    <el-button class="btn btn-small btn-blue" @click="editSalePlan()">编 辑</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')">保 存</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')">下 发</el-button>
+                </div>
+                <div class="fr">共有<span class="detailMsg">{{modal_plan_length}}</span>条下发计划</div>
+            </div>
         </el-dialog>
         <!--新增弹框 end-->
 
@@ -357,16 +357,16 @@
                                         <el-form-item label="计划生成时间："><span>{{sale_info_form.createTime}}</span></el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label="计划状态：" ><span>{{sale_info_form.operationName}}</span></el-form-item>
+                                        <el-form-item label="计划下发时间：" ><span>{{sale_info_form.operTime || "无"}}</span></el-form-item>
                                     </el-col>
                                 </el-row>
 
                                 <el-row>
                                     <el-col :span="8">
-                                        <el-form-item label="计划下发时间：" ><span>{{sale_info_form.operTime || "无"}}</span></el-form-item>
+                                        <el-form-item label="计划状态：" ><span>{{sale_info_form.operationName}}</span></el-form-item>
                                     </el-col>
                                     <el-col :span="8">
-                                        <el-form-item label="计划下发人："><span>{{sale_info_form.operUserName || "无"}}</span></el-form-item>
+                                        <el-form-item label="　计划下发人："><span>{{sale_info_form.operUserName || "无"}}</span></el-form-item>
                                     </el-col>
                                 </el-row>
                             </el-form>

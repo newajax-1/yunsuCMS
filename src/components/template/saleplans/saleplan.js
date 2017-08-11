@@ -473,6 +473,9 @@ export default {
                 data: send_data,
                 success(res) {
                     that.clearModalForm();
+                },
+                fail() {
+                    that.editSalePlan();
                 }
             });
 

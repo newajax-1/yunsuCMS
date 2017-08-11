@@ -29,8 +29,35 @@
             @btn-large {必须存在} 四字带icon 按钮，默认颜色为 btn-blue
         -->
         <el-col :span="24" class="content-buttons">
-            <el-button class="btn btn-blue btn-small" @click="refresh"><i class="fa fa-repeat"></i> 刷 新</el-button>
-            <el-button class="btn btn-blue btn-large" @click="openSalePlanModal('新建计划')"><i class="fa fa-user-plus"></i> 新建计划</el-button>
+
+            <el-button class="btn btn-blue btn-small" @click="refresh">
+                <i class="fa fa-refresh "></i> 刷 新
+            </el-button>
+
+            <el-button class="btn btn-blue btn-large" @click="openSalePlanModal('新建计划')">
+                <i class="fa fa-file-text-o"></i> 新建计划
+            </el-button>
+
+            <el-button class="btn btn-blue btn-small" @click="refresh">
+                <i class="fa fa-trash-o"></i>删除
+            </el-button>
+
+            <el-button class="btn btn-blue btn-small" @click="refresh">
+                <i class="fa fa-pencil-square-o"></i>编辑
+            </el-button>
+
+            <el-button class="btn btn-blue btn-small" @click="refresh">
+                <i class="fa fa-sign-in"></i>下发
+            </el-button>
+
+            <el-button class="btn btn-blue btn-small" @click="refresh">
+                <i class="fa fa-check-square-o"></i>保存
+            </el-button>
+
+            <el-button class="btn btn-blue btn-small" @click="refresh">
+                <i class="fa fa-times "></i>关闭
+            </el-button>
+            
         </el-col>
 
         <!-- 

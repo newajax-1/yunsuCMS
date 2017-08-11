@@ -13,7 +13,7 @@ import 'font-awesome/css/font-awesome.css'
 import './assets/css/common.styl'
 import './assets/js/common'
 
-// Vue.config.productionTip = false;
+Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 

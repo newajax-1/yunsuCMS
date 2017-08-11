@@ -1,112 +1,220 @@
 <template>
-   <div class="sale-plan">
+    <div class="status_monitor">
         <el-row>
-            <!-- 生产计划管理 start -->
             <el-col :span="24">
                 <div class="content-title">
-                    <span>生产计划管理-生产资源计划监控</span>
+                    <span>设备状态监控</span>
                 </div>
             </el-col>
-            <!-- 生产计划管理 end -->
-            <!-- 数据表格 start -->
-            <el-col :span="24" class="box"> 
-                <p class="prod-title">注塑机</p>
-                <div class="prod-table">
-                    <el-tooltip class="text" effect="dark" content="全部：10" placement="top-start">
-                        <p class="prod-text">
-                            <span>全部：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="生产：10" placement="top">
-                        <p class="prod-text">
-                            <span>生产：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="空闲：10" placement="top-end">
-                        <p class="prod-text">
-                            <span>空闲：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="故障：10" placement="top-end">
-                        <p class="prod-text">
-                            <span>故障：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                </div>
-            </el-col>
-            <el-col :span="24" class="box"> 
-                <p class="prod-title">模具</p>
-                <div class="prod-table">
-                    <el-tooltip class="text" effect="dark" content="全部：10" placement="top-start">
-                        <p class="prod-text">
-                            <span>全部：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="生产中：10" placement="top">
-                        <p class="prod-text">
-                            <span>生产中：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="维修保养中：10" placement="top-end">
-                        <p class="prod-text">
-                            <span>维修保养中：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                </div>
-            </el-col>
-            <el-col :span="24" class="box"> 
-                <p class="prod-title">原材料</p>
-                <div class="prod-table">
-                    <el-tooltip class="text" effect="dark" content="种类：10" placement="top-start">
-                        <p class="prod-text">
-                            <span>种类：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="正常库存：10" placement="top">
-                        <p class="prod-text">
-                            <span>正常库存：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                    <el-tooltip class="text" effect="dark" content="库存告警：10" placement="top-end">
-                        <p class="prod-text">
-                            <span>库存告警：</span>
-                            <strong>10</strong>
-                        </p>
-                    </el-tooltip>
-                </div>
-            </el-col>
-            <!-- 数据表格 end -->
         </el-row>
+
+        <el-row>
+            <el-col :span="24">
+                <div class="content-boder fl" :span="4">
+                    <p class="content-p">注塑机：</p>
+                    <div class="content-table clearfix">
+                        <div class="content-top text right-border fl">
+                            <span class="fl">全部</span>
+                            <strong class="fl">10</strong>
+                        </div>
+                        <div class="content-bottom content-bottom-one fl">
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-green"></i>
+                                </span>
+                                <span class="fl">生产</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-orange"></i>
+                                </span>
+                                <span class="fl">空闲</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-cyen"></i>
+                                </span>
+                                <span class="fl">保养</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-pink"></i>
+                                </span>
+                                <span class="fl">维修</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-boder fl" :span="4">
+                    <p class="content-p">模具：</p>
+                    <div class="content-table clearfix">
+                        <div class="content-top right-border fl">
+                            <span class="fl">全部</span>
+                            <strong class="fl">10</strong>
+                        </div>
+                        <div class="content-bottom fl">
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-green"></i>
+                                </span>
+                                <span class="fl">生产</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-cyen"></i>
+                                </span>
+                                <span class="fl">保养</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-pink"></i>
+                                </span>
+                                <span class="fl">维修</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-boder fl" :span="4">
+                    <p class="content-p">原材料：</p>
+                    <div class="content-table clearfix">
+                        <div class="content-top right-border fl">
+                            <span class="fl">全部</span>
+                            <strong class="fl">10</strong>
+                        </div>
+                        <div class="content-bottom content-bottom-other fl">
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-green"></i>
+                                </span>
+                                <span class="fl">正常</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                            <p class="right-p">
+                                <span class="right-span fl">
+                                    <i class="right-i border-purple"></i>
+                                </span>
+                                <span class="fl">告警</span>
+                                <strong class="fl">10</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+        <!--分页 start-->
+        <!-- <div class="block list-page fr">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="page_list.page_num"
+                    :page-sizes="[10, 20, 30, 40]"
+                    :page-size=page_list.page_size
+                    layout="total, sizes, prev, pager, next"
+                    :total="page_list.total">
+            </el-pagination>
+        </div> -->
+        <!--分页 end-->
     </div>
 </template>
+<script src="./prodplansinfos.js"></script>
+<style lang="stylus" scoped>
+    .content-boder
+        width 492px
+        margin-top 15px
+        margin-right 15px
+        border 1px solid #dcdcdc
 
-<style lang="stylus" rel="stylesheet/stylus">
-.box
-    margin 0
-.prod-title 
-    margin-top 20px
-    margin-bottom 10px
-    padding-left 10px
-.text
-    width 200px
-    height 78px
-    color #333743
-    border 1px solid  #e1e1e1
-.prod-text
-    display inline-block
-    line-height 78px
-    padding 10px
-strong
-    padding-left 40px
-    font-size 30px
-    font-weight 100
+    .left-border
+        border-left 1px dotted #dcdcdc
+
+    .right-border
+        border-right 1px dotted #dcdcdc
+
+    .top-border
+        border-top 1px dotted #dcdcdc
+
+    .bottom-border
+        border-bottom 1px dotted #dcdcdc
+
+    .content-p
+        background-color #f9f9f9
+        height 40px
+        line-height 40px
+        padding-left 10px
+
+    .content-table
+        padding 40px 0px
+    
+    .content-top
+        padding-left 34px
+        width 40%
+        height 200px
+        line-height 200px
+        span
+            font-size 16px
+        strong
+            padding-left 34px
+            font-size 48px
+            font-weight 100
+            color #148aed
+
+    .content-bottom
+        padding 0 20px
+        width 40%
+        padding-top 20px
+        span
+            font-size 14px
+        strong
+            padding-left 34px
+            font-weight 100
+            font-size 16px
+        .right-p
+            height 50px
+            line-height 50px
+        .right-span
+            position relative
+            height 50px
+            width 21px
+            padding-right 12px
+        .right-i
+            position absolute
+            left 0
+            top 50%
+            transform translateY(-50%)
+            width 13px
+            height 13px
+            border-radius 50%
+    
+    .content-bottom-one
+        padding-top 0px
+
+    .content-bottom-other
+        padding-top 50px
+
+    .border-green
+        background-color #a4d43e
+        border 4px solid #dbeeb2
+
+    .border-cyen
+        background-color #04bcf8
+        border 4px solid #9be4fc
+
+    .border-pink
+        background-color #fd6363
+        border 4px solid #fec1c1
+
+    .border-orange
+        background-color #f8cd04
+        border 4px solid #fceb9b
+
+    .border-purple
+        background-color #e679f6
+        border 4px solid #f5c9fb
 </style>

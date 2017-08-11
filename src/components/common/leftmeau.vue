@@ -64,7 +64,7 @@ $gf = #fff;
 .layout-menu
     top 50px !important
     height 100%
-    width 150px
+    width 180px
     color $gf
     .el-submenu__title
     .left-item

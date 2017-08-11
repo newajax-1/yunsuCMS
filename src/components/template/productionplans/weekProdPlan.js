@@ -158,11 +158,13 @@ export default {
             modal_sync_data: {},
             modal_week_date: {},
             modal_btn_show: false,
+
             // 周计划 新建
             create_new_plan: undefined,
             delete_work_array: [],
             weekplan_info_show: false,
-            new_workplan_index: []
+            new_workplan_index: [],
+            edit_next_show_week: true
         }
     },
 
@@ -334,6 +336,7 @@ export default {
             this.modal_title = undefined;
             this.work_plan_id = undefined;
             this.new_week_date = true;
+            this.edit_next_show_week = true;
             this.refresh();
         },
 
@@ -352,19 +355,28 @@ export default {
             }
         },
 
-        openWeekplanModal(modal_title, plan_id) {
+        openWeekplanModal(modal_title, plan_id, index_of_week) {
+
+            let send_data = {};
+
+            if (index_of_week) {
+                let week = index_of_week.match(/[1-9][0-9]*/g);
+                send_data.workplanWeekId = plan_id;
+                send_data.indexOfWeek = week[0];
+            }
+
             this.modal_title = modal_title;
             this.modal_show_tips = true;
             this.create_new_plan = modal_title === "新建周计划" ? "create" : "modify";
             this.modal_btn_show = modal_title === "新建周计划" ? true : false;
-
-            this.getModalData(plan_id);
+            this.edit_next_show_week = modal_title === "新建周计划" ? true : false;
+            this.getModalData(send_data);
         },
 
-        getModalData(plan_id) {
+        getModalData(datas) {
             let that = this;
 
-            if (!plan_id) {
+            if (!datas.workplanWeekId) {
                 that.$ajaxWrap({
                     url: "week/queryWeekList",
                     success(res) {
@@ -372,13 +384,11 @@ export default {
                     }
                 })
             } else {
-                that.work_plan_id = plan_id;
+                that.work_plan_id = datas.workplanWeekId;
 
                 that.$ajaxWrap({
                     url: "week/queryWeekList",
-                    data: {
-                        workplanWeekId: plan_id
-                    },
+                    data: datas,
                     success(res) {
                         that.loadModalTableData(res.data);
                         that.modal_table_edit = false;
@@ -459,15 +469,12 @@ export default {
             Vue.set(that.modal_weekplan_table_data, index, temp_workplan_data);
         },
 
-
         confirmSendPlan(tips) {
             let that = this,
                 sure_text = tips === "save" ? "保存" : "下发";
 
-
             let new_table_data = that.modal_weekplan_table_data,
                 len = new_table_data.length;
-
 
             for (let i = 0; i < len; i++) {
                 let el = new_table_data[i]
@@ -492,6 +499,8 @@ export default {
                         continue
                     }
                     if ((el[key] === "" || el[key] === undefined) && el[key] !== null) {
+
+                        // 显示 未填写数据
                         console.log(key);
                         that.$alert('请完善表单信息', '提示', {
                             confirmButtonText: '确定',
@@ -714,13 +723,18 @@ export default {
             this.modal_weekplan_table_data = temp_data;
         },
 
-        openWeekplanInfo(weekplan_id, title) {
+        openWeekplanInfo(weekplan_id, index_of_week, title) {
             let that = this;
+
+            let week = index_of_week.match(/[1-9][0-9]*/g);
+            week = week[0];
+
             that.modal_title = title;
             that.$ajaxWrap({
                 url: "week/queryWeekList",
                 data: {
-                    workplanWeekId: weekplan_id
+                    workplanWeekId: weekplan_id,
+                    indexOfWeek: week
                 },
                 success(res) {
                     that.loadModalTableData(res.data);
@@ -743,16 +757,17 @@ export default {
             }
 
             that.new_week_date = !that.new_week_date;
-
-            console.log(temp_data);
             that.$ajaxWrap({
                 url: "week/queryWeekList",
                 data: {
                     indexOfWeek: temp_data
                 },
                 success(res) {
-                    console.log(res.data);
-                    that.modal_week_date = res.data.data
+                    let ret = that.modal_sync_data;
+                    ret.dataList = that.modal_weekplan_table_data;
+                    ret.data = res.data.data;
+
+                    that.loadModalTableData(ret);
                 }
             })
 

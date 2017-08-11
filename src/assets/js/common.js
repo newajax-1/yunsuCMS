@@ -55,7 +55,8 @@ VueProto.$vueExtend({
                     done();
                     return;
                 }
-                if (that.refresh) that.refresh();
+
+                // if (that.refresh) that.refresh();
             }
         });
     },
@@ -70,26 +71,32 @@ VueProto.$vueExtend({
             type: "warning"
         }).then(function() {
             if (typeof done === "function") done();
-            if (that.refresh) that.refresh();
+
+            // if (that.refresh) that.refresh();
         }).catch(function() {});
     },
 
     // 置空对象
     $clearObject(object) {
-        if (object && typeof object === "object") {
-            let result = Object.prototype.toString.call(object).slice(8, 13);
-            if (result !== "Array") {
-                for (var key in object) {
-                    if (object.hasOwnProperty(key)) {
-                        object[key] = undefined;
-                    }
+        if (!this.$typeofArray(object)) {
+            for (var key in object) {
+                if (object.hasOwnProperty(key)) {
+                    object[key] = undefined;
                 }
-            } else {
-                let arr = [];
-                return arr;
             }
-        }
+        } else {
+            let arr = [];
+            return arr;
 
+        }
+    },
+
+    // 检测数组
+    $typeofArray(arr) {
+        if (arr && typeof arr === "object") {
+            let result = Object.prototype.toString.call(arr).slice(8, 13);
+            return result === "Array";
+        }
     },
 
     // Ajax 请求
@@ -101,7 +108,8 @@ VueProto.$vueExtend({
             url = opt.url || "",
             datas = opt.data || {},
             success = opt.success || opt.callback || function() {},
-            error = opt.error || function() {};
+            error = opt.error || function() {},
+            fail = opt.fail || function() {};
 
         const callback = function(res) {
             if (res.status === 200) {
@@ -147,6 +155,11 @@ VueProto.$vueExtend({
                 }
             }).then(function(res) {
                 callback(res);
+            }).catch(function(res) {
+                console.log(res)
+                that.$baseWarn("请输入正确信息！");
+
+                if (typeof fail === "function") fail();
             });
         }
     },

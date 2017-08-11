@@ -77,7 +77,7 @@
                     </el-table>
                 </div>
 
-                <div class="second-table">
+                <div class="table-wrap">
                     <h1 v-if="second_table_text_show">请输入检索条件查询已下发工单内容</h1>
                     <el-table 
                         border
@@ -111,11 +111,10 @@
                     </el-table>
                 </div>
 
-                <div class="other-table">
+                <div class="table-wrap">
                     <el-table 
                         border
                         :data="other_table_data" 
-                        style="width: 100%" 
                         v-if="other_table_show">
                         <el-table-column prop="itemNo" label="产品型号"></el-table-column>
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
@@ -186,7 +185,7 @@
             </div>
             <div class="stop-message">
                 <el-radio class="radio" v-model="stop_data_info.radio" label="06">其他</el-radio>
-                <el-input placeholder="请简单描述终止原因" class="radio-input change-inline" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'asterisk' : ''"></el-input>
+                <el-input placeholder="请简单描述终止原因" class="radio-input change-inline" :disabled="stop_data_info.radio === '06' ? false : true" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'asterisk' : ''"></el-input>
             </div>
             <div class="message center">
                 <el-button class="btn btn-small btn-green" @click="stopWork()">完 成</el-button>

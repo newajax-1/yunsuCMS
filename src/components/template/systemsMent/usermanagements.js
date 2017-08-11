@@ -7,8 +7,8 @@ export default {
             is_scope_id: undefined,
             table_data: [],
             table_data_name: undefined,
-            search_pageNum : undefined,
-            search_pageSize : undefined,
+            search_pageNum: undefined,
+            search_pageSize: undefined,
 
             // 条件查询
             info: {
@@ -22,28 +22,29 @@ export default {
                 page_size: 10,
                 total: 0
             },
+
             current_page: 1,
 
             // 添加数据
             add_info: {
-                addName: undefined, 
-                jobNumber: undefined,  
+                addName: undefined,
+                jobNumber: undefined,
                 addPassword: undefined,
-                account: undefined,  
-                roleId: undefined,  
-                orgId: undefined,  
+                account: undefined,
+                roleId: undefined,
+                orgId: undefined,
             },
 
             // 角色下拉框
             role_list: [{
-                roleName : undefined,
-                roleId : undefined
+                roleName: undefined,
+                roleId: undefined
             }],
 
             // 部门下拉
             ogr_list: [{
-                orgName : undefined,
-                orgId : undefined
+                orgName: undefined,
+                orgId: undefined
             }],
         }
     },
@@ -52,21 +53,25 @@ export default {
         loadTable() {
             var that = this;
             this.$ajaxWrap({
-                type : "post",
-                url : "/memberAccount/index",
-                data : {
+                type: "post",
+                url: "/memberAccount/index",
+                data: {
                     jobNumber: that.info.info_num,
                     account: that.info.info_phone,
                     pageNum: that.search_pageNum || 1,
                     pageSize: that.search_pageSize || 10,
-                } ,
-                callback : function(data){
+                },
+                callback: function(data) {
                     that.table_data = data.data.page.list;
                     that.page_list.total = data.data.page.total;
-                    that.table_data.every(function(el){
+                    that.table_data.every(function(el) {
                         return el.status = el.status === 0 ? "正常" : "不正常";
                     })
-                    that.page_list.page_num = data.data.page.pageNum;
+                    if (!data.data.page.pageNum) {
+                        that.page_list.page_num = 1;
+                    } else {
+                        that.page_list.page_num = data.data.page.pageNum;
+                    }
                     that.page_list.page_size = data.data.page.pageSize;
                 }
             })
@@ -84,18 +89,18 @@ export default {
             this.is_scopeId = "";
             this.is_disabled = true;
             this.table_data_name = "新增用户",
-            this.$clearObject(this.add_info);
+                this.$clearObject(this.add_info);
             this.add_info.addPassword = "123456";
             this.$ajaxWrap({
-                type : "get",
-                url : "/memberAccount/onClick",
-                data : {} ,
-                callback : function(data){
+                type: "get",
+                url: "/memberAccount/onClick",
+                data: {},
+                callback: function(data) {
                     that.role_list = data.data.roleList;
-                    that.ogr_list = data.data.ogrList ;
+                    that.ogr_list = data.data.ogrList;
                 },
                 error(error) {
-                    
+
                 }
             })
         },
@@ -107,68 +112,68 @@ export default {
             this.is_scope_id = id;
             this.is_disabled = false;
             this.table_data_name = "修改用户",
-            this.$ajaxWrap({
-                type : "get",
-                url : "/memberAccount/onClick",
-                data : {
-                    accountId : id
-                } ,
-                callback : function(res){
-                    that.add_info = res.data.data;
-                    that.role_list = res.data.roleList
-                    that.ogr_list = res.data.ogrList 
-                },
-                error(error) {
-                    
-                }
-            })
+                this.$ajaxWrap({
+                    type: "get",
+                    url: "/memberAccount/onClick",
+                    data: {
+                        accountId: id
+                    },
+                    callback: function(res) {
+                        that.add_info = res.data.data;
+                        that.role_list = res.data.roleList
+                        that.ogr_list = res.data.ogrList
+                    },
+                    error(error) {
+
+                    }
+                })
         },
 
         // 保存
         createNewCustom(id) {
             var that = this;
             console.log(this.add_info.name)
-            if( !this.add_info.name || 
-                !this.add_info.jobNumber || 
-                !this.add_info.roleId || 
-                !this.add_info.orgId ) {
+            if (!this.add_info.name ||
+                !this.add_info.jobNumber ||
+                !this.add_info.roleId ||
+                !this.add_info.orgId) {
                 this.$message({
                     message: "请将信息填写完整",
                     type: "warning"
                 });
                 return;
-            }else if(!/^1[34578]\d{9}$/.test((this.add_info.account))) {
+            } else if (!/^1[34578]\d{9}$/.test((this.add_info.account))) {
                 this.$message({
                     message: "手机格式错误",
                     type: "warning"
                 });
                 return;
-            }else {
+            } else {
                 var falg = undefined;
                 falg = (id ? "/memberAccount/updateMemberAccount" : "/memberAccount/addMemberAccount");
                 this.$ajaxWrap({
-                    type : "post",
-                    url : falg,
-                    data : {
-                        name : that.add_info.name,
+                    type: "post",
+                    url: falg,
+                    data: {
+                        name: that.add_info.name,
                         jobNumber: that.add_info.jobNumber,
                         password: that.add_info.addPassword,
-                        account : that.add_info.account,
-                        roleId : that.add_info.roleId,
-                        orgId : that.add_info.orgId,
+                        account: that.add_info.account,
+                        roleId: that.add_info.roleId,
+                        orgId: that.add_info.orgId,
                         accountId: that.is_scope_id,
-                    } ,
+                    },
                     callback(data) {
                         that.loadTable();
                         that.new_custom = false;
                         that.$message({
-                          message: data.tipMsg,
-                          type: 'success'
+                            message: data.tipMsg,
+                            type: 'success'
                         });
                         that.$clearObject(that.add_info);
                     },
                     error(data) {
-                        
+
                     }
                 })
             }
@@ -181,12 +186,12 @@ export default {
                 cancelButtonText: "取消",
             }).then(function() {
                 that.$ajaxWrap({
-                    type : "get",
-                    url : "/memberAccount/deleteAccount",
-                    data : {
-                        accountId : id
-                    } ,
-                    callback : function(data){
+                    type: "get",
+                    url: "/memberAccount/deleteAccount",
+                    data: {
+                        accountId: id
+                    },
+                    callback: function(data) {
                         that.$message({
                             message: "删除成功！",
                             type: "success"
@@ -225,7 +230,7 @@ export default {
                 this.searchFormData(val, "size");
             };
         },
-        // -----------------------------------------------------------------------------------------------------------------------------------      
+
         handleCurrentChange(val) {
             if (this.table_data.length) {
                 this.searchFormData(val, "num");
@@ -233,7 +238,7 @@ export default {
         },
 
     },
-    mounted(){
+    mounted() {
         //当组件模板挂载时数据显示到上面去。
         this.loadTable();
     },

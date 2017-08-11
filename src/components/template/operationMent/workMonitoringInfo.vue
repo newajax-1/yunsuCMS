@@ -8,7 +8,7 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item>
-                            <el-button @click="moreOperationWeek()" class="btn btn-small btn-orange">下发</el-button>
+                            <el-button @click="moreOperationWeek()" class="btn btn-small btn-blue">下发</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -17,8 +17,9 @@
                 <!-- 列表开始  start -->
                 <div class="table-wrap">
                     <el-table
-                    :data="detail_data"
-                    @selection-change="handleSelectionChange">
+                        border
+                        :data="detail_data"
+                        @selection-change="handleSelectionChange">
                         <el-table-column type="selection" width="45"></el-table-column>
                         <el-table-column width="30" prop="type" label="类型"></el-table-column>
                         <el-table-column width="45" prop="lv" label="优先级"></el-table-column>
@@ -269,7 +270,7 @@
                     </el-col>.
                 </el-row>
             </div>
-            <div class="message fr">
+            <div class="message center">
                 <el-button class="btn btn-small btn-green" @click="saveUpdateInfo()">保 存</el-button>
                 <el-button class="btn btn-small btn-orange" @click="operationWeek()" v-if="show_operation">下 发</el-button>
                 <el-button class="btn btn-small btn-gray" @click="handleClose">关 闭</el-button>

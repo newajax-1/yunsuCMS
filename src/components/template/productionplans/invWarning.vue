@@ -60,7 +60,7 @@
                         <el-table-column prop="invStsName" label="库存状态"></el-table-column>
                         <el-table-column label="操作" width="200">
                             <template scope="scope">
-                                <el-button type="text" size="small" @click="detailtab(scope.row)">详情</el-button>
+                                <el-button type="text" size="small" @click="detailtab(scope.row.invWarningId)">详情</el-button>
                                 <el-button type="text" size="small" @click="edittab(scope.row.invWarningId)">修改</el-button>
                                 <el-button type="text" size="small" @click="deletetab(scope.row.invWarningId)"> 删除</el-button>
                                 <el-button type="text" size="small" v-show="show_info[scope.$index].show">备库存</el-button>
@@ -149,8 +149,8 @@
                     </el-row>
                 </el-form>
                 <div class="message center clearfix">
-                    <el-button class="btn btn-small btn-green" @click="addNewWarning()">提交</el-button>
-                    <el-button class="btn btn-small btn-gray" @click="closeDialog">取 消</el-button>
+                    <el-button class="btn btn-small btn-green" @click="addNewWarning()">保 存</el-button>
+                    <el-button class="btn btn-small btn-gray" @click="closeDialog">关 闭</el-button>
                 </div>
         </el-dialog>
 
@@ -216,8 +216,8 @@
             </el-form>
 
             <div class="message center clearfix">
-                <el-button class="btn btn-small btn-green" @click="updateInvWarning()">提交</el-button>
-                <el-button class="btn btn-small btn-gray" @click="closeDialog">取 消</el-button>
+                <el-button class="btn btn-small btn-green" @click="updateInvWarning()">保 存</el-button>
+                <el-button class="btn btn-small btn-gray" @click="closeDialog">关 闭</el-button>
             </div>
         </el-dialog>
 
@@ -247,42 +247,42 @@
                 <el-row :gutter="24">
                     <el-col :span="12">
                         <el-form-item label="库品类型：">
-                            <p>{{ detail_info.warningName }}</p>
+                            <p>{{ edit_table.warningName }}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="库品编号：">
-                            <p>{{ detail_info.itemNo }}</p>
+                            <p>{{ edit_table.itemNo }}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="12">
                         <el-form-item label="库品名称：">
-                                <p>{{ detail_info.itemName }}</p>
+                                <p>{{ edit_table.itemName }}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12" v-show="show_factory_detail">
                         <el-form-item label="　供应商：">
-                            <p>{{ detail_info.materialFactory }}</p>
+                            <p>{{ edit_table.materialFactory }}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="12">
                         <el-form-item label="安全库存：">
-                                <p>{{ detail_info.secInv }}</p>
+                                <p>{{ edit_table.secInv }}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="库存预警：低于">
-                            <p>{{ detail_info.secInv }}</p>
+                            <p>{{ edit_table.secInv }}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <div class="message center clearfix">
-                <el-button class="btn-blue btn btn-small" @click="detail_warning = false">返回</el-button>
+                <el-button class="btn-gray btn btn-small" @click="detail_warning = false">关 闭</el-button>
             </div>
         </el-dialog>
     </div>

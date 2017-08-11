@@ -239,9 +239,6 @@ export default {
                     that.f.p = _data_arr.province;
                     that.f.c = _data_arr.city;
                     that.f.cc = _data_arr.area;
-                },
-                error() {
-                    //do error function
                 }
             })
         },
@@ -259,9 +256,6 @@ export default {
                 },
                 success: function(data) {
                     that.edit_select_op = data.data.dicData;
-                },
-                error() {
-                    //do error function
                 }
             })
             this.showDetailed(ids);

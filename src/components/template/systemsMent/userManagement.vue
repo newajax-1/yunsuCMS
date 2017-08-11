@@ -22,9 +22,7 @@
             </el-col>
             
             <div class="content-buttons fl">
-                <el-col :span="24" class="content-buttons">
-                    <el-button @click="toAdd()" class="btn btn-blue btn-small"><i class="fa fa-user-plus"></i> 新增</el-button>
-                </el-col>
+                <el-button @click="toAdd()" class="btn btn-blue btn-small"><i class="fa fa-user-plus"></i> 新增</el-button>
             </div>
 
             <!-- 数据表格 start -->
@@ -57,14 +55,15 @@
             </el-col>
             <!-- 数据表格 end -->
         </el-row>
+
         <!--分页 start-->
         <div class="table-page fr">
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page.sync="page_list.page_num"
-                :page-size=page_list.page_size
-                layout="total, prev, pager, next"
+                :page-size="page_list.page_size"
+                layout="total, prev, next"
                 :total="page_list.total">
             </el-pagination>
         </div>
@@ -140,8 +139,8 @@
             </el-row>
 
             <div class="message center">
-                <el-button class="btn btn-small btn-green" @click="createNewCustom(is_scope_id)">保存</el-button>
-                <el-button class="btn btn-small btn-blue" @click="closeDialog()">关 闭</el-button>
+                <el-button class="btn btn-small btn-green" @click="createNewCustom(is_scope_id)">保 存</el-button>
+                <el-button class="btn btn-small btn-gray" @click="closeDialog()">关 闭</el-button>
             </div>
         </el-dialog>
         <!--新增弹框 end-->

@@ -116,14 +116,23 @@ import Qs from 'qs'
             this.tip_msg = id;
             this.dialog_visible = true;
         },
-        detailtab(object){
+        detailtab(ids){
+            let that = this;
             this.detail_warning = true;
-            if(object.warningName == "原材料"){
-                this.show_factory_detail = true;
-            }else{
-                this.show_factory_detail = false;
-            }
-            this.detail_info = object;
+
+            this.$ajaxWrap({
+                type : "get",
+                url : "invWarning/toAddOrEditInvWarning",
+                data : {
+                    invWarningId: ids,
+                },
+                callback(data) {
+                    that.eselect_op = data.data.dicData;
+                    that.eselect_item_op = data.data.dataList;
+                    that.edit_table =  data.data.data;
+                    (that.edit_table.warningName == "原材料") ? (that.show_factory_detail = true) : (that.show_factory_detail = false);
+                }
+            });
         },
         deleteObject(){
             var that = this;

@@ -61,7 +61,7 @@ export default {
                             case "02" :
                                 that.detail_data[i].lv = "中";
                                 break;
-                            case "02" :
+                            case "03" :
                                 that.detail_data[i].lv = "低";
                                 break;
                         };

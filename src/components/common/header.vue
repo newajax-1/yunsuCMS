@@ -150,16 +150,18 @@
             logout(){
                 let that = this;
 
-                that.$ajaxWrap({
-                    url : "memberAccount/logout",
-                    success(res){
-                        if(res.success){
-                            that.$baseWarn("退出成功！",function(){
-                                that.$goRoute("/");
-                            })
+                that.$baseConfirm("确定退出登录？",function() {
+                    that.$ajaxWrap({
+                        url : "memberAccount/logout",
+                        success(res){
+                            if(res.success){
+                                that.$baseWarn("退出成功！",function(){
+                                    that.$goRoute("/");
+                                })
+                            }
                         }
-                    }
-                });
+                    });                    
+                })
             },
 
             editPassword(){
