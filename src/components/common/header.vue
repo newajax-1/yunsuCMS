@@ -12,7 +12,7 @@
                     <ul class="top-nav-right fr">
 
                         <li class="right-nav-items">
-                            <i class="fa fa-bell bell "></i>
+                            <span class="header-text">消息</span>
                             <span class="num">0</span>
                         </li>
 
@@ -45,32 +45,33 @@
                     :model="edit_form" >
                     <div class="login-form-shadow">
                         <el-form-item prop='username'>
+                            原始密码：    
                             <el-input 
                                 type="text" 
-                                placeholder="原始密码"
                                 auto-complete="off" 
                                 v-model="edit_form.oldPassword"></el-input>
                         </el-form-item>
 
                         <el-form-item prop='password' class="password" >
+                            　新密码： 
                             <el-input 
                                 type="password" 
-                                placeholder="新密码"
                                 auto-complete="off"
                                 v-model="edit_form.password" ></el-input>
                         </el-form-item>
 
                         <el-form-item prop='password' class="confirm_password" >
+                            确认密码：
                             <el-input 
                                 type="password" 
-                                placeholder="确认密码"
                                 auto-complete="off"
                                 v-model="edit_form.confirmPassword"></el-input>
                         </el-form-item>
                     </div>
 
-                    <el-form-item class="btn-wrap ">
-                        <el-button class="btn-login" @click="surePassword()">确认修改</el-button>
+                    <el-form-item class="message">
+                        <el-button class="btn btn-green" @click="surePassword()">保存</el-button>
+                        <el-button class="btn btn-gray" @click="closePassword">关闭</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -168,6 +169,12 @@
                 this.edit_password = true;
             },
 
+            closePassword(){
+                let that = this;
+                that.edit_password = false;
+                that.$clearObject(that.edit_form)
+            },
+
             surePassword(){
                 let that = this,
                     send_data = that.edit_form;
@@ -191,6 +198,8 @@
 </script>
 <style lang="stylus">
 
+@import "../../assets/css/common.styl"
+
 /* variable */ 
 $gf = #fff;
 $g3 = #333;
@@ -203,6 +212,15 @@ $header_hover_color = #2a2f32;
 $icon_tips_bgcolor = #fd9a01;
 
 
+$default_green = #a4d43e;
+$default_bd_green = #85b61d;
+$default_green_hover = #8bbc22;
+$default_bd_green_hover = $default_bd_green;
+
+$default_gray = #bdbdbd;
+$default_bd_gray = #a6a6a6;
+$default_gray_hover = #a9a9a9;
+$default_bd_gray_hover = $default_bd_gray;
 
 .layout-header
     z-index: 1
@@ -289,7 +307,7 @@ $icon_tips_bgcolor = #fd9a01;
 
 .edit-password-dialog
     &.el-dialog
-        width: 240px 
+        width: 720px 
         background-color: $gf 
     .el-dialog__header
         padding: 10px 15px 
@@ -299,10 +317,18 @@ $icon_tips_bgcolor = #fd9a01;
             color: $gf
             font-weight: 400
     .el-dialog__body
-        padding 15px
+        padding 30px 0 0 0
+        .login-form-shadow
+            width: 260px;
+            margin: 0 auto;
         .el-form-item
-            width: 100%
             margin: 0
+            margin-bottom:30px
+
+            .el-input
+                width: 160px
+                .el-input__inner
+                    width: 160px
             &.password
                 position: relative
                 top: -1px
@@ -321,4 +347,27 @@ $icon_tips_bgcolor = #fd9a01;
             width: 100%
         .el-input__inner
             border-radius: 0
+    .message
+        width: 100%
+        text-align: center
+        .btn
+            width: 75px
+            height: 30px
+            padding: 0
+            color: $gf
+            line-height : 30px
+            border-radius: 0 
+            &.btn-green
+                background-color: $default_green
+                border-color: $default_bd_green
+                &:hover
+                    background-color: $default_green_hover
+                    border-color: $default_bd_green_hover 
+            &.btn-gray
+                background-color: $default_gray
+                border-color: $default_bd_gray
+                &:hover
+                    background-color: $default_gray_hover
+                    border-color: $default_bd_gray_hover
+
 </style>

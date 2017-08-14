@@ -66,12 +66,12 @@
 
                             <el-row :gutter="24">
                                 <el-col :span="12">
-                                    <el-form-item label="角色名称：">
+                                    <el-form-item label="角色名称：" class="required">
                                         <el-input v-model="add_info.roleName" placeholder="请输入角色名称" class="asterisk"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="角色描述：">
+                                    <el-form-item label="角色描述：" class="required">
                                         <el-input v-model="add_info.remark" placeholder="请输入角色描述" class=""></el-input>
                                     </el-form-item>
                                 </el-col>

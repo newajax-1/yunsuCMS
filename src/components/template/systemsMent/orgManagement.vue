@@ -8,7 +8,7 @@
 	                <div class="content-search">
 		                <el-form :inline="true" class="">
 			                <el-form-item>
-			                    <el-button @click='toAdd()' class="btn btn-blue btn-large">新增</el-button>
+			                    <el-button @click='toAdd()' class="btn btn-blue btn-small"><i class="fa fa-file-text-o"></i> 新 增</el-button>
 			                </el-form-item>
 			            </el-form>
 			        </div>
@@ -102,12 +102,12 @@
             <el-form :inline="true" class="formClass">
 				<el-row :gutter="24">
 					<el-col :span="12">
-						<el-form-item label="组织名称：">
+						<el-form-item label="组织名称：" class="required">
 							<el-input v-model="add_info.org_name" class="asterisk"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="上级组织：">
+						<el-form-item label="上级组织：" class="required">
 							<el-select v-model="sel_val" class="asterisk">
 								<el-option
 								v-for="item in select_op"
@@ -121,8 +121,8 @@
 				</el-row>
 				<el-row :gutter="24">
 					<el-col :span="12">
-						<el-form-item label="备　　注：">
-							<el-input v-model="add_info.remark"></el-input>
+						<el-form-item label="备　　注：" class="required">
+							<el-input v-model="add_info.remarks"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>

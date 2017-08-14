@@ -107,7 +107,8 @@ export default {
                     that.update_data.every(function(el) {
                         return that.worker.push({
                             workplanBillId : el.workplanBillId,
-                            worker : el.worker || ""
+                            worker : el.worker || "",
+                            quantity : el.quantity
                         });
                     });
                 },

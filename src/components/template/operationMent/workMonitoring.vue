@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="table-wrap">
-                    <h1 v-if="second_table_text_show">请输入检索条件查询已下发工单内容</h1>
+                    <h1 v-if="second_table_text_show" style="font-weight: 400; font-size: 14px;">请输入检索条件查询已下发工单内容</h1>
                     <el-table 
                         border
                         :data="second_table_data" 

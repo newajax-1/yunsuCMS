@@ -47,15 +47,15 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button class="btn btn-small btn-blue" @click="searchFormData()">查 询</el-button>
-                        <el-button class="btn btn-small btn-orange" @click="reset">重 置</el-button>
+                        <el-button class="btn btn-small btn-blue" @click="searchFormData()"><i class="fa fa-search"></i> 查 询</el-button>
+                        <el-button class="btn btn-small btn-orange" @click="reset"><i class="fa fa-window-restore"></i> 重 置</el-button>
                     </el-form-item>
                 </el-form>
             </div>
         </el-col>
         <el-col :span="24" class="content-buttons">
-            <el-button class="btn btn-blue btn-small" @click="refresh"><i class="fa fa-repeat"></i> 刷 新</el-button>
-            <el-button class="btn btn-blue btn-large" @click="openSalePlanModal('新建计划')"><i class="fa fa-user-plus"></i> 新建计划</el-button>
+            <el-button class="btn btn-blue btn-small" @click="refresh"><i class="fa fa-refresh "></i> 刷 新</el-button>
+            <el-button class="btn btn-blue btn-large" @click="openSalePlanModal('新建计划')"><i class="fa fa-file-text-o"></i> 新建计划</el-button>
         </el-col>
         <!-- sale_plan_form end  -->
 
@@ -128,7 +128,7 @@
                         :rules="modal_form_rules">
                         <el-row :gutter="24">
                             <el-col :span="6">
-                                <el-form-item label="客户名称：" prop="custName">
+                                <el-form-item label="客户名称：" prop="custName" class="required">
                                     <el-select placeholder="选择客户" v-model="modal_form_data.custName" >
                                         <el-option v-for="item in guest_name_data" :label="item.custName" :value="item.custNo" :key="item.custNo"></el-option>  
                                     </el-select>
@@ -136,13 +136,13 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label='订单编号：' prop="orderNo">
-                                    <el-input  v-model='modal_form_data.orderNo' ></el-input>
+                                <el-form-item label='订单编号：' prop="orderNo" class="required">
+                                    <el-input  v-model='modal_form_data.orderNo'></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="订单日期：" prop="orderDate">
+                                <el-form-item label="订单日期：" prop="orderDate" class="required">
                                     <el-date-picker
                                         
                                         type="date"
@@ -154,7 +154,7 @@
                             </el-col>
                             
                             <el-col :span="6">
-                                <el-form-item label="交货日期：" prop="deliveryDate">
+                                <el-form-item label="交货日期：" prop="deliveryDate" class="required">
                                     <el-date-picker
                                         type="date"
                                         
@@ -168,7 +168,7 @@
 
                         <el-row :gutter="24">
                             <el-col :span="6">
-                                <el-form-item label="计划类型：" prop="planType">
+                                <el-form-item label="计划类型：" prop="planType" class="required">
                                     <el-select placeholder="选择客户" v-model='modal_form_data.planType' >
                                         <el-option label="生产" value="01"></el-option>
                                         <el-option label="库存" value="02"></el-option>
@@ -176,17 +176,17 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
-                                <el-form-item label="产品型号：" prop="itemNo">
+                                <el-form-item label="产品型号：" prop="itemNo" class="required">
                                     <el-input v-model='modal_form_data.itemNo' ></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
-                                <el-form-item label="产品名称：" prop="itemName">
+                                <el-form-item label="产品名称：" prop="itemName" class="required">
                                     <el-input v-model='modal_form_data.itemName' ></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
-                                <el-form-item label="需求数量：" prop="quantity">
+                                <el-form-item label="需求数量：" prop="quantity" class="required">
                                     <el-input v-model='modal_form_data.quantity' ></el-input>
                                 </el-form-item>
                             </el-col>
@@ -293,7 +293,6 @@
                         <template scope="scope">
                             <el-input 
                                 type="text"
-                                 
                                 :disabled="modal_table_edit"
                                 v-model="scope.row.quantity" >
                             </el-input>
@@ -329,9 +328,9 @@
 
             <div class="message mt-10 clearfix">
                 <div class="fl">
-                    <el-button class="btn btn-small btn-blue" @click="editSalePlan()">编 辑</el-button>
-                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')">保 存</el-button>
-                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')">下 发</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="editSalePlan()"><i class="fa fa-pencil-square-o"></i> 编 辑</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')"><i class="fa fa-check-square-o"></i> 保 存</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')"><i class="fa fa-sign-in"></i> 下 发</el-button>
                 </div>
                 <div class="fr">共有<span class="detailMsg">{{modal_plan_length}}</span>条下发计划</div>
             </div>
@@ -431,7 +430,7 @@
                 </el-col>
             </el-row>
             <div class="message center" style="margin-top: 10px;">
-                <el-button class="btn btn-small btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-repeat" ></i> 返回</el-button>
+                <el-button class="btn btn-small btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-undo"></i> 返 回</el-button>
             </div>
         </el-dialog>
     </el-row>

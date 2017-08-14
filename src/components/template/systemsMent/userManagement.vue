@@ -14,16 +14,13 @@
                             <el-input placeholder="输入工号" v-model="info.info_num"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue btn-small">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click="toAdd()" class="btn btn-blue btn-small"><i class="fa fa-user-plus"></i> 新增</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
-            </el-col>
-            
-            <div class="content-buttons fl">
-                <el-button @click="toAdd()" class="btn btn-blue btn-small"><i class="fa fa-user-plus"></i> 新增</el-button>
-            </div>
+            </el-col>   
 
             <!-- 数据表格 start -->
             <el-col :span="24">
@@ -84,19 +81,19 @@
 
                             <el-row :gutter="24">
                                 <el-col :span="12">
-                                    <el-form-item label="用户名称：">
+                                    <el-form-item label="用户名称：" class="required">
                                         <el-input v-model="add_info.name" placeholder="请输入用户名称" class="asterisk"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="工　　号：">
+                                    <el-form-item label="工　　号：" class="required">
                                         <el-input v-model="add_info.jobNumber" placeholder="请输入工号" class="asterisk"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
-                                    <el-form-item label="手　　机：">
+                                    <el-form-item label="手　　机：" class="required">
                                         <el-input v-model="add_info.account" placeholder="请输入手机号" class="asterisk"></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -108,7 +105,7 @@
                             </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
-                                    <el-form-item label="用户角色：">
+                                    <el-form-item label="用户角色：" class="required">
                                         <el-select 
                                             v-model="add_info.roleId" 
                                             :placeholder="add_info.roleName || '选择角色'" class="asterisk">
@@ -122,7 +119,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="所属部门：">
+                                    <el-form-item label="所属部门：" class="required">
                                         <el-select v-model="add_info.orgId" :placeholder="add_info.orgName || '选择部门'" class="asterisk">
                                             <el-option 
                                                 v-for="item in ogr_list"
@@ -150,5 +147,7 @@
 .user-manage
     .content-buttons
         padding 5px 0 3px 0
+    .el-input__inner
+        padding-right : 0 !important
 </style>
 <script src="./usermanagements.js"></script>

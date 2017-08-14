@@ -17,17 +17,17 @@
                             <el-input placeholder="输入联系人" v-model='info.contacts'></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue">查询</el-button>
-                            <el-button @click='reset()' class="btn btn-orange">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click='reset()' class="btn btn-orange"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="btn btn-small btn-blue" @click="refresh()"><i class="fa fa-repeat"></i> 刷新</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="refresh()"><i class="fa fa-refresh "></i> 刷 新</el-button>
                     <el-button class="btn btn-large btn-blue" @click="batchDelete()"><i class="fa fa-trash-o"></i> 批量删除</el-button>
-                    <el-button class="btn btn-large btn-blue" @click="toAdd()"><i class="fa fa-user-plus"></i> 新建客户</el-button>
+                    <el-button class="btn btn-large btn-blue" @click="toAdd()"><i class="fa fa-file-text-o"></i> 新建客户</el-button>
                 </el-col>
             </div>
 
@@ -110,7 +110,7 @@
                     <el-form :inline="true" class="">
                         <el-row :gutter="24">
                             <el-col :span="12">
-                                <el-form-item label="客户类型：">
+                                <el-form-item label="客户类型：" class="required">
                                     <el-select :placeholder="select_op[0] && select_op[0].dicName" v-model="sel_val" >
                                         <el-option
                                             v-for="item in select_op"
@@ -122,19 +122,19 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item label="客户名称：">
+                                <el-form-item label="客户名称：" class="required">
                                     <el-input v-model="add_info.sel_name" ></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row :gutter="24">
                             <el-col :span="12">
-                                <el-form-item label="　联系人：">
+                                <el-form-item label="　联系人：" class="required">
                                     <el-input v-model="add_info.sel_contact" ></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item label="　手机号：">
+                                <el-form-item label="　手机号：" class="required">
                                     <el-input v-model="add_info.sel_phone" ></el-input>
                                 </el-form-item>
                             </el-col>
@@ -177,7 +177,7 @@
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-                                <el-form-item class="input-large">
+                                <el-form-item class="input-large required" >
                                     <el-input v-model="add_info.address" ></el-input>
                                 </el-form-item>
                             </el-col>
@@ -202,7 +202,7 @@
             <el-form :inline="true" class="">
                 <el-row :gutter="24">
                     <el-col :span="8">
-                        <el-form-item label="客户类型：">
+                        <el-form-item label="客户类型：" class="required">
                             <input type="hidden" v-html='edit_table.custType' id="custType">
                             <el-select v-model="edit_table.custType" >
                                 <el-option
@@ -215,24 +215,24 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="客户编号：">
+                        <el-form-item label="客户编号：" class="required">
                             <p v-html="edit_table.custNo"></p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="客户名称：">
+                        <el-form-item label="客户名称：" class="required">
                             <el-input v-model="edit_table.custName" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="8">
-                        <el-form-item label="　联系人：">
+                        <el-form-item label="　联系人：" class="required">
                             <el-input v-model="edit_table.contacts" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="　手机号：">
+                        <el-form-item label="　手机号：" class="required">
                             <el-input v-model="edit_table.phone" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -275,7 +275,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item class="input-large">
+                        <el-form-item class="input-large required">
                             <el-input v-model="edit_table.address" ></el-input>
                         </el-form-item>
                     </el-col>

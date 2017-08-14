@@ -349,7 +349,7 @@ import Qs from 'qs'
                     });
                     that.edit_warning = false;
                     that.page.page_num = 1;
-                    that.loadTable();
+                    that.refresh();
                     that.$clearObject(that.edit_table)
                 },
                 error(data) {
@@ -400,7 +400,7 @@ import Qs from 'qs'
                     });
                     that.new_warning = false;
                     that.page.page_num = 1;
-                    that.loadTable(0);
+                    that.refresh(0);
                     that.$clearObject(that.add_info);
                 },
                 error(data) {

@@ -94,7 +94,7 @@
                 <el-form :inline="true" class="">
                     <el-row :gutter="24">
                         <el-col :span="12">
-                            <el-form-item label="库品类型：">
+                            <el-form-item label="库品类型：" class="required">
                                 <el-select placeholder="原材料" v-model="add_info.sel_val" @change="changeSelValue()" class="asterisk">
                                     <el-option
                                             v-for="item in select_op"
@@ -108,7 +108,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="库品编号：">
+                            <el-form-item label="库品编号：" class="required">
                                 <input type="hidden" v-html='add_info.cur_ins' id="curIns">
                                 <el-select v-model="add_info.item_no" @change="changeItemNo(1)" class="asterisk">
                                     <el-option
@@ -125,7 +125,7 @@
                     </el-row>
                     <el-row :gutter="24">
                         <el-col :span="12">
-                            <el-form-item label="库品名称：">
+                            <el-form-item label="库品名称：" >
                                     <p>{{ add_info.item_name }}</p>
                             </el-form-item>
                         </el-col>
@@ -137,7 +137,7 @@
                     </el-row>
                     <el-row :gutter="24">
                         <el-col :span="12">
-                            <el-form-item label="安全库存：">
+                            <el-form-item label="安全库存：" class="required">
                                 <el-input v-model="add_info.sec_inv" class="asterisk"></el-input>
                             </el-form-item>
                         </el-col>
@@ -173,7 +173,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="库品编号：">
+                        <el-form-item label="库品编号：" class="required">
                             <input type="hidden" v-html='edit_table.curInv' id="curIns">
                             <el-select v-model="edit_table.itemNo" @change="changeItemNo(2)" class="asterisk">
                                 <el-option
@@ -201,7 +201,7 @@
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="12">
-                        <el-form-item label="安全库存：">
+                        <el-form-item label="安全库存：" class="required">
                             <el-input v-model="edit_table.secInv" class="asterisk"></el-input>
                             
                         </el-form-item>

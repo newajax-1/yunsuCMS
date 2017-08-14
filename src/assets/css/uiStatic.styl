@@ -31,6 +31,8 @@ $default_bd_gray_hover = $default_bd_gray;
 $table_header_bgcolor = #e4f3ff;
 $dialog_blue = #00a8ff;
 
+$warn_red = #ff0000;
+
 .layout-content
     background: $gf;
     
@@ -102,9 +104,19 @@ $dialog_blue = #00a8ff;
 
     /* 清除ele-ui表单样式 */
     .el-input__inner
-        font-size: 12px;
+        position: relative
         width: 105px
         height: 30px
+        font-size: 12px
         border-radius: 0
         border-color: $e5
 
+    .required
+        position: relative
+        &::after
+            content: "*"
+            position: absolute
+            top: 50%
+            right: -10px
+            color:$warn_red
+            transform: translateY(-50%)

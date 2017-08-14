@@ -13,7 +13,7 @@ export default {
             new_organization: false,
             add_info: {
                 org_name: undefined,
-                remark: undefined,
+                remarks: undefined,
             },
             select_op: [],
             sel_val: undefined,
@@ -94,6 +94,7 @@ export default {
                 if (objectChilds[0].orgId == null) {
                     _data.push({
                         planNo: object.orgName,
+                        remarks: object.remarks
                     });
                     this.commonorg_id = object.orgId;
                     this.staff_table_data = null;
@@ -108,7 +109,7 @@ export default {
             var that = this;
             this.add_info.org_name = "";
             this.sel_val = "";
-            this.add_info.remark = "";
+            this.add_info.remarks = "";
             this.new_organization = true;
             this.$ajaxWrap({
                 type: "post",
@@ -143,7 +144,7 @@ export default {
                 data: {
                     orgName: that.add_info.org_name,
                     parentId: that.sel_val,
-                    remarks: that.add_info.remark,
+                    remarks: that.add_info.remarks,
                 },
                 callback: function(data) {
                     that.$message({
@@ -175,9 +176,16 @@ export default {
 
         // 删除
         deleteObject() {
-            var that = this;
-            var flag = undefined;
-            (this.delete_msg.indexOf("会员") == -1) ? (flag = "/sysOrganization/deleteById?orgId=") : (flag = "/sysOrganization/deleteStaffById?accountOrgid=");
+            var that = this,
+                flag = undefined,
+                tips = false;
+            if (this.delete_msg.indexOf("会员") == -1) {
+                flag = "/sysOrganization/deleteById?orgId="
+                tips = true;
+
+            } else {
+                flag = "/sysOrganization/deleteStaffById?accountOrgid="
+            }
             this.$ajaxWrap({
                 type: "get",
                 url: flag + that.tip_msg,
@@ -187,10 +195,16 @@ export default {
                         message: '删除成功',
                         type: 'success'
                     });
+
                     that.dialog_visible = false;
                     that.table_data = null;
                     that.staff_table_data = null;
-                    that.loadStaffTable();
+
+                    if (tips) {
+                        that.loadTable();
+                    } else {
+                        that.loadStaffTable();
+                    }
                 },
                 error(data) {
 
@@ -242,12 +256,9 @@ export default {
         },
 
 
-        handleOpen(key, keyPath) {
-            console.log(key, keyPath);
-        },
-        handleClose(key, keyPath) {
-            console.log(key, keyPath);
-        },
+        handleOpen(key, keyPath) {},
+
+        handleClose(key, keyPath) {},
 
     },
     //当加载页面的时候调用

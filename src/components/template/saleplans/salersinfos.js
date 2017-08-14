@@ -318,6 +318,7 @@ export default {
                             message: '修改成功',
                             type: 'success'
                         });
+                        that.$clearObject(that.info);
                         that.loadTable();
                         that.edit_custom = false;
                         that.sel_val = undefined;
@@ -379,6 +380,7 @@ export default {
                                 type: 'success'
                             });
                             that.new_custom = false;
+                            that.$clearObject(that.info);
                             that.loadTable();
                             that.sel_val = undefined;
                             that.$clearObject(that.add_info);

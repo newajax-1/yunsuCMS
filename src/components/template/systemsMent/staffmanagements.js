@@ -2,60 +2,67 @@ import Qs from 'qs'
 export default {
     name: 'orgManagement',
     data() {
-        
+
         return {
-            table_data : [],
-            work_table_data : [],
-            search_pageNum : undefined,
-            search_pageSize : undefined,
+            table_data: [],
+            work_table_data: [],
+            search_pageNum: undefined,
+            search_pageSize: undefined,
 
             // 弹框标题
-            dialog_name : undefined,
-            batch_ids : undefined,
+            dialog_name: undefined,
+            batch_ids: undefined,
 
             // 搜索信息
-            search_info : {
-                emp_no : undefined,
-                emp_nm : undefined,
+            search_info: {
+                emp_no: undefined,
+                emp_nm: undefined,
             },
 
             // 增加信息/修改时原始数据和详情数据存放
-            initial_info : {
-                empId : undefined,
-                empNo : undefined, 
-                empNm : undefined,
-                password : undefined,
+            initial_info: {
+                empId: undefined,
+                empNo: undefined,
+                empNm: undefined,
+                password: undefined,
             },
 
             // 分页数据
-            page : {
-                page_num : 1,
-                page_size : 10,
-                total : 0,
+            page: {
+                page_num: 1,
+                page_size: 10,
+                total: 0,
             },
-            show_emp_id : false,
-            new_custom : false,
-            details_custom : false,
+            show_emp_id: false,
+            new_custom: false,
+            details_custom: false,
         }
     },
     methods: {
+
         // 加载数据
         loadTable() {
             var that = this;
             this.$ajaxWrap({
-                type : "post",
-                url : "/emp/queryList",
-                data : {
-                    pageNum : that.search_pageNum || 1,
-                    pageSize : that.search_pageSize || 10,
-                    empNo : that.search_info.emp_no,
-                    empNm : that.search_info.emp_nm,
-                } ,
-                success : function(data){
+                type: "post",
+                url: "/emp/queryList",
+                data: {
+                    pageNum: that.search_pageNum || 1,
+                    pageSize: that.search_pageSize || 10,
+                    empNo: that.search_info.emp_no,
+                    empNm: that.search_info.emp_nm,
+                },
+                success: function(data) {
                     that.table_data = data.data.page.list;
                     that.page.total = data.data.page.total;
                     that.page.page_num = data.data.page.pageNum;
                     that.page.page_size = data.data.page.pageSize;
+
+                    for (let i = 0; i < that.table_data.length; i++) {
+                        let el = that.table_data[i];
+                        el.index = (that.page.page_size * (that.page.page_num - 1)) + i + 1
+                    }
+
                 },
                 error() {
                     //do error function
@@ -71,22 +78,22 @@ export default {
             this.$clearObject(this.add_info);
             this.$clearObject(this.initial_info);
             id ? (this.dialog_name = "修改员工") : (this.dialog_name = "增加员工");
-            if(id) {
+            if (id) {
                 this.show_emp_id = true,
-                this.$ajaxWrap({
-                    type : "get",
-                    url : "/emp/getObject",
-                    data : {
-                        empId : id
-                    } ,
-                    callback : function(data){
-                        that.initial_info = data.data.data;
-                        that.initial_info.password = undefined;
-                    },
-                    error() {
-                        //do error function
-                    }
-                })
+                    this.$ajaxWrap({
+                        type: "get",
+                        url: "/emp/getObject",
+                        data: {
+                            empId: id
+                        },
+                        callback: function(data) {
+                            that.initial_info = data.data.data;
+                            that.initial_info.password = undefined;
+                        },
+                        error() {
+                            //do error function
+                        }
+                    })
             }
         },
 
@@ -109,13 +116,13 @@ export default {
         // 复选框勾选
         handleSelectionChange(val) {
             var that = this;
-            if(val.length != 0) {
+            if (val.length != 0) {
                 var arr = [];
                 val.every(function(el) {
                     return arr.push(el.empId)
                 })
                 that.batch_ids = arr.join(",")
-            }else {
+            } else {
                 that.batch_ids = undefined;
             }
             console.log(that.batch_ids)
@@ -133,12 +140,12 @@ export default {
                 cancelButtonText: "取消",
             }).then(function() {
                 that.$ajaxWrap({
-                    type : "get",
-                    url : "/emp/deleteById",
-                    data : {
-                        empId : id
-                    } ,
-                    callback : function(data){
+                    type: "get",
+                    url: "/emp/deleteById",
+                    data: {
+                        empId: id
+                    },
+                    callback: function(data) {
                         that.loadTable();
                         that.$message({
                             message: data.tipMsg,
@@ -146,7 +153,7 @@ export default {
                         });
                     },
                     error() {
-                        
+
                     }
                 })
             }).catch(function() {});
@@ -156,12 +163,12 @@ export default {
         saveInfo() {
             var that = this;
             var _flag = undefined;
-            if(this.show_emp_id) {
-            	_flag = !that.initial_info.empNo || !that.initial_info.empNm;
-            }else{
-            	_flag = !that.initial_info.empNo || !that.initial_info.empNm || !that.initial_info.password
+            if (this.show_emp_id) {
+                _flag = !that.initial_info.empNo || !that.initial_info.empNm;
+            } else {
+                _flag = !that.initial_info.empNo || !that.initial_info.empNm || !that.initial_info.password
             }
-            if(_flag){
+            if (_flag) {
                 this.$message({
                     message: "请将信息填写完整",
                     type: "warning"
@@ -170,15 +177,15 @@ export default {
             }
 
             this.$ajaxWrap({
-                type : "post",
-                url : "/emp/save",
-                data : {
-                    empId : that.initial_info.empId || "",
-                    empNo : that.initial_info.empNo,
-                    empNm : that.initial_info.empNm,
-                    password : that.initial_info.password,
-                } ,
-                callback : function(data){
+                type: "post",
+                url: "/emp/save",
+                data: {
+                    empId: that.initial_info.empId || "",
+                    empNo: that.initial_info.empNo,
+                    empNm: that.initial_info.empNm,
+                    password: that.initial_info.password,
+                },
+                callback: function(data) {
                     that.new_custom = false;
                     that.$message({
                         message: data.tipMsg,
@@ -187,7 +194,7 @@ export default {
                     that.loadTable();
                 },
                 error(data) {
-                    
+
                 }
             })
         },
@@ -240,13 +247,13 @@ export default {
         //改变页码的时候调用
         handleCurrentChange(val) {
             if (this.table_data.length) {
-                this.searchFormData(val, "size");
+                this.searchFormData(val, "num");
             };
         },
 
     },
     //当加载页面的时候调用
-    mounted(){
-        this.loadTable();   
+    mounted() {
+        this.loadTable();
     }
-    }
+}

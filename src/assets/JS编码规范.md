@@ -1,8 +1,8 @@
 # JavaScript编码规范.md
 
 ## 变量初始值
-非对象为undefined
-对象初始值为null
+    非对象为undefined
+    对象初始值为null
 
 ## 函数命名：
 
@@ -24,55 +24,54 @@
     update : 修改
 
 ## 变量命名
-    
-    以 is : boolean
 
-    ### 函数私有变量
-    变量名前下划线
-
+    变量名描述用下划线连接，以区别函数的小驼峰命名
     cust_name
     temp_list
-    临时数据对象: _data
-    临时对象 : _temp
+
+## 路由跳转
+
+    Vue.$goRoute(route); 
 
 ## ajax
 
-Vue.$ajaxWrap({
-    type : "get" or "post",
-    url : url,
-    data : data ,
-    success : function(data){
-        //do success function 
-    },
-    error() {
-        //do error function
-    }
-})
+    Vue.$ajaxWrap({
+        type : "get" or "post", // default type get
+        url : url,
+        data : data ,
+        success : function(data){
+            // do success function 
+        },
+        error() {
+            // do error function
+        },
+        fail(){
+            // 请求失败的情况：当请求status非200时的处理
+        }
+    })
 
 ## 清除数据
-    Vue.$clearObject()
+
+    Vue.$clearObject();
+
+## 检测数组
+
+    Vue.$typeofArray();
 
 ## 提示框
     
     ### 普通提示框
-    Vue.$message("这是一条普通消息");
-
-    ### 成功与警告框
-    Vue.$message({
-        message: "这是一条成功/警告消息",
-        type: "success" or "warning"
+    Vue.$baseWarn("这是一条普通消息",function(){
+        // alert 效果
+        // 确认后需要做的事件
     });
 
-    ### 错误框
-    Vue.$message.error("这是一条错误消息");
+    ### 成功与警告框
+    Vue.$baseConfirm("确定信息",function(){
+        // 确认后需要做的事件
+    });
 
 
-## 删除关闭提示
+## 日期截取
 
-    Vue.$confirm("你确定删除么？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-    }).then(function() {
-    
-        })
-    }).catch(function() {});
+    Vue.$handleDateObject(); // return yyyy-mm-dd

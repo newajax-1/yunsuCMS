@@ -164,6 +164,7 @@ export default {
                         accountId: that.is_scope_id,
                     },
                     callback(data) {
+                        that.$clearObject(that.info);
                         that.loadTable();
                         that.new_custom = false;
                         that.$message({

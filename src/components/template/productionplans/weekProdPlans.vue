@@ -49,15 +49,17 @@
                             </el-date-picker>
                         </el-form-item>
 
-                        <el-form-item><el-button class="btn btn-small btn-blue" @click="searchFormData()">查询</el-button></el-form-item>
-                        <el-form-item><el-button class="btn btn-small btn-orange" @click="reset">重置</el-button></el-form-item>
+                        <el-form-item>
+                            <el-button class="btn btn-small btn-blue" @click="searchFormData()"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button class="btn btn-small btn-orange" @click="reset"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                        </el-form-item>
                     </el-form>
                 </div>
             </el-col>
             
             <el-col :span="24" class="content-buttons">
-                <el-button class="btn btn-blue btn-samll" @click="refresh"><i class="fa fa-repeat"></i> 刷新</el-button>
-                <el-button class="btn btn-blue btn-large" @click="openWeekplanModal('新建周计划')"><i class="fa fa-user-plus"></i> 新建周计划</el-button>
+                <el-button class="btn btn-blue btn-samll" @click="refresh"><i class="fa fa-refresh "></i> 刷 新</el-button>
+                <el-button class="btn btn-blue btn-large" @click="openWeekplanModal('新建周计划')"><i class="fa fa-file-text-o"></i> 新建周计划</el-button>
             </el-col>
 
             <el-col :span="24">
@@ -503,12 +505,12 @@
                     </el-row>
                     <div class="message clearfix" style=" margin-top: 10px;">
                         <div v-show="!weekplan_info_show">
-                            <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')">保 存</el-button>
-                            <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')" v-show="!modal_btn_show">下 发</el-button>
-                            <el-button class="btn btn-small btn-blue" @click="deleteWorkArray">删除</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')"><i class="fa fa-check-square-o"></i> 保 存</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')" v-show="!modal_btn_show"><i class="fa fa-sign-in"></i> 下 发</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="deleteWorkArray"><i class="fa fa-trash-o"></i> 删 除</el-button>
                             <el-button class="btn btn-large btn-blue" @click="createWorkplan"><i class="fa fa-user-plus"></i>新增计划</el-button>
-                            <el-button class="btn btn-small btn-blue"  v-show="edit_next_show_week" v-if="new_week_date" @click="nextWeekplan('pre')" >上一周</el-button>  
-                            <el-button class="btn btn-small btn-blue"  v-show="edit_next_show_week" v-else @click="nextWeekplan('next')" >下一周</el-button>
+                            <el-button class="btn btn-small btn-blue"  v-show="edit_next_show_week" v-if="new_week_date" @click="nextWeekplan('pre')" ><i class="fa fa-caret-left" ></i>上一周</el-button>  
+                            <el-button class="btn btn-small btn-blue"  v-show="edit_next_show_week" v-else @click="nextWeekplan('next')" ><i class="fa fa-caret-right" ></i>下一周</el-button>
                         </div>
                     </div>
 

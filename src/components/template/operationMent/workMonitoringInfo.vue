@@ -5,13 +5,6 @@
                 <div class="content-title">
                     <span>未下发工单详情</span>
                 </div>
-                <div class="content-search">
-                    <el-form :inline="true" class="">
-                        <el-form-item>
-                            <el-button @click="moreOperationWeek()" class="btn btn-small btn-blue">下发</el-button>
-                        </el-form-item>
-                    </el-form>
-                </div>
             </el-col>
             <el-col :span="24">
                 <!-- 列表开始  start -->
@@ -21,8 +14,8 @@
                         :data="detail_data"
                         @selection-change="handleSelectionChange">
                         <el-table-column type="selection" width="45"></el-table-column>
-                        <el-table-column width="30" prop="type" label="类型"></el-table-column>
-                        <el-table-column width="45" prop="lv" label="优先级"></el-table-column>
+                        <el-table-column width="60" prop="type" label="类型"></el-table-column>
+                        <el-table-column width="60" prop="lv" label="优先级"></el-table-column>
                         <el-table-column width="60" prop="custName" label="客户"></el-table-column>
                         <el-table-column width="60" prop="ordrNo" label="订单编号"></el-table-column>
                         <el-table-column width="60" prop="itemNo" label="产品型号"></el-table-column>
@@ -201,7 +194,7 @@
                         </el-table-column>
                         <el-table-column width="60" prop="secInv" label="安全库存">
                         </el-table-column>
-                        <el-table-column label="操作" width="60">
+                        <el-table-column label="操作" width="60" fixed="right">
                             <template scope="scope">
                                 <el-button  
                                     type="text"
@@ -221,6 +214,7 @@
             <div class="content-buttons fl">
                 <el-col :span="24">
                     <el-button class="btn btn-blue" @click="$goRoute('workmonitoring')"><i class="fa fa-repeat" ></i> 返回</el-button>
+                    <el-button @click="moreOperationWeek()" class="btn btn-small btn-blue"><i class="fa fa-sign-in"></i>下发</el-button>
                 </el-col>
             </div>
 	    </el-row>
@@ -288,10 +282,10 @@
                 height: 30px
                 font-size: 12px !important
             td                
-                padding: 0 2px
+                padding: 0 2px !important
                 text-align: center
             .cell            
-                padding: 0 2px    
+                padding: 0 2px !important  
                 line-height: 1
             .el-input__inner
                 width: 100%

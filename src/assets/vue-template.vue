@@ -30,33 +30,51 @@
         -->
         <el-col :span="24" class="content-buttons">
 
-            <el-button class="btn btn-blue btn-small" @click="refresh">
+            <el-button class="btn btn-blue btn-small">
                 <i class="fa fa-refresh "></i> 刷 新
             </el-button>
 
-            <el-button class="btn btn-blue btn-large" @click="openSalePlanModal('新建计划')">
+            <el-button class="btn btn-blue btn-large">
                 <i class="fa fa-file-text-o"></i> 新建计划
             </el-button>
 
-            <el-button class="btn btn-blue btn-small" @click="refresh">
+            <el-button class="btn btn-blue btn-small">
                 <i class="fa fa-trash-o"></i>删除
             </el-button>
 
-            <el-button class="btn btn-blue btn-small" @click="refresh">
+            <el-button class="btn btn-blue btn-small">
                 <i class="fa fa-pencil-square-o"></i>编辑
             </el-button>
 
-            <el-button class="btn btn-blue btn-small" @click="refresh">
+            <el-button class="btn btn-blue btn-small">
                 <i class="fa fa-sign-in"></i>下发
             </el-button>
 
-            <el-button class="btn btn-blue btn-small" @click="refresh">
+            <el-button class="btn btn-blue btn-small">
                 <i class="fa fa-check-square-o"></i>保存
             </el-button>
 
-            <el-button class="btn btn-blue btn-small" @click="refresh">
+            <el-button class="btn btn-blue btn-small">
                 <i class="fa fa-times "></i>关闭
             </el-button>
+            
+            <el-button class="btn btn-small btn-blue">
+                <i class="fa fa-search"></i> 查 询
+            </el-button>
+
+            <el-button class="btn btn-small btn-blue">
+                <i class="fa fa-window-restore"></i> 重 置
+            </el-button>
+
+            <el-button class="btn btn-small btn-blue">
+                <i class="fa fa-undo"></i> 返 回
+            </el-button>
+
+            <el-button class="btn btn-small btn-blue"  >
+                <i class="fa fa-caret-left" ></i> 上一周
+            </el-button> 
+
+            
             
         </el-col>
 

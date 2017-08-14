@@ -10,7 +10,8 @@ import axios from 'axios'
  * 请保留以下所有代码，勿修改
  */
 
-const BaseUrl = window.BaseUrl = "http://localhost:8080/ybs_mes/";
+// const BaseUrl = window.BaseUrl = 'http://192.168.3.156:8080/ybs_mes_master';
+const BaseUrl = window.BaseUrl = 'http://192.168.3.233:8080/ybs_mes';
 
 // 非父子组件通信 [慎用-可考虑Vuex代替]
 const EventBus = window.EventBus = new Vue();
@@ -45,7 +46,7 @@ VueProto.$vueExtend({
     },
 
     // 警示框
-    $baseWarn(tips, done) {
+    $baseWarn(tips, done, flag) {
         let that = this;
 
         that.$alert(tips, '提示', {
@@ -55,14 +56,13 @@ VueProto.$vueExtend({
                     done();
                     return;
                 }
-
-                // if (that.refresh) that.refresh();
+                if (flag && that.refresh) that.refresh();
             }
         });
     },
 
     // 提示框
-    $baseConfirm(tips, done, fail) {
+    $baseConfirm(tips, done, flag) {
         let that = this;
 
         that.$confirm(tips, "提示", {
@@ -72,7 +72,7 @@ VueProto.$vueExtend({
         }).then(function() {
             if (typeof done === "function") done();
 
-            // if (that.refresh) that.refresh();
+            if (flag && that.refresh) that.refresh();
         }).catch(function() {});
     },
 
@@ -87,6 +87,7 @@ VueProto.$vueExtend({
         } else {
             let arr = [];
             return arr;
+
         }
     },
 
