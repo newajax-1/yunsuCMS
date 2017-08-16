@@ -75,19 +75,19 @@
 							</template>
 						</el-table-column>
 					</el-table>
+					<!--分页-->
+					<div class="table-page">
+						<el-pagination
+							@size-change="handleSizeChange"
+							@current-change="handleCurrentChange"
+							:current-page.sync=page.pageNum
+							:page-size=page.pageSize
+							layout="total, prev, pager, next"
+							:total="page.total">
+						</el-pagination>
+					</div>
 				</div>
 				
-				<!--分页-->
-				<div class="table-page fr">
-				    <el-pagination
-			            @size-change="handleSizeChange"
-			            @current-change="handleCurrentChange"
-			            :current-page.sync=page.pageNum
-			            :page-size=page.pageSize
-			            layout="total, prev, pager, next"
-			            :total="page.total">
-				    </el-pagination>
-				</div>
 			</el-col>
 	    </el-row>
 	   

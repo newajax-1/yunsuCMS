@@ -83,21 +83,21 @@
                             </template>
                         </el-table-column>
                     </el-table>
+
+                    <!--分页-->
+                    <div class="table-page">
+                        <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="page.page_num"
+                            :page-size="page.page_size"
+                            layout="total, prev, pager, next"
+                            :total="page.total">
+                        </el-pagination>
+                    </div>
                 </div>
             </el-col>
         </el-row>
-
-        <!--分页-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page.page_num"
-                :page-size="page.page_size"
-                layout="total, prev, pager, next"
-                :total="page.total">
-            </el-pagination>
-        </div>
 
         <el-dialog
             size="small"

@@ -30,7 +30,15 @@ export default {
             iss_sts : "01",
         }
     },
+    created() {
+        this.workplan_week_id = this.$route.query.workplan_week_id;
+        this.week = this.$route.query.week;
+        this.init();
+    },
     methods: {
+        init() {
+            this.loadTable();
+        },
 
         // 加载
         loadTable() {
@@ -40,7 +48,8 @@ export default {
                 url : "/week/queryWeekList",
                 data : {
                     workplanWeekId : that.workplan_week_id,
-                    billIssSts : 0
+                    billIssSts : 0,
+                    indexOfWeek : that.week.match(/[1-9][0-9]*/g)[0]
                 } ,
                 success : function(data){
                     that.week_detail = data.data.data;
@@ -80,9 +89,6 @@ export default {
                                 break;
                         };
                     }
-                },
-                error() {
-                    //do error function
                 }
             }) 
         },
@@ -111,9 +117,6 @@ export default {
                             quantity : el.quantity
                         });
                     });
-                },
-                error() {
-                    //do error function
                 }
             }) 
         },
@@ -135,9 +138,6 @@ export default {
                     });
                     // that.update_custom = false;
                     that.loadTable();
-                },
-                error(res) {
-                    //do error function
                 }
             })
         },
@@ -164,9 +164,6 @@ export default {
                         type: "success"
                     });
                     that.loadTable();
-                },
-                error(res) {
-                    
                 }
             })
         },
@@ -188,9 +185,6 @@ export default {
                     });
                     that.loadTable();
                     that.update_custom = false;
-                },
-                error(data) {
-                    
                 }
             })  
         },
@@ -242,18 +236,5 @@ export default {
                 that.update_custom = false;
             }).catch(function() {});
         },
-
-        compute(){},
-    },
-    mounted(){
-        //当组件模板挂载时数据显示到上面去。
-        this.compute();
-        this.loadTable();
-    },
-    created() {
-        var that = this;
-        EventBus.$on("setInfoId",function(data){
-            that.workplan_week_id = data.id;
-        })
     },
 }

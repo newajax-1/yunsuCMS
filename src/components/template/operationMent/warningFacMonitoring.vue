@@ -30,15 +30,15 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue btn-small">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
 
             <div class="content-buttons fl">
-                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
+                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷新</el-button>
             </div>
 
             <el-col :span="24">

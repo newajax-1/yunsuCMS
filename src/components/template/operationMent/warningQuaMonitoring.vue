@@ -30,15 +30,15 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue btn-small">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-blue">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-blue"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
 
             <div class="content-buttons fl">
-                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
+                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷新</el-button>
             </div>
 
             <el-col :span="24">
@@ -64,22 +64,22 @@
                         <el-table-column prop="opr" label="解除人"></el-table-column>>
                         <el-table-column prop="handleTime" label="处理时长"></el-table-column>>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page">
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="page_list.page_num"
+                                :page-size=page_list.page_size
+                                layout="total, prev, pager, next"
+                                :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
         </el-row>
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="page_list.page_num"
-                    :page-size=page_list.page_size
-                    layout="total, prev, pager, next"
-                    :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
     </div>
 </template>
 <style lang="stylus">

@@ -215,12 +215,13 @@ export default {
             })
         },
 
-        showDetail(id) {
-            console.log(id)
-            this.$goRoute("/home/workmonitoringinfo")
-            this.EventId = {
-                id : id
-            };
+        showDetail(id, val) {
+            this.$goRoute("/home/workmonitoringinfo",
+                {
+                    workplan_week_id : id,
+                    week : val
+                }
+            )
         },
 
         showTable() {

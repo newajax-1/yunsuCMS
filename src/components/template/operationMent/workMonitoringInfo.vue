@@ -213,7 +213,7 @@
 
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="btn btn-blue" @click="$goRoute('workmonitoring')"><i class="fa fa-repeat" ></i> 返回</el-button>
+                    <el-button class="btn btn-blue" @click="$goRoute('workmonitoring')"><i class="fa fa-undo"></i> 返 回</el-button>
                     <el-button @click="moreOperationWeek()" class="btn btn-small btn-blue"><i class="fa fa-sign-in"></i>下发</el-button>
                 </el-col>
             </div>
@@ -249,7 +249,7 @@
                             </el-table-column>
                             <el-table-column label="工人姓名" prop="worker">
                                 <template scope="scope">
-                                    <el-select :disabled="!scope.row.quantity" v-model="scope.row.worker" @change="changeWeeker(scope.row.workplanBillId, scope.row.worker)" class="asterisk">
+                                    <el-select :disabled="!scope.row.quantity" v-model="scope.row.worker" @change="changeWeeker(scope.row.workplanBillId, scope.row.worker)" class="required">
                                         <el-option
                                             v-for="item in worker_list"
                                             :label="item.empNm"

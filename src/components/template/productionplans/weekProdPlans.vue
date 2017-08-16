@@ -105,20 +105,19 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <div class="table-page">
+                        <el-pagination
+                            layout="total, prev, pager, next"
+                            :current-page.sync="weekplan_page_list.pageNum"
+                            :page-size="weekplan_page_list.pageSize"
+                            :total="weekplan_page_list.total"
+                            @size-change="currentSizeChange"
+                            @current-change="currentPageChange">
+                        </el-pagination>
+                    </div>
                 </div>
             </el-col>
             <!-- 周计划 数据表格 end -->
-
-            <div class="table-page fr">
-                <el-pagination
-                    layout="total, prev, pager, next"
-                    :current-page.sync="weekplan_page_list.pageNum"
-                    :page-size="weekplan_page_list.pageSize"
-                    :total="weekplan_page_list.total"
-                    @size-change="currentSizeChange"
-                    @current-change="currentPageChange">
-                </el-pagination>
-            </div>
 
             <!-- 周计划 新建或修改 start -->
             <el-dialog
@@ -508,7 +507,7 @@
                             <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('save')"><i class="fa fa-check-square-o"></i> 保 存</el-button>
                             <el-button class="btn btn-small btn-blue" @click="confirmSendPlan('push')" v-show="!modal_btn_show"><i class="fa fa-sign-in"></i> 下 发</el-button>
                             <el-button class="btn btn-small btn-blue" @click="deleteWorkArray"><i class="fa fa-trash-o"></i> 删 除</el-button>
-                            <el-button class="btn btn-large btn-blue" @click="createWorkplan"><i class="fa fa-user-plus"></i>新增计划</el-button>
+                            <el-button class="btn btn-large btn-blue" @click="createWorkplan"><i class="fa fa-file-text-o"></i> 新增计划</el-button>
                             <el-button class="btn btn-small btn-blue"  v-show="edit_next_show_week" v-if="new_week_date" @click="nextWeekplan('pre')" ><i class="fa fa-caret-left" ></i>上一周</el-button>  
                             <el-button class="btn btn-small btn-blue"  v-show="edit_next_show_week" v-else @click="nextWeekplan('next')" ><i class="fa fa-caret-right" ></i>下一周</el-button>
                         </div>
@@ -523,7 +522,10 @@
 <style lang="stylus">
 .week-prod-plans
     .el-dialog__body
-        padding: 15px;
+        padding: 15px
+        .table-wrap
+            margin: 0
+            padding: 0
         .el-table
             th,
             td

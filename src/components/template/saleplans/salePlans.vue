@@ -98,19 +98,19 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="table-page">
+                    <el-pagination
+                        layout="total, prev, pager, next"
+                        :current-page.sync="sale_page_list.pageNum"
+                        :page-size="sale_page_list.pageSize"
+                        :total="sale_page_list.total"
+                        @size-change="currentSizeChange"
+                        @current-change="currentPageChange">
+                    </el-pagination>
+                </div>
             </div>
         </el-col>
 
-        <div class="table-page fr">
-            <el-pagination
-                layout="total, prev, pager, next"
-                :current-page.sync="sale_page_list.pageNum"
-                :page-size="sale_page_list.pageSize"
-                :total="sale_page_list.total"
-                @size-change="currentSizeChange"
-                @current-change="currentPageChange">
-            </el-pagination>
-        </div>
 
         <!--新增弹框 start-->
         <el-dialog

@@ -8,7 +8,7 @@
                 <div class="content-search">
                     <el-form :inline="true">
                         <el-form-item>
-                            <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-user-plus"></i> 新建角色</el-button>
+                            <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 新建角色</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -34,22 +34,22 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page">
+                        <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="page_list.page_num"
+                            :page-size=page_list.page_size
+                            layout="total, prev, pager, next"
+                            :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
             </el-col>
             <!-- 数据表格 end -->
     	</el-row>
-    	<!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page_list.page_num"
-                :page-size=page_list.page_size
-                layout="total, prev, pager, next"
-                :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
 
 		<!--新增弹框 start-->
         <el-dialog

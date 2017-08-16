@@ -19,8 +19,8 @@
                 @btn-small {必须存在} 按钮尺寸
                 @btn-blue {必须存在} 按钮颜色
             -->
-            <el-button class="btn btn-small btn-blue" @click="searchFormData()">查 询</el-button>
-            <el-button class="btn btn-small btn-orange" @click="reset">重 置</el-button>
+            <el-button class="btn btn-small btn-blue" @click="searchFormData()"><i class="fa fa-search"></i> 查 询</el-button>
+            <el-button class="btn btn-small btn-orange" @click="reset"><i class="fa fa-window-restore"></i> 重 置</el-button>
         </div> 
 
         <!-- 
@@ -39,7 +39,7 @@
             </el-button>
 
             <el-button class="btn btn-blue btn-small">
-                <i class="fa fa-trash-o"></i>删除
+                <i class="fa fa-trash-o"></i> 删 除
             </el-button>
 
             <el-button class="btn btn-blue btn-small">
@@ -88,12 +88,12 @@
         <!-- @table-wrap {必须存在} 正文表格父类 属性border必选 -->
         <div class="table-wrap">
             <el-table border></el-table>
-        </div>
 
 
-        <!-- @table-page {必须存在} 正文表格分页 -->
-        <div class="table-page fr">
+            <!-- @table-page {必须存在} 正文表格分页 -->
+            <div class="table-page ">
 
+            </div>
         </div>
 
         <!-- 

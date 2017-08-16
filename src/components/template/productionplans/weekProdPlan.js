@@ -786,12 +786,39 @@ export default {
                     ret.dataList = that.modal_weekplan_table_data;
                     ret.data = res.data.data;
 
-                    let temp = JSON.parse(JSON.stringify(ret))
+                    let temp = JSON.parse(JSON.stringify(ret));
 
-                    that.loadModalTableData(temp);
+                    let send_data = that.changeNextWeekdate(temp);
+
+                    console.log(send_data);
+
+                    that.loadModalTableData(send_data);
                 }
             })
 
+        },
+        changeNextWeekdate(data) {
+            let arr = data,
+                list = arr.dataList;
+
+            for (let i = 0; i < list.length; i++) {
+                let data = list[i];
+                data.planBill.monday.day.weekDate = arr.data.mondayDate
+                data.planBill.monday.night.weekDate = arr.data.mondayDate
+                data.planBill.tuesday.day.weekDate = arr.data.tuesdayDate
+                data.planBill.tuesday.night.weekDate = arr.data.tuesdayDate
+                data.planBill.wednesday.day.weekDate = arr.data.wednesdayDate
+                data.planBill.wednesday.night.weekDate = arr.data.wednesdayDate
+                data.planBill.thursday.day.weekDate = arr.data.thursdayDate
+                data.planBill.thursday.night.weekDate = arr.data.thursdayDate
+                data.planBill.friday.day.weekDate = arr.data.fridayDate
+                data.planBill.friday.night.weekDate = arr.data.fridayDate
+                data.planBill.saturday.day.weekDate = arr.data.saturdayDate
+                data.planBill.saturday.night.weekDate = arr.data.saturdayDate
+                data.planBill.sunday.day.weekDate = arr.data.sundayDate
+                data.planBill.sunday.night.weekDate = arr.data.sundayDate
+            }
+            return arr;
         }
     }
 }

@@ -10,10 +10,10 @@ import axios from 'axios'
  * 请保留以下所有代码，勿修改
  */
 
-// const BaseUrl = window.BaseUrl = 'http://192.168.3.156:8080/ybs_mes_master';
-const BaseUrl = window.BaseUrl = 'http://192.168.3.233:8080/ybs_mes';
+const BaseUrl = window.BaseUrl = 'http://192.168.3.156:8080/ybs_mes_master';
+// const BaseUrl = window.BaseUrl = 'http://192.168.3.233:8080/ybs_mes';
 
-// 非父子组件通信 [慎用-可考虑Vuex代替]
+    // 非父子组件通信 [慎用-可考虑Vuex代替]
 const EventBus = window.EventBus = new Vue();
 
 /**
@@ -41,8 +41,12 @@ VueProto.$vueExtend({
     $ajax: axios,
 
     // 路由跳转
-    $goRoute(index) {
-        this.$router.push(index);
+    $goRoute(index, query) {
+        if (query && typeof query === "object") {
+            this.$router.push({ path: index, query: query })
+        } else {
+            this.$router.push(index);
+        }
     },
 
     // 警示框
@@ -173,6 +177,24 @@ VueProto.$vueExtend({
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
         date = year + "-" + month + "-" + day;
+        return date
+    },
+
+    // 日期时间截取
+    $handleDateObjectTime(date) {
+        let year = date.getFullYear(),
+            month = date.getMonth() + 1,
+            day = date.getDate(),
+            hour = date.getHours(),
+            minutes = date.getMinutes(),
+            seconds = date.getSeconds(),
+            date_str = undefined;
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+        if (hour < 10) hour = "0" + hour;
+        if (minutes < 10) minutes = "0" + minutes;
+        if (seconds < 10) seconds = "0" + seconds;
+        date = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
         return date
     },
 
