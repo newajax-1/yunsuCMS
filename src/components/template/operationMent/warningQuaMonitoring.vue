@@ -83,8 +83,5 @@
     </div>
 </template>
 <style lang="stylus">
-.warning_qua_mon
-    .content-buttons
-        padding 10px 0 10px 0
 </style>
 <script src="./warningquamonitorings.js"></script>

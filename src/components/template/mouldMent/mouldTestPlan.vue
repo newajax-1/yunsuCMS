@@ -42,7 +42,7 @@
                 <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷 新</el-button>
                 <el-button @click="deleteId(2)" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
                 <el-button @click="deleteId(1)" class="btn btn-blue btn-small"><i class="fa fa-sign-in"></i> 下 发</el-button>
-                <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 增加设备</el-button>
+                <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 新建计划</el-button>
             </el-col>
 
             <el-col :span="24">
@@ -62,16 +62,16 @@
                         <el-table-column type="selection" width="55"></el-table-column>
                         <el-table-column prop="testMouldPlanNo" label="试模计划编号"></el-table-column>
                         <el-table-column prop="createTime" label="计划生成时间"></el-table-column>
-                        <el-table-column prop="oprTm" label="计划下发时间" v-if="table_show"></el-table-column>
-                        <el-table-column prop="oprNm" label="下发人" v-if="table_show"></el-table-column>
+                        <el-table-column prop="oprTm" label="计划下发时间" v-if="!table_show"></el-table-column>
+                        <el-table-column prop="oprNm" label="下发人" v-if="!table_show"></el-table-column>
                         <el-table-column prop="testMouldTyp" label="试模类型"></el-table-column>
                         <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
-                        <el-table-column prop="machine" label="归属机台" v-if="table_show"></el-table-column>
-                        <el-table-column prop="testStartTm" label="试模开始时间" v-if="table_show"></el-table-column>
-                        <el-table-column prop="testEndTm" label="试模结束时间" v-if="table_show"></el-table-column>
+                        <el-table-column prop="machine" label="归属机台" v-if="!table_show"></el-table-column>
+                        <el-table-column prop="testStartTm" label="试模开始时间" v-if="!table_show"></el-table-column>
+                        <el-table-column prop="testEndTm" label="试模结束时间" v-if="!table_show"></el-table-column>
                         <el-table-column prop="managerName" label="负责人"></el-table-column>
-                        <el-table-column prop="testResultName" label="试模结果" v-if="table_show"></el-table-column>
+                        <el-table-column prop="testResultName" label="试模结果" v-if="!table_show"></el-table-column>
                         <el-table-column label="操作">
                             <template scope="scope">
                                 <el-button  
@@ -97,22 +97,22 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page">
+                        <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="page_list.page_num"
+                            :page-size=page_list.page_size
+                            layout="total, prev, pager, next"
+                            :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
         </el-row>
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page_list.page_num"
-                :page-size=page_list.page_size
-                layout="total, prev, pager, next"
-                :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
 
         <!--新增弹框-->
         <el-dialog

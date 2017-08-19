@@ -5,14 +5,14 @@ export default {
         this.init();
     },
     data() {
-        return{
+        return {
             //产品BOM表格数据
-            product_bom_table_data:[{}],
+            product_bom_table_data: [{}],
             //产品BOM查询条件
-            product_bom_form_data:{
-                productNo:undefined,
-                productNm:undefined,
-                custProductNo:undefined,
+            product_bom_form_data: {
+                productNo: undefined,
+                productNm: undefined,
+                custProductNo: undefined,
             },
             //产品BOM分页
             product_bom_page_list: {
@@ -22,36 +22,36 @@ export default {
             },
 
             //详情
-            product_bom_info:false,
-            product_bom_info_form:{
-                productNm:"",
-                custProductNo:"",
-                number:"",
-                materialGradeName:"",
-                productWeightName:"",
-                colorName:"",
-                gapWeightName:"",
-                secdProcName:"",
-                packingTypName:"",
-                packingCount:"",
-                packingDetl :"",
-                materialGrade:"",
-                gapWeight:"",
-                secdProc:"",
-                packingTyp:"",
+            product_bom_info: false,
+            product_bom_info_form: {
+                productNm: "",
+                custProductNo: "",
+                number: "",
+                materialGradeName: "",
+                productWeightName: "",
+                colorName: "",
+                gapWeightName: "",
+                secdProcName: "",
+                packingTypName: "",
+                packingCount: "",
+                packingDetl: "",
+                materialGrade: "",
+                gapWeight: "",
+                secdProc: "",
+                packingTyp: "",
             },
             //修改
-            product_bom_modify:false,
-            product_sop_modify_data:{},
+            product_bom_modify: false,
+            product_sop_modify_data: {},
             //
-            batch_ids:undefined,
+            batch_ids: undefined,
 
             // 
-            bom_edit : false,
-            dialog_title : "",
+            bom_edit: false,
+            dialog_title: "",
 
-            sync_product_data :{},
-            bom_id : undefined
+            sync_product_data: {},
+            bom_id: undefined
         }
     },
     methods: {
@@ -71,7 +71,7 @@ export default {
             let that = this;
 
             that.$ajaxWrap({
-                type :"post",
+                type: "post",
                 url: "product/queryList",
                 success(res) {
                     that.loadProductBomTable(res.data);
@@ -113,7 +113,7 @@ export default {
             }
 
             that.$ajaxWrap({
-                type :"post",
+                type: "post",
                 url: "product/queryList",
                 data: search_data,
                 success(res) {
@@ -125,20 +125,21 @@ export default {
         handleSelectionChange(val) {
             console.log(val);
             var batch_ids = [];
-            if(val.length > 0) {
+            if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
                     batch_ids.push(val[i].productId);
                 }
                 this.batch_ids = batch_ids.join(",");
-            }else{
+            } else {
                 this.batch_ids = undefined;
             }
         },
 
-        closeModal(){
+        closeModal() {
             let that = this;
-            that.$baseConfirm("确定关闭？",function(){
+            that.$baseConfirm("确定关闭？", function() {
                 that.product_bom_info = false;
+                that.product_bom_modify = false;
                 that.bom_edit = false;
                 that.refresh();
             })
@@ -146,10 +147,10 @@ export default {
 
         deleteIds() {
             let that = this;
-            if(!this.batch_ids) {
+            if (!this.batch_ids) {
                 this.$message({
                     message: "请选择删除的数据",
-                    type:"warning"
+                    type: "warning"
                 });
                 return;
             };
@@ -162,7 +163,7 @@ export default {
                     type: "get",
                     url: "product/deleteProduct",
                     data: {
-                        ids : that.batch_ids
+                        ids: that.batch_ids
                     },
                     success(res) {
                         that.$message({
@@ -171,7 +172,7 @@ export default {
                         });
                         that.getProductBomData();
                     }
-                }) 
+                })
             }).catch(function() {});
         },
 
@@ -186,7 +187,7 @@ export default {
                     type: "get",
                     url: "product/deleteProduct",
                     data: {
-                        ids : id
+                        ids: id
                     },
                     success(res) {
                         that.$message({
@@ -199,23 +200,38 @@ export default {
             }).catch(function() {});
         },
 
-        openProductBomInfo(planId , types) {
+        openProductBomInfo(planId, types) {
             let that = this;
             that.product_bom_info = true;
             that.bom_id = planId;
             that.$ajaxWrap({
-                type:"get",
+                type: "get",
                 url: "product/selectById",
                 data: {
                     productId: planId,
-                    type:types
+                    type: types
                 },
                 success(res) {
-                    if(types === 1){
-                        that.showProductBomInfo();
-                    }else{
-                        that.modifyProductBom();
-                    }
+                    that.showProductBomInfo();
+                    that.sync_product_data = res.data;
+                    that.product_bom_info_form = that.sync_product_data.data;
+
+                }
+            })
+        },
+        openProductBomModify(planId, types) {
+            let that = this;
+            that.product_bom_modify = true;
+            that.bom_id = planId;
+            that.$ajaxWrap({
+                type: "get",
+                url: "product/selectById",
+                data: {
+                    productId: planId,
+                    type: types
+                },
+                success(res) {
+                    that.modifyProductBom();
                     that.sync_product_data = res.data;
                     that.product_bom_info_form = that.sync_product_data.data;
 
@@ -223,35 +239,40 @@ export default {
             })
         },
 
-        modifyProductBom(){
+
+        modifyProductBom() {
             this.bom_edit = false;
             this.dialog_title = "修改产品BOM"
         },
 
-        showProductBomInfo(){
+        showProductBomInfo() {
             let that = this;
             that.bom_edit = true;
             that.dialog_title = "产品BOM详情"
 
         },
-        updateProductBom(){
+
+        updateProductBom() {
             let that = this,
                 send_data = that.product_bom_info_form;
-            
+
             send_data.productId = that.bom_id;
             that.$ajaxWrap({
-                type:"post",
-                url:"product/editProduct",
+                type: "post",
+                url: "product/editProduct",
                 data: send_data,
                 success(res) {
                     that.$message({
                         message: res.tipMsg,
                         type: "success"
                     });
-                    that.product_bom_info = false;
+                    that.product_bom_modify = false;
                     that.refresh();
                 },
             });
+        },
+        gotoAddpage() {
+            this.$goRoute("/home/addmouldinfo");
         }
-    } 
+    }
 }

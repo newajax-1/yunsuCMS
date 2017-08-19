@@ -10,7 +10,7 @@
 
         <el-row class="prod-plans-wrap">
             <el-col :span="24">
-                <div class="content-boder ml-10 fl" :span="4">
+                <div class="content-boder fl" :span="4">
                     <p class="content-p">模具：</p>
                     <div class="content-table clearfix">
                         <div class="content-top text right-border fl">
@@ -81,11 +81,13 @@
 	</div>
 </template>
 <script src="./mouldmonitors.js"></script>
-<style lang="stylus" scoped>
+<style lang="stylus">
+.mould_monitor
     .content-boder
         width 492px
         margin-top 15px
         margin-right 15px
+        margin-left 15px
         border 1px solid #dcdcdc
         &.ml-10
             margin-left: 10px

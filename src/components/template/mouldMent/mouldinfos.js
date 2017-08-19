@@ -20,10 +20,6 @@ export default {
                 {
                     name : "通过",
                     value : "01"
-                },
-                {
-                    name : "不通过",
-                    value : "02"
                 }
             ],
 
@@ -113,7 +109,11 @@ export default {
                 default :
                     that.first_data = data.page.list;
                     break;
-            }
+            };
+            that.page_list.page_num = data.page.pageNum;
+            that.page_list.page_list = data.page.pageList;
+            that.page_list.total = data.page.total;
+            
         },
 
         // 重置
@@ -129,6 +129,13 @@ export default {
 
         deleteIds(id) {
             let that = this;
+            if (!this.batch_ids) {
+                this.$message({
+                    message: "请选择删除的数据",
+                    type: "warning"
+                });
+                return;
+            };
             var _data = {};
             if(id) {
                 _data = { id : id }
@@ -209,7 +216,7 @@ export default {
                     operationType : _operationType
                 },
                 success(res) {
-                    console.log(res)
+                    
                     that.$message({
                         message: res.tipMsg,
                         type: "success"

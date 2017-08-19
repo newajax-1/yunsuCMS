@@ -23,7 +23,6 @@ export default {
                 dicValue : undefined,
                 maintItm : undefined,
                 maintCycle : undefined,
-                startMaintTm : undefined,
             },
 
             select_op : [],
@@ -34,7 +33,6 @@ export default {
             search_pageSize : undefined,
             is_has_id : undefined,
             diag_title : undefined,
-            old_date : undefined,
             is_disabled : false,
             sale_change_name : "first",
             new_custom : false,
@@ -152,7 +150,6 @@ export default {
                     },
                     success(res) {
                         that.add_info = res.data.data;
-                        that.old_date = that.add_info.startMaintTm;
                     }
                 })
             }else{
@@ -174,11 +171,9 @@ export default {
         saveInfo() {
             let that = this;
             var _operationType = (this.is_has_id ? "update" : "add");
-            var _startMaintTm = (this.old_date == this.add_info.startMaintTm ? this.add_info.startMaintTm : this.$handleDateObject(this.add_info.startMaintTm))
             var _flag = 
                 !that.add_info.maintItm || 
-                !that.add_info.maintCycle || 
-                !that.add_info.startMaintTm;
+                !that.add_info.maintCycle;
             if(_flag) {
                 this.$message({
                     message: "请将信息填写完整",
@@ -196,7 +191,6 @@ export default {
                     type : that.add_info.dicValue || "01",
                     maintItm : that.add_info.maintItm,
                     maintCycle : that.add_info.maintCycle,
-                    startMaintTm : _startMaintTm,
                 },
                 success(res) {
                     that.$message({

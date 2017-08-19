@@ -61,22 +61,22 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page">
+                        <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="page_list.page_num"
+                            :page-size=page_list.page_size
+                            layout="total, prev, pager, next"
+                            :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
         </el-row>
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page_list.page_num"
-                :page-size=page_list.page_size
-                layout="total, prev, pager, next"
-                :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
 
         <!--新增弹框-->
         <el-dialog
@@ -118,15 +118,6 @@
                                 <el-col :span="12">
                                     <el-form-item label="保养周期：">
                                         <el-input placeholder="请输入保养周期" class="asterisk" v-model="add_info.maintCycle"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="初始保养时间：">
-                                        <el-date-picker
-                                            v-model="add_info.startMaintTm"
-                                            type="date"
-                                            placeholder="选择日期">
-                                        </el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>

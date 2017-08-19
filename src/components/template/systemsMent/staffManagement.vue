@@ -112,9 +112,6 @@
 </template>
 
 <style lang="stylus" rel="stylesheet/stylus">
-.staff-manage
-    .content-buttons
-        padding 10px 0 5px 0
 </style>
 <!-- 引入js -->
 <script src="./staffmanagements.js"></script>

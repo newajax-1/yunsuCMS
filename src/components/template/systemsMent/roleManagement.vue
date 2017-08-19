@@ -5,12 +5,8 @@
             	<div class="content-title">
                     <span>角色管理</span>
                 </div>
-                <div class="content-search">
-                    <el-form :inline="true">
-                        <el-form-item>
-                            <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 新建角色</el-button>
-                        </el-form-item>
-                    </el-form>
+                <div class="content-buttons">
+                    <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 新建角色</el-button>
                 </div>
 		    </el-col>
 	        <!-- 数据表格 start -->

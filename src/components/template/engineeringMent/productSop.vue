@@ -29,12 +29,12 @@
         <!-- @table-wrap {必须存在} 正文表格父类 属性border必选 -->
         <div class="table-wrap">
             <el-table
-             border
-             :data="product_sop_table_data"
-             @selection-change="handleSelectionChange">
+                border
+                :data="product_sop_table_data"
+                @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="45"></el-table-column>
                 <el-table-column prop="sopNo" label="SOP编号"></el-table-column>
-                <el-table-column prop="sopTyp" label="类型"></el-table-column>
+                <el-table-column prop="sopTypName" label="类型"></el-table-column>
                 <el-table-column prop="sopTitl" label="标题"></el-table-column>
                 <el-table-column prop="productBomName" label="产品名称"></el-table-column>
                 <el-table-column prop="updateTime" label="更新时间"></el-table-column>
@@ -43,20 +43,12 @@
                         <el-button
                             type="text"
                             size="small"
-                            @click="toModifySop(scope)">
-                            修改
-                        </el-button>
+                            @click="toModifySop(scope)">修改</el-button>
                         <el-button
                             type="text"
                             size="small"
-                            @click="deleteId(scope.row.productSopId)">
-                            删除
-                        </el-button>
-                        <el-button 
-                            type="text"
-                            size="small">
-                            <a class="link-normal" :href="download_sop" @click="setRowProductSop(scope.row.productSopId)">下载</a>
-                        </el-button>
+                            @click="deleteId(scope.row.productSopId)">删除</el-button>
+                        <a class="link-normal" :href="download_sop" @click="setRowProductSop(scope.row.productSopId)">下载</a>
                         <a class="link-normal">
                             <label>重新上传
                                 <input type="file" class="hidden abs" @change="upload(scope.row.productSopId)" accept=".pdf">
@@ -65,20 +57,20 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- @table-page {必须存在} 正文表格分页 -->
+            <div class="table-page">
+                <el-pagination
+                    layout="total, prev, pager, next"
+                    :current-page.sync="product_sop_page_list.pageNum"
+                    :page-size="product_sop_page_list.pageSize"
+                    :total="product_sop_page_list.total"
+                    @size-change="currentSizeChange"
+                    @current-change="currentPageChange">
+                </el-pagination>
+            </div>
         </div>
 
 
-        <!-- @table-page {必须存在} 正文表格分页 -->
-        <div class="table-page fr">
-            <el-pagination
-                layout="total, prev, pager, next"
-                :current-page.sync="product_sop_page_list.pageNum"
-                :page-size="product_sop_page_list.pageSize"
-                :total="product_sop_page_list.total"
-                @size-change="currentSizeChange"
-                @current-change="currentPageChange">
-            </el-pagination>
-        </div>
 
         <!--新增弹窗-->
         <el-dialog

@@ -95,6 +95,7 @@
 		                        :data="bad_table_data">
                                 <el-table-column prop="rjctType" label="不良类型"></el-table-column>
 		                        <el-table-column prop="rjctNum" label="不良数"></el-table-column>
+		                        <el-table-column prop="createTime" label="提交时间"></el-table-column>
 		                    </el-table>
 		                </div>
                     </el-col>

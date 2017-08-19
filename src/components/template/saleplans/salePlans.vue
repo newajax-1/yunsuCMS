@@ -430,7 +430,7 @@
                 </el-col>
             </el-row>
             <div class="message center" style="margin-top: 10px;">
-                <el-button class="btn btn-small btn-blue" @click="closeSalePlanInfo()"><i class="fa fa-undo"></i> 返 回</el-button>
+                <el-button class="btn btn-small btn-gray" @click="closeSalePlanInfo()">关 闭</el-button>
             </div>
         </el-dialog>
     </el-row>

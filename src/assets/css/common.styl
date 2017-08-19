@@ -12,6 +12,7 @@
 html,
 body{
     background-color: $f4;
+    font-family: "Microsoft Yahei"
 }
 
 ul,
@@ -52,6 +53,8 @@ li
 
 .hidden
     visibility: hidden
+    width:0
+    height: 0
 
 
 // public css
@@ -101,10 +104,24 @@ li
 
     .content-buttons
         position: absolute
-        top: 0
-        right: 0
+        top: 15px
+        right: 20px
         width: auto
-        padding 15px 0 20px 0
+        .btn
+            width: auto
+            height: auto
+            margin-left: 25px
+            background: transparent
+            border 0 none
+            color: $g3
+            line-height: 20px
+            &:hover
+                background: transparent
+                border 0 none
+                text-decoration: underline
+                color: $default_blue
+            .fa
+                color: $default_blue
     .tab-title
         padding: 10px 10px 0 10px
         margin: 0 10px
@@ -195,6 +212,8 @@ li
                 margin-bottom: 0
                 margin-top: 10px
         .table-wrap
+            margin: 0
+            padding: 0
             .el-input
                 &.is-disabled
                     .el-input__icon
@@ -223,3 +242,6 @@ li
         &.dialog-small
             .el-dialog--small
                 width: 720px
+        &.dialog-tiny
+            .el-dialog--tiny
+                width: 360px

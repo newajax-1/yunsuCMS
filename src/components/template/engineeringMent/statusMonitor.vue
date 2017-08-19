@@ -10,7 +10,7 @@
 
         <el-row class="prod-plans-wrap">
             <el-col :span="24">
-                <div class="content-boder ml-10 fl" :span="4">
+                <div class="content-boder fl" :span="4">
                     <p class="content-p">注塑机：</p>
                     <div class="content-table clearfix">
                         <div class="content-top text right-border fl">
@@ -106,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="content-boder ml-10 fl" :span="4">
+                <div class="content-boder fl" :span="4">
                     <p class="content-p">5T行车：</p>
                     <div class="content-table clearfix">
                         <div class="content-top right-border fl">
@@ -220,14 +220,12 @@
 	</div>
 </template>
 <script src="./statusmonitors.js"></script>
-<style lang="stylus" scoped>
+<style lang="stylus">
     .content-boder
         width 492px
         margin-top 15px
-        margin-right 15px
+        margin-left 15px
         border 1px solid #dcdcdc
-        &.ml-10
-            margin-left: 15px
 
     .left-border
         border-left 1px dotted #dcdcdc

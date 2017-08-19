@@ -10,8 +10,8 @@
                         <el-form-item label="设备编号：">
                             <el-input placeholder="输入设备编号" v-model="search_info.eqp_no"></el-input>
                         </el-form-item>
-                        <el-form-item label="设备型号：">
-                            <el-input placeholder="输入设备型号" v-model="search_info.eqp_nm"></el-input>
+                        <el-form-item label="设备代码：">
+                            <el-input placeholder="输入设备代码" v-model="search_info.eqp_code"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
@@ -48,13 +48,13 @@
                         @selection-change="handleSelectionChange">
                         <el-table-column type="selection" width="55"></el-table-column>
                         <el-table-column prop="eqpNo" label="设备编号"></el-table-column>
-                        <el-table-column prop="eqpNm" label="设备型号" v-if="show_other"></el-table-column>
+                        <el-table-column prop="eqpCode" label="设备代码"></el-table-column>
                         <el-table-column prop="ton" label="吨位" v-if="show_other"></el-table-column>
-                        <el-table-column prop="type" label="类型"></el-table-column>
+                        <el-table-column prop="type" label="类型" v-if="show_other"></el-table-column>
                         <el-table-column prop="eqpBrand" label="设备品牌"></el-table-column>
                         <el-table-column prop="eqpIp" label="设备IP" v-if="show_other"></el-table-column>
                         <el-table-column prop="padIp" label="padIp" v-if="show_other"></el-table-column>
-                        <el-table-column prop="eqpSts" label="状态"></el-table-column>
+                        <el-table-column prop="eqpStsName" label="状态"></el-table-column>
                         <el-table-column label="操作">
                             <template scope="scope">
                                 <el-button  
@@ -71,27 +71,28 @@
                                     @click="deleteId(scope.row.equipmentId)">删除</el-button>
                                 <el-button  
                                     type="text"
+                                    v-if="show_other"
                                     size="small"
                                     @click="toBinding(scope.row.eqpNo)">绑定</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page">
+                        <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="page_list.page_num"
+                            :page-size=page_list.page_size
+                            layout="total, prev, pager, next"
+                            :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
         </el-row>
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page_list.page_num"
-                :page-size=page_list.page_size
-                layout="total, prev, pager, next"
-                :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
 
         <!--新增弹框-->
         <el-dialog
@@ -111,7 +112,7 @@
                                         <el-select 
                                             placeholder="注塑机" 
                                             :disabled="is_disabled" 
-                                            class="asterisk" 
+                                            class="required" 
                                             v-model="add_info.eqpTyp" 
                                             @change="changeType(add_info.eqpTyp)">
                                             <el-option 
@@ -129,36 +130,36 @@
                                 <el-row :gutter="24">
                                     <el-col :span="12">
                                         <el-form-item label="设备品牌：">
-                                            <el-input placeholder="请输入设备品牌" class="asterisk" v-model="add_info.eqpBrand"></el-input>
+                                            <el-input placeholder="请输入设备品牌" class="required" v-model="add_info.eqpBrand"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="设备类型：">
-                                            <el-input placeholder="请输入设备类型" class="asterisk" v-model="add_info.type"></el-input>
+                                            <el-input placeholder="请输入设备类型" class="required" v-model="add_info.type"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-row :gutter="24">
                                     <el-col :span="12">
                                         <el-form-item label="设备代码：">
-                                            <el-input placeholder="请输入设备代码" class="asterisk" v-model="add_info.eqpNm"></el-input>
+                                            <el-input placeholder="请输入设备代码" class="required" v-model="add_info.eqpCode"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="设备吨位：">
-                                            <el-input placeholder="请输入设备吨位" class="asterisk" v-model="add_info.ton"></el-input>
+                                            <el-input placeholder="请输入设备吨位" class="required" v-model="add_info.ton"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-row :gutter="24">
                                     <el-col :span="12">
                                         <el-form-item label="设　备 IP：">
-                                            <el-input placeholder="请输入设备IP" class="asterisk" v-model="add_info.eqpIp"></el-input>
+                                            <el-input placeholder="请输入设备IP" class="required" v-model="add_info.eqpIp"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="看　板 IP：">
-                                            <el-input placeholder="请输入看板IP" class="asterisk" v-model="add_info.padIp"></el-input>
+                                            <el-input placeholder="请输入看板IP" class="required" v-model="add_info.padIp"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -167,12 +168,12 @@
                                 <el-row :gutter="24">
                                     <el-col :span="12">
                                         <el-form-item label="设备品牌：">
-                                            <el-input placeholder="请输入设备品牌" class="asterisk" v-model="add_info.eqpBrand"></el-input>
+                                            <el-input placeholder="请输入设备品牌" class="required" v-model="add_info.eqpBrand"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
-                                        <el-form-item label="设备类型：">
-                                            <el-input placeholder="请输入设备类型" class="asterisk" v-model="add_info.type"></el-input>
+                                        <el-form-item label="设备代码：">
+                                            <el-input placeholder="请输入设备代码" class="asterisk" v-model="add_info.eqpCode"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -181,7 +182,17 @@
                                 <el-row :gutter="24">
                                     <el-col :span="12">
                                         <el-form-item label="设备状态：">
-                                            <el-input placeholder="请输入设备状态" class="asterisk" v-model="add_info.eqpSts"></el-input>
+                                            <el-select 
+                                                placeholder="请输入设备状态" 
+                                                class="required" 
+                                                v-model="add_info.eqpSts">
+                                                    <el-option
+                                                        v-for=" item in eqp_sts_list"
+                                                        :value="item.dicValue"
+                                                        :label="item.dicName"
+                                                        :key="item.dicValue"></el-option>
+                                            </el-select>
+
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
@@ -201,7 +212,7 @@
                 </el-col>
             </el-row>
             <div class="message center">
-                <el-button class="btn btn-small btn-green" @click="saveInfo()">保 存</el-button>
+                <el-button class="btn btn-small btn-green" @click="saveInfo()">提 交</el-button>
                 <el-button class="btn btn-small btn-gray" @click="closeDialog">关 闭</el-button>
             </div>
         </el-dialog>
@@ -221,12 +232,12 @@
                             <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="设备代码：">
-                                        <el-input placeholder="请输入设备代码" class="asterisk" v-model="binding_info.pad_code"></el-input>
+                                        <el-input placeholder="请输入设备代码" class="required" v-model="binding_info.pad_code"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="IMEI码：">
-                                        <el-input placeholder="请输入IMEI码" class="asterisk" v-model="binding_info.pad_imei"></el-input>
+                                        <el-input placeholder="请输入IMEI码" class="required" v-model="binding_info.pad_imei"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>

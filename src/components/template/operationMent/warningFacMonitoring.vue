@@ -82,8 +82,5 @@
 	</div>
 </template>
 <style lang="stylus">
-.warning_fac_mon
-    .content-buttons
-        padding 10px 0 10px 0
 </style>
 <script src="./warningfacmonitorings.js"></script>

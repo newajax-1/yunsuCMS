@@ -59,22 +59,22 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page">
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="page_list.page_num"
+                                :page-size=page_list.page_size
+                                layout="total, prev, pager, next"
+                                :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
         </el-row>
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="page_list.page_num"
-                    :page-size=page_list.page_size
-                    layout="total, prev, pager, next"
-                    :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
 
         <!--新增弹框-->
         <el-dialog

@@ -55,7 +55,6 @@ export default {
                     pageSize: "10"
                 },
                 success(res) {
-                    console.log(res)
                     that.loadTable(res.data);
                 }
             })
@@ -139,7 +138,7 @@ export default {
             for(var i = 0; i < this.dynamicValidateForm.domains.length; i++) {
                 _save_maint_acct.push(this.dynamicValidateForm.domains[i].value);
             }
-            console.log(_save_maint_acct)
+            
             this.$ajaxWrap({
                 type: "post",
                 url: "/mouldMaintPlan/saveMouldMaintPlan",
@@ -162,6 +161,13 @@ export default {
         // 删除
         deleteId(id) {
             let that = this;
+            if (!this.batch_ids) {
+                this.$message({
+                    message: "请选择删除的数据",
+                    type: "warning"
+                });
+                return;
+            };
             var _data = undefined;
             if(id) {
                 _data = {

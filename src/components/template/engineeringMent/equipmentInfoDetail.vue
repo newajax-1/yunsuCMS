@@ -1,7 +1,7 @@
 <template>
 	<div class="equipment_info_detail">
 	    <el-row>
-	    	<el-col :span="24" class="content-top">
+	    	<el-col :span="24">
                 <div class="content-title">
                     <span>设备详情</span>
                 </div>
@@ -21,21 +21,17 @@
                     <el-table 
                         border
                         :data="first_data" 
-                        v-if="table_show.first_show">
+                        v-show="table_show.first_show">
                         <el-table-column prop="eqpNo" label="设备编号"></el-table-column>
-                        <el-table-column prop="eqpNm" label="设备型号"></el-table-column>
-                        <el-table-column prop="ton" label="吨位"></el-table-column>
                         <el-table-column prop="type" label="类型"></el-table-column>
                         <el-table-column prop="eqpBrand" label="设备品牌"></el-table-column>
-                        <el-table-column prop="eqpIp" label="设备IP"></el-table-column>
-                        <el-table-column prop="padIp" label="padIp"></el-table-column>
                         <el-table-column prop="eqpSts" label="状态"></el-table-column>
                     </el-table>
                     <!-- 表格三 -->
                     <el-table 
                         border 
                         :data="second_data" 
-                        v-if="table_show.second_show">
+                        v-show="table_show.second_show">
                         <el-table-column prop="planMaintTm" label="计划保养时间"></el-table-column>
                         <el-table-column prop="realMaintTm" label="实际保养时间"></el-table-column>
                         <el-table-column prop="maintItm" label="保养内容"></el-table-column>
@@ -48,7 +44,7 @@
                     <el-table 
                         border
                         :data="third_data" 
-                        v-if="table_show.third_show">
+                        v-show="table_show.third_show">
                         <el-table-column prop="warnTm" label="报警时间"></el-table-column>
                         <el-table-column prop="warnOpr" label="报警人"></el-table-column>
                         <el-table-column prop="repairTm" label="维修时间"></el-table-column>
@@ -63,15 +59,15 @@
                     <el-table 
                         border
                         :data="other_data" 
-                        v-if="table_show.other_show && first_table_show">
+                        v-show="table_show.other_show && first_table_show">
                         <el-table-column prop="serNm" label="服务名称"></el-table-column>
                         <el-table-column prop="deviceNo" label="设备编号"></el-table-column>
                     </el-table>
                     <el-table 
                         border
                         :data="other_data" 
-                        v-if="table_show.other_show && !first_table_show">
-                        <el-table-column prop="status" label="设备代码"></el-table-column>
+                        v-show="table_show.other_show && !first_table_show">
+                        <el-table-column prop="padCode" label="设备代码"></el-table-column>
                         <el-table-column prop="padImei" label="IMIE码"></el-table-column>
                         <el-table-column label="操作">
                             <template scope="scope">
@@ -99,7 +95,4 @@
 </template>
 <script src="./equipmentinfodetails.js"></script>
 <style lang="stylus">
-.equipment_info_detail
-    .content-top
-        margin-bottom 10px
 </style>

@@ -5,15 +5,16 @@
 import Vue from 'vue'
 import axios from 'axios'
 
-
 /**
  * 请保留以下所有代码，勿修改
  */
 
-const BaseUrl = window.BaseUrl = 'http://192.168.3.156:8080/ybs_mes_master';
+// const BaseUrl = window.BaseUrl = 'http://192.168.3.156:8080/ybs_mes';
 // const BaseUrl = window.BaseUrl = 'http://192.168.3.233:8080/ybs_mes';
+const BaseUrl = window.BaseUrl = 'http://localhost:8080/ybs_mes_02';
+// const BaseUrl = window.BaseUrl = 'http://192.168.3.55:8080/';
 
-    // 非父子组件通信 [慎用-可考虑Vuex代替]
+// 非父子组件通信 [慎用-可考虑Vuex代替]
 const EventBus = window.EventBus = new Vue();
 
 /**
@@ -56,10 +57,7 @@ VueProto.$vueExtend({
         that.$alert(tips, '提示', {
             confirmButtonText: '确定',
             callback() {
-                if (typeof done === "function") {
-                    done();
-                    return;
-                }
+                if (typeof done === "function") done();
                 if (flag && that.refresh) that.refresh();
             }
         });
@@ -75,7 +73,6 @@ VueProto.$vueExtend({
             type: "warning"
         }).then(function() {
             if (typeof done === "function") done();
-
             if (flag && that.refresh) that.refresh();
         }).catch(function() {});
     },
@@ -91,7 +88,6 @@ VueProto.$vueExtend({
         } else {
             let arr = [];
             return arr;
-
         }
     },
 
@@ -128,6 +124,7 @@ VueProto.$vueExtend({
                             })
                         };
                         break;
+
                     case "1":
                         if (res.data.success) {
                             that.$baseWarn("登录超时,请重新登陆！", function() {
@@ -139,6 +136,8 @@ VueProto.$vueExtend({
                 }
             }
         }
+
+
 
         if (type.toLowerCase() === "get") {
             that.$ajax.get(url, {
@@ -161,11 +160,12 @@ VueProto.$vueExtend({
                 callback(res);
             }).catch(function(res) {
                 console.log(res)
-                that.$baseWarn("请输入正确信息！");
+                that.$baseWarn("请求失败，请输入正确信息！");
 
                 if (typeof fail === "function") fail();
             });
         }
+
     },
 
     // 日期截取
@@ -174,10 +174,12 @@ VueProto.$vueExtend({
             month = date.getMonth() + 1,
             day = date.getDate(),
             date_str = undefined;
+
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
-        date = year + "-" + month + "-" + day;
-        return date
+
+        date_str = year + "-" + month + "-" + day;
+        return date_str;
     },
 
     // 日期时间截取
@@ -189,13 +191,15 @@ VueProto.$vueExtend({
             minutes = date.getMinutes(),
             seconds = date.getSeconds(),
             date_str = undefined;
+
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
         if (hour < 10) hour = "0" + hour;
         if (minutes < 10) minutes = "0" + minutes;
         if (seconds < 10) seconds = "0" + seconds;
-        date = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
-        return date
+
+        date_str = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+        return date_str;
     },
 
     // 字符串截取
@@ -205,6 +209,16 @@ VueProto.$vueExtend({
 
     $sort(arr) {
         return arr.sort((a, b) => a < b ? 1 : -1);
+    },
+
+    $cloneObject(obj) {
+        if (!this.$typeofArray(obj)) {
+            let ret = {};
+            for (let key in obj) {
+                ret[key] = obj[key]
+            }
+            return ret;
+        }
     }
 
 })

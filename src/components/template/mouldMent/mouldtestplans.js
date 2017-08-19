@@ -170,7 +170,14 @@ export default {
             let that = this;
             var _name = (id == 1 ? "下发" : "删除")
             var _ids = (val ? val : that.batch_ids);
-
+            
+            if (!_ids) {
+                this.$message({
+                    message: "请选择删除的数据",
+                    type: "warning"
+                });
+                return;
+            };
             this.$confirm("你确定" + _name + "吗？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",

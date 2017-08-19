@@ -17,8 +17,8 @@
                             <el-input placeholder="输入客户名称" v-model="search_info.cust_factory"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -56,7 +56,7 @@
                         <el-table-column prop="mouldAscription" label="模具归属"></el-table-column>
                         <el-table-column prop="mouldFactory" label="模具制造"></el-table-column>
                         <el-table-column prop="custFactory" label="客户名称"></el-table-column>
-                        <el-table-column prop="machine" label="可用机台"></el-table-column>
+                        <el-table-column prop="machineName" label="可用机台"></el-table-column>
                         <el-table-column prop="acptSts" label="验收状态"></el-table-column>
                         <el-table-column label="操作">
                             <template scope="scope">
@@ -95,7 +95,7 @@
                         <el-table-column prop="mouldAscription" label="模具归属"></el-table-column>
                         <el-table-column prop="mouldFactory" label="模具制造"></el-table-column>
                         <el-table-column prop="custFactory" label="客户名称"></el-table-column>
-                        <el-table-column prop="machine" label="可用机台"></el-table-column>
+                        <el-table-column prop="machineName" label="可用机台"></el-table-column>
                         <el-table-column prop="mouldPlay" label="已打模数"></el-table-column>
                         <el-table-column prop="maintNum" label="保养次数"></el-table-column>
                         <el-table-column prop="repairNum" label="维修次数"></el-table-column>
@@ -105,7 +105,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="toAdd(scope.row.mouldId)">修改</el-button>
+                                    @click="addMouldDetail(scope.row.mouldId)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"    
@@ -133,12 +133,24 @@
                         <el-table-column prop="mouldAscription" label="模具归属"></el-table-column>
                         <el-table-column prop="mouldFactory" label="模具制造"></el-table-column>
                         <el-table-column prop="custFactory" label="客户名称"></el-table-column>
-                        <el-table-column prop="machine" label="可用机台"></el-table-column>
+                        <el-table-column prop="machineName" label="可用机台"></el-table-column>
                         <el-table-column prop="mouldPlay" label="已打模数"></el-table-column>
                         <el-table-column prop="maintNum" label="保养次数"></el-table-column>
                         <el-table-column prop="repairNum" label="维修次数"></el-table-column>
                         <el-table-column prop="mouldSts" label="模具状态"></el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <!-- <div class="table-page">
+                        <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="page_list.page_num"
+                            :page-size=page_list.page_size
+                            layout="total, prev, pager, next"
+                            :total="page_list.total">
+                        </el-pagination>
+                    </div> -->
+                    <!--分页 end-->
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
@@ -211,18 +223,6 @@
             </div>
         </el-dialog>
 
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page_list.page_num"
-                :page-size=page_list.page_size
-                layout="total, prev, pager, next"
-                :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
     </div>
 </template>
 <script src="./mouldinfos.js"></script>

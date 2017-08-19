@@ -5,55 +5,58 @@ export default {
     },
     data() {
         return {
-            table_data : [],
+            table_data: [],
 
-            search_info : {
-                eqp_no : undefined,
-                eqp_nm : undefined,
+            search_info: {
+                eqp_no: undefined,
+                eqp_code: undefined,
             },
 
-            page_list : {
-                page_num : 1,
-                page_size : 10,
-                total : 0
+            page_list: {
+                page_num: 1,
+                page_size: 10,
+                total: 0
             },
 
-            select_op : [],
+            select_op: [],
+            eqp_sts_list : [],
 
-            add_info : {
-                dicName : undefined,
-                dicValue : undefined,
-                eqpTyp : "01",
-                eqpBrand : undefined,
-                type : undefined,
-                eqpNm : undefined,
-                ton : undefined,
-                eqpIp : undefined,
-                padIp : undefined,
-                eqpSts : undefined,
-                startMaintTm : undefined,
+            add_info: {
+                dicName: undefined,
+                dicValue: undefined,
+                eqpTyp: undefined,
+                eqpBrand: undefined,
+                type: undefined,
+                eqpNm: undefined,
+                ton: undefined,
+                eqpIp: undefined,
+                padIp: undefined,
+                eqpSts: undefined,
+                startMaintTm: undefined,
             },
 
-            binding_info : {
-                pad_code :undefined,
-                pad_imei :undefined,
+            binding_info: {
+                pad_code: undefined,
+                pad_imei: undefined,
             },
 
-            search_pageNum : undefined,
-            search_pageSize : undefined,
+            search_pageNum: undefined,
+            search_pageSize: undefined,
 
-            show_type : true,
-            show_other : true,
-            eqp_typ : "01",
-            batch_ids : undefined,
-            is_has_id : undefined,
-            save_binding_id : undefined,
-            diag_title : undefined,
-            is_disabled : false,
-            sale_change_name : "first",
-            details_custom : false,
-            new_custom : false,
-            binding_custom : false,
+            show_type: true,
+            show_other: true,
+            eqp_typ: "01",
+            batch_ids: undefined,
+            is_has_id: undefined,
+            save_binding_id: undefined,
+            diag_title: undefined,
+            is_disabled: false,
+            sale_change_name: "first",
+            details_custom: false,
+            new_custom: false,
+            binding_custom: false,
+
+            eqp_sts_list: null
         }
     },
     methods: {
@@ -69,7 +72,7 @@ export default {
                 type: "post",
                 url: "/equipment/queryList",
                 data: {
-                    eqpTyp : that.eqp_typ,
+                    eqpTyp: that.eqp_typ,
                     pageNum: "1",
                     pageSize: "10"
                 },
@@ -86,9 +89,9 @@ export default {
                 type: "post",
                 url: "/equipment/queryList",
                 data: {
-                    eqpTyp : that.eqp_typ,
-                    eqpNo : that.search_info.eqp_no,
-                    eqpNm : that.search_info.eqp_nm,
+                    eqpTyp: that.eqp_typ,
+                    eqpNo: that.search_info.eqp_no,
+                    eqpCode: that.search_info.eqp_code,
                     pageNum: that.search_pageNum || "1",
                     pageSize: that.search_pageNum || "10"
                 },
@@ -101,9 +104,24 @@ export default {
         loadTable(data) {
             let that = this;
             that.table_data = data.page.list;
-            that.page_list.page_num =  data.page.pageNum;
-            that.page_list.page_list =  data.page.pageList;
-            that.page_list.total =  data.page.total;
+            that.page_list.page_num = data.page.pageNum;
+            that.page_list.page_list = data.page.pageList;
+            that.page_list.total = data.page.total;
+
+            for (let i = 0; i < that.table_data.length; i++) {
+                let el = that.table_data[i];
+                switch (el.eqpSts) {
+                    case "01":
+                        el.eqpStsName = "正常";
+                        break;
+                    case "02":
+                        el.eqpStsName = "保养";
+                        break;
+                    case "03":
+                        el.eqpStsName = "维修"
+                        break;
+                }
+            }
         },
 
         // 重置
@@ -119,10 +137,10 @@ export default {
 
         deleteIds() {
             let that = this;
-            if(!this.batch_ids) {
+            if (!this.batch_ids) {
                 this.$message({
                     message: "请选择删除的数据",
-                    type:"warning"
+                    type: "warning"
                 });
                 return;
             };
@@ -135,7 +153,7 @@ export default {
                     type: "get",
                     url: "/equipment/deleteByIds",
                     data: {
-                        ids : that.batch_ids
+                        ids: that.batch_ids
                     },
                     success(res) {
                         that.$message({
@@ -145,7 +163,7 @@ export default {
                         that.new_custom = false;
                         that.searchTableData(res.data);
                     }
-                }) 
+                })
             }).catch(function() {});
         },
 
@@ -161,20 +179,21 @@ export default {
                 type: "get",
                 url: "/equipment/getSelects",
                 data: {
-                    key : "eqp_typ"
+                    key: "eqp_typ"
                 },
                 success(res) {
                     that.select_op = res.data.dicData;
+                    that.getEqpSts();
                 }
             })
-            if(id) {
+            if (id) {
                 this.diag_title = "修改设备"
 
                 this.$ajaxWrap({
                     type: "get",
                     url: "/equipment/getObject",
                     data: {
-                        equipmentId : id
+                        equipmentId: id
                     },
                     success(res) {
                         that.add_info = res.data.data
@@ -187,68 +206,60 @@ export default {
         // 保存
         saveInfo() {
             let that = this;
-            var _operationType = (this.is_has_id ? "update" : "add");  
-            switch(that.add_info.eqpTyp) {
-                case "注塑机":
-                    that.add_info.eqpTyp = "01";
-                    break;
-                case "集中供料":
-                    that.add_info.eqpTyp = "02";
-                    break;
-                case "辅机":
-                    that.add_info.eqpTyp = "03";
-                    break;
-                case "5T行车":
-                    that.add_info.eqpTyp = "04";
-                    break;
-                case "循环水系统":
-                    that.add_info.eqpTyp = "05";
-                    break;
-                case "高低压开关柜":
-                    that.add_info.eqpTyp = "06";
-                    break;
-                default:
-                    that.add_info.eqpTyp = "01";
-                    break;
+            var _operationType = (this.is_has_id ? "update" : "add");
+            if (that.add_info.eqpTyp == "01" || that.add_info.eqpTyp == "注塑机") {
+                that.add_info.eqpTyp = "01";
+            } else if (that.add_info.eqpTyp == "02" || that.add_info.eqpTyp == "集中供料") {
+                that.add_info.eqpTyp = "02";
+            } else if (that.add_info.eqpTyp == "03" || that.add_info.eqpTyp == "辅机") {
+                that.add_info.eqpTyp = "03";
+            } else if (that.add_info.eqpTyp == "04" || that.add_info.eqpTyp == "5T行车") {
+                that.add_info.eqpTyp = "04";
+            } else if (that.add_info.eqpTyp == "05" || that.add_info.eqpTyp == "循环水系统") {
+                that.add_info.eqpTyp = "05";
+            } else if (that.add_info.eqpTyp == "06" || that.add_info.eqpTyp == "高低压开关柜") {
+                that.add_info.eqpTyp = "06";
+            } else {
+                that.add_info.eqpTyp = "01";
             }
             this.new_custom = true;
-            var _flag = (this.is_has_id ? 
-                !that.add_info.eqpTyp || 
-                !that.add_info.eqpBrand || 
-                !that.add_info.type || 
-                !that.add_info.eqpSts
-            : 
-                !that.add_info.eqpTyp || 
-                !that.add_info.eqpBrand || 
-                !that.add_info.type || 
-                !that.add_info.eqpNm || 
-                !that.add_info.ton || 
-                !that.add_info.eqpIp || 
+            var _flag = (this.add_info.eqpTyp != "01" ?
+                !that.add_info.eqpTyp ||
+                !that.add_info.eqpBrand ||
+                !that.add_info.eqpCode ||
+                !that.add_info.eqpSts :
+                !that.add_info.eqpTyp ||
+                !that.add_info.eqpBrand ||
+                !that.add_info.type ||
+                !that.add_info.eqpCode ||
+                !that.add_info.ton ||
+                !that.add_info.eqpSts ||
                 !that.add_info.padIp);
-            if(_flag) {
+            if (_flag) {
+                
                 this.$message({
                     message: "请将信息填写完整",
                     type: "warning"
                 });
                 return;
             };
-            var _start_saint_tm = typeof(this.add_info.startMaintTm) == "object" ? this.$handleDateObject(this.add_info.startMaintTm ) : this.add_info.startMaintTm 
-            
+            var _start_saint_tm = typeof(this.add_info.startMaintTm) == "object" ? this.$handleDateObject(this.add_info.startMaintTm) : this.add_info.startMaintTm
+
             that.$ajaxWrap({
                 type: "post",
                 url: "/equipment/save",
                 data: {
-                    operationType : _operationType,
-                    equipmentId : that.is_has_id,
-                    eqpTyp : that.add_info.eqpTyp,
-                    eqpBrand : that.add_info.eqpBrand,
-                    type : that.add_info.type,
-                    eqpNm : that.add_info.eqpNm,
-                    ton : that.add_info.ton,
-                    eqpIp : that.add_info.eqpIp,
-                    padIp : that.add_info.padIp,
-                    eqpSts : that.add_info.eqpSts,
-                    startMaintTm : _start_saint_tm,
+                    operationType: _operationType,
+                    equipmentId: that.is_has_id,
+                    eqpTyp: that.add_info.eqpTyp,
+                    eqpBrand: that.add_info.eqpBrand,
+                    type: that.add_info.type,
+                    eqpCode: that.add_info.eqpCode,
+                    ton: that.add_info.ton,
+                    eqpIp: that.add_info.eqpIp,
+                    padIp: that.add_info.padIp,
+                    eqpSts: that.add_info.eqpSts,
+                    startMaintTm: _start_saint_tm,
                 },
                 success(res) {
                     that.$message({
@@ -262,14 +273,12 @@ export default {
         },
 
         // 详情
-        showDetail(id,val) {
-            this.$goRoute("/home/equipmentinfodetail", 
-                {
-                    whole_id : id,
-                    whole_eqp_typ : this.eqp_typ,
-                    whole_no : val
-                }
-            );
+        showDetail(id, val) {
+            this.$goRoute("/home/equipmentinfodetail", {
+                whole_id: id,
+                whole_eqp_typ: this.eqp_typ,
+                whole_no: val
+            });
         },
 
         // 删除
@@ -283,7 +292,7 @@ export default {
                     type: "get",
                     url: "/equipment/deleteById",
                     data: {
-                        id : id
+                        id: id
                     },
                     success(res) {
                         that.$message({
@@ -303,7 +312,7 @@ export default {
 
         saveBindingInfo() {
             let that = this;
-            if(!this.binding_info.pad_code || !this.binding_info.pad_imei) {
+            if (!this.binding_info.pad_code || !this.binding_info.pad_imei) {
                 this.$message({
                     message: "请将设备信息填写完整",
                     type: "warning"
@@ -315,10 +324,10 @@ export default {
                 type: "post",
                 url: "/equipment/operationBind",
                 data: {
-                    eqpNo : that.save_binding_id,
-                    padCode : that.binding_info.pad_code,
-                    padImei : that.binding_info.pad_imei,
-                    operationType : "binding",
+                    eqpNo: that.save_binding_id,
+                    padCode: that.binding_info.pad_code,
+                    padImei: that.binding_info.pad_imei,
+                    operationType: "binding",
                 },
                 success(res) {
                     that.$message({
@@ -326,15 +335,16 @@ export default {
                         type: "success"
                     });
                     that.binding_custom = false;
+                    that.$clearObject(that.binding_info);
                 }
             })
         },
 
         // 切换类型
         changeType(val) {
-            if(val == "01" || !val || "注塑机") {
+            if (val == "01" || !val || val == "注塑机") {
                 this.show_type = true;
-            }else{
+            } else {
                 this.show_type = false;
             }
         },
@@ -342,12 +352,12 @@ export default {
         // 复选框勾选
         handleSelectionChange(val) {
             var batch_ids = [];
-            if(val.length > 0) {
+            if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
                     batch_ids.push(val[i].equipmentId);
                 }
                 this.batch_ids = batch_ids.join(",");
-            }else{
+            } else {
                 this.batch_ids = undefined;
             }
         },
@@ -413,11 +423,27 @@ export default {
                 this.searchFormData(val, "size");
             };
         },
-        // -----------------------------------------------------------------------------------------------------------------------------------      
+
         handleCurrentChange(val) {
             if (this.table_data.length) {
                 this.searchFormData(val, "num");
             };
         },
+
+        getEqpSts() {
+            let that = this;
+
+            this.$ajaxWrap({
+                type: "get",
+                url: "/equipment/getSelects",
+                data: {
+                    key: "eqp_sts"
+                },
+                success(res) {
+                    that.eqp_sts_list = res.data.dicData;
+                }
+            })
+
+        }
     },
 }

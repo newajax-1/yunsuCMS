@@ -1,3 +1,4 @@
+import Vue from "vue";
 export default {
     name: 'mouldInfoNewDetail',
     created() {
@@ -6,48 +7,53 @@ export default {
     },
     data() {
         return {
-            table_data : [],
-            mould_type_list : [],
-            cavity_cnt_list : [],
-            mould_status_list : [],
-            mould_asc_list : [],
-            cust_info_list : [],
-            secd_proc_list : [],
-            packing_typ_list : [],
+            table_data: [],
+            mould_type_list: [],
+            cavity_cnt_list: [],
+            mould_status_list: [],
+            mould_asc_list: [],
+            cust_info_list: [],
+            secd_proc_list: [],
+            packing_typ_list: [],
+            product_data: [],
 
-            add_info : {
-                mouldTyp : undefined,
-                mouldCode : undefined,
-                dsgnCnt : undefined,
-                mouldSts : undefined,
-                cavityCnt : undefined,
-                moldingCycl : undefined,
-                mouldAscription : undefined,
-                mouldFactory : undefined,
-                custFactory : undefined,
-                machine : undefined,
+            add_info: {
+                mouldTyp: undefined,
+                mouldCode: undefined,
+                dsgnCnt: undefined,
+                mouldSts: undefined,
+                cavityCnt: undefined,
+                moldingCycl: undefined,
+                mouldAscription: undefined,
+                mouldFactory: undefined,
+                custFactory: undefined,
+                machine: undefined,
             },
 
-            table_data_son : {
-                productNm : undefined,
-                custProductNo : undefined,
-                number : undefined,
-                materialGrade : undefined,
-                productWeight : undefined,
-                color : undefined,
-                gapWeight : undefined,
-                secdProc : undefined,
-                secdProcName : undefined,
-                packingTyp : undefined,
-                packingCount : undefined,
-                packingDetl : undefined,
-                packingTypName : undefined,
+            dialog_form_data: {
+                productNm: undefined,
+                custProductNo: undefined,
+                number: undefined,
+                materialGrade: undefined,
+                productWeight: undefined,
+                color: undefined,
+                gapWeight: undefined,
+                secdProc: undefined,
+                secdProcName: undefined,
+                packingTyp: undefined,
+                packingCount: undefined,
+                packingDetl: undefined,
+                packingTypName: undefined,
             },
 
-            mould_id : undefined,
-            save_id : undefined,
-            diag_title : undefined,
-            new_custom : false,
+            mould_id: undefined,
+            save_id: undefined,
+            add_tips: undefined,
+            diag_title: undefined,
+            new_custom: false,
+            product_custom: false,
+            batch_names: undefined,
+            batch_ids: undefined
         }
     },
     methods: {
@@ -59,133 +65,259 @@ export default {
             let that = this;
 
             this.$ajaxWrap({
-                type :"post",
-                url : "/mould/initData",
-                data : {
-                    mouldId : that.mould_id
-                } ,
-                success : function(res){
+                type: "post",
+                url: "/mould/initData",
+                data: {
+                    mouldId: that.mould_id
+                },
+                success: function(res) {
                     that.loadTable(res.data)
                 }
             })
         },
 
-        toAdd(id) {
-            let that = this;
-            this.diag_title = "增加产品"
-            if(id) {
-                this.diag_title = "修改产品"
-                this.save_id = id;
-                this.table_data.every(function(el){
-                    if(el.index === id){
-                        return  that.table_data_son = that.table_data[id - 1];
-                    }
-                })
-            }
-            this.new_custom = true;
+        openMouldInfoModal(row) {
+            let that = this,
+                tips = row.index || row.productId || row;
 
-            this.$ajaxWrap({
-                type :"get",
-                url : "product/selectById",
-                data : {
-                    type : "2",
-                } ,
-                success : function(res){
+            that.new_custom = true;
+            that.add_tips = tips;
+
+            if (tips === "add") {
+                that.diag_title = "增加产品";
+            } else {
+                that.diag_title = "修改产品";
+                that.loadMouldInfoModal(tips);
+            }
+
+            that.$ajaxWrap({
+                type: "get",
+                url: "product/selectById",
+                data: {
+                    type: "2",
+                },
+                success: function(res) {
                     that.secd_proc_list = res.data.dicList5;
                     that.packing_typ_list = res.data.dicList6;
                 }
             })
         },
 
-        saveAddInfo() {
-            if(!this.save_id) {
-                let index = this.table_data.length;
-                index++
-                this.table_data_son.index = index;
-                console.log(this.table_data_son)
-                switch(this.table_data_son.secdProc) {
-                    case "01" :
-                        this.table_data_son.secdProcName = "精装"
-                    case "02" :
-                        this.table_data_son.secdProcName = "简装"
-                    case "03" :
-                        this.table_data_son.secdProcName = "无"
-                };
-                switch(this.table_data_son.packingTyp) {
-                    case "01" :
-                        this.table_data_son.packingTypName = "印刷"
-                    case "02" :
-                        this.table_data_son.packingTypName = "组装"
-                    case "03" :
-                        this.table_data_son.packingTypName = "镶嵌"
-                    case "04" :
-                        this.table_data_son.packingTypName = "包装"
-                };
-                
-                let clone_data = JSON.parse(JSON.stringify(this.table_data_son))
-                this.table_data.push(clone_data);
+        loadMouldInfoModal(tips) {
+            let that = this;
 
-                this.$message({
-                    message: "新增成功",
-                    type: "success"
-                });
-            }else{
-                for(var i = 0; i < this.table_data.length; i ++) {
-                    if(this.table_data[i].index === this.save_id) {
-                        this.table_data.splice(i,i + 1);
-                        this.table_data_son.index = this.save_id;
+            for (let i = 0; i < that.table_data.length; i++) {
+                let el = that.table_data[i];
+                if (el.index === tips || el.productId === tips) {
+                    let clone_el = that.$cloneObject(el);
+                    return that.dialog_form_data = clone_el;
+                }
+            }
+        },
+
+        saveModalDataInitTable() {
+            let that = this;
+
+            if (!that.dialog_form_data.productNm ||
+                !that.dialog_form_data.custProductNo ||
+                !that.dialog_form_data.number ||
+                !that.dialog_form_data.materialGrade ||
+                !that.dialog_form_data.productWeight ||
+                !that.dialog_form_data.color ||
+                !that.dialog_form_data.gapWeight) {
+
+                that.$baseWarn("请完善必填信息");
+                return
+            } else {
+
+                switch (that.dialog_form_data.packingTyp) {
+                    case "01":
+                        that.dialog_form_data.packingTypName = "精装";
+                        break;
+                    case "02":
+                        that.dialog_form_data.packingTypName = "简装"
+                        break;
+                    case "03":
+                        that.dialog_form_data.packingTypName = "无"
+                        break;
+                };
+
+                switch (that.dialog_form_data.secdProc) {
+                    case "01":
+                        that.dialog_form_data.secdProcName = "印刷"
+                        break;
+                    case "02":
+                        that.dialog_form_data.secdProcName = "镶嵌"
+                        break;
+                    case "03":
+                        that.dialog_form_data.secdProcName = "组装"
+                        break;
+                    case "04":
+                        that.dialog_form_data.secdProcName = "包装"
+                        break;
+                };
+
+                that.pushTableData(that.dialog_form_data);
+            }
+
+        },
+
+        pushTableData(modal_data) {
+            let that = this,
+                len = that.table_data.length,
+                clone_modal_data = that.$cloneObject(modal_data);
+            if (that.add_tips === "add") {
+                clone_modal_data.index = len + 1;
+                that.table_data.push(clone_modal_data);
+                that.$baseWarn("添加成功！", function() {
+                    that.clearFormData();
+                })
+            } else {
+                if (that.add_tips === clone_modal_data.index) {
+                    that.table_data.splice(clone_modal_data.index - 1, 1, clone_modal_data);
+                    that.$baseWarn("修改成功！", function() {
+                        that.clearFormData();
+                    })
+                } else {
+                    for (let i = 0; i < len; i++) {
+                        let el = that.table_data[i];
+                        if (el.productId === clone_modal_data.productId) {
+                            that.table_data.splice(i, 1, clone_modal_data);
+                            that.$baseWarn("修改成功！", function() {
+                                that.clearFormData();
+                            })
+                        }
                     }
-                } 
-                let clone_data = JSON.parse(JSON.stringify(this.table_data_son))
-                this.table_data.push(clone_data);
-            } 
-            this.new_custom = false;
-            this.$clearObject(this.add_info);
+                }
+            }
+        },
+
+
+        spliceTableData(clone_data) {
+            let that = this;
+            for (let i = 0; i < that.table_data.length; i++) {
+                let el = that.table_data[i];
+                if (el.productId === clone_data.productId) {
+                    Vue.set(that.table_data, i, clone_data);
+                }
+                if (el.index === clone_data.index) {
+                    // Vue.set(that.table_data, i, clone_data);
+                    console.log(that.table_data)
+                }
+            }
         },
 
         saveTableData() {
             let that = this;
+            this.batch_ids = this.batch_ids || this.add_info.machine;
+            if (!that.add_info.mouldTyp ||
+                !that.add_info.mouldCode ||
+                !that.add_info.dsgnCnt ||
+                !that.add_info.cavityCnt ||
+                !that.add_info.moldingCycl ||
+                !that.add_info.mouldSts ||
+                !that.add_info.mouldAscription ||
+                !that.add_info.mouldFactory ||
+                !that.add_info.custFactory ||
+                !that.batch_ids) {
+
+                that.$baseWarn("请将信息填写完整");
+                return;
+            }
 
             this.$ajaxWrap({
-                type :"post",
-                url : "/mould/saveMould",
-                data : {
-                    mouldTyp : that.add_info.mouldTyp,
-                    mouldCode :that.add_info.mouldCode ,
-                    dsgnCnt : that.add_info.dsgnCnt,
-                    cavityCnt : that.add_info.cavityCnt,
-                    moldingCycl : that.add_info.moldingCycl,
-                    mouldSts : that.add_info.mouldSts,
-                    mouldAscription : that.add_info.mouldAscription,
-                    mouldFactory : that.add_info.mouldFactory,
-                    custFactory : that.add_info.custFactory,
-                    machine : that.add_info.machine,
-                    productList : that.table_data
-                } ,
-                success : function(res){
-                    that.$baseWarn(res.tipMsg,function() {
+                type: "post",
+                url: "/mould/saveMould",
+                data: {
+                    mouldTyp: that.add_info.mouldTyp,
+                    mouldCode: that.add_info.mouldCode,
+                    dsgnCnt: that.add_info.dsgnCnt,
+                    cavityCnt: that.add_info.cavityCnt,
+                    moldingCycl: that.add_info.moldingCycl,
+                    mouldSts: that.add_info.mouldSts,
+                    mouldAscription: that.add_info.mouldAscription,
+                    mouldFactory: that.add_info.mouldFactory,
+                    custFactory: that.add_info.custFactory,
+                    machine: that.batch_ids,
+                    machineName: that.batch_names,
+                    productList: that.table_data,
+                    mouldId: that.mould_id,
+                    mouldNo: that.add_info.mouldNo
+                },
+                success: function(res) {
+                    that.$baseWarn(res.tipMsg, function() {
                         that.$clearObject(that.add_info);
                     });
+                    that.$goRoute("/home/mouldinfo");
                 }
             })
         },
 
-        deleteId(id) {
+        toAddProduct() {
+            let that = this;
+
+            that.$ajaxWrap({
+                type: "post",
+                url: "/equipment/queryList",
+                data: {
+                    eqpTyp: "01",
+                    pageNum: "1",
+                    pageSize: "10"
+                },
+                success(res) {
+                    that.product_data = res.data.page.list
+                }
+            })
+            this.product_custom = true;
+        },
+
+        saveProductInfo() {
+            this.add_info.machineName = this.batch_names;
+            this.product_custom = false;
+        },
+
+        // 复选框勾选
+        handleSelectionChange(val) {
+            var batch_ids = [];
+            var batch_names = [];
+            if (val.length > 0) {
+                for (var i = 0; i < val.length; i++) {
+                    batch_ids.push(val[i].eqpNo);
+                    batch_names.push(val[i].eqpBrand);
+                }
+                this.batch_names = batch_names.join(",");
+                this.batch_ids = batch_ids.join(",");
+            }
+        },
+
+        deleteId(id, val) {
             let that = this;
 
             this.$confirm("你确定删除么？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
             }).then(function() {
-                for(var i = 0; i < that.table_data.length; i ++) {
-                    if(that.table_data[i].index === id) {
-                        that.table_data.splice(i,i + 1);
+                if (val) {
+                    for (var i = 0; i < that.table_data.length; i++) {
+                        if (that.table_data[i].productId === val) {
+                            that.table_data.splice(i, i + 1);
+                        }
                     }
-                } 
-                that.$message({
-                    message: "删除成功",
-                    type: "success"
-                });
+                    that.$message({
+                        message: "删除成功",
+                        type: "success"
+                    });
+                } else {
+                    for (var i = 0; i < that.table_data.length; i++) {
+                        if (that.table_data[i].index === id) {
+                            that.table_data.splice(i, i + 1);
+                        }
+                    }
+                    that.$message({
+                        message: "删除成功",
+                        type: "success"
+                    });
+                }
             }).catch(function() {});
         },
 
@@ -197,23 +329,28 @@ export default {
             that.mould_status_list = data.mouldStatusList;
             that.mould_asc_list = data.mouldAscList;
             that.cust_info_list = data.custInfoList;
-            if(data.bomList.length != 0) {
-                that.table_data = data.bomList;
-            }
-            if(!!data.mould) {
+            that.table_data = data.bomList || [];
+            if (!!data.mould) {
                 that.add_info = data.mould;
             }
         },
 
-        // 点击关闭
         closeDialog() {
             var that = this;
             this.$confirm("你确定关闭么？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
             }).then(function() {
-                that.new_custom = false;
+                that.clearFormData()
             }).catch(function() {});
         },
+
+        clearFormData() {
+            let that = this;
+            that.new_custom = false;
+            that.product_custom = false;
+            that.add_tips = "";
+            that.$clearObject(that.dialog_form_data);
+        }
     },
 }

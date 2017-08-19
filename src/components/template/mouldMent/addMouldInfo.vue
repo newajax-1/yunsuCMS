@@ -1,129 +1,133 @@
 <template>
     <div class="equipment_info_detail">
         <el-row>
-            <el-col :span="24" class="content-top">
+            <el-col :span="24">
                 <div class="content-title">
                     <span>增加模具</span>
                 </div>
             </el-col>
 
-            <el-col :span="24">
-                <div class="pub-mask-wrap">
-                    <!-- 校验规则必须写在 el-form 标签中 -->
-                    <el-form :inline="true" class="">
-                        <el-row :gutter="24">
-                            <el-col :span="8">
-                                <el-form-item label="模具类型：">
-                                    <el-select 
-                                        placeholder="选择设备类型" 
-                                        class="required" 
-                                        v-model="add_info.mouldTyp">
-                                        <el-option 
-                                            v-for="item in mould_type_list"
-                                            :label="item.dicName"
-                                            :value="item.dicValue"
-                                            :key="item.dicValue"
-                                        ></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="模具代码：">
-                                    <el-input placeholder="请输入保模具代码" class="required" v-model="add_info.mouldCode"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="设计模数：">
-                                    <el-input placeholder="请输入设计模数" class="required" v-model="add_info.dsgnCnt"></el-input>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="8">
-                                <el-form-item label="　模穴数：">
-                                    <el-select 
-                                        placeholder="选择模穴数" 
-                                        class="required" 
-                                        v-model="add_info.cavityCnt">
-                                        <el-option 
-                                            v-for="item in cavity_cnt_list"
-                                            :label="item.dicName"
-                                            :value="item.dicValue"
-                                            :key="item.dicValue"
-                                        ></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="成型周期：">
-                                    <el-input placeholder="请输入成型周期" class="required" v-model="add_info.moldingCycl"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="模具状态：">
-                                    <el-select 
-                                        placeholder="选择模具状态" 
-                                        class="required" 
-                                        v-model="add_info.mouldSts">
-                                        <el-option 
-                                            v-for="item in mould_status_list"
-                                            :label="item.dicName"
-                                            :value="item.dicValue"
-                                            :key="item.dicValue"
-                                        ></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="8">
-                                <el-form-item label="模具归属：">
-                                    <el-select 
-                                        placeholder="选择模具归属" 
-                                        class="required" 
-                                        v-model="add_info.mouldAscription">
-                                        <el-option 
-                                            v-for="item in mould_asc_list"
-                                            :label="item.dicName"
-                                            :value="item.dicValue"
-                                            :key="item.dicValue"
-                                        ></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="模具制造：">
-                                    <el-input placeholder="请输入模具制造" class="required" v-model="add_info.mouldFactory"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="客户名称：">
-                                    <el-select 
-                                        placeholder="选择客户名称" 
-                                        class="required" 
-                                        v-model="add_info.custFactory">
-                                        <el-option 
-                                            v-for="item in cust_info_list"
-                                            :label="item.custName"
-                                            :value="item.custNo"
-                                            :key="item.custNo"
-                                        ></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="8">
-                                <el-form-item label="可用机台：">
-                                    <el-input placeholder="请输入可用机台" class="required" v-model="add_info.machine"></el-input>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-form>
-                </div>
-            </el-col>
+            <div class="content-buttons">
+                <el-col :span="24">
+                    <el-button class="btn btn-blue btn-small" @click="saveTableData"><i class="fa fa-check-square-o"></i> 提交</el-button>
+                    <el-button class="btn btn-blue btn-small" @click="$goRoute('mouldinfo')"><i class="fa fa-undo"></i> 返回</el-button>
+                    <el-button @click="openMouldInfoModal('add')" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 增加产品</el-button>
+                </el-col>
+            </div>
 
-            <el-col :span="24" class="content-buttons">
+            <el-col :span="24">
+                <!-- 校验规则必须写在 el-form 标签中 -->
+                <el-form :inline="true" class="add-mould-form">
+                    <el-row :gutter="24">
+                        <el-col :span="8">
+                            <el-form-item label="模具类型：">
+                                <el-select 
+                                    placeholder="选择设备类型" 
+                                    class="required" 
+                                    v-model="add_info.mouldTyp">
+                                    <el-option 
+                                        v-for="item in mould_type_list"
+                                        :label="item.dicName"
+                                        :value="item.dicValue"
+                                        :key="item.dicValue"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="模具代码：">
+                                <el-input placeholder="请输入保模具代码" class="required" v-model="add_info.mouldCode"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="设计模数：">
+                                <el-input placeholder="请输入设计模数" class="required" v-model="add_info.dsgnCnt"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="24">
+                        <el-col :span="8">
+                            <el-form-item label="　模穴数：">
+                                <el-select 
+                                    placeholder="选择模穴数" 
+                                    class="required" 
+                                    v-model="add_info.cavityCnt">
+                                    <el-option 
+                                        v-for="item in cavity_cnt_list"
+                                        :label="item.dicName"
+                                        :value="item.dicValue"
+                                        :key="item.dicValue"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="成型周期：">
+                                <el-input placeholder="请输入成型周期" class="required" v-model="add_info.moldingCycl"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="模具状态：">
+                                <el-select 
+                                    placeholder="选择模具状态" 
+                                    class="required" 
+                                    v-model="add_info.mouldSts">
+                                    <el-option 
+                                        v-for="item in mould_status_list"
+                                        :label="item.dicName"
+                                        :value="item.dicValue"
+                                        :key="item.dicValue"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="24">
+                        <el-col :span="8">
+                            <el-form-item label="模具归属：">
+                                <el-select 
+                                    placeholder="选择模具归属" 
+                                    class="required" 
+                                    v-model="add_info.mouldAscription">
+                                    <el-option 
+                                        v-for="item in mould_asc_list"
+                                        :label="item.dicName"
+                                        :value="item.dicValue"
+                                        :key="item.dicValue"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="模具制造：">
+                                <el-input placeholder="请输入模具制造" class="required" v-model="add_info.mouldFactory"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="客户名称：">
+                                <el-select 
+                                    placeholder="选择客户名称" 
+                                    class="required" 
+                                    v-model="add_info.custFactory">
+                                    <el-option 
+                                        v-for="item in cust_info_list"
+                                        :label="item.custName"
+                                        :value="item.custNo"
+                                        :key="item.custNo"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="24">
+                        <el-col :span="24">
+                            <el-form-item label="可用机台：">
+                                <p>{{ add_info.machineName }}</p>
+                            </el-form-item>
+                            <el-button class="btn btn-large btn-blue" @click="toAddProduct()" style="margin-left: -12px;">添加可用机台</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form>
             </el-col>
 
             <el-col :span="24">
@@ -140,8 +144,8 @@
                         <el-table-column prop="color" label="色号&颜色"></el-table-column>
                         <el-table-column prop="productWeight" label="单位重量"></el-table-column>
                         <el-table-column prop="gapWeight" label="水口重量"></el-table-column>
-                        <el-table-column prop="packingTypName" label="二次加工"></el-table-column>
-                        <el-table-column prop="secdProcName" label="包装类型"></el-table-column>
+                        <el-table-column prop="secdProcName" label="二次加工"></el-table-column>
+                        <el-table-column prop="packingTypName" label="包装类型"></el-table-column>
                         <el-table-column prop="packingCount" label="包装数量"></el-table-column>
                         <el-table-column prop="packingDetl" label="包装详情"></el-table-column>
                         <el-table-column label="操作">
@@ -149,25 +153,17 @@
                                 <el-button  
                                     type="text"
                                     size="small"    
-                                    @click="toAdd(scope.row.index)">修改</el-button>
+                                    @click="openMouldInfoModal(scope.row)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"    
-                                    @click="deleteId(scope.row.index)">删除</el-button>
+                                    @click="deleteId(scope.row.index,scope.row.productId)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
-
-            <div class="content-buttons fl">
-                <el-col :span="24">
-                    <el-button class="btn btn-blue btn-small" @click="saveTableData"><i class="fa fa-check-square-o"></i> 提 交</el-button>
-                    <el-button class="btn btn-blue btn-small" @click="$goRoute('mouldinfo')"><i class="fa fa-undo"></i> 返 回</el-button>
-                    <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 增加产品</el-button>
-                </el-col>
-            </div>
 
         </el-row>
 
@@ -183,51 +179,57 @@
                     <div class="pub-mask-wrap">
                         <!-- 校验规则必须写在 el-form 标签中 -->
                         <el-form :inline="true" class="">
+                            <el-row>
+                                <el-col :span="24">
+                                    <span class="dialog-title">基础信息</span>
+                                </el-col>
+                            </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="产品BOM名称：">
-                                        <el-input placeholder="请输入产品BOM名称" class="required" v-model="table_data_son.productNm"></el-input>
+                                        <el-input placeholder="请输入产品BOM名称" class="required" v-model="dialog_form_data.productNm"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="客户BOM编号：">
-                                        <el-input placeholder="请输入客户BOM编号" class="required" v-model="table_data_son.custProductNo"></el-input>
+                                        <el-input placeholder="请输入客户BOM编号" class="required" v-model="dialog_form_data.custProductNo"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="　　　　穴 号：">
-                                        <el-input placeholder="请输入穴号" class="required" v-model="table_data_son.number"></el-input>
+                                        <el-input placeholder="请输入穴号" class="required" v-model="dialog_form_data.number"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-row :gutter="24">
+                            <div class="dashed"></div>
+                            <el-row>
                                 <el-col :span="24">
-                                    <p>更多信息</p>
+                                    <span class="dialog-title">更多信息</span>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="材质&牌号：">
-                                        <el-input placeholder="请输入材质&牌号" class="required" v-model="table_data_son.materialGrade"></el-input>
+                                        <el-input placeholder="请输入材质&牌号" class="required" v-model="dialog_form_data.materialGrade"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="　产品重量（g）：">
-                                        <el-input placeholder="请输入产品重量" class="required" v-model="table_data_son.productWeight"></el-input>
+                                        <el-input placeholder="请输入产品重量" class="required" v-model="dialog_form_data.productWeight"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="色号&颜色：">
-                                        <el-input placeholder="请输入色号&颜色" class="required" v-model="table_data_son.color"></el-input>
+                                        <el-input placeholder="请输入色号&颜色" class="required" v-model="dialog_form_data.color"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="　水口重量（g）：">
-                                        <el-input placeholder="请输入水口重量" class="required" v-model="table_data_son.gapWeight"></el-input>
+                                        <el-input placeholder="请输入水口重量" class="required" v-model="dialog_form_data.gapWeight"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -235,10 +237,9 @@
                                 <el-col :span="12">
                                     <el-form-item label="　二次加工：">
                                         <el-select 
+                                            class="required"
                                             placeholder="选择二次加工" 
-                                            class="required" 
-                                            v-model="table_data_son.secdProc">
-
+                                            v-model="dialog_form_data.secdProc" >
                                             <el-option 
                                             v-for="item in secd_proc_list"
                                             :label="item.dicName"
@@ -251,11 +252,11 @@
                             </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
-                                    <el-form-item label="　包装类型：">
+                                    <el-form-item label="　包装类型：" >
                                         <el-select 
+                                            class="required"
                                             placeholder="选择包装类型" 
-                                            class="required" 
-                                            v-model="table_data_son.packingTyp">
+                                            v-model="dialog_form_data.packingTyp">
                                             <el-option 
                                             v-for="item in packing_typ_list"
                                             :label="item.dicName"
@@ -267,7 +268,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="包装数量（pcs）：">
-                                        <el-input placeholder="请输入包装数量" class="required" v-model="table_data_son.packingCount"></el-input>
+                                        <el-input placeholder="请输入包装数量" v-model="dialog_form_data.packingCount"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -278,7 +279,7 @@
                                             type="textarea"
                                             :rows="2"
                                             placeholder="请输入内容"
-                                            v-model="table_data_son.packingDetl">
+                                            v-model="dialog_form_data.packingDetl">
                                         </el-input>
                                     </el-form-item>
                                 </el-col>
@@ -287,12 +288,37 @@
                     </div>
                 </el-col>
             </el-row>
-            <div class="message center">
-                <el-button class="btn btn-small btn-green" @click="saveAddInfo()">保 存</el-button>
+            <div class="message center mt-10">
+                <el-button class="btn btn-small btn-green" @click="saveModalDataInitTable()">保 存</el-button>
                 <el-button class="btn btn-small btn-gray" @click="closeDialog">关 闭</el-button>
             </div>
         </el-dialog>
 
+        <!--新增弹框-->
+        <el-dialog
+            title="可用机台"
+            :visible.sync="product_custom"
+            size="tiny"
+            class="default-dialog dialog-tiny"
+            :before-close="closeDialog">
+            <el-row>
+                <el-col :span="24">
+                    <div class="table-wrap">
+                        <!-- 校验规则必须写在 el-form 标签中 -->
+                        <el-table 
+                            border
+                            :data="product_data" @selection-change="handleSelectionChange">
+                            <el-table-column type="selection" width="45"></el-table-column>
+                            <el-table-column prop="eqpBrand" label="可用机台"></el-table-column>
+                        </el-table>
+                    </div>
+                </el-col>
+            </el-row>
+            <div class="message center mt-10">
+                <el-button class="btn btn-small btn-green" @click="saveProductInfo()" style="margin-left:-12px;">确 定</el-button>
+            </div>
+        </el-dialog>
+        
 
         <!--分页 start-->
         <!-- <div class="block list-page fr">
@@ -314,4 +340,24 @@
 .equipment_info_detail
     .content-top
         margin-bottom 10px
+    .add-mould-form
+        padding: 20px 0 0 20px
+    .dialog-title
+        font-weight 700
+        display:block
+        margin-bottom 20px
+    .dashed
+        display block
+        height 1px
+        width 100%
+        border-bottom 1px dashed #666
+        margin 10px 0 36px
+    .default-dialog
+        .el-form-item
+            width: 100% !important 
+        .el-form-item__label
+            width: 40%
+
+    .el-textarea__inner
+        resize: none
 </style>

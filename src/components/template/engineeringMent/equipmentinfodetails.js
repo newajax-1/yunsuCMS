@@ -94,6 +94,19 @@ export default {
             let that = this;
             if(that.table_show.first_show) {
                 that.whole_eqp_no = data.data.eqpNo;
+                for (var key in data.data) {
+                    switch (data.data.eqpSts) {
+                        case "01":
+                        	data.data.eqpSts = "正常";
+                            break;
+                        case "02":
+                        	data.data.eqpSts = "保养";
+                            break;
+                        case "03":
+                        	data.data.eqpSts = "维修"
+                            break;
+                    }
+                }
                 that.first_data.push(data.data);
                 return; 
             };

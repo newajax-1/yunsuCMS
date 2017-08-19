@@ -19,9 +19,9 @@
                 </el-tabs> 
 
 
-                <el-col :span="24" class="content-buttons" v-if="show_table.fifth_show">
-                    <el-button @click="" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
-                    <el-button @click="toAdd()" class="btn btn-blue btn-large btn-other"><i class="fa fa-user-plus"></i> 增加变更记录</el-button>
+                <el-col :span="24" class="content-buttons" >
+                    <el-button v-if="show_table.fifth_show" @click="toAdd()" class="btn btn-blue btn-large btn-other"><i class="fa fa-user-plus"></i> 增加变更记录</el-button>
+                    <el-button class="btn btn-blue btn-small" @click="$goRoute('mouldinfo')"><i class="fa fa-repeat" ></i> 返回</el-button>
                 </el-col>             
                 <!-- 原料库存  成品库存  选择开始end -->
                 <!-- 列表开始  start -->
@@ -53,9 +53,9 @@
                         <el-table-column prop="productNm" label="产品BOM名称"></el-table-column>
                         <el-table-column prop="custProductNo" label="客户BOM编号"></el-table-column>
                         <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
-                        <el-table-column prop="Number" label="穴号"></el-table-column>
+                        <el-table-column prop="number" label="穴号"></el-table-column>
                         <el-table-column prop="materialGrade" label="材质&牌号"></el-table-column>
-                        <el-table-column prop="Color" label="色号&颜色"></el-table-column>
+                        <el-table-column prop="color" label="色号&颜色"></el-table-column>
                         <el-table-column prop="productWeight" label="单位重量"></el-table-column>
                         <el-table-column prop="gapWeight" label="水口重量"></el-table-column>
                     </el-table>
@@ -118,20 +118,13 @@
                         v-show="show_table.other_show">
                         <el-table-column prop="acptItm" label="验收项目"></el-table-column>
                         <el-table-column prop="acptRslt" label="验收结果"></el-table-column>
-                        <el-table-column prop="Acceptor" label="验收人"></el-table-column>
+                        <el-table-column prop="acceptor" label="验收人"></el-table-column>
                         <el-table-column prop="startTm" label="验收开始时间"></el-table-column>
                         <el-table-column prop="endTm" label="验收结束时间"></el-table-column>
                     </el-table>
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
-
-            <div class="content-buttons fl">
-                <el-col :span="24">
-                    <el-button class="btn btn-blue btn-small" @click="$goRoute('mouldinfo')"><i class="fa fa-repeat" ></i> 返回</el-button>
-                </el-col>
-            </div>
-            
         </el-row>
 
         <!--新增弹框 start-->
@@ -149,23 +142,23 @@
 
                             <el-row :gutter="24">
                                 <el-col :span="12">
-                                    <el-form-item label="变更前模具编号：">
+                                    <el-form-item label="变更前模具代码：">
                                         <el-select 
-                                            placeholder="选择变更前模具编号" class="required"
-                                            v-model="add_info.oldMouldNo"
-                                            @change="changeOldRecId(add_info.oldMouldNo)">
+                                            placeholder="选择变更前模具代码" class="required"
+                                            v-model="add_info.oldMouldCode"
+                                            @change="changeOldRecId(add_info.oldMouldCode)">
                                             <el-option
                                             v-for="item in mould_no"
-                                            :label="item.name"
-                                            :value="item.value"
-                                            :key="item.value" 
+                                            :label="item.mouldCode"
+                                            :value="item.mouldCode"
+                                            :key="item.mouldCode" 
                                             ></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="变更后模具代码：">
-                                        <p>{{ add_info.newMouldNo }}</p>
+                                    <el-form-item label="变更前模具编号：">
+                                        <p>{{ add_info.oldMouldNo }}</p>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -179,7 +172,7 @@
                             <el-row :gutter="24">
                                 <el-col :span="24">
                                     <el-form-item label="　　　变更描述：">
-                                        <el-input type="textarea" v-model="add_info.chgItm"></el-input>
+                                        <el-input type="textarea" class="required" v-model="add_info.chgItm"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>

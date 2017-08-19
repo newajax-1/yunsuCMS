@@ -1,11 +1,8 @@
 export default {
     name: 'mouldInfoSuccessDetail',
     created() {
-        var that = this;
-        EventBus.$on("mouldId",function(data){
-            that.mould_id = data.mouldId;
-            that.init();
-        })
+        this.mould_id = this.$route.query.mould_id;
+        this.init();
     },
     data() {
         return {
@@ -26,24 +23,13 @@ export default {
             },
 
             add_info : {
+            	oldMouldCode : undefined,
                 oldMouldNo : undefined,
-                newMouldNo : undefined,
+                chgCnt : undefined,
+                chgItm : undefined,
             },
 
-            mould_no : [
-                {
-                    name : "11111",
-                    value : "01", 
-                },
-                {
-                    name : "22222",
-                    value : "02", 
-                },
-                {
-                    name : "33333",
-                    value : "03", 
-                }
-            ],
+            mould_no : [],
 
             mould_id : undefined,
             change_rec_id : undefined,
@@ -68,7 +54,6 @@ export default {
                     operationType : that.operation_type
                 },
                 success(res) {
-                    console.log(res)
                     that.loadTable(res.data);
                 }
             })
@@ -87,6 +72,7 @@ export default {
                     that.first_data.push(data.mould);
                     break;
                 case "2":
+                debugger
                     that.second_data = data.bomList;
                     break;
                 case "3":
@@ -116,27 +102,37 @@ export default {
 
         toAdd(id) {
             let that = this;
+            debugger
             this.change_rec_id = id;
             this.$clearObject(this.add_info)
             this.new_custom = true;
 
-            if(id) {
-                this.$ajaxWrap({
-                    type: "post",
-                    url: "/change/initData",
-                    data: {
-                        changeRecId : that.change_rec_id,
-                        mouldId : that.mould_id,
-                    },
-                    success(res) {
-                        that.add_info = res.data.data
-                    }
-                })
-            }
+            this.$ajaxWrap({
+                type: "post",
+                url: "/change/initData",
+                data: {
+                    changeRecId : that.change_rec_id,
+                    mouldId : that.mould_id,
+                },
+                success(res) {
+                	that.mould_no = res.data.dataList;
+                	if(id) {
+                        that.add_info = res.data.data;
+                	}
+                }
+            })
         },
 
         saveInfo() {
             let that = this;
+            
+            if(!that.add_info.oldMouldNo || !that.add_info.oldMouldCode || !that.add_info.chgCnt || !that.add_info.chgItm) {
+            	that.$message({
+                    message: "请将信息填写完整",
+                    type: "warning" 
+                });
+            	return;
+            }
 
             this.$ajaxWrap({
                 type: "post",
@@ -213,19 +209,21 @@ export default {
 
         changeOldRecId(val) {
             let that = this;
-            console.log(val)
-
-            // this.$ajaxWrap({
-            //     type: "post",
-            //     url: "/change/getOldMouldCode",
-            //     data: {
-            //         oldMouldNo : id,
-            //         mouldId : that.mould_id,
-            //     },
-            //     success(res) {
-            //         console.log(res)
-            //     }
-            // })
+            if(val){
+            	this.$ajaxWrap({
+                    type: "post",
+                    url: "/change/getOldMouldNo",
+                    data: {
+                   	 oldMouldCode : val,
+                        mouldId : that.mould_id,
+                    },
+                    success(res) {
+                   	 if(res.data.data.mouldNo) {
+                            that.add_info.oldMouldNo = res.data.data.mouldNo;
+                   	 }
+                    }
+                })
+            }
         },
 
         // 点击关闭

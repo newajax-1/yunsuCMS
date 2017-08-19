@@ -2,18 +2,15 @@
 	<div class="org-management">
 	    <el-row>
 	         <el-col :span="24">
-	            	<div class="content-title">
-	                    <span>组织架构</span>
-	                </div>
-	                <div class="content-search">
-		                <el-form :inline="true" class="">
-			                <el-form-item>
-			                    <el-button @click='toAdd()' class="btn btn-blue btn-small"><i class="fa fa-file-text-o"></i> 新 增</el-button>
-			                </el-form-item>
-			            </el-form>
-			        </div>
-			    </el-col>
+				<div class="content-title">
+					<span>组织架构</span>
+				</div>
+				<div class="content-buttons">
+					<el-button @click='toAdd()' class="btn btn-blue btn-small"><i class="fa fa-file-text-o"></i> 新 增</el-button>
+				</div>
+			</el-col>
 	        <!-- 下拉部门 -->
+
 	        <el-col :span="3">
 	            <el-menu 
 					default-active="2" 
@@ -150,3 +147,8 @@
 </template>
 <!-- 引入js -->
 <script src="./orgmanagements.js"></script>
+<style lang="stylus">
+.org-management
+	.el-menu-vertical-demo
+		left: 10px
+</style>
