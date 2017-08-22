@@ -3,7 +3,7 @@
  */
 import Vue from "vue"
 export default {
-    name: 'saleplan',
+    name: 'saleplancontent',
     created() {
         this.init();
     },
@@ -69,7 +69,7 @@ export default {
 
             // 销售计划 当前Tab页面id
             sale_change_tips: undefined,
-            sale_change_name: "all",
+            sale_change_name: "",
 
             // 新增或修改 显示隐藏
             modal_show_tips: false,
@@ -136,8 +136,14 @@ export default {
 
     methods: {
         init() {
-            this.reset();
-            this.getSalePlanData();
+            let that = this,
+                temp = {};
+
+            that.reset();
+
+            that.sale_change_name = that.$route.query.tab_name;
+            temp.name = that.sale_change_name;
+            temp.name ? that.changeTableActive(temp) : that.getSalePlanData();
         },
 
         reset() {
@@ -152,7 +158,7 @@ export default {
 
         getSalePlanData() {
             let that = this;
-
+            that.sale_change_name = "all";
             that.$ajaxWrap({
                 url: "plan/index",
                 success(res) {
@@ -258,6 +264,12 @@ export default {
                 that.operationSalePlan(planId, planIndex);
             });
         },
+
+        gotoCreateSalePlan(plan_id) {
+            let that = this;
+            that.$goRoute("/home/saleplan/createsaleplan", { tab_name: that.sale_change_name, plan_id: plan_id || "" });
+        },
+
 
         clearModalForm() {
             let that = this;

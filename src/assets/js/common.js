@@ -5,14 +5,13 @@
 import Vue from 'vue'
 import axios from 'axios'
 
+
 /**
  * 请保留以下所有代码，勿修改
  */
 
-// const BaseUrl = window.BaseUrl = 'http://192.168.3.156:8080/ybs_mes';
-// const BaseUrl = window.BaseUrl = 'http://192.168.3.233:8080/ybs_mes';
 const BaseUrl = window.BaseUrl = 'http://localhost:8080/ybs_mes_02';
-// const BaseUrl = window.BaseUrl = 'http://192.168.3.55:8080/';
+// const BaseUrl = window.BaseUrl = 'http://192.168.3.233:8080/ybs_mes';
 
 // 非父子组件通信 [慎用-可考虑Vuex代替]
 const EventBus = window.EventBus = new Vue();
@@ -57,7 +56,10 @@ VueProto.$vueExtend({
         that.$alert(tips, '提示', {
             confirmButtonText: '确定',
             callback() {
-                if (typeof done === "function") done();
+                if (typeof done === "function") {
+                    done();
+                    return;
+                }
                 if (flag && that.refresh) that.refresh();
             }
         });
@@ -73,6 +75,7 @@ VueProto.$vueExtend({
             type: "warning"
         }).then(function() {
             if (typeof done === "function") done();
+
             if (flag && that.refresh) that.refresh();
         }).catch(function() {});
     },
@@ -88,6 +91,7 @@ VueProto.$vueExtend({
         } else {
             let arr = [];
             return arr;
+
         }
     },
 
@@ -124,7 +128,6 @@ VueProto.$vueExtend({
                             })
                         };
                         break;
-
                     case "1":
                         if (res.data.success) {
                             that.$baseWarn("登录超时,请重新登陆！", function() {
@@ -136,8 +139,6 @@ VueProto.$vueExtend({
                 }
             }
         }
-
-
 
         if (type.toLowerCase() === "get") {
             that.$ajax.get(url, {
@@ -160,12 +161,11 @@ VueProto.$vueExtend({
                 callback(res);
             }).catch(function(res) {
                 console.log(res)
-                that.$baseWarn("请求失败，请输入正确信息！");
+                that.$baseWarn("请输入正确信息！");
 
                 if (typeof fail === "function") fail();
             });
         }
-
     },
 
     // 日期截取
@@ -174,32 +174,10 @@ VueProto.$vueExtend({
             month = date.getMonth() + 1,
             day = date.getDate(),
             date_str = undefined;
-
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
-
-        date_str = year + "-" + month + "-" + day;
-        return date_str;
-    },
-
-    // 日期时间截取
-    $handleDateObjectTime(date) {
-        let year = date.getFullYear(),
-            month = date.getMonth() + 1,
-            day = date.getDate(),
-            hour = date.getHours(),
-            minutes = date.getMinutes(),
-            seconds = date.getSeconds(),
-            date_str = undefined;
-
-        if (month < 10) month = "0" + month;
-        if (day < 10) day = "0" + day;
-        if (hour < 10) hour = "0" + hour;
-        if (minutes < 10) minutes = "0" + minutes;
-        if (seconds < 10) seconds = "0" + seconds;
-
-        date_str = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
-        return date_str;
+        date = year + "-" + month + "-" + day;
+        return date
     },
 
     // 字符串截取
@@ -207,10 +185,7 @@ VueProto.$vueExtend({
         return str.replace(/^\s*/, '').replace(/\s*$/, '');
     },
 
-    $sort(arr) {
-        return arr.sort((a, b) => a < b ? 1 : -1);
-    },
-
+    // 克隆对象
     $cloneObject(obj) {
         if (!this.$typeofArray(obj)) {
             let ret = {};
@@ -219,6 +194,28 @@ VueProto.$vueExtend({
             }
             return ret;
         }
+    },
+
+    // 判断对象类型
+    $isObject(val) {
+        return typeof val === "object" && val !== null
+    },
+
+    // 深度拷贝引用类型 [请替换JSON.parse(JSON.stringify(object))作为深拷贝方法]
+    $deepCloneObject(val, new_obj) {
+        let that = this,
+            res = new_obj || (that.$typeofArray(val) ? [] : {});
+
+        for (let key in val) {
+            if (that.$isObject(val[key])) {
+                res[key] = that.$typeofArray(val[key]) ? [] : {};
+                that.$deepCloneObject(val[key], res[key]);
+            } else {
+                res[key] = val[key];
+            }
+        }
+
+        return res;
     }
 
 })

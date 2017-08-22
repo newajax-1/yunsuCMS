@@ -23,8 +23,8 @@
                              </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click='loadTable(1)' class="btn btn-small btn-blue"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click='reset()' class="btn btn-small btn-orange"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click='loadTable(1)' class="btn btn-small btn-blue">查询</el-button>
+                            <el-button @click='reset()' class="btn btn-small btn-orange">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -33,9 +33,9 @@
             
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="btn btn-small btn-blue" @click="refresh()"><i class="fa fa-refresh"></i> 刷新</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="refresh()"><i class="fa fa-repeat"></i> 刷新</el-button>
                     <el-button class="btn btn-large btn-blue" @click="batchDelete()"><i class="fa fa-trash-o"></i> 批量删除</el-button>
-                    <el-button class="btn btn-large btn-blue" @click="toAdd()"><i class="fa fa-file-text-o"></i> 新建预警</el-button>
+                    <el-button class="btn btn-large btn-blue" @click="toAdd()"><i class="fa fa-user-plus"></i> 新建预警</el-button>
                 </el-col>
             </div>
 
@@ -67,22 +67,22 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <!--分页-->
-                    <div class="table-page">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page.sync="page.page_num"
-                                :page-size="page.page_size"
-                                layout="total, prev, pager, next"
-                                :total="page.total">
-                        </el-pagination>
-                    </div>
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
         </el-row>
 
+        <!--分页-->
+        <div class="table-page fr">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="page.page_num"
+                    :page-size="page.page_size"
+                    layout="total, prev, pager, next"
+                    :total="page.total">
+            </el-pagination>
+        </div>
 
         <!--新增弹框-->
         <el-dialog
@@ -130,7 +130,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12" v-show="show_factory">
-                            <el-form-item label="　供应商：" class="text-ellipsis">{{ add_info.material_factory }}
+                            <el-form-item label="　供应商：">
+                                <p>{{ add_info.material_factory }}</p>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -289,12 +290,3 @@
 
 <!-- 引入js -->
 <script src="./invwarnings.js"></script>
-<style lang="stylus">
-
-.text-ellipsis
-    .el-form-item__content
-        max-width: 225px
-        overflow: hidden
-        text-overflow: ellipsis
-        white-space: nowrap
-</style>

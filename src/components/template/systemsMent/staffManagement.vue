@@ -24,7 +24,7 @@
             <el-col :span="24" class="content-buttons">
                 <el-button @click="refresh()" class="btn btn-blue btn-small"> <i class="fa fa-refresh "></i> 刷 新</el-button>
                 <el-button @click="deleteInfo()" class="btn btn-small btn-blue "><i class="fa fa-trash-o"></i> 删 除</el-button>
-                <el-button @click="showDialog()" class="btn btn-large btn-blue"><i class="fa fa-file-text-o"></i> 增加员工</el-button>
+                <el-button @click="showDialog()" class="btn btn-large btn-blue"><i class="fa fa-user-plus"></i> 增加员工</el-button>
             </el-col>
 
             <el-col :span="24" class="table-wrap">
@@ -57,18 +57,6 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <!--分页 start-->
-                <div class="table-page">
-                    <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page.sync="page.page_num"
-                        :page-size=page.page_size
-                        layout="total, prev, pager, next"
-                        :total="page.total">
-                    </el-pagination>
-                </div>
-                <!-- 分页 end -->
             </el-col>
             <!-- 列表开始  end -->
 	    </el-row> 
@@ -108,10 +96,77 @@
             </div>
         </el-dialog>
         <!--增加/修改员工弹框 end-->
+        <!--详情弹框 start-->
+        <el-dialog
+            size="large"
+            title="员工详情"
+            class="default-dialog dialog-small"
+            :visible.sync="details_custom"
+            :before-close="closeDialog">
+            <div class="content-search">
+                    <el-form :inline="true" class="">
+                        <el-form-item label="工单号：">
+                            <el-input placeholder="输入工单号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="周：">
+                            <el-input placeholder="输入周"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button @click="detailSearch()" class="btn btn-blue">查询</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button @click="reset()" class="btn btn-orange">重置</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button @click="detailrefresh()" class="btn btn-blue">刷新</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button @click="detailExport()" class="btn btn-blue">导出</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            <div>
+                <el-row>
+                    <el-col :span="24">
+                        <div class="list-table">
+                            <el-table
+                                style="width: 100% "
+                                :data="work_table_data">
+                                <el-table-column prop="name" label="工单号"></el-table-column>
+                                <el-table-column prop="account" label="周"></el-table-column>
+                                <el-table-column prop="account" label="班次"></el-table-column>
+                                <el-table-column prop="account" label="产品BOM编号"></el-table-column>
+                                <el-table-column prop="account" label="机台号"></el-table-column>
+                                <el-table-column prop="account" label="计划产量"></el-table-column>
+                                <el-table-column prop="account" label="上工时间"></el-table-column>
+                                <el-table-column prop="account" label="实际产量"></el-table-column>
+                                <el-table-column prop="account" label="下工时间"></el-table-column>
+                            </el-table>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-dialog>
+        <!--详情弹框 end-->
+        <!--分页 start-->
+        <div class="table-page fr">
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="page.page_num"
+                :page-size=page.page_size
+                layout="total, prev, pager, next"
+                :total="page.total">
+            </el-pagination>
+        </div>
+        <!-- 分页 end -->
 	</div>
 </template>
 
 <style lang="stylus" rel="stylesheet/stylus">
+.staff-manage
+    .content-buttons
+        padding 10px 0 5px 0
 </style>
 <!-- 引入js -->
 <script src="./staffmanagements.js"></script>

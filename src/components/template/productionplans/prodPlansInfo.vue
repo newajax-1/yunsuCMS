@@ -8,9 +8,9 @@
             </el-col>
         </el-row>
 
-        <el-row class="prod-plans-wrap">
+        <el-row>
             <el-col :span="24">
-                <div class="content-boder ml-10 fl" :span="4">
+                <div class="content-boder fl" :span="4">
                     <p class="content-p">注塑机：</p>
                     <div class="content-table clearfix">
                         <div class="content-top text right-border fl">
@@ -124,101 +124,97 @@
     </div>
 </template>
 <script src="./prodplansinfos.js"></script>
-<style lang="stylus">
-    $gf = #fff
-    .status_monitor
-        .content-boder
-            width 492px
-            margin-top 15px
-            margin-right 15px
-            border 1px solid #dcdcdc
-            &.ml-10
-                margin-left: 15px
+<style lang="stylus" scoped>
+    .content-boder
+        width 492px
+        margin-top 15px
+        margin-right 15px
+        border 1px solid #dcdcdc
 
-        .left-border
-            border-left 1px dotted #dcdcdc
+    .left-border
+        border-left 1px dotted #dcdcdc
 
-        .right-border
-            border-right 1px dotted #dcdcdc
+    .right-border
+        border-right 1px dotted #dcdcdc
 
-        .top-border
-            border-top 1px dotted #dcdcdc
+    .top-border
+        border-top 1px dotted #dcdcdc
 
-        .bottom-border
-            border-bottom 1px dotted #dcdcdc
+    .bottom-border
+        border-bottom 1px dotted #dcdcdc
 
-        .content-p
-            background-color #f9f9f9
-            height 40px
-            line-height 40px
-            padding-left 10px
+    .content-p
+        background-color #f9f9f9
+        height 40px
+        line-height 40px
+        padding-left 10px
 
-        .content-table
-            padding 40px 0px
-        
-        .content-top
+    .content-table
+        padding 40px 0px
+    
+    .content-top
+        padding-left 34px
+        width 40%
+        height 200px
+        line-height 200px
+        span
+            font-size 16px
+        strong
             padding-left 34px
-            width 40%
-            height 200px
-            line-height 200px
-            span
-                font-size 16px
-            strong
-                padding-left 34px
-                font-size 48px
-                font-weight 100
-                color #148aed
+            font-size 48px
+            font-weight 100
+            color #148aed
 
-        .content-bottom
-            padding 0 20px
-            width 40%
-            padding-top 20px
-            span
-                font-size 14px
-            strong
-                padding-left 34px
-                font-weight 100
-                font-size 16px
-            .right-p
-                height 50px
-                line-height 50px
-            .right-span
-                position relative
-                height 50px
-                width 21px
-                padding-right 12px
-            .right-i
-                position absolute
-                left 0
-                top 50%
-                transform translateY(-50%)
-                width 13px
-                height 13px
-                border-radius 50%
-        
-        .content-bottom-one
-            padding-top 0px
+    .content-bottom
+        padding 0 20px
+        width 40%
+        padding-top 20px
+        span
+            font-size 14px
+        strong
+            padding-left 34px
+            font-weight 100
+            font-size 16px
+        .right-p
+            height 50px
+            line-height 50px
+        .right-span
+            position relative
+            height 50px
+            width 21px
+            padding-right 12px
+        .right-i
+            position absolute
+            left 0
+            top 50%
+            transform translateY(-50%)
+            width 13px
+            height 13px
+            border-radius 50%
+    
+    .content-bottom-one
+        padding-top 0px
 
-        .content-bottom-other
-            padding-top 50px
+    .content-bottom-other
+        padding-top 50px
 
-        .border-green
-            background-color #a4d43e
-            border 4px solid #dbeeb2
+    .border-green
+        background-color #a4d43e
+        border 4px solid #dbeeb2
 
-        .border-cyen
-            background-color #04bcf8
-            border 4px solid #9be4fc
+    .border-cyen
+        background-color #04bcf8
+        border 4px solid #9be4fc
 
-        .border-pink
-            background-color #fd6363
-            border 4px solid #fec1c1
+    .border-pink
+        background-color #fd6363
+        border 4px solid #fec1c1
 
-        .border-orange
-            background-color #f8cd04
-            border 4px solid #fceb9b
+    .border-orange
+        background-color #f8cd04
+        border 4px solid #fceb9b
 
-        .border-purple
-            background-color #e679f6
-            border 4px solid #f5c9fb
+    .border-purple
+        background-color #e679f6
+        border 4px solid #f5c9fb
 </style>

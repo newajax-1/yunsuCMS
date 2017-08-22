@@ -33,8 +33,8 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="search()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click="search()" class="btn btn-blue btn-small">查询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -42,7 +42,7 @@
 
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh "></i> 刷 新</el-button>
+                    <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
                 </el-col>
             </div>
 
@@ -71,7 +71,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="showDetail(scope.row.workplanWeekId,scope.row.week)">详情</el-button>
+                                    @click="showDetail(scope.row.workplanWeekId)">详情</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -185,7 +185,7 @@
             </div>
             <div class="stop-message">
                 <el-radio class="radio" v-model="stop_data_info.radio" label="06">其他</el-radio>
-                <el-input placeholder="请简单描述终止原因" class="radio-input change-inline" :disabled="stop_data_info.radio === '06' ? false : true" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'required' : ''"></el-input>
+                <el-input placeholder="请简单描述终止原因" class="radio-input change-inline" :disabled="stop_data_info.radio === '06' ? false : true" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'asterisk' : ''"></el-input>
             </div>
             <div class="message center">
                 <el-button class="btn btn-small btn-green" @click="stopWork()">完 成</el-button>

@@ -212,8 +212,7 @@ export default {
 
         // 详情查询
         detailSearch(id) {
-            let that =  this;
-            that.$goRoute('/home/workLoadInfo',{ empNo: id });
+
         },
 
         // 详情刷新
