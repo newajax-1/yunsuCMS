@@ -57,6 +57,19 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <!--分页 start-->
+                <div class="table-page" v-if="page.total === 0 ? false : true">
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="page.page_num"
+                        :page-size=page.page_size
+                        :page-sizes="[10, 20, 30, 40]"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="page.total">
+                    </el-pagination>
+                </div>
+                <!-- 分页 end -->
             </el-col>
             <!-- 列表开始  end -->
 	    </el-row> 
@@ -148,25 +161,8 @@
             </div>
         </el-dialog>
         <!--详情弹框 end-->
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page.page_num"
-                :page-size=page.page_size
-                layout="total, prev, pager, next"
-                :total="page.total">
-            </el-pagination>
-        </div>
-        <!-- 分页 end -->
+        
 	</div>
 </template>
-
-<style lang="stylus" rel="stylesheet/stylus">
-.staff-manage
-    .content-buttons
-        padding 10px 0 5px 0
-</style>
 <!-- 引入js -->
 <script src="./staffmanagements.js"></script>

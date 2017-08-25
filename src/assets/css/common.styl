@@ -9,6 +9,12 @@
     margin: 0px
     padding: 0px
 
+html,
+body{
+    background-color: $f4;
+    font-family: "Microsoft Yahei"
+}
+
 ul,
 ol,
 li
@@ -47,26 +53,30 @@ li
 
 .hidden
     visibility: hidden
+    width:0
+    height: 0
 
 
 // public css
 .layout-content
+    position: relative
     margin: 50px 0 0 180px
-    padding: 8px 20px
-
+    background-color: $f4 
     .content-title
-        height: 40px
+        height: 18px
+        padding: 15px 0 15px 10px
         border-bottom: 1px solid $e5
+        background-color: $gf
         span
             position: relative
             top: -1px
             float: left
-            padding-right: 90px
-            line-height: 40px
-            border-bottom: 2px solid $default_blue 
+            padding-left: 10px
+            line-height: 18px
+            border-left: 4px solid $default_blue 
 
     .content-search
-        padding: 15px 0
+        padding: 12px 0 12px 20px
         border-bottom: 1px solid $e5
         .el-form-item
             margin-right: 0
@@ -93,8 +103,29 @@ li
             position: relative
 
     .content-buttons
-        padding 15px 0 20px 0
+        position: absolute
+        top: 15px
+        right: 20px
+        width: auto
+        .btn
+            width: auto
+            height: auto
+            margin-left: 25px
+            background: transparent
+            border 0 none
+            color: $g3
+            line-height: 20px
+            &:hover
+                background: transparent
+                border 0 none
+                text-decoration: underline
+                color: $default_blue
+            .fa
+                color: $default_blue
     .tab-title
+        padding: 10px 10px 0 10px
+        margin: 0 10px
+        background-color: $gf
         .el-tabs__header
             margin-bottom: 0
         .el-tabs__item
@@ -104,7 +135,7 @@ li
             font-size: 12px
             text-align: center
             &.is-active
-                color: $g3;
+                color: $g3; 
                 border-radius: 0
                 &::before
                     content: ""
@@ -115,7 +146,9 @@ li
                     height: 2px
                     background-color: $default_blue
     .table-wrap
-        margin-top: 8px
+        margin: 0 10px
+        padding: 8px 10px 0 10px
+        background-color: $gf
         .el-table__header
             th
                 padding: 0
@@ -143,9 +176,16 @@ li
                     text-align: center
 
     .table-page
-        margin-top: 15px
+        padding: 10px 0
         .el-pagination
             padding: 0
+    .message
+        margin-bottom: 10px
+        &.center
+            text-align: center
+        &.mt-10
+            margin-bottom: 0
+            margin-top: 10px
     .default-dialog
         .el-dialog__header
             padding: 20px
@@ -167,18 +207,14 @@ li
             .el-input
                 line-height: 30px
             .el-input__inner
+                width: 180px
                 height: 30px
                 padding-right: 6px
             .el-date-editor
                 width: 105px
-        .message
-            margin-bottom: 10px
-            &.center
-                text-align: center
-            &.mt-10
-                margin-bottom: 0
-                margin-top: 10px
         .table-wrap
+            margin: 0
+            padding: 0
             .el-input
                 &.is-disabled
                     .el-input__icon
@@ -207,3 +243,6 @@ li
         &.dialog-small
             .el-dialog--small
                 width: 720px
+        &.dialog-tiny
+            .el-dialog--tiny
+                width: 360px

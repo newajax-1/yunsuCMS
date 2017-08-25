@@ -30,7 +30,15 @@ export default {
             iss_sts : "01",
         }
     },
+    created() {
+        this.workplan_week_id = this.$route.query.workplan_week_id;
+        this.week = this.$route.query.week;
+        this.init();
+    },
     methods: {
+        init() {
+            this.loadTable();
+        },
 
         // 加载
         loadTable() {
@@ -40,7 +48,8 @@ export default {
                 url : "/week/queryWeekList",
                 data : {
                     workplanWeekId : that.workplan_week_id,
-                    billIssSts : 0
+                    billIssSts : 0,
+                    indexOfWeek : that.week.match(/[1-9][0-9]*/g)[0]
                 } ,
                 success : function(data){
                     that.week_detail = data.data.data;
@@ -70,19 +79,22 @@ export default {
                                 that.detail_data[i].scndProc = "印刷";
                                 break;
                             case "02" :
-                                that.detail_data[i].scndProc = "镶嵌";
+                                that.detail_data[i].scndProc = "喷涂";
                                 break;
                             case "03" :
-                                that.detail_data[i].scndProc = "组装";
+                                that.detail_data[i].scndProc = "焊接";
                                 break;
                             case "04" :
-                                that.detail_data[i].scndProc = "包装";
+                                that.detail_data[i].scndProc = "贴膜";
+                                break;
+                            case "05" :
+                                that.detail_data[i].scndProc = "包覆";
+                                break;
+                            default :
+                                that.detail_data[i].scndProc = "其他";
                                 break;
                         };
                     }
-                },
-                error() {
-                    //do error function
                 }
             }) 
         },
@@ -111,9 +123,6 @@ export default {
                             quantity : el.quantity
                         });
                     });
-                },
-                error() {
-                    //do error function
                 }
             }) 
         },
@@ -135,9 +144,6 @@ export default {
                     });
                     // that.update_custom = false;
                     that.loadTable();
-                },
-                error(res) {
-                    //do error function
                 }
             })
         },
@@ -164,9 +170,6 @@ export default {
                         type: "success"
                     });
                     that.loadTable();
-                },
-                error(res) {
-                    
                 }
             })
         },
@@ -174,25 +177,32 @@ export default {
         // 单条下发
         operationWeek(id) {
             var that = this;
-            var _id = that.workplan_id || id;
-            this.$ajaxWrap({
-                type : "post",
-                url : "/bill/operationBillListByDetailId",
-                data : {
-                    workplanDetailId : _id
-                } ,
-                callback : function(data){
-                    that.$message({
-                        message: data.tipMsg,
-                        type: "success"
-                    });
-                    that.loadTable();
-                    that.update_custom = false;
-                },
-                error(data) {
-                    
+            this.$confirm("确定下发吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(function() {
+                if(!id) {
+                    that.saveUpdateInfo();
                 }
-            })  
+                var _id = that.workplan_id || id;
+                that.$ajaxWrap({
+                    type : "post",
+                    url : "/bill/operationBillListByDetailId",
+                    data : {
+                        workplanDetailId : _id
+                    } ,
+                    callback : function(data){
+                        that.$message({
+                            message: data.tipMsg,
+                            type: "success"
+                        });
+                        that.loadTable();
+                        that.update_custom = false;
+                    }
+                })
+            }).catch(function() {});
+                  
         },
 
         // 改变事件
@@ -242,18 +252,5 @@ export default {
                 that.update_custom = false;
             }).catch(function() {});
         },
-
-        compute(){},
-    },
-    mounted(){
-        //当组件模板挂载时数据显示到上面去。
-        this.compute();
-        this.loadTable();
-    },
-    created() {
-        var that = this;
-        EventBus.$on("setInfoId",function(data){
-            that.workplan_week_id = data.id;
-        })
     },
 }

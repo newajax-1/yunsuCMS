@@ -17,8 +17,8 @@
                             <el-input placeholder="输入模具代码" v-model="seach_info.mould_code"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue btn-small">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -36,6 +36,7 @@
                     <el-table 
                         :data="table_data"
                         border
+                        height="360"
                         >
                         <el-table-column prop="workplanNo" label="生产计划编号"></el-table-column>
                         <el-table-column prop="productNo" label="生产批号"></el-table-column>
@@ -61,22 +62,23 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page" v-if="page_list.total === 0 ? false : true">
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="page_list.page_num"
+                                :page-size=page_list.page_size
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :page-sizes="[10, 20, 30, 40]"
+                                :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
         </el-row>
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="page_list.page_num"
-                    :page-size=page_list.page_size
-                    layout="total, prev, pager, next"
-                    :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
 	</div>
 </template>
 <style lang="stylus">

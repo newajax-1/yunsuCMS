@@ -30,15 +30,15 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue btn-small">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
 
             <div class="content-buttons fl">
-                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
+                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷新</el-button>
             </div>
 
             <el-col :span="24">
@@ -51,7 +51,8 @@
                 <!-- 列表开始  start -->
                 <div class="table-wrap">
                     <el-table 
-                        :data="table_data" 
+                        :data="table_data"
+                        height="360"
                         border>
                         <el-table-column prop="alarmNo" label="设备报警编号"></el-table-column>
                         <el-table-column prop="machine" label="机台归属"></el-table-column>
@@ -63,27 +64,25 @@
                         <el-table-column prop="opr" label="解除人"></el-table-column>>
                         <el-table-column prop="handleTime" label="处理时长"></el-table-column>>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page" v-if="page_list.total === 0 ? false : true">
+                        <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="page_list.page_num"
+                            :page-size=page_list.page_size
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :page-sizes="[10, 20, 30, 40]"
+                            :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
                  <!-- 列表开始  end -->
             </el-col>
 	    </el-row>
-        <!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page_list.page_num"
-                :page-size=page_list.page_size
-                layout="total, prev, pager, next"
-                :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
 	</div>
 </template>
 <style lang="stylus">
-.warning_fac_mon
-    .content-buttons
-        padding 10px 0 10px 0
 </style>
 <script src="./warningfacmonitorings.js"></script>

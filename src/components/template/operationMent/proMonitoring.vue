@@ -27,8 +27,8 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-small btn-blue">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-small btn-orange">重置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-small btn-blue"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-small btn-orange"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -38,6 +38,7 @@
                 <div class="table-wrap">
                     <el-table
                         border
+                        height="360"
                         :data="table_data">
                         <el-table-column prop="itemNo" label="产品型号"></el-table-column>
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
@@ -63,22 +64,24 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page" v-if="page_list.total === 0 ? false : true">
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="page_list.page_num"
+                                :page-size=page_list.page_size
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :page-sizes="[10, 20, 30, 40]"
+                                :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
             </el-col>
             <!-- 数据表格 end -->
     	</el-row>
-    	<!--分页 start-->
-        <div class="table-page fr">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="page_list.page_num"
-                    :page-size=page_list.page_size
-                    layout="total, prev, pager, next"
-                    :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
+
 		<!--详情弹框 start-->
         <el-dialog
             size="small"
@@ -92,8 +95,8 @@
 		                    <el-table
 		                        border
 		                        :data="bad_table_data">
+                                <el-table-column prop="createTime" label="提交时间"></el-table-column>
                                 <el-table-column prop="rjctType" label="不良类型"></el-table-column>
-		                        <el-table-column prop="rjctNum" label="不良数"></el-table-column>
 		                    </el-table>
 		                </div>
                     </el-col>

@@ -35,6 +35,7 @@
                 <div class="table-wrap">
                     <el-table
                         border
+                        height="360"
                         :data="table_data"
                         style="width: 100%"
                         @selection-change="handleSelectionChange">
@@ -83,21 +84,22 @@
                             </template>
                         </el-table-column>
                     </el-table>
+
+                    <!--分页-->
+                    <div class="table-page" v-if="page.total === 0 ? false : true">
+                        <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="page.page_num"
+                            :page-size="page.page_size"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :page-sizes="[10, 20, 30, 40]"
+                            :total="page.total">
+                        </el-pagination>
+                    </div>
                 </div>
             </el-col>
         </el-row>
-
-        <!--分页-->
-        <div class="table-page fr">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="page.page_num"
-                :page-size="page.page_size"
-                layout="total, prev, pager, next"
-                :total="page.total">
-            </el-pagination>
-        </div>
 
         <el-dialog
             size="small"

@@ -33,8 +33,8 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="search()" class="btn btn-blue btn-small">查询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small">重置</el-button>
+                            <el-button @click="search()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -42,7 +42,7 @@
 
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷新</el-button>
+                    <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh "></i> 刷 新</el-button>
                 </el-col>
             </div>
 
@@ -58,6 +58,7 @@
                 <div class="table-wrap">
                     <el-table 
                         border
+                        height="360"
                         :data="first_table_data" 
                         style="width: 100%" 
                         v-if="first_table_show">
@@ -71,16 +72,30 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="showDetail(scope.row.workplanWeekId)">详情</el-button>
+                                    @click="showDetail(scope.row.workplanWeekId,scope.row.week)">详情</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page" v-if="!second_table_text_show && (page_list.total === 0 ? false : true)">
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="page_list.page_num"
+                                :page-size=page_list.page_size
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :page-sizes="[10, 20, 30, 40]"
+                                :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
 
                 <div class="table-wrap">
                     <h1 v-if="second_table_text_show" style="font-weight: 400; font-size: 14px;">请输入检索条件查询已下发工单内容</h1>
                     <el-table 
                         border
+                        height="360"
                         :data="second_table_data" 
                         style="width: 100%" 
                         v-if="second_table_show">
@@ -109,11 +124,25 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page" v-if="!second_table_text_show && (page_list.total === 0 ? false : true)">
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="page_list.page_num"
+                                :page-size=page_list.page_size
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :page-sizes="[10, 20, 30, 40]"
+                                :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
 
                 <div class="table-wrap">
                     <el-table 
                         border
+                        height="360"
                         :data="other_table_data" 
                         v-if="other_table_show">
                         <el-table-column prop="itemNo" label="产品型号"></el-table-column>
@@ -134,22 +163,23 @@
                         <el-table-column prop="trmtTm" label="停止时间"></el-table-column>
                         <el-table-column prop="operUserName" label="下发人"></el-table-column>
                     </el-table>
+                    <!--分页 start-->
+                    <div class="table-page" v-if="!second_table_text_show && (page_list.total === 0 ? false : true)">
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="page_list.page_num"
+                                :page-size=page_list.page_size
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :page-sizes="[10, 20, 30, 40]"
+                                :total="page_list.total">
+                        </el-pagination>
+                    </div>
+                    <!--分页 end-->
                 </div>
-                 <!-- 列表开始  end -->
             </el-col>
 	    </el-row>
-        <!--分页 start-->
-        <div class="table-page fr" v-if="!second_table_text_show">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="page_list.page_num"
-                    :page-size=page_list.page_size
-                    layout="total, prev, pager, next"
-                    :total="page_list.total">
-            </el-pagination>
-        </div>
-        <!--分页 end-->
+                    
 	    <!-- 终止工单弹框 start -->
 	    <el-dialog
             size="small"
@@ -185,7 +215,7 @@
             </div>
             <div class="stop-message">
                 <el-radio class="radio" v-model="stop_data_info.radio" label="06">其他</el-radio>
-                <el-input placeholder="请简单描述终止原因" class="radio-input change-inline" :disabled="stop_data_info.radio === '06' ? false : true" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'asterisk' : ''"></el-input>
+                <el-input placeholder="请简单描述终止原因" class="radio-input change-inline" :disabled="stop_data_info.radio === '06' ? false : true" v-model="stop_data_info.comment" :class="stop_data_info.radio === '06' ? 'required' : ''"></el-input>
             </div>
             <div class="message center">
                 <el-button class="btn btn-small btn-green" @click="stopWork()">完 成</el-button>

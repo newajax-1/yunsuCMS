@@ -1,14 +1,16 @@
 <template>
     <div class="create-sale-plan">
         <div class="content-title">
-            <span>新增销售计划</span>
-        </div>
-        
+            <span>{{create_title}}</span>
+        </div>        
         <div class="table-wrap">
             <el-table
                 border
-                :data="sale_plan_data">
-                
+                :height="$tableHeight"
+                :data="sale_plan_data"
+                @selection-change="handleSelectionChange">                
+                <el-table-column type="selection" width="60"></el-table-column>
+
                 <el-table-column
                     prop="planType"
                     label="计划类型">
@@ -50,7 +52,7 @@
                         <el-date-picker                                    
                             type="date" 
                             placeholder="选择日期" 
-                            :editable=false
+                            :editable="false"
                             v-model="scope.row.orderDate"></el-date-picker>
                     </template>
                 </el-table-column>
@@ -94,6 +96,7 @@
                     <template scope="scope">
                         <el-input 
                             type="text" 
+                            disabled
                             v-model="scope.row.unit">
                         </el-input>
                     </template>
@@ -106,35 +109,61 @@
                         <el-date-picker 
                             type="date" 
                             placeholder="选择日期" 
-                            :editable=false
+                            :editable="false"
                             v-model="scope.row.deliveryDate"></el-date-picker>
                     </template>
                 </el-table-column>
+                <el-table-column label="操作" width="150">
+                    <template scope="scope">
+                        <el-button 
+                            @click="confirmDeleteSalePlan(scope.row)"
+                            type="text"
+                            size="small">删除</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
-            <el-col :span="24" class="content-buttons">
 
-                <el-button class="btn btn-blue btn-small">
+            <div class="message mt-10 ">
+                <el-button class="btn btn-blue btn-small" @click="deleteDetailArray">
                     <i class="fa fa-trash-o"></i> 删 除
                 </el-button>
                     
-                <el-button class="btn btn-blue btn-small">
+                <el-button class="btn btn-blue btn-small" @click="createNewSalePlan">
                     <i class="fa fa-file-text-o"></i> 增 加
                 </el-button>
 
-                <el-button class="btn btn-blue btn-small">
+                <el-button class="btn btn-blue btn-small" @click="confirmSendPlan('save')">
                     <i class="fa fa-check-square-o"></i> 保 存
                 </el-button>
 
-                <el-button class="btn btn-blue btn-small">
+                <el-button class="btn btn-blue btn-small" @click="confirmSendPlan('push')">
                     <i class="fa fa-sign-in"></i> 下 发
                 </el-button>
 
                 <el-button class="btn btn-small btn-blue" @click="comebackSalePlan()">
                     <i class="fa fa-undo"></i> 返 回
                 </el-button>                
-                
-            </el-col>
+            </div>
         </div>
     </div>
 </template>
 <script src="./createsaleplans.js"></script>
+<style lang="stylus">
+.create-sale-plan
+    .table-wrap
+        margin-top: 10px
+        .el-input__inner
+            border : 0 none
+            padding-right: 6px
+        .message
+            padding-bottom: 8px
+    .el-table__row
+        td
+            padding: 0 2px !important
+        .is-disabled
+            .el-input__inner
+                background : #fff
+        .el-date-editor
+            width: 105px      
+</style>
+
