@@ -11,9 +11,6 @@ import axios from 'axios'
  */
 
 const BaseUrl = window.BaseUrl = 'http://localhost:8080/ybs_mes';
-// const BaseUrl = window.BaseUrl = 'http://192.168.3.233:8080/ybs_mes';
-// const BaseUrl = window.BaseUrl = 'http://192.168.3.182:8080/ybs_mes';
-// const BaseUrl = window.BaseUrl = 'http://192.168.3.156:8080/ybs_mes';
 
 // 非父子组件通信 [慎用-可考虑Vuex代替]
 const EventBus = window.EventBus = new Vue();
@@ -29,14 +26,7 @@ axios.defaults.baseURL = BaseUrl;
 let height = window.screen.height,
     tableHeight;
 
-switch (height) {
-    case 1080:
-        tableHeight = 641;
-        break
-    case 768:
-        tableHeight = 420;
-        break
-}
+tableHeight = height >= 770 ? 580 : 380;
 
 const VueProto = Vue.prototype;
 
@@ -55,9 +45,21 @@ VueProto.$vueExtend({
     $ajax: axios,
 
     $tableHeight: tableHeight,
+
+
+    // 判断对象类型
+    $isObject(val) {
+        return typeof val === "object" && val !== null
+    },
+
+    // 判断数组
+    $isArray(val) {
+        return this.$typeofArray(arr);
+    },
+
     // 路由跳转
     $goRoute(index, query) {
-        if (query && typeof query === "object") {
+        if (this.$isObject(query)) {
             this.$router.push({ path: index, query: query })
         } else {
             this.$router.push(index);
@@ -71,10 +73,7 @@ VueProto.$vueExtend({
         that.$alert(tips, '提示', {
             confirmButtonText: '确定',
             callback() {
-                if (typeof done === "function") {
-                    done();
-                    return;
-                }
+                if (typeof done === "function") done();
                 if (flag && that.refresh) that.refresh();
             }
         });
@@ -90,7 +89,6 @@ VueProto.$vueExtend({
             type: "warning"
         }).then(function() {
             if (typeof done === "function") done();
-
             if (flag && that.refresh) that.refresh();
         }).catch(function() {});
     },
@@ -183,19 +181,19 @@ VueProto.$vueExtend({
         }
     },
 
-    // 日期截取
+    // 日期截取 YY-MM-DD
     $handleDateObject(date) {
         let year = date.getFullYear(),
             month = date.getMonth() + 1,
             day = date.getDate(),
-            date_str = undefined;
+            date_str;
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
-        date = year + "-" + month + "-" + day;
-        return date
+        date_str = year + "-" + month + "-" + day;
+        return date_str
     },
 
-    // 日期时间截取
+    // 日期时间截取 YY-MM-DD-HH-MM-SS
     $handleDateObjectTime(date) {
         let year = date.getFullYear(),
             month = date.getMonth() + 1,
@@ -203,7 +201,7 @@ VueProto.$vueExtend({
             hour = date.getHours(),
             minutes = date.getMinutes(),
             seconds = date.getSeconds(),
-            date_str = undefined;
+            date_str;
 
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
@@ -229,11 +227,6 @@ VueProto.$vueExtend({
             }
             return ret;
         }
-    },
-
-    // 判断对象类型
-    $isObject(val) {
-        return typeof val === "object" && val !== null
     },
 
     // 深度拷贝引用类型 [请替换JSON.parse(JSON.stringify(object))作为深拷贝方法]

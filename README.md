@@ -1,4 +1,4 @@
-# vueproject
+# Y-MES
 
 > A Vue.js project
 
@@ -6,7 +6,7 @@
 
 ``` bash
 # install dependencies
-npm install
+cnpm install
 
 # serve with hot reload at localhost:8080
 npm run dev
@@ -18,8 +18,6 @@ npm run build
 npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-
 ##
 
 ```html
@@ -28,19 +26,9 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   │
   ├─ assets   [ 静态资源文件夹 ]
   │    │
-  │    └─ js  [ js文件 ]
-  │    │   │
-  │    │   └─ lib [ js插件 ]
-  │    │   │
-  │    │   └─ scripts [ 单页JS ]
-  │    │        │
-  │    │        └─ common/
-  │    │        │
-  │    │        └─ index.js
+  │    └─ js/  [ js文件 ]
   │    │
   │    └─ css/ 
-  │    │   │                       
-  │    │   └─ styles.styl/  
   │    │
   │    └─ images/
   │
@@ -54,29 +42,11 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
         │   │
         │   └─ left-menu.vue/
         │
-        └─ single/    [ 单页]
-                │
-                └─ index/
-                │  │
-                │  └─ index.vue 
-                │  │
-                │  └─ index.js 
+        └─ single/ [ 单页]
                 │
                 └─ login/
-                │  │
-                │  └─ login.vue 
-                │  │
-                │  └─ login.js  
                 │
-                └─ sale-plan/
-                │  │
-                │  └─ sale-plan.vue 
-                │  │
-                │  └─ sale-plan.js 
+                └─ saleplan/
                 │
-                └─ saler-info/
-                │  │
-                │  └─ saler-info.vue 
-                │  │
-                │  └─ saler-info.js 
+                └─ salerinfo/
 ```

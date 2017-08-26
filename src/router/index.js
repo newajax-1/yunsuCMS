@@ -1,62 +1,60 @@
 /**
  * coding by Alex of 2017-07-24
  */
-//home:默认页面
-import home from '../components/template/Home/home'
 
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import login from '../components/login/login'
-import index from '../components/index'
+import login from '@/components/login/login'
+import index from '@/components/index'
 
-/**
- * @saleplan : 销售计划管理
- * @salersInfo : 客户信息管理
- */
+// 首页
+import home from '@/components/single/home/home'
 
-import saleplan from '../components/template/saleplans/salePlans'
-import salersInfo from '../components/template/saleplans/salersInfo'
-import createsaleplan from "@/components/template/saleplans/createsaleplan"
-import saleplancontent from "@/components/template/saleplans/saleplancontent"
-import saleplaninfo from "@/components/template/saleplans/saleplaninfobyid"
+// 销售计划
+import saleplan from '@/components/single/saleplans/salePlans'
+import salersInfo from '@/components/single/saleplans/salersInfo'
+import createsaleplan from "@/components/single/saleplans/createsaleplan"
+import saleplancontent from "@/components/single/saleplans/saleplancontent"
+import saleplaninfo from "@/components/single/saleplans/saleplaninfobyid"
 
-import prodPlansInfo from '../components/template/productionplans/prodPlansInfo'
-import weekProdPlans from '../components/template/productionplans/weekProdPlans'
-import invWarning from '../components/template/productionplans/invWarning'
+// 周计划
+import prodPlansInfo from '@/components/single/productionplans/prodPlansInfo'
+import weekProdPlans from '@/components/single/productionplans/weekProdPlans'
+import invWarning from '@/components/single/productionplans/invWarning'
 
-//用户管理
-import userManagement from '../components/template/systemsMent/userManagement'
-import roleManagement from '../components/template/systemsMent/roleManagement'
-import orgManagement from '../components/template/systemsMent/orgManagement'
-import staffManagement from '../components/template/systemsMent/staffManagement'
-import workLoadInfo from '../components/template/systemsMent/workLoadInfo'
+// 用户管理
+import userManagement from '@/components/single/systemsMent/userManagement'
+import roleManagement from '@/components/single/systemsMent/roleManagement'
+import orgManagement from '@/components/single/systemsMent/orgManagement'
+import staffManagement from '@/components/single/systemsMent/staffManagement'
+import workLoadInfo from '@/components/single/systemsMent/workLoadInfo'
 
 // 生产作业管理
-import proMonitoring from '../components/template/operationMent/proMonitoring'
-import workMonitoring from '../components/template/operationMent/workMonitoring'
-import workMonitoringInfo from '../components/template/operationMent/workMonitoringInfo'
-import warningFacMonitoring from '../components/template/operationMent/warningFacMonitoring'
-import warningQuaMonitoring from '../components/template/operationMent/warningQuaMonitoring'
-import modelMonitoring from '../components/template/operationMent/modelMonitoring'
+import proMonitoring from '@/components/single/operationMent/proMonitoring'
+import workMonitoring from '@/components/single/operationMent/workMonitoring'
+import workMonitoringInfo from '@/components/single/operationMent/workMonitoringInfo'
+import warningFacMonitoring from '@/components/single/operationMent/warningFacMonitoring'
+import warningQuaMonitoring from '@/components/single/operationMent/warningQuaMonitoring'
+import modelMonitoring from '@/components/single/operationMent/modelMonitoring'
 
 // 工程管理
-import statusMonitor from '../components/template/engineeringMent/statusMonitor'
-import equipmentInfo from '../components/template/engineeringMent/equipmentInfo'
-import equipmentInfoDetail from '../components/template/engineeringMent/equipmentInfoDetail'
-import equipmentMaintain from '../components/template/engineeringMent/equipmentMaintain'
-import standbyMent from '../components/template/engineeringMent/standbyMent'
-import productSop from '../components/template/engineeringMent/productSop'
-import productBom from '../components/template/engineeringMent/productBom'
+import statusMonitor from '@/components/single/engineeringMent/statusMonitor'
+import equipmentInfo from '@/components/single/engineeringMent/equipmentInfo'
+import equipmentInfoDetail from '@/components/single/engineeringMent/equipmentInfoDetail'
+import equipmentMaintain from '@/components/single/engineeringMent/equipmentMaintain'
+import standbyMent from '@/components/single/engineeringMent/standbyMent'
+import productSop from '@/components/single/engineeringMent/productSop'
+import productBom from '@/components/single/engineeringMent/productBom'
 
 // 模具管理
-import mouldMonitor from '../components/template/mouldMent/mouldMonitor'
-import mouldInfo from '../components/template/mouldMent/mouldInfo'
-import mouldInfoNewDetail from '../components/template/mouldMent/mouldInfoNewDetail'
-import mouldInfoSuccessDetail from '../components/template/mouldMent/mouldInfoSuccessDetail'
-import maintainPlan from '../components/template/mouldMent/maintainPlan'
-import mouldTestPlan from '../components/template/mouldMent/mouldTestPlan'
-import addMouldInfo from '../components/template/mouldMent/addMouldInfo'
+import mouldMonitor from '@/components/single/mouldMent/mouldMonitor'
+import mouldInfo from '@/components/single/mouldMent/mouldInfo'
+import mouldInfoNewDetail from '@/components/single/mouldMent/mouldInfoNewDetail'
+import mouldInfoSuccessDetail from '@/components/single/mouldMent/mouldInfoSuccessDetail'
+import maintainPlan from '@/components/single/mouldMent/maintainPlan'
+import mouldTestPlan from '@/components/single/mouldMent/mouldTestPlan'
+import addMouldInfo from '@/components/single/mouldMent/addMouldInfo'
 
 Vue.use(Router)
 
@@ -165,11 +163,11 @@ export default new Router({
                 },
                 {
                     path: 'equipmentinfodetail',
-                    component: equipmentInfoDetail 
+                    component: equipmentInfoDetail
                 },
                 {
                     path: 'workloadinfo',
-                    component: workLoadInfo 
+                    component: workLoadInfo
                 },
                 {
                     path: 'equipmentmaintain',
@@ -201,19 +199,19 @@ export default new Router({
                 },
                 {
                     path: 'mouldtestplan',
-                    component: mouldTestPlan 
+                    component: mouldTestPlan
                 },
                 {
                     path: 'addmouldinfo',
-                    component: addMouldInfo 
+                    component: addMouldInfo
                 },
                 {
                     path: 'productsop',
-                    component: productSop 
+                    component: productSop
                 },
                 {
                     path: 'productbom',
-                    component: productBom 
+                    component: productBom
                 },
             ]
         },

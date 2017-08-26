@@ -4,7 +4,7 @@
             <el-col :span="24">
                 <div class="top-nav-content clearfix">
 
-                    <div class="top-nav-left fl">
+                    <div class="top-nav-left fl" @click="$goRoute('/home')">
                         <h1 class="logo fl"><img :src="img_url" /></h1>
                         <p class="nav-title fl">管理控制台</p>
                     </div>
@@ -234,6 +234,7 @@ $default_bd_gray_hover = $default_bd_gray;
     background-color: $header_bgcolor
 
     .top-nav-left
+        cursor: pointer
         .logo,
         .nav-title
             padding: 0 16px

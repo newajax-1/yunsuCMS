@@ -6,50 +6,45 @@
     </div>
 </template>
 <script>
-    import saleplan from '../template/saleplans/salePlans'
-    import salersInfo from '../template/saleplans/salersInfo'
-    import createsaleplan from '../template/saleplans/createsaleplan'
-    import saleplancontent from '../template/saleplans/saleplancontent'
-    import saleplaninfo from '../template/saleplans/saleplaninfobyid'
+    import saleplan from '../single/saleplans/salePlans'
+    import salersInfo from '../single/saleplans/salersInfo'
+    import createsaleplan from '../single/saleplans/createsaleplan'
+    import saleplancontent from '../single/saleplans/saleplancontent'
+    import saleplaninfo from '../single/saleplans/saleplaninfobyid'
 
-    import prodPlansInfo from '../template/productionplans/prodPlansInfo'
-    import weekProdPlans from '../template/productionplans/weekProdPlans'
-    import invWarning from '../template/productionplans/invWarning'
+    import prodPlansInfo from '../single/productionplans/prodPlansInfo'
+    import weekProdPlans from '../single/productionplans/weekProdPlans'
+    import invWarning from '../single/productionplans/invWarning'
 
-    // 用户
-    import userManagement from '../template/systemsMent/userManagement'
-    import roleManagement from '../template/systemsMent/roleManagement'
-    import orgManagement from '../template/systemsMent/orgManagement'
-    import staffManagement from '../template/systemsMent/staffManagement'
+    import userManagement from '../single/systemsMent/userManagement'
+    import roleManagement from '../single/systemsMent/roleManagement'
+    import orgManagement from '../single/systemsMent/orgManagement'
+    import staffManagement from '../single/systemsMent/staffManagement'
 
-    import proMonitoring from '../template/operationMent/proMonitoring'
-    import workMonitoring from '../template/operationMent/workMonitoring'
-    import workMonitoringInfo from '../template/operationMent/workMonitoringInfo'
-    import warningFacMonitoring from '../template/operationMent/warningFacMonitoring'
-    import warningQuaMonitoring from '../template/operationMent/warningQuaMonitoring'
-    import modelMonitoring from '../template/operationMent/modelMonitoring'
+    import proMonitoring from '../single/operationMent/proMonitoring'
+    import workMonitoring from '../single/operationMent/workMonitoring'
+    import workMonitoringInfo from '../single/operationMent/workMonitoringInfo'
+    import warningFacMonitoring from '../single/operationMent/warningFacMonitoring'
+    import warningQuaMonitoring from '../single/operationMent/warningQuaMonitoring'
+    import modelMonitoring from '../single/operationMent/modelMonitoring'
     
-    import workLoadInfo from "../template/systemsMent/workLoadInfo"
+    import workLoadInfo from "../single/systemsMent/workLoadInfo"
 
-    // 工程管理
-    import statusMonitor from '../template/engineeringMent/statusMonitor'
-    import equipmentInfo from '../template/engineeringMent/equipmentInfo'
-    import equipmentInfoDetail from '../template/engineeringMent/equipmentInfoDetail'
-    import equipmentMaintain from '../template/engineeringMent/equipmentMaintain'
-    import standbyMent from '../template/engineeringMent/standbyMent'
-    import productSop from '../template/engineeringMent/productSop'
-    import productBom from '../template/engineeringMent/productBom'
+    import statusMonitor from '../single/engineeringMent/statusMonitor'
+    import equipmentInfo from '../single/engineeringMent/equipmentInfo'
+    import equipmentInfoDetail from '../single/engineeringMent/equipmentInfoDetail'
+    import equipmentMaintain from '../single/engineeringMent/equipmentMaintain'
+    import standbyMent from '../single/engineeringMent/standbyMent'
+    import productSop from '../single/engineeringMent/productSop'
+    import productBom from '../single/engineeringMent/productBom'
 
-    // 模具管理
-    import mouldMonitor from '../template/mouldMent/mouldMonitor'
-    import mouldInfo from '../template/mouldMent/mouldInfo'
-    import mouldInfoNewDetail from '../template/mouldMent/mouldInfoNewDetail'
-    import mouldInfoSuccessDetail from '../template/mouldMent/mouldInfoSuccessDetail'
-    import maintainPlan from '../template/mouldMent/maintainPlan'
-    import mouldTestPlan from '../template/mouldMent/mouldTestPlan'
-    import addMouldInfo from '../template/mouldMent/addMouldInfo'
-
-  
+    import mouldMonitor from '../single/mouldMent/mouldMonitor'
+    import mouldInfo from '../single/mouldMent/mouldInfo'
+    import mouldInfoNewDetail from '../single/mouldMent/mouldInfoNewDetail'
+    import mouldInfoSuccessDetail from '../single/mouldMent/mouldInfoSuccessDetail'
+    import maintainPlan from '../single/mouldMent/maintainPlan'
+    import mouldTestPlan from '../single/mouldMent/mouldTestPlan'
+    import addMouldInfo from '../single/mouldMent/addMouldInfo'
 
     export default {
         name : "content",

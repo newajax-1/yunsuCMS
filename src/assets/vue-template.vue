@@ -1,5 +1,5 @@
 <!--
- coding by Alex of 2017-08-08
+    coding by Alex of 2017-08-08
 -->
 <template>
 
@@ -73,8 +73,6 @@
             <el-button class="btn btn-small btn-blue"  >
                 <i class="fa fa-caret-left" ></i> 上一周
             </el-button> 
-
-            
             
         </el-col>
 
@@ -87,13 +85,13 @@
         
         <!-- @table-wrap {必须存在} 正文表格父类 属性border必选 -->
         <div class="table-wrap">
-            <el-table border></el-table>
-
+            <el-table 
+                :height="$tableHeight"
+                border>
+            </el-table>
 
             <!-- @table-page {必须存在} 正文表格分页 -->
-            <div class="table-page ">
-
-            </div>
+            <div class="table-page "></div>
         </div>
 
         <!-- 
@@ -104,21 +102,22 @@
             size="large"
             class="default-dialog dialog-large">
             <el-form>
-                
                 <div class="message">
-                    <el-button class="btn btn-small btn-green" @click="addNewSalePlan()">完 成</el-button>
-                    <el-button class="btn btn-small btn-gray" @click="confirmCloseModal()">关 闭</el-button>
+                    <el-button class="btn btn-small btn-green">完 成</el-button>
+                    <el-button class="btn btn-small btn-gray">关 闭</el-button>
                 </div>
             </el-form>
 
             <div class="message">
-                <el-button class="btn btn-small btn-green" @click="addNewSalePlan()">完 成</el-button>
-                <el-button class="btn btn-small btn-gray" @click="confirmCloseModal()">关 闭</el-button>
+                <el-button class="btn btn-small btn-green">完 成</el-button>
+                <el-button class="btn btn-small btn-gray">关 闭</el-button>
             </div>
-
             
             <div class="table-wrap">
-
+                <el-table 
+                    :height="$tableHeight"
+                    border>
+                </el-table>
             </div>
         </el-dialog>
     </el-row>
