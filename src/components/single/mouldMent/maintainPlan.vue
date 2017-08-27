@@ -88,16 +88,18 @@
                                 </el-col>
                             </el-row>
                             <el-row :gutter="24">
-                                <el-col :span="24">
-                                    <el-form-item
-                                        v-for="(domain, index) in dynamicValidateForm.domains"
-                                        label="保养模次："
-                                        :key="domain.key"
-                                        :prop="'domains.' + index + '.value'">
-                                        <el-input v-model="domain.value"  class="required increase-input"></el-input>
-                                    </el-form-item>
+                                <div class="clearfix pd-12">                                    
+                                    <label class="fl  pdr-12">保养模次：</label>
+                                    <div class="wrap fl">
+                                        <el-form-item
+                                            v-for="(domain, index) in dynamicValidateForm.domains"
+                                            :key="domain.key"
+                                            :prop="'domains.' + index + '.value'">
+                                            <el-input v-model="domain.value"  class="required increase-input"></el-input>
+                                        </el-form-item>
+                                    </div>
                                     <el-button class="btn btn-small btn-blue increase" @click="addDomain()">增加模次</el-button>
-                                </el-col>
+                                </div>
                             </el-row>
                         </el-form>
                     </div>
@@ -112,10 +114,18 @@
 </template>
 <script src="./maintainplans.js"></script>
 <style lang="stylus">
-.increase-input
-    &::after
-        right 10px
-.increase
-    margin-top 4px
-    margin-left 10px
+.maintain_info
+    .pd-12
+        padding: 0 12px
+    .pdr-12
+        padding: 11px 12px 10px 0
+        line-height: 1
+    .wrap
+        width: 87%
+    .el-form-item
+        margin-right 15px !important
+        &::after
+            right 10px
+    .increase
+        margin-top 4px
 </style>
