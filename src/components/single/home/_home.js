@@ -70,9 +70,63 @@ export default {
                     path: "/home"
                 }
             ],
+
             option_1: {
                 title: {
-                    text: "昨日设备开机率70%",
+                    x: "center",
+                    bottom: "0",
+                    text: "昨日设备开机率 70%",
+                    textStyle: {
+                        fontSize: '14',
+                        fontWeight: '400',
+                        color: '#333'
+                    }
+                },
+
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+
+                legend: {
+                    orient: 'horizontal',
+                    x: 'center',
+                    data: ['正常 7台', '保养 2台', '维修 1台']
+                },
+                series: [{
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    color: ["#4dc4df", "#e86a5b", "#fbac33"],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '16',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: [
+                        { value: 7, name: '正常 7台' },
+                        { value: 2, name: '保养 2台' },
+                        { value: 1, name: '维修 1台' },
+                    ]
+                }]
+            },
+            option_2: {
+                title: {
+                    text: "昨日员工排班率 70%",
                     textStyle: {
                         fontSize: '14',
                         fontWeight: '400',
@@ -88,38 +142,85 @@ export default {
                 legend: {
                     orient: 'horizontal',
                     x: 'center',
-                    data: ['正常', '保养', '维修']
+                    data: ['上工 70人', '休息 30人']
                 },
                 series: [{
                     name: '访问来源',
                     type: 'pie',
                     radius: ['50%', '70%'],
                     color: ["#4dc4df", "#e86a5b", "#fbac33"],
-                    itemStyle: {
+                    avoidLabelOverlap: false,
+                    label: {
                         normal: {
-                            label: {
-                                show: false
-                            },
-                            labelLine: {
-                                show: false
-                            }
+                            show: false,
+                            position: 'center'
                         },
                         emphasis: {
-                            label: {
-                                show: true,
-                                position: 'center',
-                                textStyle: {
-                                    fontSize: '12',
-                                    fontWeight: 'bold',
-                                    color: '#333'
-                                }
+                            show: true,
+                            textStyle: {
+                                fontSize: '16',
+                                fontWeight: 'bold'
                             }
                         }
                     },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
                     data: [
-                        { value: 335, name: '正常' },
-                        { value: 310, name: '保养' },
-                        { value: 234, name: '维修' },
+                        { value: 70, name: '上工 70人' },
+                        { value: 30, name: '休息 30人' }
+                    ]
+                }]
+            },
+            option_3: {
+                title: {
+                    text: "昨日成品入库率 50%",
+                    textStyle: {
+                        fontSize: '14',
+                        fontWeight: '400',
+                        color: '#333',
+                    },
+                    bottom: "0",
+                    x: "center"
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'horizontal',
+                    x: 'center',
+                    data: ['入库 10000件', '出库 5000件']
+                },
+                series: [{
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    color: ["#4dc4df", "#e86a5b", "#fbac33"],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '16',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: [
+                        { value: 5000, name: '入库 10000件' },
+                        { value: 5000, name: '出库 5000件' }
                     ]
                 }]
             }
@@ -137,8 +238,8 @@ export default {
             let myChart_3 = echarts.init(wrap_3);
 
             myChart_1.setOption(that.option_1);
-            myChart_2.setOption(that.option_1);
-            myChart_3.setOption(that.option_1);
+            myChart_2.setOption(that.option_2);
+            myChart_3.setOption(that.option_3);
         }
     }
 }

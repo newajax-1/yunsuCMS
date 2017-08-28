@@ -91,8 +91,7 @@
                                             <el-select
                                                 v-model="product_sop_add_data_send.sopTyp">
                                                 <el-option 
-                                                    v-for=" item in product_sop_add_data_get.product_sop_select"
-                                                    
+                                                    v-for=" item in product_sop_add_data_get.product_sop_select"                                                    
                                                     :label="item.dicName"
                                                     :value="item.dicValue"
                                                     :key="item.dicValue">

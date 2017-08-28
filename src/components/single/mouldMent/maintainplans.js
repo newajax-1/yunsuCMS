@@ -5,16 +5,16 @@ export default {
     },
     data() {
         return {
-            table_data : [],
+            table_data: [],
 
-            search_info : {
-                maint_itm : undefined,
+            search_info: {
+                maint_itm: undefined,
             },
 
-            page_list : {
-                page_num : 1,
-                page_size : 10,
-                total : 0
+            page_list: {
+                page_num: 1,
+                page_size: 10,
+                total: 0
             },
 
             dynamicValidateForm: {
@@ -23,19 +23,19 @@ export default {
                 }],
             },
 
-            select_op : [],
+            select_op: [],
 
-            add_info : {
-                maintItm : undefined,
-                maintAcct : undefined,
+            add_info: {
+                maintItm: undefined,
+                maintAcct: undefined,
             },
 
-            search_pageNum : undefined,
-            search_pageSize : undefined,
-            batch_ids : undefined,
-            plan_id : undefined,
-            new_custom : false,
-            diag_title : undefined,
+            search_pageNum: undefined,
+            search_pageSize: undefined,
+            batch_ids: undefined,
+            plan_id: undefined,
+            new_custom: false,
+            diag_title: undefined,
         }
     },
     methods: {
@@ -67,7 +67,7 @@ export default {
                 type: "post",
                 url: "/mouldMaintPlan/queryList",
                 data: {
-                    maintItm : that.search_info.maint_itm,
+                    maintItm: that.search_info.maint_itm,
                     pageNum: that.search_pageNum || "1",
                     pageSize: that.search_pageSize || "10"
                 },
@@ -80,9 +80,9 @@ export default {
         loadTable(data) {
             let that = this;
             that.table_data = data.page.list;
-            that.page_list.page_num =  data.page.pageNum;
-            that.page_list.page_list =  data.page.pageList;
-            that.page_list.total =  data.page.total;
+            that.page_list.page_num = data.page.pageNum;
+            that.page_list.page_list = data.page.pageList;
+            that.page_list.total = data.page.total;
         },
 
         // 重置
@@ -101,28 +101,28 @@ export default {
             let that = this;
             this.$clearObject(this.add_info);
             this.plan_id = id;
-            if(id) {
+            if (id) {
                 this.diag_title = "修改保养计划";
                 this.dynamicValidateForm.domains = [];
-            }else{
+            } else {
                 this.diag_title = "新增保养计划";
                 this.dynamicValidateForm.domains = [{
                     value: ""
                 }];
             };
-            if(id) {
+            if (id) {
                 this.$ajaxWrap({
                     type: "post",
                     url: "/mouldMaintPlan/detailMouldMaintPlan",
                     data: {
-                        mouldMaintPlanId : id
+                        mouldMaintPlanId: id
                     },
                     success(res) {
                         that.add_info = res.data.data;
                         var _main_acct_list = that.add_info.maintAcct.split(",");
-                        for(var i = 0; i < _main_acct_list.length; i++) {
+                        for (var i = 0; i < _main_acct_list.length; i++) {
                             that.dynamicValidateForm.domains.push({
-                                value : _main_acct_list[i]
+                                value: _main_acct_list[i]
                             })
                         }
                     }
@@ -135,17 +135,17 @@ export default {
         saveInfo() {
             let that = this;
             var _save_maint_acct = [];
-            for(var i = 0; i < this.dynamicValidateForm.domains.length; i++) {
+            for (var i = 0; i < this.dynamicValidateForm.domains.length; i++) {
                 _save_maint_acct.push(this.dynamicValidateForm.domains[i].value);
             }
-            
+
             this.$ajaxWrap({
                 type: "post",
                 url: "/mouldMaintPlan/saveMouldMaintPlan",
                 data: {
-                    mouldMaintPlanId : that.plan_id,
-                    maintItm : that.add_info.maintItm,
-                    maintAcct : _save_maint_acct.join(",")
+                    mouldMaintPlanId: that.plan_id,
+                    maintItm: that.add_info.maintItm,
+                    maintAcct: _save_maint_acct.join(",")
                 },
                 success(res) {
                     that.$message({
@@ -161,21 +161,24 @@ export default {
         // 删除
         deleteId(id) {
             let that = this;
-            if (!this.batch_ids) {
-                this.$message({
-                    message: "请选择删除的数据",
-                    type: "warning"
-                });
-                return;
-            };
+            if (!id) {
+                if (!this.batch_ids) {
+                    this.$message({
+                        message: "请选择删除的数据",
+                        type: "warning"
+                    });
+                    return;
+                };
+            }
+
             var _data = undefined;
-            if(id) {
+            if (id) {
                 _data = {
-                    mouldMaintPlanId : id
+                    mouldMaintPlanId: id
                 }
-            }else{
+            } else {
                 _data = {
-                    mouldMaintPlanIdList : this.batch_ids
+                    mouldMaintPlanIdList: this.batch_ids
                 }
             };
 
@@ -208,12 +211,12 @@ export default {
         // 复选框勾选
         handleSelectionChange(val) {
             var batch_ids = [];
-            if(val.length > 0) {
+            if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
                     batch_ids.push(val[i].mouldMaintPlanId);
                 }
                 this.batch_ids = batch_ids.join(",");
-            }else{
+            } else {
                 this.batch_ids = undefined;
             }
         },

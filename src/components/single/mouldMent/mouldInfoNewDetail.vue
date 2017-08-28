@@ -44,7 +44,7 @@
                         v-show="show_table.second_show">
                         <el-table-column prop="acptItm" label="验收项目"></el-table-column>
                         <el-table-column prop="acptRslt" label="验收结果"></el-table-column>
-                        <el-table-column prop="Acceptor" label="验收人"></el-table-column>
+                        <el-table-column prop="acceptor" label="验收人"></el-table-column>
                         <el-table-column prop="startTm" label="验收开始时间"></el-table-column>
                         <el-table-column prop="endTm" label="验收结束时间"></el-table-column>
                     </el-table>

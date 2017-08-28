@@ -134,10 +134,7 @@ export default {
                         for (let i = 0; i < that.second_table_data.length; i++) {
                             let el = that.second_table_data[i];
                             if (el.updateTime) {
-                                el.updateTime = el.updateTime.split(" ")[0];
-                            }
-                            if (el.operTime) {
-                                el.operTime = el.operTime.split(" ")[0];
+                                el.updateTime = el.updateTime.slice(0, 5) + el.weekDate;
                             }
                         }
                     } else {
@@ -145,10 +142,7 @@ export default {
                         for (let i = 0; i < that.other_table_data.length; i++) {
                             let el = that.other_table_data[i];
                             if (el.updateTime) {
-                                el.updateTime = el.updateTime.split(" ")[0];
-                            }
-                            if (el.operTime) {
-                                el.operTime = el.operTime.split(" ")[0];
+                                el.updateTime = el.updateTime.slice(0, 5) + el.weekDate;
                             }
                         }
                     }

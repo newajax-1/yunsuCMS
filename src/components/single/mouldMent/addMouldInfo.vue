@@ -22,7 +22,7 @@
                         <el-col :span="6">
                             <el-form-item label="模具类型：">
                                 <el-select 
-                                    :disabled="source_type"
+                                    :disabled="mould_type_tips"
                                     placeholder="选择设备类型" 
                                     class="required" 
                                     v-model="add_info.mouldTyp">
@@ -153,7 +153,7 @@
                         <el-table-column prop="number" label="穴号"></el-table-column>
                         <el-table-column prop="materialGrade" label="材质&牌号"></el-table-column>
                         <el-table-column prop="color" label="色号&颜色"></el-table-column>
-                        <el-table-column prop="productWeight" label="单位重量"></el-table-column>
+                        <el-table-column prop="productWeight" label="产品重量"></el-table-column>
                         <el-table-column prop="gapWeight" label="水口重量"></el-table-column>
                         <el-table-column prop="secdProcName" label="二次加工"></el-table-column>
                         <el-table-column prop="packingTypName" label="包装类型"></el-table-column>
@@ -228,7 +228,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="　产品重量（g）：">
+                                    <el-form-item label="　产品重量(g)：">
                                         <el-input placeholder="请输入产品重量" v-model="dialog_form_data.productWeight"></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -240,7 +240,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="　水口重量（g）：">
+                                    <el-form-item label="　水口重量(g)：">
                                         <el-input placeholder="请输入水口重量" v-model="dialog_form_data.gapWeight"></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -277,7 +277,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="包装数量（pcs）：">
+                                    <el-form-item label="包装数量(pcs)：">
                                         <el-input placeholder="请输入包装数量" v-model="dialog_form_data.packingCount"></el-input>
                                     </el-form-item>
                                 </el-col>

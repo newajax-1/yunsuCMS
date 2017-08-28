@@ -233,7 +233,14 @@ export default {
                     that.modifyProductBom();
                     that.sync_product_data = res.data;
                     that.product_bom_info_form = that.sync_product_data.data;
-
+                    that.sync_product_data.dicList5.unshift({
+                        dicName: "无",
+                        dicValue: ""
+                    })
+                    that.sync_product_data.dicList6.unshift({
+                        dicName: "无",
+                        dicValue: ""
+                    })
                 }
             })
         },

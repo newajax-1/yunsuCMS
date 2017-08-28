@@ -60,7 +60,7 @@
                 <el-table-column prop="number" label="穴号"></el-table-column>
                 <el-table-column prop="materialGrade" label="材质&牌号"></el-table-column>
                 <el-table-column prop="color" label="色号&颜色"></el-table-column>
-                <el-table-column prop="productWeight" label="单位重量"></el-table-column>
+                <el-table-column prop="productWeight" label="产品重量"></el-table-column>
                 <el-table-column prop="gapWeight" label="水口重量"></el-table-column>
                 <el-table-column label="操作">
                     <template scope="scope">
@@ -241,8 +241,8 @@
 
         <!--修改弹窗-->
         <el-dialog
-            size="large"
-            class="default-dialog dialog-large"
+            size="small"
+            class="default-dialog dialog-small"
             :title="dialog_title"
             :visible.sync="product_bom_modify">
             <el-row>
@@ -256,23 +256,26 @@
                                     </el-col>
                                 </el-row>
                                 <el-row>
-                                    <el-col :span="8">
+                                    <el-col :span="12">
                                         <el-form-item label="产品BOM名称：">
                                             <el-input 
+                                                class="required"
                                                 :disabled="bom_edit" 
                                                 v-model="product_bom_info_form.productNm"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="12">
                                         <el-form-item label="客户BOM编号：" >
                                             <el-input 
+                                                class="required"
                                                 :disabled="bom_edit" 
                                                 v-model="product_bom_info_form.custProductNo"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="12">
                                         <el-form-item label="穴号：" >
                                             <el-input 
+                                                class="required"
                                                 :disabled="bom_edit" 
                                                 v-model="product_bom_info_form.number"></el-input>
                                         </el-form-item>
@@ -285,37 +288,39 @@
                                     </el-col>
                                 </el-row>
                                 <el-row>
-                                    <el-col :span="8">
-                                        <el-form-item label="材质 & 牌号：" >
+                                    <el-col :span="12">
+                                        <el-form-item label="材质&牌号：" >
                                             <el-input 
+                                                class="required"
                                                 :disabled="bom_edit" 
                                                 v-model="product_bom_info_form.materialGrade"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="8">
-                                        <el-form-item label="产品重量（g）：" >
+                                    <el-col :span="12">
+                                        <el-form-item label="产品重量(g)：" >
                                             <el-input 
                                                 :disabled="bom_edit" 
                                                 v-model="product_bom_info_form.productWeight"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="12">
                                         <el-form-item label="色号&颜色：" >
                                             <el-input 
+                                                class="required"
                                                 :disabled="bom_edit" 
                                                 v-model="product_bom_info_form.color"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                </el-row>
-                                <el-row>
-                                    <el-col :span="8">
-                                        <el-form-item label="水口重量（g）：" >
+                                    <el-col :span="12">
+                                        <el-form-item label="水口重量(g)：" >
                                             <el-input 
                                                 :disabled="bom_edit" 
                                                 v-model="product_bom_info_form.gapWeight"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="8">
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="12">
                                         <el-form-item label="二次加工：" >
                                             <el-select
                                                 :disabled="bom_edit" 
@@ -329,7 +334,10 @@
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="8">
+                                </el-row>
+                                <el-row>
+                                    
+                                    <el-col :span="12">
                                         <el-form-item label="包装类型：" >
                                             <el-select
                                                 :disabled="bom_edit" 
@@ -343,17 +351,14 @@
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
-                                </el-row>
-                                <el-row>
-                                    
-                                    <el-col :span="8">
-                                        <el-form-item label="包装数量：" >
+                                    <el-col :span="12">
+                                        <el-form-item label="包装数量(pcs)：" >
                                             <el-input 
                                                 :disabled="bom_edit" 
                                                 v-model="product_bom_info_form.packingCount"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="12">
                                         <el-form-item label="包装详情：" >
                                             <el-input 
                                                 :disabled="bom_edit" 

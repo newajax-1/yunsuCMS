@@ -87,6 +87,9 @@ export default {
                             case "05":
                                 that.detail_data[i].scndProc = "包覆";
                                 break;
+                            case "06":
+                                that.detail_data[i].scndProc = "其他";
+                                break;
                             default:
                                 that.detail_data[i].scndProc = "";
                                 break;

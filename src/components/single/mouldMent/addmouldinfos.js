@@ -3,6 +3,8 @@ export default {
     name: 'mouldInfoNewDetail',
     created() {
         this.mould_id = this.$route.query.mould_id;
+
+        this.mould_type_tips = this.mould_id ? true : false;
         this.mould_path = this.$route.query.mould_path;
         this.source_type = (this.$route.query.source_type == "10" ? true : false);
         this.source_type_tips = this.$route.query.source_type;
@@ -36,6 +38,7 @@ export default {
             },
 
             source_type_tips: undefined,
+            mould_type_tips: false,
             dialog_form_data: {
                 productNm: undefined,
                 custProductNo: undefined,
