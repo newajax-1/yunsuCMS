@@ -84,7 +84,7 @@
                                 :current-page.sync="page_list.page_num"
                                 :page-size=page_list.page_size
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :page-sizes="[10, 20, 30, 40]"
+                                :page-sizes="[15, 20, 30, 40]"
                                 :total="page_list.total">
                         </el-pagination>
                     </div>
@@ -132,7 +132,7 @@
                                 :current-page.sync="page_list.page_num"
                                 :page-size=page_list.page_size
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :page-sizes="[10, 20, 30, 40]"
+                                :page-sizes="[15, 20, 30, 40]"
                                 :total="page_list.total">
                         </el-pagination>
                     </div>
@@ -153,7 +153,7 @@
                         <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
                         <el-table-column prop="materialGrade" label="原材料"></el-table-column>
                         <el-table-column prop="scndProc" label="二次加工"></el-table-column>
-                        <el-table-column prop="createTime" label="计划生产日期"></el-table-column>
+                        <el-table-column prop="updateTime" label="计划生产日期"></el-table-column>
                         <el-table-column prop="week" label="周"></el-table-column>
                         <el-table-column prop="clas" label="班次"></el-table-column>
                         <el-table-column prop="empName" label="班次工人"></el-table-column>
@@ -172,7 +172,7 @@
                                 :current-page.sync="page_list.page_num"
                                 :page-size=page_list.page_size
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :page-sizes="[10, 20, 30, 40]"
+                                :page-sizes="[15, 20, 30, 40]"
                                 :total="page_list.total">
                         </el-pagination>
                     </div>

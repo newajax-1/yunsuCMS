@@ -29,7 +29,7 @@ export default {
             // 分页数据
             page: {
                 page_num: 1,
-                page_size: 10,
+                page_size: 15,
                 total: 0,
             },
             show_emp_id: false,
@@ -47,7 +47,7 @@ export default {
                 url: "/emp/queryList",
                 data: {
                     pageNum: that.search_pageNum || 1,
-                    pageSize: that.search_pageSize || 10,
+                    pageSize: that.search_pageSize || 15,
                     empNo: that.search_info.emp_no,
                     empNm: that.search_info.emp_nm,
                 },

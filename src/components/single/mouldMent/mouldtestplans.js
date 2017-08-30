@@ -5,45 +5,45 @@ export default {
     },
     data() {
         return {
-            table_data : [],
+            table_data: [],
 
-            search_info : {
-                mould_no : undefined,
-                mould_code : undefined,
-                start_time : undefined,
-                end_time : undefined,
+            search_info: {
+                mould_no: undefined,
+                mould_code: undefined,
+                start_time: undefined,
+                end_time: undefined,
             },
 
-            page_list : {
-                page_num : 1,
-                page_size : 10,
-                total : 0
+            page_list: {
+                page_num: 1,
+                page_size: 15,
+                total: 0
             },
-            table_show : true,
-            save_id : undefined,
+            table_show: true,
+            save_id: undefined,
 
-            select_op_one : [],
-            select_op_second : [],
-            select_op_third : [],
+            select_op_one: [],
+            select_op_second: [],
+            select_op_third: [],
 
-            add_info : {
-                dicName : undefined,
-                dicValue : undefined,
-                testMouldTyp : undefined,
-                manager : undefined,
-                mouldCode : undefined,
-                mouldNo : undefined,
-                testTm : undefined,
+            add_info: {
+                dicName: undefined,
+                dicValue: undefined,
+                testMouldTyp: undefined,
+                manager: undefined,
+                mouldCode: undefined,
+                mouldNo: undefined,
+                testTm: undefined,
             },
 
-            search_pageNum : undefined,
-            search_pageSize : undefined,
-            diag_title : undefined,
+            search_pageNum: undefined,
+            search_pageSize: undefined,
+            diag_title: undefined,
 
-            plan_sts : "2",
+            plan_sts: "2",
 
-            sale_change_name : "first",
-            new_custom : false,
+            sale_change_name: "first",
+            new_custom: false,
         }
     },
     methods: {
@@ -59,9 +59,9 @@ export default {
                 type: "post",
                 url: "/testMouldPlan/queryList",
                 data: {
-                    planSts : that.plan_sts,
+                    planSts: that.plan_sts,
                     pageNum: "1",
-                    pageSize: "10"
+                    pageSize: "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -76,13 +76,13 @@ export default {
                 type: "post",
                 url: "/testMouldPlan/queryList",
                 data: {
-                    planSts : that.plan_sts,
-                    mouldNo : that.search_info.mould_no,
-                    mouldCode : that.search_info.mould_code,
-                    startTime : that.search_info.start_time && that.$handleDateObject(that.search_info.start_time),
-                    endTime : that.search_info.end_time && that.$handleDateObject(that.search_info.end_time),
+                    planSts: that.plan_sts,
+                    mouldNo: that.search_info.mould_no,
+                    mouldCode: that.search_info.mould_code,
+                    startTime: that.search_info.start_time && that.$handleDateObject(that.search_info.start_time),
+                    endTime: that.search_info.end_time && that.$handleDateObject(that.search_info.end_time),
                     pageNum: that.search_pageNum || "1",
-                    pageSize: that.search_pageSize || "10"
+                    pageSize: that.search_pageSize || "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -93,10 +93,10 @@ export default {
         loadTable(data) {
             let that = this;
             that.table_data = data.page.list;
-            that.page_list.page_num =  data.page.pageNum;
-            that.page_list.page_size =  data.page.pageSize;
-            that.page_list.page_list =  data.page.pageList;
-            that.page_list.total =  data.page.total;
+            that.page_list.page_num = data.page.pageNum;
+            that.page_list.page_size = data.page.pageSize;
+            that.page_list.page_list = data.page.pageList;
+            that.page_list.total = data.page.total;
         },
 
         // 重置
@@ -117,21 +117,19 @@ export default {
         // 弹框
         toAdd(id) {
             let that = this;
-            this.diag_title = (id ? "修改试模计划" : "新增试模计划")
-            this.$clearObject(this.add_info);
+            this.diag_title = (id ? "修改试模计划" : "新增试模计划");
             this.save_id = id;
 
             this.$ajaxWrap({
                 type: "get",
                 url: "/testMouldPlan/toInsertOrEdit",
                 data: {
-                    id : id
+                    id: id
                 },
                 success(res) {
                     that.select_op_one = res.data.dataList;
-                    that.select_op_second = res.data.managers;
-                    that.select_op_third = res.data.moulds;
-                    if(id) {
+                    that.select_op_second = res.data.moulds;
+                    if (id) {
                         that.add_info = res.data.data;
                     }
                 }
@@ -143,25 +141,29 @@ export default {
         saveInfo() {
             let that = this;
             var _test_tm = (typeof(that.add_info.testTm) == "object" ? that.$handleDateObjectTime(that.add_info.testTm) : that.add_info.testTm)
-            
+
             this.$ajaxWrap({
                 type: "post",
                 url: "/testMouldPlan/insertOrEdit",
                 data: {
-                    testMouldPlanId : that.save_id,
-                    testMouldTyp : that.add_info.testMouldTyp,
-                    manager : that.add_info.manager,
-                    mouldNo : that.add_info.mouldNo,
-                    mouldCode : that.add_info.mouldCode,
-                    testTm : _test_tm,
+                    testMouldPlanId: that.save_id,
+                    testMouldTyp: that.add_info.testMouldTyp,
+                    manager: that.add_info.manager,
+                    mouldNo: that.add_info.mouldNo,
+                    mouldCode: that.add_info.mouldCode,
+                    testTm: _test_tm,
                 },
                 success(res) {
                     that.$message({
                         message: res.tipMsg,
                         type: "success"
                     });
+
                     that.new_custom = false;
+
+                    that.$clearObject(that.add_info);
                     that.getTableData();
+
                 }
             })
         },
@@ -171,7 +173,7 @@ export default {
             let that = this;
             var _name = (id == 1 ? "下发" : "删除")
             var _ids = (val ? val : that.batch_ids);
-            
+
             if (!_ids) {
                 this.$message({
                     message: "请选择删除的数据",
@@ -187,8 +189,8 @@ export default {
                     type: "get",
                     url: "/testMouldPlan/deleteOrOprOption",
                     data: {
-                        type : id,
-                        ids : _ids
+                        type: id,
+                        ids: _ids
                     },
                     success(res) {
                         that.$message({
@@ -199,7 +201,7 @@ export default {
                     }
                 })
             }).catch(function() {});
-            
+
         },
 
         // 完成
@@ -210,7 +212,7 @@ export default {
                 type: "get",
                 url: "/testMouldPlan/finishOpt",
                 data: {
-                    id : id
+                    id: id
                 },
                 success(res) {
                     that.$message({
@@ -224,12 +226,12 @@ export default {
 
         // 切换类型
         changeType(val) {
-            if(this.select_op_third.length == 0) {
+            if (this.select_op_second.length == 0) {
                 return;
             }
-            for(var i = 0; i < this.select_op_third.length; i++) {
-                if(this.select_op_third[i].mould_no == val) {
-                    this.add_info.mouldCode = this.select_op_third[i].mould_code;
+            for (var i = 0; i < this.select_op_second.length; i++) {
+                if (this.select_op_second[i].mould_code == val) {
+                    this.add_info.mouldNo = this.select_op_second[i].mould_no;
                 };
             };
         },
@@ -237,12 +239,12 @@ export default {
         // 复选框勾选
         handleSelectionChange(val) {
             var batch_ids = [];
-            if(val.length > 0) {
+            if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
                     batch_ids.push(val[i].testMouldPlanId);
                 }
                 this.batch_ids = batch_ids.join(",");
-            }else{
+            } else {
                 this.batch_ids = undefined;
             }
         },
@@ -261,7 +263,7 @@ export default {
                     this.table_show = false;
                     this.getTableData();
                     break;
-                default : 
+                default:
                     this.plan_sts = "2";
                     this.table_show = true;
                     this.getTableData();

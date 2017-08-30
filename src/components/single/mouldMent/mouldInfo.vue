@@ -139,7 +139,7 @@
                         <el-table-column prop="mouldAscription" label="模具归属"></el-table-column>
                         <el-table-column prop="mouldFactory" label="模具制造"></el-table-column>
                         <el-table-column prop="custFactory" label="客户名称"></el-table-column>
-                        <el-table-column prop="machine" label="可用机台"></el-table-column>
+                        <el-table-column prop="machineName" label="可用机台"></el-table-column>
                         <el-table-column prop="mouldPlay" label="已打模数"></el-table-column>
                         <el-table-column prop="maintNum" label="保养次数"></el-table-column>
                         <el-table-column prop="repairNum" label="维修次数"></el-table-column>
@@ -153,7 +153,7 @@
                             :current-page.sync="page_list.page_num"
                             :page-size=page_list.page_size
                             layout="total, sizes, prev, pager, next, jumper"
-                            :page-sizes="[10, 20, 30, 40]"
+                            :page-sizes="[15, 20, 30, 40]"
                             :total="page_list.total">
                         </el-pagination>
                     </div> -->

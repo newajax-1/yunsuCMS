@@ -16,7 +16,7 @@ export default {
             //产品BOM分页
             product_bom_page_list: {
                 pageNum: 1,
-                pageSize: 10,
+                pageSize: 15,
                 total: 0
             },
 

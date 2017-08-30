@@ -52,7 +52,7 @@
         <div class="table-page fr">
             <el-pagination
                 layout="total, sizes, prev, pager, next, jumper"
-                :page-sizes="[10, 20, 30, 40]"
+                :page-sizes="[15, 20, 30, 40]"
                 :current-page.sync="page_list.pageNum"
                 :page-size="page_list.pageSize"
                 :total="page_list.total"

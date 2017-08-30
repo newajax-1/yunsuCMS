@@ -5,37 +5,38 @@ export default {
     },
     data() {
         return {
-            table_data : [],
+            table_data: [],
 
-            page_list : {
-                page_num : 1,
-                page_size : 10,
-                total : 0
+            page_list: {
+                page_num: 1,
+                page_size: 15,
+                total: 0
             },
 
-            search_info : {
-                maint_itm : undefined,
-                maint_cycle : undefined
+            search_info: {
+                maint_itm: undefined,
+                maint_cycle: undefined
             },
 
-            add_info : {
-                dicName : undefined,
-                dicValue : undefined,
-                maintItm : undefined,
-                maintCycle : undefined,
+            add_info: {
+                dicName: undefined,
+                dicValue: undefined,
+                type: undefined,
+                maintItm: undefined,
+                maintCycle: undefined,
             },
 
-            select_op : [],
+            select_op: [],
 
-            type : "01",
-            batch_ids : undefined,
-            search_pageNum : undefined,
-            search_pageSize : undefined,
-            is_has_id : undefined,
-            diag_title : undefined,
-            is_disabled : false,
-            sale_change_name : "first",
-            new_custom : false,
+            type: "01",
+            batch_ids: undefined,
+            search_pageNum: undefined,
+            search_pageSize: undefined,
+            is_has_id: undefined,
+            diag_title: undefined,
+            is_disabled: false,
+            sale_change_name: "first",
+            new_custom: false,
         }
     },
     methods: {
@@ -51,9 +52,9 @@ export default {
                 type: "post",
                 url: "/equipmentmaintpaln/queryList",
                 data: {
-                    type : that.type,
+                    type: that.type,
                     pageNum: "1",
-                    pageSize: "10"
+                    pageSize: "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -68,11 +69,11 @@ export default {
                 type: "post",
                 url: "/equipmentmaintpaln/queryList",
                 data: {
-                    type : that.type,
-                    maintItm : that.search_info.maint_itm,
-                    maintCycle : that.search_info.maint_cycle,
+                    type: that.type,
+                    maintItm: that.search_info.maint_itm,
+                    maintCycle: that.search_info.maint_cycle,
                     pageNum: that.search_pageNum || "1",
-                    pageSize: that.search_pageSize || "10"
+                    pageSize: that.search_pageSize || "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -101,10 +102,10 @@ export default {
 
         deleteIds() {
             let that = this;
-            if(!this.batch_ids) {
+            if (!this.batch_ids) {
                 this.$message({
                     message: "请选择删除的数据",
-                    type:"warning"
+                    type: "warning"
                 });
                 return;
             };
@@ -117,7 +118,7 @@ export default {
                     type: "get",
                     url: "/equipmentmaintpaln/deleteByIds",
                     data: {
-                        ids : that.batch_ids
+                        ids: that.batch_ids
                     },
                     success(res) {
                         that.$message({
@@ -127,7 +128,7 @@ export default {
                         that.new_custom = false;
                         that.searchTableData(res.data);
                     }
-                }) 
+                })
             }).catch(function() {});
         },
 
@@ -139,31 +140,30 @@ export default {
             this.is_has_id = id;
 
             this.$clearObject(this.add_info);
-            
-            if(id) {
+
+            if (id) {
                 this.diag_title = "修改设备"
                 this.$ajaxWrap({
                     type: "get",
                     url: "/equipmentmaintpaln/getObject",
                     data: {
-                        id : id
+                        id: id
                     },
                     success(res) {
                         that.add_info = res.data.data;
                     }
                 })
-            }else{
-                this.$ajaxWrap({
-                    type: "get",
-                    url: "/equipment/getSelects",
-                    data: {
-                        key : "eqp_typ"
-                    },
-                    success(res) {
-                        that.select_op = res.data.dicData;
-                    }
-                })
             }
+            this.$ajaxWrap({
+                type: "get",
+                url: "/equipment/getSelects",
+                data: {
+                    key: "eqp_typ"
+                },
+                success(res) {
+                    that.select_op = res.data.dicData;
+                }
+            })
             this.new_custom = true;
         },
 
@@ -171,29 +171,28 @@ export default {
         saveInfo() {
             let that = this;
             var _operationType = (this.is_has_id ? "update" : "add");
-            var _flag = 
-                !that.add_info.maintItm || 
+            var _flag = !that.add_info.maintItm ||
                 !that.add_info.maintCycle;
-            if(_flag) {
+            if (_flag) {
                 this.$message({
                     message: "请将信息填写完整",
                     type: "warning"
                 });
                 return;
             };
-            if((that.add_info.maintCycle - 0).isNaN){
-                
+            if ((that.add_info.maintCycle - 0).isNaN) {
+
             };
 
             this.$ajaxWrap({
                 type: "post",
                 url: "/equipmentmaintpaln/save",
                 data: {
-                    operationType : _operationType,
-                    equipmentMaintPalnId : that.is_has_id,
-                    type : that.add_info.dicValue || "01",
-                    maintItm : that.add_info.maintItm,
-                    maintCycle : that.add_info.maintCycle,
+                    operationType: _operationType,
+                    equipmentMaintPalnId: that.is_has_id,
+                    type: that.add_info.type || "01",
+                    maintItm: that.add_info.maintItm,
+                    maintCycle: that.add_info.maintCycle,
                 },
                 success(res) {
                     that.$message({
@@ -203,7 +202,7 @@ export default {
                     that.new_custom = false;
                     that.refresh(res.data);
                 }
-            })  
+            })
         },
 
         // 删除
@@ -218,7 +217,7 @@ export default {
                     type: "get",
                     url: "/equipmentmaintpaln/deleteById",
                     data: {
-                        id : id
+                        id: id
                     },
                     success(res) {
                         that.$message({
@@ -228,19 +227,19 @@ export default {
                         that.new_custom = false;
                         that.searchTableData(res.data);
                     }
-                }) 
+                })
             }).catch(function() {});
         },
 
         // 复选框勾选
         handleSelectionChange(val) {
             var batch_ids = [];
-            if(val.length > 0) {
+            if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
                     batch_ids.push(val[i].equipmentMaintPalnId);
                 }
                 this.batch_ids = batch_ids.join(",");
-            }else{
+            } else {
                 this.batch_ids = undefined;
             }
         },

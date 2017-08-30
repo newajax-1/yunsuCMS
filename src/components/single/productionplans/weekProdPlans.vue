@@ -109,7 +109,7 @@
                     <div class="table-page" v-if="weekplan_page_list.total === 0 ? false : true">
                         <el-pagination
                             layout="total, sizes, prev, pager, next, jumper"
-                            :page-sizes="[10, 20, 30, 40]"
+                            :page-sizes="[15, 20, 30, 40]"
                             :current-page.sync="weekplan_page_list.pageNum"
                             :page-size="weekplan_page_list.pageSize"
                             :total="weekplan_page_list.total"

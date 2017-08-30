@@ -2,21 +2,21 @@ export default {
     name: 'proMonitoring',
     data() {
         return {
-            table_data : [],
-            search_pageNum : undefined,
-            search_pageSize : undefined,
-            is_show : true,
-            sale_change_name : "first",
-            seach_info : {
-                oprt_typ : "01",
-                product_no : undefined,
-                machine : undefined,
-                mould_code : undefined,
+            table_data: [],
+            search_pageNum: undefined,
+            search_pageSize: undefined,
+            is_show: true,
+            sale_change_name: "first",
+            seach_info: {
+                oprt_typ: "01",
+                product_no: undefined,
+                machine: undefined,
+                mould_code: undefined,
             },
-            page_list : {
-                page_size : 10,
-                page_num : 1,
-                total : 0
+            page_list: {
+                page_size: 15,
+                page_num: 1,
+                total: 0
             },
         }
     },
@@ -25,17 +25,17 @@ export default {
         loadTable() {
             var that = this;
             this.$ajaxWrap({
-                type : "post",
-                url : "/mouldopt/loadTable",
-                data : {
-                    oprtTyp : that.seach_info.oprt_typ,
-                    productNo : that.seach_info.product_no,
-                    machine : that.seach_info.machine,
-                    mouldCode : that.seach_info.mould_code,
-                    pageSize : that.search_pageSize || 10,
-                    pageNum : that.search_pageNum || 1
-                } ,
-                success : function(data){
+                type: "post",
+                url: "/mouldopt/loadTable",
+                data: {
+                    oprtTyp: that.seach_info.oprt_typ,
+                    productNo: that.seach_info.product_no,
+                    machine: that.seach_info.machine,
+                    mouldCode: that.seach_info.mould_code,
+                    pageSize: that.search_pageSize || 15,
+                    pageNum: that.search_pageNum || 1
+                },
+                success: function(data) {
                     that.table_data = data.data.page.list;
                     that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
@@ -44,17 +44,17 @@ export default {
                 error(res) {
                     //do error function
                 }
-            }) 
+            })
         },
 
         // 上下模
         changeMould(id, type) {
             var _oprtTyp = undefined;
             var _msg = undefined;
-            if(type == "01") {
+            if (type == "01") {
                 _oprtTyp = "02";
                 _msg = "上模";
-            }else{
+            } else {
                 _oprtTyp = "03";
                 _msg = "下模";
             }
@@ -64,13 +64,13 @@ export default {
                 cancelButtonText: "取消",
             }).then(function() {
                 that.$ajaxWrap({
-                    type : "post",
-                    url : "/mouldopt/operationMouldOpt",
-                    data : {
-                        mouldOptId : id,
-                        oprtTyp : _oprtTyp,
-                    } ,
-                    success : function(data){
+                    type: "post",
+                    url: "/mouldopt/operationMouldOpt",
+                    data: {
+                        mouldOptId: id,
+                        oprtTyp: _oprtTyp,
+                    },
+                    success: function(data) {
                         that.$message({
                             message: data.tipMsg,
                             type: "success"
@@ -100,7 +100,7 @@ export default {
             }
             that.loadTable();
         },
-        
+
         // 分页
         handleSizeChange(val) {
             if (this.table_data.length) {
@@ -132,7 +132,7 @@ export default {
                     this.is_show = false;
                     this.loadTable();
                     break;
-                default :
+                default:
                     this.seach_info.oprt_typ = "01";
                     this.is_show = true;
                     this.loadTable();
@@ -153,7 +153,7 @@ export default {
             }).catch(function() {});
         },
     },
-    mounted(){
+    mounted() {
         //当组件模板挂载时数据显示到上面去。
         this.loadTable();
     },

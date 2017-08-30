@@ -14,7 +14,7 @@ export default {
             //产品SOP分页
             product_sop_page_list: {
                 pageNum: 1,
-                pageSize: 10,
+                pageSize: 15,
                 total: 0
             },
             //
@@ -186,6 +186,7 @@ export default {
         },
         toAddSop() {
             let that = this;
+            this.$clearObject(this.product_sop_add_data_send);
             that.product_sop_add = true;
             that.$ajaxWrap({
                 type: "get",
@@ -199,7 +200,6 @@ export default {
         addSop() {
             let that = this,
                 send_data = that.product_sop_add_data_send;
-
             that.$ajaxWrap({
                 type: "post",
                 url: "productsop/insertOrEditProductSop",

@@ -68,7 +68,7 @@
                                 :current-page.sync="page_list.page_num"
                                 :page-size=page_list.page_size
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :page-sizes="[10, 20, 30, 40]"
+                                :page-sizes="[15, 20, 30, 40]"
                                 :total="page_list.total">
                         </el-pagination>
                     </div>
@@ -93,7 +93,7 @@
                             <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="备件名称：">
-                                        <el-input placeholder="请输入备件名称" class="asterisk" v-model="add_info.spareNm"></el-input>
+                                        <el-input placeholder="请输入备件名称" class="required" v-model="add_info.spareNm"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -101,7 +101,7 @@
                                         <el-select 
                                             placeholder="选择设备类型" 
                                             v-model="add_info.unit" 
-                                            class="asterisk">
+                                            class="required">
                                             <el-option
                                             v-for="item in select_op"
                                             :label="item.dicName"
@@ -114,12 +114,12 @@
                             <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="安全库存：">
-                                        <el-input placeholder="请输入安全库存" class="asterisk" v-model="add_info.secInv" @change="changeSecInv(add_info.secInv)"></el-input>
+                                        <el-input placeholder="请输入安全库存" class="required" v-model="add_info.secInv" @change="changeSecInv(add_info.secInv)"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="库存预警：低于">
-                                        <el-input placeholder="库存预警" class="asterisk" disabled="disabled" v-model="add_info.invAlarm"></el-input>
+                                        <el-input placeholder="库存预警" class="required" disabled="disabled" v-model="add_info.invAlarm"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>

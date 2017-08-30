@@ -106,7 +106,7 @@
                             :current-page.sync="page_list.page_num"
                             :page-size=page_list.page_size
                             layout="total, sizes, prev, pager, next, jumper"
-                            :page-sizes="[10, 20, 30, 40]"
+                            :page-sizes="[15, 20, 30, 40]"
                             :total="page_list.total">
                         </el-pagination>
                     </div>
@@ -152,28 +152,21 @@
                             </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
-                                    <el-form-item label="模具编号：">
+                                    <el-form-item label="模具代码：">
                                         <el-select 
-                                            placeholder="选择模具编号" 
+                                            placeholder="选择模具代码" 
                                             class="required" 
-                                            v-model="add_info.mouldNo" 
-                                            @change="changeType(add_info.mouldNo)">
+                                            v-model="add_info.mouldCode" 
+                                            @change="changeType(add_info.mouldCode)">
                                             <el-option 
-                                            v-for="item in select_op_third"
-                                            :label="item.mould_no"
-                                            :value="item.mould_no"
-                                            :key="item.mould_no"
+                                            v-for="item in select_op_second"
+                                            :label="item.mould_code"
+                                            :value="item.mould_code"
+                                            :key="item.mould_code"
                                             ></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="模具代码：">
-                                        <p>{{ add_info.mouldCode }}</p>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                            <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="预计时间：">
                                         <el-date-picker

@@ -2,27 +2,27 @@ export default {
     name: 'proMonitoring',
     data() {
         return {
-            table_data : [],
-            new_custom : false,
-            search_pageNum : undefined,
-            search_pageSize : undefined,
+            table_data: [],
+            new_custom: false,
+            search_pageNum: undefined,
+            search_pageSize: undefined,
 
             // 搜索条件
-            seach_info : {
-                oprt_type : 0,
-                machine : undefined,
-                bill_no : undefined,
-                rpter : undefined,
-                start_time : undefined,
-                end_time : undefined,
+            seach_info: {
+                oprt_type: 0,
+                machine: undefined,
+                bill_no: undefined,
+                rpter: undefined,
+                start_time: undefined,
+                end_time: undefined,
             },
-            page_list : {
-                page_num : 1,
-                page_size : 10,
-                total : 0
+            page_list: {
+                page_num: 1,
+                page_size: 15,
+                total: 0
             },
-            alarm_source : "01",
-            sale_change_name : "first",
+            alarm_source: "01",
+            sale_change_name: "first",
         }
     },
     methods: {
@@ -30,20 +30,20 @@ export default {
         loadTable() {
             var that = this;
             this.$ajaxWrap({
-                type : "post",
-                url : "/machineAlarm/queryList",
-                data : {
-                    alarmSource : that.alarm_source,
-                    oprtType : that.seach_info.oprt_type,
-                    machine : that.seach_info.machine,
-                    billNo : that.seach_info.bill_no,
-                    rpter : that.seach_info.rpter,
-                    startTime : that.seach_info.start_time && that.$handleDateObject(that.seach_info.start_time),
-                    endTime : that.seach_info.end_time && that.$handleDateObject(that.seach_info.end_time),
-                    pageSize : that.search_pageSize || 10,
-                    pageNum : that.search_pageNum || 1
-                } ,
-                callback : function(data){
+                type: "post",
+                url: "/machineAlarm/queryList",
+                data: {
+                    alarmSource: that.alarm_source,
+                    oprtType: that.seach_info.oprt_type,
+                    machine: that.seach_info.machine,
+                    billNo: that.seach_info.bill_no,
+                    rpter: that.seach_info.rpter,
+                    startTime: that.seach_info.start_time && that.$handleDateObject(that.seach_info.start_time),
+                    endTime: that.seach_info.end_time && that.$handleDateObject(that.seach_info.end_time),
+                    pageSize: that.search_pageSize || 15,
+                    pageNum: that.search_pageNum || 1
+                },
+                callback: function(data) {
                     that.table_data = data.data.page.list;
                     that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
@@ -52,7 +52,7 @@ export default {
                 error() {
                     //do error function
                 }
-            }) 
+            })
         },
 
         // 重置
@@ -92,7 +92,7 @@ export default {
                 this.searchFormData(val, "num");
             };
         },
-        
+
         // table切换
         changeTableActive(val) {
             switch (val.name) {
@@ -104,14 +104,14 @@ export default {
                     this.seach_info.oprt_type = 1;
                     this.refresh();
                     break;
-                default :
-                	this.seach_info.oprt_type = 0;
-	                this.refresh();
-	                break;
+                default:
+                    this.seach_info.oprt_type = 0;
+                    this.refresh();
+                    break;
             }
         },
     },
-    mounted(){
+    mounted() {
         //当组件模板挂载时数据显示到上面去。
         this.loadTable();
     },

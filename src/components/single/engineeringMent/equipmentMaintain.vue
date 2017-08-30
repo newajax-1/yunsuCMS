@@ -70,7 +70,7 @@
                             :current-page.sync="page_list.page_num"
                             :page-size=page_list.page_size
                             layout="total, sizes, prev, pager, next, jumper"
-                            :page-sizes="[10, 20, 30, 40]"
+                            :page-sizes="[15, 20, 30, 40]"
                             :total="page_list.total">
                         </el-pagination>
                     </div>
@@ -98,8 +98,8 @@
                                         <el-select 
                                             placeholder="注塑机" 
                                             :disabled="is_disabled" 
-                                            class="asterisk"
-                                            v-model="add_info.dicValue">
+                                            class="required"
+                                            v-model="add_info.type">
                                             <el-option
                                             v-for="item in select_op"
                                             :label="item.dicName"
@@ -112,14 +112,14 @@
                             <el-row :gutter="24">
                                 <el-col :span="24">
                                     <el-form-item label="保养内容：">
-                                        <el-input placeholder="请输入保养内容" class="asterisk" v-model="add_info.maintItm"></el-input>
+                                        <el-input placeholder="请输入保养内容" class="required" v-model="add_info.maintItm"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="24">
                                 <el-col :span="12">
                                     <el-form-item label="保养周期：">
-                                        <el-input placeholder="请输入保养周期" class="asterisk" v-model="add_info.maintCycle"></el-input>
+                                        <el-input placeholder="请输入保养周期" class="required" v-model="add_info.maintCycle"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>

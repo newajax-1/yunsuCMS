@@ -26,7 +26,7 @@ export default {
             // 分页
             page: {
                 page_num: 1,
-                page_size: 10,
+                page_size: 15,
                 total: 0
             },
 
@@ -61,7 +61,7 @@ export default {
                 url: "sysOrganization/queryStaffList",
                 data: {
                     pageNum: that.search_pageNum || 1,
-                    pageSize: that.search_pageSize || 10,
+                    pageSize: that.search_pageSize || 15,
                     orgId: that.commonorg_id,
                 },
                 callback: function(data) {

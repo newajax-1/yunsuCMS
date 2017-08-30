@@ -5,39 +5,39 @@ export default {
     },
     data() {
         return {
-            table_data : [],
+            table_data: [],
 
-            page_list : {
-                page_num : 1,
-                page_size : 10,
-                total : 0
+            page_list: {
+                page_num: 1,
+                page_size: 15,
+                total: 0
             },
 
-            search_info : {
-                spare_nm : undefined,
-                inv_sts : undefined
+            search_info: {
+                spare_nm: undefined,
+                inv_sts: undefined
             },
 
-            add_info : {
-                spareNm : undefined,
-                unit : undefined,
-                dicName : undefined,
-                dicValue : undefined,
-                secInv : undefined,
-                invAlarm : undefined,
+            add_info: {
+                spareNm: undefined,
+                unit: undefined,
+                dicName: undefined,
+                dicValue: undefined,
+                secInv: undefined,
+                invAlarm: undefined,
             },
 
-            select_op : [],
+            select_op: [],
 
-            eqp_typ : "01",
-            batch_ids : undefined,
-            is_has_id : undefined,
-            diag_title : undefined,
-            search_pageNum : undefined,
-            search_pageSize : undefined,
-            is_disabled : false,
-            sale_change_name : "first",
-            new_custom : false,
+            eqp_typ: "01",
+            batch_ids: undefined,
+            is_has_id: undefined,
+            diag_title: undefined,
+            search_pageNum: undefined,
+            search_pageSize: undefined,
+            is_disabled: false,
+            sale_change_name: "first",
+            new_custom: false,
         }
     },
     methods: {
@@ -54,7 +54,7 @@ export default {
                 url: "/spare/queryList",
                 data: {
                     pageNum: "1",
-                    pageSize: "10"
+                    pageSize: "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -68,10 +68,10 @@ export default {
                 type: "post",
                 url: "/spare/queryList",
                 data: {
-                    spareNm : that.search_info.spare_nm,
-                    invSts : that.search_info.inv_sts,
+                    spareNm: that.search_info.spare_nm,
+                    invSts: that.search_info.inv_sts,
                     pageNum: that.search_pageNum || "1",
-                    pageSize: that.search_pageSize || "10"
+                    pageSize: that.search_pageSize || "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -100,10 +100,10 @@ export default {
 
         deleteIds() {
             let that = this;
-            if(!this.batch_ids) {
+            if (!this.batch_ids) {
                 this.$message({
                     message: "请选择删除的数据",
-                    type:"warning"
+                    type: "warning"
                 });
                 return;
             };
@@ -116,7 +116,7 @@ export default {
                     type: "get",
                     url: "/spare/deleteByIds",
                     data: {
-                        ids : that.batch_ids
+                        ids: that.batch_ids
                     },
                     success(res) {
                         that.$message({
@@ -126,7 +126,7 @@ export default {
                         that.new_custom = false;
                         that.searchTableData(res.data);
                     }
-                }) 
+                })
             }).catch(function() {});
         },
 
@@ -138,22 +138,22 @@ export default {
 
             this.$clearObject(this.add_info);
             this.$ajaxWrap({
-                    type: "get",
-                    url: "/equipment/getSelects",
-                    data: {
-                        key : "unit"
-                    },
-                    success(res) {
-                        that.select_op = res.data.dicData;
-                    }
-                })
-            if(id) {
+                type: "get",
+                url: "/equipment/getSelects",
+                data: {
+                    key: "unit"
+                },
+                success(res) {
+                    that.select_op = res.data.dicData;
+                }
+            })
+            if (id) {
                 this.diag_title = "修改备件"
                 this.$ajaxWrap({
                     type: "get",
                     url: "/spare/getObject",
                     data: {
-                        id : id
+                        id: id
                     },
                     success(res) {
                         that.add_info = res.data.data;
@@ -168,12 +168,11 @@ export default {
         saveInfo() {
             let that = this;
             var _operationType = (this.is_has_id ? "update" : "add");
-            var _flag = 
-                !that.add_info.spareNm || 
-                !that.add_info.unit || 
-                !that.add_info.secInv || 
+            var _flag = !that.add_info.spareNm ||
+                !that.add_info.unit ||
+                !that.add_info.secInv ||
                 !that.add_info.invAlarm;
-            if(_flag) {
+            if (_flag) {
                 this.$message({
                     message: "请将信息填写完整",
                     type: "warning"
@@ -185,12 +184,12 @@ export default {
                 type: "post",
                 url: "/spare/save",
                 data: {
-                    operationType : _operationType,
-                    spareNm : that.add_info.spareNm,
-                    spareId : that.is_has_id,
-                    unit : that.add_info.unit,
-                    secInv : that.add_info.secInv,
-                    invAlarm : that.add_info.invAlarm,
+                    operationType: _operationType,
+                    spareNm: that.add_info.spareNm,
+                    spareId: that.is_has_id,
+                    unit: that.add_info.unit,
+                    secInv: that.add_info.secInv,
+                    invAlarm: that.add_info.invAlarm,
                 },
                 success(res) {
                     that.$message({
@@ -200,7 +199,7 @@ export default {
                     that.new_custom = false;
                     that.refresh();
                 }
-            })  
+            })
         },
 
         // 删除
@@ -210,11 +209,11 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
             }).then(function() {
-                 that.$ajaxWrap({
+                that.$ajaxWrap({
                     type: "get",
                     url: "/spare/deleteById",
                     data: {
-                        id : id
+                        id: id
                     },
                     success(res) {
                         that.$message({
@@ -224,19 +223,19 @@ export default {
                         that.new_custom = false;
                         that.searchTableData(res.data);
                     }
-                }) 
+                })
             }).catch(function() {});
         },
 
         // 复选框勾选
         handleSelectionChange(val) {
             var batch_ids = [];
-            if(val.length > 0) {
+            if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
                     batch_ids.push(val[i].spareId);
                 }
                 this.batch_ids = batch_ids.join(",");
-            }else{
+            } else {
                 this.batch_ids = undefined;
             }
         },

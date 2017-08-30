@@ -32,7 +32,7 @@ export default {
             // 分页
             page: {
                 page_num: 1,
-                page_size: 10,
+                page_size: 15,
                 total: 0
             },
             current_page: 1,
@@ -206,7 +206,7 @@ export default {
                 url: "/invWarning/queryList",
                 data: {
                     pageNum: that.search_pageNum || 1,
-                    pageSize: that.search_pageSize || 10,
+                    pageSize: that.search_pageSize || 15,
                     warningName: _warning_name,
                     itemName: that.warning.item_name,
                     invSts: that.warning.inv_sts,

@@ -6,7 +6,7 @@ export default {
 
         this.mould_type_tips = this.mould_id ? true : false;
         this.mould_path = this.$route.query.mould_path;
-        this.source_type = (this.$route.query.source_type == "10" ? true : false);
+        this.source_type = (this.$route.query.source_type == "15" ? true : false);
         this.source_type_tips = this.$route.query.source_type;
         this.init();
     },
@@ -291,7 +291,7 @@ export default {
                 data: {
                     eqpTyp: "01",
                     pageNum: "1",
-                    pageSize: "10"
+                    pageSize: "15"
                 },
                 success(res) {
                     that.product_data = res.data.page.list

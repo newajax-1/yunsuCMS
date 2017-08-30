@@ -16,12 +16,12 @@ export default {
 
             page_list: {
                 page_num: 1,
-                page_size: 10,
+                page_size: 15,
                 total: 0
             },
 
             select_op: [],
-            eqp_sts_list : [],
+            eqp_sts_list: [],
 
             add_info: {
                 dicName: undefined,
@@ -42,12 +42,11 @@ export default {
                 pad_imei: undefined,
             },
 
-            select_type : [
-                {
-                    dicName : "单色"
+            select_type: [{
+                    dicName: "单色"
                 },
                 {
-                    dicName : "双色"
+                    dicName: "双色"
                 }
             ],
 
@@ -62,8 +61,8 @@ export default {
             save_binding_id: undefined,
             diag_title: undefined,
             is_disabled: false,
-            sale_change_name: "first",      
-            sale_change_type: undefined,      
+            sale_change_name: "first",
+            sale_change_type: undefined,
             details_custom: false,
             new_custom: false,
             binding_custom: false,
@@ -74,8 +73,8 @@ export default {
     methods: {
         init() {
             this.reset();
-            this.changeTableActive({name : this.sale_change_name})
-            // this.getTableData();
+            this.changeTableActive({ name: this.sale_change_name })
+                // this.getTableData();
         },
 
         getTableData() {
@@ -87,7 +86,7 @@ export default {
                 data: {
                     eqpTyp: that.eqp_typ,
                     pageNum: "1",
-                    pageSize: "10"
+                    pageSize: "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -106,7 +105,7 @@ export default {
                     eqpNo: that.search_info.eqp_no,
                     eqpCode: that.search_info.eqp_code,
                     pageNum: that.search_pageNum || "1",
-                    pageSize: that.search_pageSize || "10"
+                    pageSize: that.search_pageSize || "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -293,7 +292,7 @@ export default {
                 whole_id: id,
                 whole_eqp_typ: this.eqp_typ,
                 whole_no: val,
-                sale_change_type : this.sale_change_type
+                sale_change_type: this.sale_change_type
             });
         },
 

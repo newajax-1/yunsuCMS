@@ -30,7 +30,7 @@ export default {
             // 周计划 表格分页
             weekplan_page_list: {
                 pageNum: 0,
-                pageSize: 10,
+                pageSize: 15,
                 total: undefined
             },
 
@@ -194,7 +194,7 @@ export default {
                 url: "week/index",
                 data: {
                     pageNum: "1",
-                    pageSize: "10"
+                    pageSize: "15"
                 },
                 success(res) {
                     that.loadWeekPlanTable(res.data);

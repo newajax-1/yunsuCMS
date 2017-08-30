@@ -12,7 +12,7 @@ export default {
 
             page_list: {
                 page_num: 1,
-                page_size: 10,
+                page_size: 15,
                 total: 0
             },
 
@@ -64,7 +64,7 @@ export default {
                 data: {
                     mouldTyp: that.mould_typ,
                     pageNum: "1",
-                    pageSize: "10"
+                    pageSize: "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -84,7 +84,7 @@ export default {
                     mouldFactory: that.search_info.mould_factory,
                     custFactory: that.search_info.cust_factory,
                     pageNum: that.search_pageNum || "1",
-                    pageSize: that.search_pageSize || "10"
+                    pageSize: that.search_pageSize || "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -289,8 +289,8 @@ export default {
         addMouldDetail(id, val) {
             this.$goRoute("/home/addmouldinfo", {
                 mould_id: id,
-                source_type : val,
-                mould_path : "01"
+                source_type: val,
+                mould_path: "01"
             });
         },
 

@@ -19,7 +19,7 @@ export default {
             // 分页
             page_list: {
                 page_num: 1,
-                page_size: 10,
+                page_size: 15,
                 total: 0
             },
 
@@ -59,7 +59,7 @@ export default {
                     jobNumber: that.info.info_num,
                     account: that.info.info_phone,
                     pageNum: that.search_pageNum || 1,
-                    pageSize: that.search_pageSize || 10,
+                    pageSize: that.search_pageSize || 15,
                 },
                 callback: function(data) {
                     that.table_data = data.data.page.list;

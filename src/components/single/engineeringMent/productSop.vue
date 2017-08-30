@@ -62,7 +62,7 @@
             <div class="table-page" v-if="product_sop_page_list.total === 0 ? false : true">
                 <el-pagination
                     layout="total, sizes, prev, pager, next, jumper"
-                    :page-sizes="[10, 20, 30, 40]"
+                    :page-sizes="[15, 20, 30, 40]"
                     :current-page.sync="product_sop_page_list.pageNum"
                     :page-size="product_sop_page_list.pageSize"
                     :total="product_sop_page_list.total"

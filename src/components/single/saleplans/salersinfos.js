@@ -53,7 +53,7 @@ export default {
             // 分页
             page: {
                 page_num: 1,
-                page_size: 10,
+                page_size: 15,
                 total: 0
             },
             current_page: 1,
@@ -163,7 +163,7 @@ export default {
             var that = this;
             var send_data = {
                 pageNum: that.search_pageNum || 1,
-                pageSize: that.search_pageSize || 10,
+                pageSize: that.search_pageSize || 15,
                 custNo: that.info.cust_no,
                 custName: that.info.cust_name,
                 contacts: that.info.contacts

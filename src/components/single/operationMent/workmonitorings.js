@@ -17,7 +17,7 @@ export default {
                 issEndTime: undefined,
             },
             page_list: {
-                page_size: 10,
+                page_size: 15,
                 page_num: 1,
                 total: 0,
             },
@@ -68,7 +68,7 @@ export default {
                     week: that.seach_info.week,
                     issStartTime: that.seach_info.issStartTime && this.$handleDateObject(that.seach_info.issStartTime),
                     issEndTime: that.seach_info.issEndTime && this.$handleDateObject(that.seach_info.issEndTime),
-                    pageSize: that.search_pageSize || 10,
+                    pageSize: that.search_pageSize || 15,
                     pageNum: that.search_pageNum || 1
                 },
                 callback: function(data) {
@@ -93,7 +93,7 @@ export default {
                 data: {
                     issSts: "02",
                     planIssSts: "100",
-                    pageSize: that.search_pageSize || 10,
+                    pageSize: that.search_pageSize || 15,
                     pageNum: that.search_pageNum || 1
                 },
                 callback: function(data) {
@@ -124,7 +124,7 @@ export default {
                     billSts: that.seach_info.bill_sts,
                     creStartTime: that.seach_info.issStartTime && this.$handleDateObject(that.seach_info.issStartTime),
                     creEndTime: that.seach_info.issEndTime && this.$handleDateObject(that.seach_info.issEndTime),
-                    pageSize: that.search_pageSize || 10,
+                    pageSize: that.search_pageSize || 15,
                     pageNum: that.search_pageNum || 1
                 },
                 success(data) {

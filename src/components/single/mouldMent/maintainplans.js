@@ -13,7 +13,7 @@ export default {
 
             page_list: {
                 page_num: 1,
-                page_size: 10,
+                page_size: 15,
                 total: 0
             },
 
@@ -52,7 +52,7 @@ export default {
                 url: "/mouldMaintPlan/queryList",
                 data: {
                     pageNum: "1",
-                    pageSize: "10"
+                    pageSize: "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -69,7 +69,7 @@ export default {
                 data: {
                     maintItm: that.search_info.maint_itm,
                     pageNum: that.search_pageNum || "1",
-                    pageSize: that.search_pageSize || "10"
+                    pageSize: that.search_pageSize || "15"
                 },
                 success(res) {
                     that.loadTable(res.data);
