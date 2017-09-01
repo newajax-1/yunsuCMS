@@ -4,7 +4,7 @@
             <!-- 查询条件开始  start-->
             <el-col :span="24">
                 <div class="content-title">
-                    <span>库存预警</span>
+                    <span>生产计划-库存预警</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">

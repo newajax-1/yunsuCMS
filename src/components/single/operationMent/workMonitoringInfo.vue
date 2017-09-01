@@ -3,7 +3,7 @@
 	    <el-row>
             <el-col :span="24">
                 <div class="content-title">
-                    <span>未下发工单详情</span>
+                    <span>生产作业-工单管理-未下发工单详情</span>
                 </div>
             </el-col>
             <el-col :span="24">

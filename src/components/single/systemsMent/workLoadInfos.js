@@ -102,7 +102,6 @@ export default {
                 url: "emp/queryEmpWorkDetail",
                 data: search_data,
                 success(res) {
-                    console.log(res);
                     that.loadTable(res);
                 }
             });

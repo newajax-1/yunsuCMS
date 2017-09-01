@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="24">
                 <div class="content-title">
-                    <span>设备状态监控</span>
+                    <span>生产计划-生产资源状态监控</span>
                 </div>
             </el-col>
         </el-row>

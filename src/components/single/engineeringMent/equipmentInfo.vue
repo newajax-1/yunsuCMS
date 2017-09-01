@@ -3,7 +3,7 @@
 	    <el-row>
 	    	<el-col :span="24">
                 <div class="content-title">
-                    <span>设备信息</span>
+                    <span>工程管理-设备信息</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">

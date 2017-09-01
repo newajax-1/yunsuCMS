@@ -3,7 +3,7 @@
 	    <el-row>
 	    	<el-col :span="24">
                 <div class="content-title">
-                    <span>保养计划</span>
+                    <span>工程管理-设备保养</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">

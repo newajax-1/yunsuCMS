@@ -25,9 +25,9 @@
             </el-col>
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="btn btn-small btn-blue" @click="refresh()"><i class="fa fa-refresh "></i> 刷 新</el-button>
-                    <el-button class="btn btn-large btn-blue" @click="batchDelete()"><i class="fa fa-trash-o"></i> 批量删除</el-button>
-                    <el-button class="btn btn-large btn-blue" @click="toAdd()"><i class="fa fa-file-text-o"></i> 新建客户</el-button>
+                    <el-button class="btn btn-small" @click="refresh()"><i class="fa fa-refresh "></i> 刷 新</el-button>
+                    <el-button class="btn btn-large" @click="batchDelete()"><i class="fa fa-trash-o"></i> 批量删除</el-button>
+                    <el-button class="btn btn-large" @click="toAdd()"><i class="fa fa-file-text-o"></i> 新建客户</el-button>
                 </el-col>
             </div>
 

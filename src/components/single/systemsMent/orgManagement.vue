@@ -3,7 +3,7 @@
 	    <el-row>
 	         <el-col :span="24">
 	            	<div class="content-title">
-	                    <span>组织架构</span>
+	                    <span>系统管理-组织管理</span>
 	                </div>
 	                <div class="content-search">
 		                <el-form :inline="true" class="">

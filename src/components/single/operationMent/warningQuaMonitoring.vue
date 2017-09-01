@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="24">
                 <div class="content-title">
-                    <span>质量报警</span>
+                    <span>生产作业-质量报警</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">

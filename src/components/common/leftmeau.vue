@@ -8,14 +8,16 @@
                     v-for="item in link" 
                     :index="item.index" 
                     :key="item.index">
-                    <template slot="title">{{item.textName}}</template>
-                        <el-menu-item 
-                            v-for="route in item.child" 
-                            :index="route.index" 
-                            :key="route.route" 
-                            @click="$goRoute(route.route)">
-                            <a class="left-item" >{{route.text}}</a>
-                        </el-menu-item>
+                    <template slot="title">
+                        <i :class="item.icon" class="fa"></i>{{item.textName}}
+                    </template>
+                    <el-menu-item 
+                        v-for="route in item.child" 
+                        :index="route.index" 
+                        :key="route.route" 
+                        @click="$goRoute(route.route)">
+                        <a class="left-item" >{{route.text}}</a>
+                    </el-menu-item>
                 </el-submenu>
             </el-menu>
         </div>
@@ -67,12 +69,20 @@ $gf = #fff;
     width 180px
     color $gf
     .el-submenu__title
-    .left-item
-        font-size 12px
-        color $gf
     .el-menu
         height 100%
-        border-radius 0        
+        border-radius 0 
+        color $gf
+        .left-item
+            font-size 12px
+            color $gf
+        .fa
+            margin-right: 7px
+            font-size: 16px
+        .el-submenu
+            &.is-active
+                .el-submenu__title
+                    background: #48576a       
         .el-menu-item
             padding-left 30px !important /* 替换 ele-ui js 样式 */
             min-width 150px

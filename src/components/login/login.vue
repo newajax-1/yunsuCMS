@@ -107,6 +107,7 @@
                         opt = {};
                     opt.textName = el.name;
                     opt.index = i+"";
+                    opt.icon = el.icon
                     if(el.menuList.length){
                         opt.child = [];
                         for(let j = 0 ; j < el.menuList.length ; j++){

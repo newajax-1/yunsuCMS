@@ -3,7 +3,7 @@
 	    <el-row>
 	    	<el-col :span="24">
                 <div class="content-title">
-                    <span>模具基础信息</span>
+                    <span>模具管理-模具基础信息</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">

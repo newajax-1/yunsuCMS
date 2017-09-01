@@ -1,5 +1,19 @@
 # JavaScript编码规范.md
 
+## 组件与路由
+
+    销售计划 - salePlan
+        销售计划管理 - salaPlans
+            新建销售计划 - createSalePlan
+            销售计划详情 - salePlanInfo 
+        客户信息管理 - clientsInfo
+    生产计划 - productionPlan
+        生产资源监控 - productionMonitoring
+        周生产计划 - weeklyPlans
+        库存管理 - storeManagement 
+
+    生产作业 - productionOperation
+    
 ## 变量初始值
     非对象为undefined
     对象初始值为null

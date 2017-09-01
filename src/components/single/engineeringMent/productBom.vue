@@ -1,7 +1,7 @@
 <template>
     <el-row class="product-boms">
         <div class="content-title">
-            <span>工程管理-产品管理-产品BOM</span>
+            <span>工程管理-产品BOM</span>
         </div>
         <div class="content-search">
             <el-form :inline="true">

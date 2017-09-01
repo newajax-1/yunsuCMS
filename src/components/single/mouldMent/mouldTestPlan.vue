@@ -3,7 +3,7 @@
 	    <el-row>
 	    	<el-col :span="24">
                 <div class="content-title">
-                    <span>模具试模计划</span>
+                    <span>模具管理-模具试模计划</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">
@@ -146,7 +146,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="　负责人：">
-                                        <el-input placeholder="请输入保养内容" class="required" v-model="add_info.manager"></el-input>
+                                        <el-input placeholder="请输入负责人姓名" class="required" v-model="add_info.manager"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -154,7 +154,7 @@
                                 <el-col :span="12">
                                     <el-form-item label="模具代码：">
                                         <el-select 
-                                            placeholder="选择模具代码" 
+                                            placeholder="请输入模具代码" 
                                             class="required" 
                                             v-model="add_info.mouldCode" 
                                             @change="changeType(add_info.mouldCode)">

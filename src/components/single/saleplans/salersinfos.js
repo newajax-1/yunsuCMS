@@ -1,6 +1,5 @@
 import citydata from "../../../assets/js/data";
 export default {
-    name: 'orgManagement',
     created: function() {
         this.pro = this.data;
         this.city = this.pro[0]['child'];
@@ -8,7 +7,6 @@ export default {
         this.result();
     },
     data() {
-
 
         return {
             search_pageNum: undefined,
@@ -91,13 +89,14 @@ export default {
         }
     },
     methods: {
-        // 单条删除
+
         deletetab(id) {
             this.delete_msg = "你确定要删除该条数据？";
             this.tip_msg = id;
             this.dialog_visible = true;
         },
         deleteObject() {
+
             var that = this;
             var _flag = undefined;
             var _data = undefined;
@@ -126,6 +125,7 @@ export default {
                 }
             })
         },
+
         // 批量删除
         batchDelete() {
             if (this.batch_ids == "") {

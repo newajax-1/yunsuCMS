@@ -3,7 +3,7 @@
 	    <el-row>
 	    	<el-col :span="24">
                 <div class="content-title">
-                    <span>工单管理</span>
+                    <span>生产作业-工单管理</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">

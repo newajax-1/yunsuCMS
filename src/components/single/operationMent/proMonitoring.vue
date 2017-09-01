@@ -3,7 +3,7 @@
    		<el-row>
     		<el-col :span="24">
                 <div class="content-title">
-                    <span>生产进度监控</span>
+                    <span>生产作业-生产进度监控</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">

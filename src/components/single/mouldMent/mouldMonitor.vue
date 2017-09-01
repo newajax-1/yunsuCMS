@@ -3,7 +3,7 @@
 	    <el-row>
 	    	<el-col :span="24">
                 <div class="content-title">
-                    <span>模具状态监控</span>
+                    <span>模具管理-模具状态监控</span>
                 </div>
             </el-col>
         </el-row>

@@ -11,11 +11,6 @@
 
                     <ul class="top-nav-right fr">
 
-                        <li class="right-nav-items">
-                            <span class="header-text">消息</span>
-                            <span class="num">0</span>
-                        </li>
-
                         <li class="right-nav-items rel" @mouseover="show_member = true">
                             <span class="header-text">{{user_name}}</span>
                             <span class="work-id rel">工号：{{job_number}}</span>
@@ -270,7 +265,7 @@ $default_bd_gray_hover = $default_bd_gray;
                     padding-right: 16px
             
             &:last-child
-                padding: 0 50px
+                padding: 0 35px
             &:hover
                 background-color: $header_hover_color
         .fa,

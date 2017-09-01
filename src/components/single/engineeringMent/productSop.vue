@@ -1,7 +1,7 @@
 <template>
     <el-row class="template-name">
         <div class="content-title">
-            <span>工程管理-产品管理-产品SOP</span>
+            <span>工程管理-产品SOP</span>
         </div>
         <div class="content-search">
             <el-form :inline="true">

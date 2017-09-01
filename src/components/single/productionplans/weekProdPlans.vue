@@ -4,7 +4,7 @@
             <!-- 周计划 数据表格 start -->
             <el-col :span="24">
                 <div class="content-title">
-                    <span>生产计划管理-周生产计划</span>
+                    <span>生产计划-周生产计划</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true">

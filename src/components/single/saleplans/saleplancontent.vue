@@ -2,7 +2,7 @@
     <div class="sale-plan-content">
         <el-col :span="24">
             <div class="content-title">
-                <span>销售管理-销售计划</span>
+                <span>销售管理-销售计划管理</span>
             </div>
             <div class="content-search">
                 <el-form :inline="true">
@@ -53,8 +53,8 @@
             </div>
         </el-col>
         <el-col :span="24" class="content-buttons">
-            <el-button class="btn btn-blue btn-small" @click="refresh"><i class="fa fa-refresh "></i> 刷 新</el-button>
-            <el-button class="btn btn-blue btn-large" @click="gotoCreateSalePlan()"><i class="fa fa-file-text-o"></i> 新建计划</el-button>
+            <el-button class="btn btn-small" @click="refresh"><i class="fa fa-refresh "></i> 刷 新</el-button>
+            <el-button class="btn btn-large" @click="gotoCreateSalePlan()"><i class="fa fa-file-text-o"></i> 新建计划</el-button>
         </el-col>
         <!-- sale_plan_form end  -->
 
@@ -84,7 +84,7 @@
                                 type="text"
                                 size="small"
                                 @click="gotoCreateSalePlan(scope.row.planId)"
-                                v-show = "saleplan_push_tips[scope.$index].show">修改 |</el-button> 
+                                v-show = "saleplan_push_tips[scope.$index].show">修改</el-button> 
                             <el-button
                                 type="text"
                                 size="small"
