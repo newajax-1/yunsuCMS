@@ -209,10 +209,10 @@
                                             @change="getAsyncBomData(scope.row.itemNo,scope.$index)">
                                             <el-option value="1">请选择</el-option>
                                             <el-option 
-                                                v-for="item in async_bom_number"
+                                                v-for="item in scope.row.async_bom_number"
                                                 :label="item.custProductNo"
                                                 :value="item.custProductNo"
-                                                :key="item.cavityCnt"></el-option>
+                                                :key="item.custProductNo"></el-option>
                                         </el-select>
                                     </template>
                                 </el-table-column>
@@ -486,6 +486,24 @@
                                         <el-input 
                                             v-model="scope.row.picking"
                                             :disabled="modal_table_edit"
+                                            v-html="(((scope.row.gapWeight - 0 )+ 
+                                                    (scope.row.productWeight - 0)
+                                                    ) * 
+                                                    ((scope.row.planBill.monday.day.quantity-0) + 
+                                                    (scope.row.planBill.monday.night.quantity-0)+ 
+                                                    (scope.row.planBill.tuesday.day.quantity-0)+ 
+                                                    (scope.row.planBill.tuesday.night.quantity-0)+ 
+                                                    (scope.row.planBill.wednesday.day.quantity-0)+ 
+                                                    (scope.row.planBill.wednesday.night.quantity-0)+ 
+                                                    (scope.row.planBill.thursday.day.quantity-0)+ 
+                                                    (scope.row.planBill.thursday.night.quantity-0)+ 
+                                                    (scope.row.planBill.friday.day.quantity-0)+ 
+                                                    (scope.row.planBill.friday.night.quantity-0)+ 
+                                                    (scope.row.planBill.saturday.day.quantity-0)+ 
+                                                    (scope.row.planBill.saturday.night.quantity-0)+ 
+                                                    (scope.row.planBill.sunday.day.quantity-0)+ 
+                                                    (scope.row.planBill.sunday.night.quantity-0)
+                                                    )/1000)"
                                             type="text">
                                         </el-input>
                                     </template>

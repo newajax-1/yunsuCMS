@@ -41,12 +41,13 @@
                             <template scope="scope">
                                 <el-button  
                                     type="text"
+                                    class="r-bd"
                                     size="small"
-                                    @click="toAdd(scope.row.mouldMaintPlanId)">修改</el-button>
+                                    @click="toAdd(scope.row.id)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="deleteId(scope.row.mouldMaintPlanId)">删除</el-button>
+                                    @click="deleteId(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

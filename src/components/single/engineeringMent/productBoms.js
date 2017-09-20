@@ -126,7 +126,7 @@ export default {
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].productId);
+                    batch_ids.push(val[i].id);
                 }
                 this.batch_ids = batch_ids.join(",");
             } else {
@@ -261,8 +261,6 @@ export default {
         updateProductBom() {
             let that = this,
                 send_data = that.product_bom_info_form;
-
-            send_data.productId = that.bom_id;
             that.$ajaxWrap({
                 type: "post",
                 url: "product/editProduct",

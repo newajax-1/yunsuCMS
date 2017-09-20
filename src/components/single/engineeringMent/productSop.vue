@@ -45,16 +45,16 @@
                             type="text"
                             size="small"
                             class="r-bd"
-                            @click="toModifySop(scope)">修改</el-button>
+                            @click="toModifySop(scope.row.id)">修改</el-button>
                         <el-button
                             type="text"
                             size="small"
                             class="r-bd"
-                            @click="deleteId(scope.row.productSopId)">删除</el-button>
-                        <a class="link-normal r-bd" :href="download_sop" @click.stop="setRowProductSop(scope.row.productSopId)"><span>下载</span></a>
+                            @click="deleteId(scope.row.id)">删除</el-button>
+                        <a class="link-normal r-bd" :href="download_sop" @click.stop="setRowProductSop(scope.row.id)"><span>下载</span></a>
                         <a class="link-normal">
                             <label>重新上传
-                                <input type="file" class="hidden abs" @change="upload(scope.row.productSopId,$event)" accept=".pdf">
+                                <input type="file" class="hidden abs" @change="upload(scope.row.id,$event)" accept=".pdf">
                             </label>
                         </a>
                     </template>
@@ -108,8 +108,8 @@
                                                 <el-option 
                                                     v-for=" item in product_sop_add_data_get.product_bom_select"
                                                     :label="item.productNm"
-                                                    :value="item.productId"
-                                                    :key="item.productId">
+                                                    :value="item.id"
+                                                    :key="item.productNm">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>

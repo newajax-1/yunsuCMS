@@ -29,7 +29,6 @@ import roleManagement from '@/components/single/systemsMent/roleManagement'
 import orgManagement from '@/components/single/systemsMent/orgManagement'
 import staffManagement from '@/components/single/systemsMent/staffManagement'
 import workLoadInfo from '@/components/single/systemsMent/workLoadInfo'
-
 import addDepartment from '@/components/single/systemsMent/addDepartment'
 
 // 生产作业管理
@@ -57,6 +56,10 @@ import mouldInfoSuccessDetail from '@/components/single/mouldMent/mouldInfoSucce
 import maintainPlan from '@/components/single/mouldMent/maintainPlan'
 import mouldTestPlan from '@/components/single/mouldMent/mouldTestPlan'
 import addMouldInfo from '@/components/single/mouldMent/addMouldInfo'
+
+//任务单管理
+// import taskSheet from '@/components/single/taskSheetMent/taskSheet'
+// import message from '@/components/single/taskSheetMent/message'
 
 Vue.use(Router)
 
@@ -218,7 +221,17 @@ export default new Router({
                 {
                     path: 'productbom',
                     component: productBom
+                }, {
+                    path: 'adddepartment',
+                    component: addDepartment
                 },
+                // {
+                //     path: 'tasksheet',
+                //     component: taskSheet
+                // }, {
+                //     path: 'message',
+                //     component: message
+                // }
             ]
         },
     ]

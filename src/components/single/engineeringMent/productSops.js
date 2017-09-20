@@ -214,15 +214,14 @@ export default {
                 }
             })
         },
-        toModifySop(ids) {
-            let that = this,
-                id = ids.row.productSopId;
+        toModifySop(id) {
+            let that = this;
             that.product_sop_modify = true;
             that.$ajaxWrap({
                 type: "get",
                 url: "productsop/toInsertOrEditProductSop",
                 data: {
-                    productSopId: id
+                    id: id
                 },
                 success(res) {
                     that.product_sop_add_data_send = res.data.data;
@@ -270,7 +269,7 @@ export default {
 
             if (file && file.type === "application/pdf") {
                 if (file.size > 512000) {
-                    that.baseWarn("文件大小不得超过500KB!");
+                    that.$baseWarn("文件大小不得超过500KB!");
                 } else {
                     if (typeof FileReader === "undefined") {
                         that.$baseWarn("您的浏览器不支持FileReader对象，请使用谷歌浏览器打开！")
@@ -282,10 +281,9 @@ export default {
                         fileRead.onload = function(e) {
                             let result = {};
 
-                            console.log(e);
                             result.fileInfo = e.target.result || e.srcElement.result
                             result.fileName = file.name;
-                            result.productSopId = id;
+                            result.id = id;
 
                             that.submitFile(result);
                         }

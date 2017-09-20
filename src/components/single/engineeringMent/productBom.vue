@@ -68,7 +68,7 @@
                             type="text"
                             size="small"
                             class="r-bd"
-                            @click="openProductBomModify(scope.row.productId,2)">
+                            @click="openProductBomModify(scope.row.id,2)">
                             修改
                         </el-button>
                         <el-button
@@ -76,13 +76,13 @@
                             size="small"
                             class="r-bd"
                             v-show="(scope.row.count - 0) > 0 ? false : true"
-                            @click="deleteId(scope.row.productId)">
+                            @click="deleteId(scope.row.id)">
                             删除
                         </el-button>
                         <el-button 
                             type="text"
                             size="small"
-                            @click="openProductBomInfo(scope.row.productId,2)">
+                            @click="openProductBomInfo(scope.row.id,2)">
                             详情
                         </el-button>
                     </template>
@@ -245,7 +245,7 @@
         <el-dialog
             size="small"
             class="default-dialog dialog-small"
-            :title="dialog_title"
+            title="修改产品BOM"
             :visible.sync="product_bom_modify">
             <el-row>
                 <el-col :span="24">

@@ -60,7 +60,10 @@ export default {
                 secInv: "",
                 planBill: "",
                 mouldCode: "",
-                sign: false
+                sign: false,
+                async_bom_number: [],
+                productWeight: "",
+                gapWeight: ""
             },
 
             // 周计划 模态框表格数据
@@ -344,7 +347,9 @@ export default {
             this.edit_next_show_week = true;
 
             that.$clearObject(that.modal_weekplan_table_data);
-            that.$clearObject(that.async_bom_number);
+
+            // that.$clearObject(that.async_bom_number);
+
             this.refresh();
         },
 
@@ -448,7 +453,6 @@ export default {
         confirmSendPlan(tips) {
             let that = this,
                 sure_text = tips === "save" ? "保存" : "下发";
-            console.log(that.modal_weekplan_table_data)
             if (that.isCompletion()) {
                 that.$baseConfirm(`确定${sure_text}吗？`, function() {
                     that.sendWorkplanData(tips);
@@ -480,6 +484,7 @@ export default {
                         (el.planBill.sunday.day.quantity - 0) +
                         (el.planBill.sunday.night.quantity - 0)
 
+                    el.picking = ((el.gapWeight - 0) + (el.productWeight - 0)) * el.sum / 1000;
                     if (key === "scndProc") {
                         continue
                     }
@@ -528,6 +533,10 @@ export default {
 
         sendWorkplanAjax(url, data, done) {
             let that = this;
+
+            for (let i = 0; i < data.detailList.length; i++) {
+                delete data.detailList[i].async_bom_number;
+            }
 
             that.$ajaxWrap({
                 type: "post",
@@ -773,7 +782,9 @@ export default {
                     id: id
                 },
                 success(res) {
-                    res.data.dataList[0].custProductNo = 'CG345';
+
+                    that.modal_weekplan_table_data[index].async_bom_number = res.data.dataList
+
                     that.async_bom_number = res.data.dataList;
                 }
             })
@@ -781,7 +792,7 @@ export default {
 
         getAsyncBomData(num, index) {
             let that = this,
-                async_data = that.async_bom_number,
+                async_data = that.modal_weekplan_table_data[index].async_bom_number,
                 len = async_data.length;
 
             let data = that.modal_weekplan_table_data,
@@ -793,24 +804,26 @@ export default {
             if (that.modal_weekplan_table_data[other] && that.modal_weekplan_table_data[other].sign) {
                 that.modal_weekplan_table_data.splice(0, lens);
                 that.modal_weekplan_table_data.push(temp);
+
             }
 
             for (let i = 0; i < len; i++) {
                 let el = async_data[i];
                 if (el.custProductNo === num) {
 
-                    that.setAsyncBomData(el, index);
+                    that.setAsyncBomData(el, index, num);
                 }
             }
         },
 
-        setAsyncBomData(data, index) {
+        setAsyncBomData(data, index, id) {
 
             let that = this,
                 temp = that.modal_weekplan_table_data[index],
                 len = that.modal_weekplan_table_data.length;
 
-            let num = data.cavityCnt.split('');
+            let datas = temp.async_bom_number,
+                lens = datas.length;
 
             temp.itemNo = data.custProductNo;
             temp.machine = data.machine;
@@ -822,44 +835,43 @@ export default {
             temp.moldingCycle = data.moldingCycl;
             temp.scndProc = data.secdProc;
 
+            temp.gapWeight = data.gapWeight || 0;
+            temp.productWeight = data.productWeight || 0;
+
             that.modal_weekplan_table_data.splice(index, 1, temp);
+            for (let i = 0; i < lens; i++) {
+                if (id !== datas[i].custProductNo) {
 
-            that.$ajaxWrap({
-                url: "week/getProductValueByMouldNo",
-                data: {
-                    mouldNo: temp.mouldNo
-                },
-                success(res) {
-                    console.log(res);
+                    let ret = that.$deepCloneObject(temp);
+                    that.$clearObject(ret);
+                    ret.async_bom_number.push(datas[i]);
+
+                    ret.itemNo = datas[i].custProductNo;
+                    ret.machine = datas[i].machine;
+                    ret.secInv = datas[i].secInv;
+                    ret.mouldCode = datas[i].mouldCode;
+                    ret.mouldNo = datas[i].mouldNo;
+                    ret.itemName = datas[i].productNm;
+                    ret.materialGrade = datas[i].materialGrade;
+                    ret.moldingCycle = datas[i].moldingCycl;
+                    ret.scndProc = datas[i].secdProc;
+
+                    ret.gapWeight = datas[i].gapWeight || 0;
+                    ret.productWeight = datas[i].productWeight || 0;
+
+                    ret.sign = true
+
+                    ret.index = temp.index++;
+                    ret.lv = temp.lv;
+                    ret.custNo = temp.custNo;
+                    ret.productNo = temp.productNo;
+
+                    ret.planBill = that.$deepCloneObject(that.modal_plan_bill)
+                    ret.sum = 0;
+
+                    that.modal_weekplan_table_data.push(ret);
                 }
-            })
-
-            // for (let i = 0; i < num.length; i++) {
-            //     if (num[i] === "+") {
-            //         let ret = that.$deepCloneObject(that.modal_weekplan_table_data[index]);
-            //         let lv = ret.lv,
-            //             custNo = ret.custNo,
-            //             ordrNo = ret.ordrNo,
-            //             productNo = ret.productNo,
-            //             mouldNo = ret.mouldNo,
-            //             mouldCode = ret.mouldCode;
-
-            //         that.$clearObject(ret);
-
-            //         ret.lv = lv
-            //         ret.custNo = custNo;
-            //         ret.ordrNo = ordrNo;
-            //         ret.productNo = productNo;
-            //         ret.mouldCode = mouldCode;
-            //         ret.mouldNo = mouldNo;
-
-            //         ret.index = len++;
-
-            //         ret.planBill = JSON.parse(JSON.stringify(that.modal_plan_bill));
-            //         ret.sign = true
-            //         that.modal_weekplan_table_data.push(ret);
-            //     }
-            // }
+            }
         }
     }
 }

@@ -60,7 +60,7 @@
                         <el-table-column prop="custFactory" label="客户名称"></el-table-column>
                         <el-table-column prop="machineName" label="可用机台"></el-table-column>
                         <el-table-column prop="acptSts" label="验收状态"></el-table-column>
-                        <el-table-column label="操作">
+                        <el-table-column label="操作"  width="160">
                             <template scope="scope">
                                 <el-button  
                                     type="text"
@@ -74,7 +74,8 @@
                                     @click="toAdd(scope.row.id)">验收</el-button>
                                 <el-button  
                                     type="text"
-                                    size="small"    
+                                    size="small"  
+                                    class="r-bd"  
                                     @click="showDetail(scope.row.id, 'new')">详情</el-button>
                                 <el-button  
                                     type="text"
@@ -106,7 +107,7 @@
                         <el-table-column prop="maintNum" label="保养次数"></el-table-column>
                         <el-table-column prop="repairNum" label="维修次数"></el-table-column>
                         <el-table-column prop="mouldSts" label="模具状态"></el-table-column>
-                        <el-table-column label="操作">
+                        <el-table-column label="操作" width="140">
                             <template scope="scope">
                                 <el-button  
                                     type="text"
@@ -116,6 +117,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"  
+                                    class="r-bd"
                                     @click="showDetail(scope.row.id)">详情</el-button>
                                 <el-button  
                                     type="text"

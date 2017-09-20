@@ -69,7 +69,11 @@ export default {
             change_status:true,
             frozen_statue:false,
             restart_status:false,
-
+            form_res:undefined,
+            name_arr:[],
+            batch_ids:[],
+            batch_names:undefined,
+            org_arr:[],
         }
     },
     methods: {
@@ -94,7 +98,6 @@ export default {
                 type: "post",
                 url: "sysOrganization/index",
                 success(res) {
-                    console.log(res);
                     that.loadPageDate(res.data);
                 }
             })
@@ -159,7 +162,7 @@ export default {
             });
         },
         openStaff(id){
-            console.log(id);
+            
             let that = this;
             that.staff_vision= true;
             that.$ajaxWrap({
@@ -173,6 +176,7 @@ export default {
                     that.staff_role_data = res.data.ROLE_LIST;
                 }
             });
+
             if(!id){
                 that.model_title = "增加员工";
                 that.change_status = false;
@@ -186,19 +190,37 @@ export default {
                         empId: id
                     },
                     success(res) {
-                        let form_res = res.data.data;
-                        form_res.autorityPc = form_res.autorityPc == 0 ? false :true;
-                        form_res.autorityPda = form_res.autorityPda == 0 ? false :true;
-                        form_res.autorityPad = form_res.autorityPad == 0 ? false :true;
-                        that.modal_form_data = form_res;
-                        that.modal_form_data.password = "******"
+                        // console.log(res.data.data.sysRoleList);
+                        that.org_arr = [];
+                        that.batch_ids = [];
+                        that.form_res = res.data.data;
+                        that.form_res.autorityPc = that.form_res.autorityPc == 0 ? false :true;
+                        that.form_res.autorityPda = that.form_res.autorityPda == 0 ? false :true;
+                        that.form_res.autorityPad = that.form_res.autorityPad == 0 ? false :true;
+                        that.role_data = that.form_res.sysRoleList;
+                        that.modal_form_data = that.form_res;
+                        that.modal_form_data.password = "******";
+                        if(that.form_res.sysOrgId === "0"){
+                            that.staff_org_data.push({orgName:"请选择",id : "0"})
+                        };
+
+                        for(var i = 0; i < that.form_res.sysRoleList.length;i++){
+                            that.org_arr.push(that.form_res.sysRoleList[i].roleName)
+                        };
+                        that.org_arr = that.org_arr.join(",");
+                        
+                        that.batch_names = that.org_arr;
+                        for(var i = 0; i < that.form_res.sysRoleList.length;i++){
+                            that.batch_ids.push(that.form_res.sysRoleList[i].id)
+                        };
+                        that.batch_ids = that.batch_ids.join(",");
                     }
                 });
             }
         },
+
         saveModelData(){
             let that = this;
-            console.log(that.modal_form_data);
             that.modal_form_data.autorityPad = that.modal_form_data.autorityPad === true ? 0 : 1;
             that.modal_form_data.autorityPda = that.modal_form_data.autorityPda === true ? 0 : 1;
             that.modal_form_data.autorityPc = that.modal_form_data.autorityPc === true ? 0 : 1;
@@ -206,7 +228,8 @@ export default {
                 that.modal_form_data.id=0;};
             if(that.modal_form_data.password == "******"){
                 that.modal_form_data.password = undefined;
-            }
+            };
+            that.modal_form_data.roleIds = that.batch_ids;
             that.$ajaxWrap({
                 type: "post",
                 url: "emp/save",
@@ -224,14 +247,17 @@ export default {
         // 点击关闭
         closeDialog() {
             var that = this;
-            this.$clearObject(this.modal_form_data);
-            this.$confirm("你确定关闭么？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-            }).then(function() {
+
+            that.$baseConfirm("你确定关闭么？",function(){
+
+                that.$clearObject(that.modal_form_data);
                 that.staff_vision = false;
-            }).catch(function() {});
+                that.batch_names = "";
+                that.batch_ids = "";
+            })
         },
+
+
         deleteStaff(id){
             let that = this;
             this.$confirm("你确定删除这条数据吗？", "提示", {
@@ -276,29 +302,27 @@ export default {
         //分组弹窗
         toAddRole() {
             let that = this;
-            that.$ajaxWrap({
-                type: "get",
-                url: "emp/addOrUpdateClick",
-                data: {
-                    empId: 0
-                },
-                success(res) {
-                    that.role_data = res.data.ROLE_LIST;
-                }
-            })
+            
+            that.role_data = that.form_res.sysRoleList;
+            for( let i = 0; i<that.role_data.length; i++){
+                that.name_arr.push(that.role_data[i].roleName)
+            }
+            
             this.role_vision = true;
         },
         // 复选框勾选
         handleSelectionChange(val) {
-            var batch_ids = [];
-            var batch_names = [];
+            console.log(val);
+            let that= this;
+            that.batch_ids = [];
+            that.batch_names = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].id);
-                    batch_names.push(val[i].roleName);
+                    that.batch_ids.push(val[i].id);
+                    that.batch_names.push(val[i].roleName);
                 }
-                this.batch_names = batch_names.join(",");
-                this.batch_ids = batch_ids.join(",");
+                that.batch_names = that.batch_names.join(",");
+                that.batch_ids = that.batch_ids.join(",");
             }
         },
         saveRoleInfo(){

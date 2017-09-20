@@ -71,7 +71,7 @@
 					<el-table-column prop="jobTitle" label="职位"></el-table-column>
 					<el-table-column prop="emailNo" label="邮箱"></el-table-column>
 					<el-table-column prop="telephone" label="电话"></el-table-column>
-					<el-table-column label="操作">
+					<el-table-column label="操作" width="140">
 						<template scope="scope">
 							<el-button
 								type="text"
@@ -114,7 +114,8 @@
             size="small"
             class="default-dialog dialog-large model_info"
 			:visible.sync="staff_vision"
-			:title="model_title">
+			:title="model_title"
+			:before-close="closeDialog">
             <el-row>
                 <el-col :span="24">
                     <el-row>
@@ -127,7 +128,7 @@
 												<el-option v-for="item in staff_org_data" 
 												:label="item.orgName" 
 												:value="item.id" 
-												:key="item.orgName"></el-option>  
+												:key="item.orgName"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
@@ -135,7 +136,7 @@
 								<el-row :gutter="24">
 									<el-col :span="24">
 										<el-form-item label="　　分组：">
-											<p class="role-text">{{modal_form_data.roleName}}</p>
+											<p class="role-text">{{batch_names}}</p>
 										</el-form-item>
 										<el-button class="btn btn-middle btn-blue" @click="toAddRole()" style="margin-top: 4px;">分组</el-button>
 									</el-col>
@@ -218,7 +219,7 @@
 							<!-- 校验规则必须写在 el-form 标签中 -->
 							<el-table 
 								border
-								:data="role_data" @selection-change="handleSelectionChange">
+								:data="staff_role_data" @selection-change="handleSelectionChange">
 								<el-table-column type="selection" width="45"></el-table-column>
 								<el-table-column prop="roleName" label="分组"></el-table-column>
 							</el-table>
@@ -249,4 +250,14 @@
 			line-height 22px
 			color #97a8be
 			margin-top 4px
+	.el-col-offset-1
+		margin-left:2.16667%
+	.el-menu
+		background-color:#e4f3ff
+	.el-menu-item
+		&:hover
+			background-color:#1f8ae9
+			color:#fff
+		
+		
 </style>

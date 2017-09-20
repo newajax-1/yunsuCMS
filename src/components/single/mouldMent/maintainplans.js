@@ -115,7 +115,7 @@ export default {
                     type: "post",
                     url: "/mouldMaintPlan/detailMouldMaintPlan",
                     data: {
-                        mouldMaintPlanId: id
+                        id: id
                     },
                     success(res) {
                         that.add_info = res.data.data;
@@ -143,7 +143,7 @@ export default {
                 type: "post",
                 url: "/mouldMaintPlan/saveMouldMaintPlan",
                 data: {
-                    mouldMaintPlanId: that.plan_id,
+                    id: that.plan_id,
                     maintItm: that.add_info.maintItm,
                     maintAcct: _save_maint_acct.join(",")
                 },
@@ -174,7 +174,7 @@ export default {
             var _data = undefined;
             if (id) {
                 _data = {
-                    mouldMaintPlanId: id
+                    id: id
                 }
             } else {
                 _data = {
@@ -213,7 +213,7 @@ export default {
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].mouldMaintPlanId);
+                    batch_ids.push(val[i].id);
                 }
                 this.batch_ids = batch_ids.join(",");
             } else {
