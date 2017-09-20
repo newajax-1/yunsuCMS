@@ -186,7 +186,7 @@ export default {
             this.diag_title = "新增设备"
             this.is_disabled = (id ? true : false);
             this.is_has_id = id;
-
+            console.log(this.add_info)
             this.$clearObject(this.add_info);
             this.$ajaxWrap({
                 type: "get",
@@ -206,7 +206,7 @@ export default {
                     type: "get",
                     url: "/equipment/getObject",
                     data: {
-                        equipmentId: id
+                        id: id
                     },
                     success(res) {
                         that.add_info = res.data.data
@@ -264,7 +264,7 @@ export default {
                 url: "/equipment/save",
                 data: {
                     operationType: _operationType,
-                    equipmentId: that.is_has_id,
+                    id: that.is_has_id,
                     eqpTyp: that.add_info.eqpTyp,
                     eqpBrand: that.add_info.eqpBrand,
                     type: that.add_info.type,
@@ -369,7 +369,7 @@ export default {
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].equipmentId);
+                    batch_ids.push(val[i].id);
                 }
                 this.batch_ids = batch_ids.join(",");
             } else {

@@ -32,7 +32,7 @@
                 style="width: 100%"
                 :data="sale_info_table">
                 <el-table-column
-                    prop="planType"
+                    prop="planTypeName"
                     label="计划类型">
                 </el-table-column>
                 <el-table-column
@@ -119,7 +119,7 @@ export default {
             that.$ajaxWrap({
                 url: "plan/detailPlan",
                 data: {
-                    planId: that.plan_id
+                    id: that.plan_id
                 },
                 success(res) {
                     let len;

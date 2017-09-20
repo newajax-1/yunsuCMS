@@ -64,20 +64,22 @@
                             <template scope="scope">
                                 <el-button  
                                     type="text"
-                                    size="small"    
-                                    @click="addMouldDetail(scope.row.mouldId,scope.row.sourceType)">修改</el-button>
+                                    size="small" 
+                                    class="r-bd"
+                                    @click="addMouldDetail(scope.row.id,scope.row.sourceType)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="toAdd(scope.row.mouldId)">验收</el-button>
+                                    class="r-bd"
+                                    @click="toAdd(scope.row.id)">验收</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"    
-                                    @click="showDetail(scope.row.mouldId, 'new')">详情</el-button>
+                                    @click="showDetail(scope.row.id, 'new')">详情</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"    
-                                    @click="deleteIds(scope.row.mouldId)">删除</el-button>
+                                    @click="deleteIds(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -109,15 +111,16 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="addMouldDetail(scope.row.mouldId,scope.row.sourceType)">修改</el-button>
+                                    class="r-bd"
+                                    @click="addMouldDetail(scope.row.id,scope.row.sourceType)">修改</el-button>
+                                <el-button  
+                                    type="text"
+                                    size="small"  
+                                    @click="showDetail(scope.row.id)">详情</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"    
-                                    @click="showDetail(scope.row.mouldId)">详情</el-button>
-                                <el-button  
-                                    type="text"
-                                    size="small"    
-                                    @click="deleteIds(scope.row.mouldId)">删除</el-button>
+                                    @click="deleteIds(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

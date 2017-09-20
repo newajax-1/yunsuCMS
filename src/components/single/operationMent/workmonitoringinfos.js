@@ -43,7 +43,7 @@ export default {
                 type: "get",
                 url: "/week/queryWeekList",
                 data: {
-                    workplanWeekId: that.workplan_week_id,
+                    id: that.workplan_week_id,
                     billIssSts: 0,
                     indexOfWeek: that.week.match(/[1-9][0-9]*/g)[0]
                 },
@@ -124,7 +124,7 @@ export default {
                     that.worker_list = data.data.empList;
                     that.update_data.every(function(el) {
                         return that.worker.push({
-                            workplanBillId: el.workplanBillId,
+                            id: el.id,
                             worker: el.worker || "",
                             quantity: el.quantity
                         });
@@ -190,7 +190,7 @@ export default {
                     type: "post",
                     url: "/bill/operationBillListByDetailId",
                     data: {
-                        workplanDetailId: _id
+                        id: _id
                     },
                     success(data) {
 
@@ -207,7 +207,7 @@ export default {
         // 改变事件
         changeWeeker(id, workerName) {
             for (var i = 0; i < this.worker.length; i++) {
-                if (this.worker[i].workplanBillId == id) {
+                if (this.worker[i].id == id) {
                     this.worker[i].worker = workerName;
                 }
             }
@@ -233,7 +233,7 @@ export default {
             var _batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    _batch_ids.push(val[i].workplanDetailId);
+                    _batch_ids.push(val[i].id);
                 }
                 this.batch_ids = _batch_ids.join(",");
             } else {

@@ -9,7 +9,7 @@ $g3 = #333;
 $e5 = #e5e5e5;
 $_g69 = #696969;
 
-$default_blue = #148aed;
+$default_blue = #1f8ae9;
 $default_bd_blue = #0176d6;
 $default_blue_hover = #0a7ad7;
 $default_bd_blue_hover = #0166ba;
@@ -30,7 +30,7 @@ $default_gray_hover = #a9a9a9;
 $default_bd_gray_hover = $default_bd_gray;
 
 $table_header_bgcolor = #e4f3ff;
-$dialog_blue = #00a8ff;
+$dialog_blue = #1f8ae9;
 
 $warn_red = #ff0000;
 
@@ -65,6 +65,15 @@ $warn_red = #ff0000;
         user-select: none
         background-image: none
         border: 1px solid transparent
+        &.r-bd
+            position: relative
+            &:after
+                position: absolute
+                top: 0
+                right: -3px
+                height: 12px
+                width: 1px
+                background: #ccc
         &.btn-large
             width: 105px
         &.btn-small
@@ -101,6 +110,21 @@ $warn_red = #ff0000;
     .el-button+.el-button
         margin: 0
 
+    .el-button
+        span
+            padding: 0 3px
+        &.r-bd
+            span
+                position: relative
+                &:after
+                    content: ""
+                    position: absolute
+                    top: 0px
+                    right: -3px 
+                    height: 12px
+                    width: 1px
+                    background: #ccc
+                    
     /* 清除ele-ui表单样式 */
     .el-input__inner
         position: relative
@@ -125,3 +149,6 @@ $warn_red = #ff0000;
         background-color: $gf
         margin: 10px 
         padding-bottom: 10px
+    
+.el-message-box__btns
+    text-align: center !important

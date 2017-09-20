@@ -150,7 +150,7 @@ export default {
             if (val.length > 0) {
                 var ids = [];
                 for (var i = 0; i < val.length; i++) {
-                    ids.push(val[i].custId);
+                    ids.push(val[i].id);
                 }
                 this.batch_ids = ids.join(',')
             } else {
@@ -344,7 +344,7 @@ export default {
             if (this.f.p == "请选择省") {
                 flag3 = true;
             }
-            console.log(!this.f.p)
+
             if (!this.add_info.sel_name || !custType || !this.add_info.sel_contact ||
                 !this.add_info.sel_phone || flag3 || !this.add_info.address) {
                 this.$message({
@@ -421,16 +421,16 @@ export default {
         result: function() {
             var re = {
                 pro: {
-                    id: "" || this.pro[this.f.p].id,
-                    name: this.pro[this.f.p].name
+                    id: typeof this.pro[this.f.p] === "object" ? typeof this.pro[this.f.p].id : "",
+                    name: typeof this.pro[this.f.p] === "object" ? typeof this.pro[this.f.p].name : ""
                 },
                 city: {
-                    id: this.city[this.f.c].id || "",
-                    name: this.city[this.f.c].name
+                    id: typeof this.pro[this.f.c] === "object" ? typeof this.pro[this.f.c].id : "",
+                    name: typeof this.pro[this.f.c] === "object" ? typeof this.pro[this.f.c].name : "",
                 },
                 county: {
-                    id: this.county[this.f.cc].id || "",
-                    name: this.county[this.f.cc].name
+                    id: typeof this.pro[this.f.cc] === "object" ? typeof this.pro[this.f.cc].id : "",
+                    name: typeof this.pro[this.f.cc] === "object" ? typeof this.pro[this.f.cc].name : "",
                 }
             };
             this.$emit("select", re);

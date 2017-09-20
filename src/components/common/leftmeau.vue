@@ -84,7 +84,7 @@ $gf = #fff;
                 .el-submenu__title
                     background: #48576a       
         .el-menu-item
-            padding-left 30px !important /* 替换 ele-ui js 样式 */
+            padding-left 45px !important /* 替换 ele-ui js 样式 */
             min-width 150px
             font-size 12px
             &:hover,

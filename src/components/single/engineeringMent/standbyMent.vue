@@ -45,18 +45,18 @@
                         <el-table-column prop="unit" label="单位"></el-table-column>
                         <el-table-column label="操作">
                             <template scope="scope">
+                                <!-- <el-button  
+                                    type="text"
+                                    size="small"
+                                    @click="">备库存</el-button> -->
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="">备库存</el-button>
+                                    @click="toAdd(scope.row.id)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="toAdd(scope.row.spareId)">修改</el-button>
-                                <el-button  
-                                    type="text"
-                                    size="small"
-                                    @click="deleteId(scope.row.spareId)">删除</el-button>
+                                    @click="deleteId(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -99,7 +99,7 @@
                                 <el-col :span="12">
                                     <el-form-item label="备件单位：">
                                         <el-select 
-                                            placeholder="选择设备类型" 
+                                            placeholder="选择设备单位" 
                                             v-model="add_info.unit" 
                                             class="required">
                                             <el-option

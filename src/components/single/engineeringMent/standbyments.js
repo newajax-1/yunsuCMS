@@ -186,7 +186,7 @@ export default {
                 data: {
                     operationType: _operationType,
                     spareNm: that.add_info.spareNm,
-                    spareId: that.is_has_id,
+                    id: that.is_has_id,
                     unit: that.add_info.unit,
                     secInv: that.add_info.secInv,
                     invAlarm: that.add_info.invAlarm,
@@ -232,7 +232,7 @@ export default {
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].spareId);
+                    batch_ids.push(val[i].id);
                 }
                 this.batch_ids = batch_ids.join(",");
             } else {

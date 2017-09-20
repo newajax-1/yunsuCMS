@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="24">
                 <div class="content-title">
-                    <span>系统管理-用户管理</span>
+                    <span>用户管理</span>
                 </div>
                 <div class="content-search">
                     <el-form :inline="true" class="">
@@ -16,7 +16,7 @@
                         <el-form-item>
                             <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
                             <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
-                            <el-button @click="toAdd()" class="btn btn-blue btn-small"><i class="fa fa-user-plus"></i> 新增</el-button>
+                            <el-button @click="toAdd()" class="btn btn-blue btn-small"><i class="fa fa-file-text-o"></i> 新 增</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -48,15 +48,16 @@
                             </template>
                         </el-table-column>
                     </el-table>
+
                     <!--分页 start-->
-                    <div class="table-page" v-if="page_list.total === 0 ? false : true">
+                    <div class="table-page">
                         <el-pagination
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
                             :current-page.sync="page_list.page_num"
                             :page-size="page_list.page_size"
-                            :page-sizes="[15, 20, 30, 40]"
                             layout="total, sizes, prev, pager, next, jumper"
+                            :page-sizes="[10, 20, 30, 40]"
                             :total="page_list.total">
                         </el-pagination>
                     </div>
@@ -65,6 +66,7 @@
             </el-col>
             <!-- 数据表格 end -->
         </el-row>
+
         <!--新增弹框 start-->
         <el-dialog
             size="small"

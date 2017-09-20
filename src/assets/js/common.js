@@ -1,86 +1,152 @@
-/**
- * coding by Alex of 2017-08-08
- */
-
-import Vue from 'vue'
-import axios from 'axios'
-
+const BaseUrl = window.BaseUrl = 'http://192.168.3.96:8080/ybs_mes_01';
+// const BaseUrl = window.BaseUrl = 'http://192.168.3.51:8080/';
+// const BaseUrl = window.BaseUrl = "http://localhost:8080/ybs_mes"
 
 /**
- * 请保留以下所有代码，勿修改
+ * on-line code
  */
 
-const BaseUrl = window.BaseUrl = 'http://localhost:8080/ybs_mes';
+import Vue from 'vue';
+import axios from 'axios';
 
-// 非父子组件通信 [慎用-可考虑Vuex代替]
 const EventBus = window.EventBus = new Vue();
 
-/**
- * 确保项目正常加载 Element-UI 与 axios
- * 否则 VueProto 报错
- */
+// axios base url
 
-// axios 配置请求根目录
+if (typeof BaseUrl === "undefined") {
+    window.BaseUrl = "/";
+}
+
 axios.defaults.baseURL = BaseUrl;
+
+/**
+ * Element-UI and axios is important
+ * if not , throw error
+ */
 
 let height = window.screen.height,
     tableHeight;
 
 tableHeight = height >= 770 ? 580 : 380;
 
+// tools
+const _toString = Object.prototype.toString;
+
+const isReference = val => typeof val === "object" && val !== null;
+
+const isObject = val => _toString.call(val).slice(8, 14) === "Object";
+
+const isArray = val => _toString.call(val).slice(8, 13) === "Array";
+
+const extend = (val, from) => {
+    let ret = val || {};
+    if (isObject(ret) && isObject(from)) {
+        for (let key in from) {
+            ret[key] = from[key];
+        }
+        return ret
+    }
+}
+
+const clearObject = val => {
+    if (isReference(val)) {
+        if (isObject(val)) {
+            for (let key in val) {
+                if (isReference(val[key])) {
+                    clearObject(val[key])
+                } else {
+                    val[key] = undefined
+                }
+            }
+        } else if (isArray(val)) {
+            val.splice(0, val.length);
+        }
+    }
+}
+
+const deepCloneObject = (val, new_val) => {
+    let ret = new_val || (isObject(val) ? {} : []);
+    for (let key in val) {
+        let el = val[key];
+        if (isReference(el)) {
+            ret[key] = isObject(el) ? {} : [];
+            deepCloneObject(el, ret[key]);
+        } else {
+            ret[key] = el
+        }
+    }
+    return ret
+}
+
+// Vue prototype methods
 const VueProto = Vue.prototype;
 
-const $vueExtend = VueProto.$vueExtend = function(option) {
-    if (option && typeof option === "object") {
-        for (let key in option) {
-            Vue.prototype[key] = option[key];
-        }
+VueProto.$vueExtend = function(option) {
+    if (option && isObject(option)) {
+        extend(VueProto, option);
     }
 }
 
 VueProto.$vueExtend({
     AUTHOR: "Alex",
+    TIME: "2017.07 - Today",
+    Version: "Y-MES 1.2",
 
     // Request
     $ajax: axios,
 
     $tableHeight: tableHeight,
 
+    $isReference(val) {
+        return isReference(val)
+    },
 
-    // 判断对象类型
     $isObject(val) {
-        return typeof val === "object" && val !== null
+        return isObject(val)
     },
 
-    // 判断数组
     $isArray(val) {
-        return this.$typeofArray(arr);
+        return isArray(val)
     },
 
-    // 路由跳转
+    $clearObject(val) {
+        clearObject(val);
+    },
+
+    $typeofArray(arr) {
+        return isArray(arr)
+    },
+
+    $cloneObject(obj) {
+        return extend(undefined, obj)
+    },
+
+    // replace JSON.parse(JSON.stringify(object))
+    $deepCloneObject(val, new_val) {
+        return deepCloneObject(val, new_val)
+    },
+
     $goRoute(index, query) {
-        if (this.$isObject(query)) {
+        if (isObject(query)) {
             this.$router.push({ path: index, query: query })
         } else {
             this.$router.push(index);
         }
     },
 
-    // 警示框
-    $baseWarn(tips, done, flag) {
+    $baseWarn(tips, done, sign) {
         let that = this;
 
         that.$alert(tips, '提示', {
             confirmButtonText: '确定',
             callback() {
                 if (typeof done === "function") done();
-                if (flag && that.refresh) that.refresh();
+                if (sign && that.refresh) that.refresh();
             }
         });
     },
 
-    // 提示框
-    $baseConfirm(tips, done, flag) {
+    $baseConfirm(tips, done, sign) {
         let that = this;
 
         that.$confirm(tips, "提示", {
@@ -89,34 +155,10 @@ VueProto.$vueExtend({
             type: "warning"
         }).then(function() {
             if (typeof done === "function") done();
-            if (flag && that.refresh) that.refresh();
+            if (sign && that.refresh) that.refresh();
         }).catch(function() {});
     },
 
-    // 置空对象
-    $clearObject(object) {
-        if (!this.$typeofArray(object)) {
-            for (var key in object) {
-                if (object.hasOwnProperty(key)) {
-                    object[key] = undefined;
-                }
-            }
-        } else {
-            let arr = [];
-            return arr;
-
-        }
-    },
-
-    // 检测数组
-    $typeofArray(arr) {
-        if (arr && typeof arr === "object") {
-            let result = Object.prototype.toString.call(arr).slice(8, 13);
-            return result === "Array";
-        }
-    },
-
-    // Ajax 请求
     $ajaxWrap(option) {
         let opt = option || {},
             that = this,
@@ -133,11 +175,12 @@ VueProto.$vueExtend({
                 switch (res.data.status) {
                     case "0":
                         if (res.data.success) {
+                            if (res.data.data.page && typeof res.data.data.page.total === "string") res.data.data.page.total = res.data.data.page.total - 0;
                             success(res.data);
                         } else {
                             that.$baseWarn(res.data.tipMsg || "操作失败！", function() {
                                 error(res.data);
-                                console.log(res.data);
+                                throw res.data;
                             })
                         };
                         break;
@@ -173,7 +216,7 @@ VueProto.$vueExtend({
             }).then(function(res) {
                 callback(res);
             }).catch(function(res) {
-                console.log(res)
+                throw res;
                 that.$baseWarn("请输入正确信息！");
 
                 if (typeof fail === "function") fail();
@@ -181,19 +224,21 @@ VueProto.$vueExtend({
         }
     },
 
-    // 日期截取 YY-MM-DD
+    // YY-MM-DD
     $handleDateObject(date) {
         let year = date.getFullYear(),
             month = date.getMonth() + 1,
             day = date.getDate(),
             date_str;
+
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
+
         date_str = year + "-" + month + "-" + day;
         return date_str
     },
 
-    // 日期时间截取 YY-MM-DD-HH-MM-SS
+    // YY-MM-DD-HH-MM-SS
     $handleDateObjectTime(date) {
         let year = date.getFullYear(),
             month = date.getMonth() + 1,
@@ -211,39 +256,5 @@ VueProto.$vueExtend({
 
         date_str = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
         return date_str;
-    },
-
-    // 字符串截取
-    $trim(str) {
-        return str.replace(/^\s*/, '').replace(/\s*$/, '');
-    },
-
-    // 克隆对象
-    $cloneObject(obj) {
-        if (!this.$typeofArray(obj)) {
-            let ret = {};
-            for (let key in obj) {
-                ret[key] = obj[key]
-            }
-            return ret;
-        }
-    },
-
-    // 深度拷贝引用类型 [请替换JSON.parse(JSON.stringify(object))作为深拷贝方法]
-    $deepCloneObject(val, new_obj) {
-        let that = this,
-            res = new_obj || (that.$typeofArray(val) ? [] : {});
-
-        for (let key in val) {
-            if (that.$isObject(val[key])) {
-                res[key] = that.$typeofArray(val[key]) ? [] : {};
-                that.$deepCloneObject(val[key], res[key]);
-            } else {
-                res[key] = val[key];
-            }
-        }
-
-        return res;
     }
-
 })

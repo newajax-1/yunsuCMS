@@ -2,7 +2,7 @@
   <div class="_home">
       <div class="top clearfix">
         <div class="machine clearfix" >
-            <p class="title">注塑机：</p>
+            <p class="title">待处理工作：</p>
             <div class="machine_wrap">
                 <div class="task_message" v-for="item in machine_item" :key="item.math">
                     <div class="circle"></div>

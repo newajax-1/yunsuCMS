@@ -1,9 +1,9 @@
 export default {
     name: "list-table",
     data() {
-        //所有的数据v-html设置的值都得在return先设置一下  这样就可以直接通过that.获取或者设值
+
         return {
-            // 条件查询 start
+
             warning: {
                 item_name: undefined,
                 inv_sts: undefined
@@ -11,11 +11,9 @@ export default {
             search_pageNum: undefined,
             search_pageSize: undefined,
             select_inv_sts: [],
-            //end 
-            //选择开始 start
+
             active_name: "first",
-            //end
-            //表单数据开始start
+
             table_data: [{
                 item_no: undefined,
                 item_name: undefined,
@@ -24,22 +22,21 @@ export default {
                 inv_sts_name: undefined,
                 sec_inv: undefined,
             }],
-            //删除提示框start
+
             dialog_visible: false,
             delete_msg: undefined,
             tip_msg: undefined,
-            // 表格当前页数据
-            // 分页
+
             page: {
                 page_num: 1,
                 page_size: 15,
                 total: 0
             },
             current_page: 1,
-            // 批量删除ids
+
             batch_ids: undefined,
             items: undefined,
-            // 新增数据
+
             new_warning: false,
             select_op: [],
             add_info: {
@@ -50,7 +47,7 @@ export default {
                 sec_inv: undefined
             },
             select_item_op: [],
-            // 修改数据存放
+
             eselect_item_op: [],
             eselect_op: [],
             edit_warning: false,
@@ -65,11 +62,11 @@ export default {
                 curInv: undefined
             },
             select_op: [],
-            //是否显示  备库存这个 
+
             show_info: [{}],
-            //新增是否显示供应商
+
             show_factory: true,
-            //更新是否显示供应商
+
             show_factory_update: true,
             show_factory_detail: true,
             detail_warning: false,
@@ -84,7 +81,7 @@ export default {
         }
     },
     methods: {
-        //获取查询条件的下拉框 
+
         loadSearchSelect() {
             var that = this;
             this.$ajaxWrap({

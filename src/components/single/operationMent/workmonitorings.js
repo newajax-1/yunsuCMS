@@ -175,7 +175,7 @@ export default {
                 type: "post",
                 url: "/bill/billDetail",
                 data: {
-                    workplanBillId: id
+                    id: id
                 },
                 callback: function(data) {
                     that.stop_data.push(data.data.data);
@@ -202,7 +202,7 @@ export default {
                 type: "post",
                 url: "/bill/operationWorkOrderBill",
                 data: {
-                    workplanBillId: that.stop_data[0].workplanBillId,
+                    workplanBillId: that.stop_data[0].id,
                     billNo: that.stop_data[0].billNo,
                     clas: that.stop_data[0].clas,
                     actQuantity: that.stop_data[0].quantity,

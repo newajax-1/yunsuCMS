@@ -2,6 +2,9 @@
     <div class="template">
         <div class="layout-content">
             <router-view></router-view>
+            <div class="bottom">
+                <p>Copyright 2017 南京塑维网络科技有限公司. All rights reserved.  版本号1.2 </p>
+            </div>
         </div>
     </div>
 </template>
@@ -85,3 +88,21 @@
         }
     }
 </script>
+<style lang="stylus">
+.template
+    height 100%
+    .layout-content
+        height 100%
+        .bottom
+            height 40px
+            width 100%
+            text-align center
+            line-height 40px
+            background #c3c9d2
+            position fixed
+            bottom 0
+            p
+                color #333
+                font-size 14px
+            
+</style>

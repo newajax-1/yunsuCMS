@@ -1,8 +1,9 @@
 <template>
     <div class="login-page">
         <div class="login-form-wrap">
-            <h1>Y-Mes</h1>
-            <p>让工业·更敏捷</p>
+            <h1>
+                <img :src="img_url.title" alt="Y-mes">
+            </h1>
             <el-form 
                 class="login-form-base">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -40,7 +41,27 @@
                             <el-button class="btn-login" @click="login()">登 录</el-button>
                         </el-form-item>
                     </el-tab-pane>
-                    <el-tab-pane label="下载APP" name="app" class="app"></el-tab-pane>
+                    <el-tab-pane label="下载APP" name="app" class="app">
+                        <div class="clearfix">
+                            <div class="fl">
+                                <div class="line">
+                                    <span class="name">iPhone版:</span>
+                                    <span class="app-img"></span>
+                                </div>
+                                <div class="line">
+                                    <span class="name">Android版:</span>
+                                    <span class="app-img"></span>
+                                </div>
+                                <div class="line">
+                                    <span class="name">Pad版:</span>
+                                    <span class="app-img"></span>
+                                </div>
+                            </div>
+                            <div class="fr">
+                                <img :src="img_url.ewm" alt="二维码">
+                            </div>
+                        </div>
+                    </el-tab-pane>
                 </el-tabs>
             </el-form>
         </div>
@@ -71,7 +92,11 @@
             };
 
             return {
-                
+                img_url: {
+                    title : require( '../../assets/images/login_logo.png'),
+                    ewm : require( '../../assets/images/erweima.png')
+                },
+
                 login_rules: {
                     username: [
                         { validator: validateName, trigger: 'blur' }
@@ -105,7 +130,7 @@
                 for(let i = 0 ; i < data.length ; i++){
                     let el = data[i],
                         opt = {};
-                    opt.textName = el.name;
+                    opt.textName = el.menuName;
                     opt.index = i+"";
                     opt.icon = el.icon
                     if(el.menuList.length){
@@ -113,7 +138,7 @@
                         for(let j = 0 ; j < el.menuList.length ; j++){
                             let ret = el.menuList[j],
                                 opt_child = {};
-                                opt_child.text = ret.name;
+                                opt_child.text = ret.menuName;
                                 opt_child.route = ret.url;
                                 opt_child.index = i+"-"+(j+1);
                             opt.child.push(opt_child);
@@ -275,6 +300,37 @@
                 &:hover{
                     transition all 0.3s
                     background-color #00c0ff
+                }
+            }
+        }
+        .app{
+            padding: 33px 20px
+            background: #fff
+            .line{
+                overflow :hidden
+                font-size: 14px
+                color: #666
+                line-height: 40px
+                margin-bottom: 20px
+                &:last-child{
+                    margin-bottom:0
+                }
+                .name{
+                    float:left
+                    width: 72px
+                    margin-right: 20px
+                    text-align :right
+                }
+                .app-img{
+                    float:right;
+                    width: 135px
+                    height: 40px
+                    background: url("../../assets/images/login.png") no-repeat -61px -60px
+                }
+                &:first-child{
+                    .app-img{
+                        background-position: -61px 0
+                    }
                 }
             }
         }

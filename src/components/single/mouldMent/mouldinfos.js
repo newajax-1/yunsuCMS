@@ -172,7 +172,7 @@ export default {
                 type: "post",
                 url: "/mould/acptMouldDetail",
                 data: {
-                    mouldId: id
+                    id: id
                 },
                 success(res) {
                     var _data = res.data.acptItemList
@@ -212,7 +212,7 @@ export default {
                 type: "post",
                 url: "/mould/acptMould",
                 data: {
-                    mouldId: that.old_id,
+                    id: that.old_id,
                     acptList: that.check_data,
                     operationType: _operationType
                 },
@@ -330,7 +330,7 @@ export default {
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].mouldId);
+                    batch_ids.push(val[i].id);
                 }
                 this.batch_ids = batch_ids.join(",");
             } else {

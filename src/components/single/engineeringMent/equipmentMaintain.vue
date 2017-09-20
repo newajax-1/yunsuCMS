@@ -54,11 +54,12 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="toAdd(scope.row.equipmentMaintPalnId)">修改</el-button>
+                                    class="r-bd"
+                                    @click="toAdd(scope.row.id)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"    
-                                    @click="deleteId(scope.row.equipmentMaintPalnId)">删除</el-button>
+                                    @click="deleteId(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

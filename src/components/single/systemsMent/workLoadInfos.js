@@ -1,30 +1,31 @@
+import Vue from "vue"
 export default {
     name: 'workLoadInfo',
     data() {
-        return {
-            empNo: undefined,
-            table_data: [{
-                billNo: undefined,
-                week: undefined,
-                clas: undefined,
-                itemNo: undefined,
-                machine: undefined,
-                quantity: undefined,
-                startTm: undefined,
-                actQuantity: undefined,
-                endTm: undefined,
+        return{
+            empNo:undefined,
+            table_data:[{
+                billNo:undefined,
+                week:undefined,
+                clas:undefined,
+                itemNo:undefined,
+                machine:undefined,
+                quantity:undefined,
+                startTm:undefined,
+                actQuantity:undefined,
+                endTm:undefined, 
             }],
-            form_data: {
-                billNo: "",
-                week: ""
+            form_data:{
+                billNo:"",
+                week:""
             },
             //分页
             page_list: {
                 pageNum: 1,
-                pageSize: 15,
+                pageSize: 10,
                 total: 0
             },
-            download_url: ""
+            download_url:""
         }
     },
     methods: {
@@ -42,23 +43,23 @@ export default {
             that.searchFormData();
         },
 
-        getTableData() {
+        getTableData(){
             let that = this;
             that.empNo = this.$route.query.empNo
             that.$ajaxWrap({
-                type: "post",
+                type:"post",
                 url: "emp/queryEmpWorkDetail",
-                data: {
-                    empNo: that.empNo
+                data:{
+                    empNo:that.empNo
                 },
-                success(res) {
+                success(res){
                     that.loadTable(res);
                 }
             })
         },
-        _export() {
+        _export(){
             let that = this;
-            this.download_url = BaseUrl + "/emp/downloadEmpWorkDetail?empNo=" + that.empNo + "&billNo=" + that.table_data[0].billNo + "&week=" + that.table_data[0].week
+            this.download_url = BaseUrl +"/emp/downloadEmpWorkDetail?empNo="+that.empNo+"&billNo="+that.table_data[0].billNo+"&week="+that.table_data[0].week
         },
         loadTable(data) {
             let that = this,
@@ -68,7 +69,7 @@ export default {
             that.page_list.pageNum = data.data.page.pageNum;
             that.page_list.pageSize = data.data.page.pageSize;
             that.page_list.total = data.data.page.total;
-        },
+        }, 
         currentPageChange(val) {
             if (this.table_data.length) {
                 this.searchFormData(val, "num");
@@ -83,12 +84,12 @@ export default {
         searchFormData(pageval, pagesize) {
             let that = this,
                 search_data = that.form_data;
-
-            search_data.empNo = that.empNo;
-            if (!search_data.billNo && !search_data.week) {
+            
+                search_data.empNo = that.empNo;
+            if(!search_data.billNo&&!search_data.week){
                 search_data = {};
                 search_data.empNo = that.empNo;
-            }
+            } 
 
             if (pagesize === "num") {
                 search_data.pageNum = pageval || that.page_list.pageNum;
@@ -98,10 +99,11 @@ export default {
                 search_data.pageSize = pageval || that.page_list.pageSize;
             }
             that.$ajaxWrap({
-                type: "post",
+                type :"post",
                 url: "emp/queryEmpWorkDetail",
                 data: search_data,
                 success(res) {
+                    console.log(res);
                     that.loadTable(res);
                 }
             });

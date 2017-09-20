@@ -83,18 +83,19 @@
                             <el-button
                                 type="text"
                                 size="small"
-                                @click="gotoCreateSalePlan(scope.row.planId)"
+                                class="r-bd"
+                                @click="gotoCreateSalePlan(scope.row.id)"
                                 v-show = "saleplan_push_tips[scope.$index].show">修改</el-button> 
                             <el-button
                                 type="text"
                                 size="small"
-                                @click="confirmOperation(scope.row.planId,scope.$index,'下发')"
+                                @click="confirmOperation(scope.row.id,scope.$index,'下发')"
                                 v-show = "saleplan_push_tips[scope.$index].show">下发</el-button> 
                             <el-button 
                                 type="text"
                                 size="small"
                                 v-show="!saleplan_push_tips[scope.$index].show"
-                                @click="gotoCreateSalePlan(scope.row.planId,true)">详情</el-button>
+                                @click="gotoCreateSalePlan(scope.row.id,true)">详情</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

@@ -6,6 +6,12 @@
                     <span>生产作业-工单管理-未下发工单详情</span>
                 </div>
             </el-col>
+            <div class="content-buttons ">
+                <el-col :span="24">
+                    <el-button class="btn btn-blue" @click="$goRoute('workmonitoring')"><i class="fa fa-undo"></i> 返 回</el-button>
+                    <el-button @click="moreOperationWeek()" class="btn btn-small btn-blue"><i class="fa fa-sign-in"></i>下发</el-button>
+                </el-col>
+            </div>
             <el-col :span="24">
                 <!-- 列表开始  start -->
                 <div class="table-wrap">
@@ -200,11 +206,11 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="showUpdateInfo(scope.row.workplanDetailId)">排班</el-button>
+                                    @click="showUpdateInfo(scope.row.id)">排班</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="operationWeek(scope.row.workplanDetailId)">下发</el-button>
+                                    @click="operationWeek(scope.row.id)">下发</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -212,12 +218,6 @@
                 <!-- 列表开始  end -->
             </el-col>
 
-            <div class="content-buttons fl">
-                <el-col :span="24">
-                    <el-button class="btn btn-blue" @click="$goRoute('workmonitoring')"><i class="fa fa-undo"></i> 返 回</el-button>
-                    <el-button @click="moreOperationWeek()" class="btn btn-small btn-blue"><i class="fa fa-sign-in"></i>下发</el-button>
-                </el-col>
-            </div>
 	    </el-row>
         <!-- 修改排班弹框 start -->
         <el-dialog
@@ -233,24 +233,28 @@
                             :data="update_data"
                             style="width: 100%">
                             <el-table-column
-                                    prop="weekDate"
-                                    label="日期">
+                                prop="weekDate"
+                                label="日期">
                             </el-table-column>
                             <el-table-column
-                                    prop="clas"
-                                    label="班次">
+                                prop="clas"
+                                label="班次">
                             </el-table-column>
                             <el-table-column
-                                    prop="billNo"
-                                    label="工单号">
+                                prop="billNo"
+                                label="工单号">
                             </el-table-column>
                             <el-table-column
-                                    prop="quantity"
-                                    label="计件量">
+                                prop="quantity"
+                                label="计件量">
                             </el-table-column>
                             <el-table-column label="工人姓名" prop="worker">
                                 <template scope="scope">
-                                    <el-select :disabled="!scope.row.quantity" v-model="scope.row.worker" @change="changeWeeker(scope.row.workplanBillId, scope.row.worker)" :class="scope.row.quantity ? 'required' : ''">
+                                    <el-select 
+                                        :disabled="!scope.row.quantity"
+                                        v-model="scope.row.worker" 
+                                        @change="changeWeeker(scope.row.id, scope.row.worker)" 
+                                        :class="scope.row.quantity ? 'required' : ''">
                                         <el-option
                                             v-for="item in worker_list"
                                             :label="item.empNm"

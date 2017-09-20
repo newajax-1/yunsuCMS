@@ -6,17 +6,17 @@ export default {
     },
     data() {
         return {
-            first_data : [],
-            second_data : [],
+            first_data: [],
+            second_data: [],
 
-            show_table : {
-                first_show : true,
-                second_show : false,
+            show_table: {
+                first_show: true,
+                second_show: false,
             },
 
-            mould_id : undefined,
-            operation_type : "1",
-            sale_change_name : "first",
+            mould_id: undefined,
+            operation_type: "1",
+            sale_change_name: "first",
         }
     },
     methods: {
@@ -31,8 +31,8 @@ export default {
                 type: "post",
                 url: "/mould/detailMould",
                 data: {
-                    mouldId : that.mould_id,
-                    operationType : that.operation_type
+                    id: that.mould_id,
+                    operationType: that.operation_type
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -51,7 +51,7 @@ export default {
                 case "6":
                     that.second_data = data.acptList;
                     var _data = data.acptItemList
-                    for(var i = 0; i <  that.second_data.length; i++) {
+                    for (var i = 0; i < that.second_data.length; i++) {
                         var _name = _data[i].dicName;
                         var _value = _data[i].dicValue;
                         that.second_data[i].acptItm = _name;
@@ -59,17 +59,17 @@ export default {
                         that.second_data[i].acptRslt = that.second_data[i].acptRslt == "01" ? "通过" : "";
                     }
                     break;
-                default :
+                default:
                     that.first_data = data.page.list;
                     break;
             }
         },
 
         changeShow(obj) {
-            if(obj.length == 0 ) {
+            if (obj.length == 0) {
                 return;
             };
-            for(var key in obj) {
+            for (var key in obj) {
                 obj[key] = false;
             }
         },
@@ -88,7 +88,7 @@ export default {
                     this.show_table.second_show = true;
                     this.getTableData();
                     break;
-                default :
+                default:
                     this.operation_type = "1";
                     this.show_table.first_show = true;
                     this.getTableData();

@@ -149,7 +149,7 @@ export default {
 
             let sure_text = tips === "save" ? "保存" : "下发";
             if (that.modify_detail_id) {
-                send_data.planId = that.modify_detail_id;
+                send_data.id = that.modify_detail_id;
             }
 
             send_data.operation = tips === "save" ? "01" : "02";
@@ -191,8 +191,8 @@ export default {
         deleteSalePlanDetail(opt) {
             let that = this,
                 plan_id;
-            if (opt.detailId) {
-                plan_id = opt.detailId
+            if (opt.id) {
+                plan_id = opt.id
                 that.$ajaxWrap({
                     url: "/plan/deletePlanDetail",
                     data: {
@@ -200,7 +200,7 @@ export default {
                     },
                     success(res) {
                         that.$baseWarn("删除成功！", function() {
-                            that.spliceArrayItem(opt.detailId);
+                            that.spliceArrayItem(opt.id);
                         })
                     }
                 })
@@ -216,7 +216,7 @@ export default {
             for (let i = 0; i < len; i++) {
                 let el = data[i];
                 if ((el.index === opt && el.index !== undefined) ||
-                    (el.detailId === opt) && el.detailId !== undefined) {
+                    (el.id === opt) && el.id !== undefined) {
 
                     data.splice(i, 1);
                     i = i - 1;
@@ -231,8 +231,8 @@ export default {
 
             for (let i = 0; i < item.length; i++) {
                 let el = item[i];
-                if (el.detailId) {
-                    temp_delete_array.push(el.detailId);
+                if (el.id) {
+                    temp_delete_array.push(el.id);
                 }
 
                 if (!isNaN(el.index)) {

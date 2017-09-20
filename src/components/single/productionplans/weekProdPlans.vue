@@ -84,22 +84,24 @@
                         <el-table-column label="操作" width="150">
                             <template scope="scope">
                                 <el-button 
-                                    @click="openWeekplanModal('修改周计划',scope.row.workplanWeekId,scope.row.week)"
+                                    @click="openWeekplanModal('修改周计划',scope.row.id,scope.row.week)"
                                     v-show="weekplan_push_tips[scope.$index].show"
                                     type="text"
+                                    class="r-bd"
                                     size="small">修改</el-button>
                                 <el-button 
-                                    @click="confirmOperation(scope.row.workplanWeekId,scope.$index,'下发')"
+                                    @click="confirmOperation(scope.row.id,scope.$index,'下发')"
                                     v-show="weekplan_push_tips[scope.$index].show"
                                     type="text"
+                                    class="r-bd"
                                     size="small">下发</el-button>
                                 <el-button 
-                                    @click="confirmOperation(scope.row.workplanWeekId,'','删除')"
+                                    @click="confirmOperation(scope.row.id,'','删除')"
                                     v-show="weekplan_push_tips[scope.$index].show"
                                     type="text"
                                     size="small">删除</el-button>
                                 <el-button
-                                    @click="openWeekplanInfo(scope.row.workplanWeekId,scope.row.week,'周计划详情')"
+                                    @click="openWeekplanInfo(scope.row.id,scope.row.week,'周计划详情')"
                                     v-show="!weekplan_push_tips[scope.$index].show"
                                     type="text"
                                     size="small">详情</el-button>
@@ -137,6 +139,7 @@
                                 @selection-change="handleSelectionChange">
                                 <el-table-column type="selection" width="60"></el-table-column>
 
+                                <!-- 
                                 <el-table-column width="60" prop="type" label="类型">
                                     <template  scope="scope">
                                         <el-select  placeholder="请选择"  :disabled="modal_table_edit" v-model="scope.row.type">
@@ -148,11 +151,13 @@
                                             </el-option>
                                         </el-select>
                                     </template>
-                                </el-table-column>
+                                </el-table-column> -->
 
                                 <el-table-column width="60" prop="lv" label="优先级">
                                     <template  scope="scope">
-                                        <el-select  placeholder="请选择" :disabled="modal_table_edit" v-model="scope.row.lv">
+                                        <el-select  placeholder="请选择" 
+                                            :disabled="modal_table_edit" 
+                                            v-model="scope.row.lv">
                                             <el-option 
                                                 v-for="item in modal_sync_data.priorityList" 
                                                 :label="item.dicName" 
@@ -165,16 +170,11 @@
 
                                 <el-table-column width="60" prop="custNo" label="客户">
                                     <template scope="scope">
-                                        <!-- 联动效果 勿删
                                         <el-select 
                                             placeholder="请选择" 
                                             :disabled="modal_table_edit" 
                                             v-model="scope.row.custNo" 
-                                            @change="getOrderDataList(scope.row.custNo,scope.$index)"> -->
-                                        <el-select 
-                                            placeholder="请选择" 
-                                            :disabled="modal_table_edit" 
-                                            v-model="scope.row.custNo" >
+                                            @change="getProductValue(scope.row.custNo,scope.$index)">
                                             <el-option  
                                                 v-for="item in modal_sync_data.custList" 
                                                 :label="item.custName" 
@@ -185,20 +185,13 @@
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column width="60" prop="ordrNo" label="订单编号">
+                                <el-table-column width="60" prop="ordrNo" label="订单代号">
                                     <template  scope="scope">
-                                        <el-tooltip class="item" effect="light" :disabled="!scope.row.machine" :content="scope.row.ordrNo" placement="bottom-start">
-                                            <!-- 联动效果 勿删
-                                            <el-select 
-                                                :disabled="modal_table_edit" 
-                                                v-model="scope.row.ordrNo"
-                                                @change="getProductData(scope.row.ordrNo,scope.$index)">
-                                                <el-option 
-                                                    v-for="item in scope.row.tempOrder"
-                                                    :label="item.orderNo"
-                                                    :value="item.orderNo"
-                                                    :key="item.orderNo"></el-option>
-                                            </el-select> -->
+                                        <el-tooltip class="item" 
+                                            effect="light" 
+                                            :disabled="!scope.row.machine" 
+                                            :content="scope.row.ordrNo" 
+                                            placement="bottom-start">
                                             <el-input
                                                 :disabled="modal_table_edit" 
                                                 v-model="scope.row.ordrNo"
@@ -207,32 +200,50 @@
                                         </el-tooltip>
                                     </template>
                                 </el-table-column>
+                                
+                                <el-table-column width="60" prop="itemNo" label="客户BOM代号">
+                                    <template scope="scope">  
+                                        <el-select 
+                                            :disabled="scope.row.sign" 
+                                            v-model="scope.row.itemNo"
+                                            @change="getAsyncBomData(scope.row.itemNo,scope.$index)">
+                                            <el-option value="1">请选择</el-option>
+                                            <el-option 
+                                                v-for="item in async_bom_number"
+                                                :label="item.custProductNo"
+                                                :value="item.custProductNo"
+                                                :key="item.cavityCnt"></el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
 
-                                <el-table-column width="60" prop="itemNo" label="产品型号">
-                                    <template  scope="scope" >
-                                        <el-tooltip class="item" effect="light" :disabled="!scope.row.machine" :content="scope.row.itemNo" placement="bottom-start">
-                                            <!-- 联动效果 勿删
-                                            <el-select 
-                                                :disabled="modal_table_edit" 
-                                                v-model="scope.row.itemNo"
-                                                @change="setProductName(scope.row.itemNo,scope.$index)">
+                                <el-table-column width="60" prop="mouldNo" label="模具代号">
+                                    <template  scope="scope">
+                                        <el-tooltip class="item" 
+                                            effect="light" 
+                                            :disabled="!scope.row.mouldNo" 
+                                            :content="scope.row.mouldCode" 
+                                            placement="bottom-start">
+                                            <el-select
+                                                :disabled="modal_table_edit"
+                                                v-model="scope.row.mouldNo">
                                                 <el-option 
-                                                    v-for="item in scope.row.tempItem"
-                                                    :label="item.itemNo"
-                                                    :value="item.itemNo"
-                                                    :key="item.itemNo"></el-option>
-                                            </el-select> -->
-                                            <el-input
-                                                :disabled="modal_table_edit" 
-                                                v-model="scope.row.itemNo">
-                                            </el-input>
+                                                    :label="scope.row.mouldCode"
+                                                    :value="scope.row.mouldNo"></el-option>
+
+                                            </el-select>
+                                            <!-- <el-input :disabled="modal_table_edit" v-model="scope.row.mouldNo"></el-input> -->
                                         </el-tooltip>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="60" prop="itemName" label="产品名称">
                                     <template  scope="scope">
-                                        <el-tooltip class="item" effect="light" :disabled="!scope.row.itemName" :content="scope.row.itemName" placement="bottom-start">
+                                        <el-tooltip class="item" 
+                                            effect="light" 
+                                            :disabled="!scope.row.itemName" 
+                                            :content="scope.row.itemName" 
+                                            placement="bottom-start">
                                             <el-input :disabled="modal_table_edit" v-model="scope.row.itemName"></el-input>
                                         </el-tooltip>
                                     </template>
@@ -240,7 +251,11 @@
 
                                 <el-table-column width="69" prop="productNo" label="生产批号">
                                     <template  scope="scope">
-                                        <el-tooltip class="item" effect="light" :disabled="!scope.row.productNo" :content="scope.row.productNo" placement="bottom-start">
+                                        <el-tooltip class="item" 
+                                            effect="light" 
+                                            :disabled="!scope.row.productNo" 
+                                            :content="scope.row.productNo" 
+                                            placement="bottom-start">
                                             <el-input disabled v-model="scope.row.productNo"></el-input>
                                         </el-tooltip>
                                     </template>
@@ -248,7 +263,11 @@
 
                                 <el-table-column width="60" prop="machine" label="机台归属">
                                     <template  scope="scope">
-                                        <el-tooltip class="item" effect="light"  :disabled="!scope.row.machine" :content="scope.row.machine" placement="bottom-start">
+                                        <el-tooltip class="item" 
+                                            effect="light" 
+                                            :disabled="!scope.row.machine" 
+                                            :content="scope.row.machine" 
+                                            placement="bottom-start"> 
                                             <el-input :disabled="modal_table_edit" v-model="scope.row.machine"></el-input>
                                         </el-tooltip>
                                     </template>
@@ -259,18 +278,18 @@
                                         <el-input :disabled="modal_table_edit" v-model="scope.row.moldingCycle"></el-input>
                                     </template>
                                 </el-table-column>
-
-                                <el-table-column width="60" prop="mouldNo" label="模具编号">
-                                    <template  scope="scope">
-                                        <el-tooltip class="item" effect="light" :disabled="!scope.row.mouldNo" :content="scope.row.mouldNo" placement="bottom-start">
-                                        <el-input :disabled="modal_table_edit" v-model="scope.row.mouldNo"></el-input>
-                                        </el-tooltip>
-                                    </template>
+                                
+                                <el-table-column width="60" prop="" label="工艺参数">
                                 </el-table-column>
+
 
                                 <el-table-column width="60" prop="materialGrade" label="原材料">
                                     <template  scope="scope">
-                                        <el-tooltip class="item" effect="light" :disabled="!scope.row.materialGrade" :content="scope.row.materialGrade" placement="bottom-start">
+                                        <el-tooltip class="item" 
+                                            effect="light" 
+                                            :disabled="!scope.row.materialGrade" 
+                                            :content="scope.row.materialGrade" 
+                                            placement="bottom-start">
                                             <el-input :disabled="modal_table_edit" v-model="scope.row.materialGrade"></el-input>
                                         </el-tooltip>
                                     </template>

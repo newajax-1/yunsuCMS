@@ -189,7 +189,7 @@ export default {
                 url: "/equipmentmaintpaln/save",
                 data: {
                     operationType: _operationType,
-                    equipmentMaintPalnId: that.is_has_id,
+                    id: that.is_has_id,
                     type: that.add_info.type || "01",
                     maintItm: that.add_info.maintItm,
                     maintCycle: that.add_info.maintCycle,
@@ -236,7 +236,7 @@ export default {
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].equipmentMaintPalnId);
+                    batch_ids.push(val[i].id);
                 }
                 this.batch_ids = batch_ids.join(",");
             } else {

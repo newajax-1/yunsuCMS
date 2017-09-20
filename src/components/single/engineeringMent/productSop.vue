@@ -44,12 +44,14 @@
                         <el-button
                             type="text"
                             size="small"
+                            class="r-bd"
                             @click="toModifySop(scope)">修改</el-button>
                         <el-button
                             type="text"
                             size="small"
+                            class="r-bd"
                             @click="deleteId(scope.row.productSopId)">删除</el-button>
-                        <a class="link-normal" :href="download_sop" @click.stop="setRowProductSop(scope.row.productSopId)">下载</a>
+                        <a class="link-normal r-bd" :href="download_sop" @click.stop="setRowProductSop(scope.row.productSopId)"><span>下载</span></a>
                         <a class="link-normal">
                             <label>重新上传
                                 <input type="file" class="hidden abs" @change="upload(scope.row.productSopId,$event)" accept=".pdf">
@@ -197,4 +199,17 @@
         font-style: normal;
         text-decoration: none;
         color: #20a0ff;
+        font-size:12px
+        padding: 0 3px
+        &.r-bd
+            span
+                position :relative
+                &:after   
+                    content: ""
+                    position: absolute
+                    top: 2px
+                    right: -5px
+                    width: 1px
+                    height: 12px
+                    background: #ccc
 </style>

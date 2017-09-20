@@ -169,7 +169,7 @@
                                     type="text"
                                     size="small"
                                     v-show="(scope.row.count - 0) > 0 ? false : true"    
-                                    @click="deleteId(scope.row.index,scope.row.productId)">删除</el-button>
+                                    @click="deleteId(scope.row.index,scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

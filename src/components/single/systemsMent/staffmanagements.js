@@ -1,3 +1,4 @@
+import Qs from 'qs'
 export default {
     name: 'orgManagement',
     data() {
@@ -29,7 +30,7 @@ export default {
             // 分页数据
             page: {
                 page_num: 1,
-                page_size: 15,
+                page_size: 10,
                 total: 0,
             },
             show_emp_id: false,
@@ -47,7 +48,7 @@ export default {
                 url: "/emp/queryList",
                 data: {
                     pageNum: that.search_pageNum || 1,
-                    pageSize: that.search_pageSize || 15,
+                    pageSize: that.search_pageSize || 10,
                     empNo: that.search_info.emp_no,
                     empNm: that.search_info.emp_nm,
                 },
@@ -211,7 +212,8 @@ export default {
 
         // 详情查询
         detailSearch(id) {
-
+            let that =  this;
+            that.$goRoute('/home/workLoadInfo',{ empNo: id });
         },
 
         // 详情刷新

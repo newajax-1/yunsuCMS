@@ -47,14 +47,13 @@
             </div>
 
             <el-col :span="24">
-                <!-- 原料库存  成品库存  选择开始start -->
+                
                 <el-tabs v-model="sale_change_name" type="card" class="tab-title" @tab-click="changeTableActive">
                     <el-tab-pane label="未下发" name="first" ></el-tab-pane>
                     <el-tab-pane label="已下发" name="second"></el-tab-pane>
                     <el-tab-pane label="已停止" name="other"></el-tab-pane>
-                </el-tabs>              
-                <!-- 原料库存  成品库存  选择开始end -->
-                <!-- 列表开始  start -->
+                </el-tabs>
+                
                 <div class="table-wrap">
                     <el-table 
                         border
@@ -72,7 +71,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="showDetail(scope.row.workplanWeekId,scope.row.week)">详情</el-button>
+                                    @click="showDetail(scope.row.id,scope.row.week)">详情</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -120,7 +119,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="stopWorkInfo(scope.row.workplanBillId)">终止</el-button>
+                                    @click="stopWorkInfo(scope.row.id)">终止</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

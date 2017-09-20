@@ -78,23 +78,25 @@
                                 <el-button  
                                     type="text"
                                     size="small"
+                                    class="r-bd"
                                     v-if="table_show"
-                                    @click="toAdd(scope.row.testMouldPlanId)">编辑</el-button>
+                                    @click="toAdd(scope.row.id)">编辑</el-button>
+                                <el-button  
+                                    type="text"
+                                    size="small"
+                                    class="r-bd"
+                                    v-if="table_show"
+                                    @click="deleteId(1, scope.row.id)">下发</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
                                     v-if="table_show"
-                                    @click="deleteId(1, scope.row.testMouldPlanId)">下发</el-button>
-                                <el-button  
-                                    type="text"
-                                    size="small"
-                                    v-if="table_show"
-                                    @click="deleteId(2, scope.row.testMouldPlanId)">删除</el-button>
+                                    @click="deleteId(2, scope.row.id)">删除</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
                                     v-if="!table_show && scope.row.testResult == '03'"
-                                    @click="successMould(scope.row.testMouldPlanId)">完成</el-button>
+                                    @click="successMould(scope.row.id)">完成</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

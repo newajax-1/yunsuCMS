@@ -247,7 +247,7 @@ export default {
                 url: "plan/operationPlan",
                 data: {
                     operationType: "issued",
-                    planId: planId
+                    id: planId
                 },
                 success() {
                     that.saleplan_push_tips[planIndex].show = false;
@@ -276,7 +276,7 @@ export default {
             that.$ajaxWrap({
                 url: "plan/detailPlan",
                 data: {
-                    planId: planId
+                    id: planId
                 },
                 success(res) {
                     let len;

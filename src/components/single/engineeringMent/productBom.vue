@@ -67,12 +67,14 @@
                         <el-button
                             type="text"
                             size="small"
+                            class="r-bd"
                             @click="openProductBomModify(scope.row.productId,2)">
                             修改
                         </el-button>
                         <el-button
                             type="text"
                             size="small"
+                            class="r-bd"
                             v-show="(scope.row.count - 0) > 0 ? false : true"
                             @click="deleteId(scope.row.productId)">
                             删除

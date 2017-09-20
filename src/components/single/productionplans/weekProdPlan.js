@@ -42,7 +42,6 @@ export default {
             modal_show_tips: false,
             modal_title: undefined,
             modal_table_row_data: {
-                type: "",
                 lv: "",
                 custNo: "",
                 scndProc: "",
@@ -60,10 +59,8 @@ export default {
                 inv: "",
                 secInv: "",
                 planBill: "",
-
-                // 联动代码 勿删
-                // tempOrder: undefined,
-                // tempItem: undefined,
+                mouldCode: "",
+                sign: false
             },
 
             // 周计划 模态框表格数据
@@ -166,7 +163,9 @@ export default {
             delete_work_array: [],
             weekplan_info_show: false,
             new_workplan_index: [],
-            edit_next_show_week: true
+            edit_next_show_week: true,
+
+            async_bom_number: []
         }
     },
 
@@ -291,7 +290,7 @@ export default {
                 type: "post",
                 url: "week/operationWeekStatus",
                 data: {
-                    workplanWeekId: plan_id
+                    id: plan_id
                 },
                 success(res) {
                     that.$baseWarn("下发成功！", function() {
@@ -309,7 +308,7 @@ export default {
                 type: "post",
                 url: "week/deleteById",
                 data: {
-                    workplanWeekId: plan_id,
+                    id: plan_id,
                 },
                 success(res) {
                     that.$baseWarn("删除成功！", function() {
@@ -331,9 +330,11 @@ export default {
             });
         },
 
+        /* Modal Event Start*/
+
         clearModalForm() {
+            let that = this;
             this.modal_show_tips = false;
-            this.modal_weekplan_table_data = [];
             this.modal_table_edit = false;
             this.weekplan_info_show = false;
             this.modal_btn_show = false;
@@ -341,6 +342,9 @@ export default {
             this.work_plan_id = undefined;
             this.new_week_date = true;
             this.edit_next_show_week = true;
+
+            that.$clearObject(that.modal_weekplan_table_data);
+            that.$clearObject(that.async_bom_number);
             this.refresh();
         },
 
@@ -365,22 +369,24 @@ export default {
 
             if (index_of_week) {
                 let week = index_of_week.match(/[1-9][0-9]*/g);
-                send_data.workplanWeekId = plan_id;
+                send_data.id = plan_id;
                 send_data.indexOfWeek = week[0];
             }
 
             this.modal_title = modal_title;
             this.modal_show_tips = true;
+
             this.create_new_plan = modal_title === "新建周计划" ? "create" : "modify";
             this.modal_btn_show = modal_title === "新建周计划" ? true : false;
             this.edit_next_show_week = modal_title === "新建周计划" ? true : false;
+
             this.getModalData(send_data);
         },
 
         getModalData(datas) {
             let that = this;
 
-            if (!datas.workplanWeekId) {
+            if (!datas.id) {
                 that.$ajaxWrap({
                     url: "week/queryWeekList",
                     success(res) {
@@ -388,7 +394,7 @@ export default {
                     }
                 })
             } else {
-                that.work_plan_id = datas.workplanWeekId;
+                that.work_plan_id = datas.id;
 
                 that.$ajaxWrap({
                     url: "week/queryWeekList",
@@ -406,35 +412,14 @@ export default {
             this.modal_sync_data = data;
 
             if (data.dataList.length) {
-
-                // 联动代码 勿删
-                // this.getProductInfoData(data.dataList);
-
                 this.modal_weekplan_table_data = data.dataList;
-
             } else {
                 this.createWorkplan();
             }
-
         },
 
-        // 联动代码 勿删
-        // getProductInfoData(data) {
-        //     let that = this;
-        //     for (let i = 0; i < data.length; i++) {
-        //         let temp_data = data[i];
-
-        //         that.getOrderDataList(temp_data.custNo, i, function(res) {
-        //             temp_data.tempOrder = res.orderList;
-        //             that.getProductData(temp_data.ordrNo, i, function(res) {
-        //                 temp_data.tempItem = res.bomList;
-        //                 Vue.set(that.modal_weekplan_table_data, i, temp_data);
-        //             });
-        //         });
-        //     }
-        // },
-
-        getProductData(val, index, done) {
+        /* product number */
+        getProductData(val, index) {
             let that = this;
 
             that.$ajaxWrap({
@@ -444,11 +429,7 @@ export default {
                     orderNo: val
                 },
                 success(res) {
-                    if (typeof done === "function") {
-                        done(res.data, index);
-                    } else {
-                        that.handleProductData(res.data, index);
-                    }
+                    that.handleProductData(res.data, index);
                 }
             });
         },
@@ -460,35 +441,26 @@ export default {
             temp_workplan_data.tempItem = data.bomList;
             temp_workplan_data.productNo = data.productNo;
 
-            // 联动代码 勿删
-            // temp_workplan_data.itemNo = "";
-            // temp_workplan_data.itemName = "";
-
-            Vue.set(that.modal_weekplan_table_data, index, temp_workplan_data);
+            that.modal_weekplan_table_data.splice(index, 1, temp_workplan_data);
         },
 
-        setProductName(val, index) {
-            let that = this,
-                temp_workplan_data = that.modal_weekplan_table_data[index];
-
-            if (temp_workplan_data.tempItem && temp_workplan_data.tempItem.length) {
-                temp_workplan_data.tempItem.every(function(el) {
-                    if (el.itemNo === val) {
-                        temp_workplan_data.itemName = el.itemName;
-                    }
-                })
-            }
-
-            Vue.set(that.modal_weekplan_table_data, index, temp_workplan_data);
-        },
-
+        /* modal verify */
         confirmSendPlan(tips) {
             let that = this,
                 sure_text = tips === "save" ? "保存" : "下发";
+            console.log(that.modal_weekplan_table_data)
+            if (that.isCompletion()) {
+                that.$baseConfirm(`确定${sure_text}吗？`, function() {
+                    that.sendWorkplanData(tips);
+                });
+            }
+        },
 
-            let new_table_data = that.modal_weekplan_table_data,
+        isCompletion() {
+
+            let that = this,
+                new_table_data = that.modal_weekplan_table_data,
                 len = new_table_data.length;
-
             for (let i = 0; i < len; i++) {
                 let el = new_table_data[i]
                 for (let key in el) {
@@ -513,25 +485,19 @@ export default {
                     }
                     if ((el[key] === "" || el[key] === undefined) && el[key] !== null) {
 
+                        if (key === "itemNo" && el.sign) {
+                            continue
+                        }
                         // 显示 未填写数据
-                        console.log(key);
-                        that.$alert('请完善表单信息', '提示', {
-                            confirmButtonText: '确定',
-                            callback() {}
-                        })
-                        return;
+                        console.error(key + " is undefined!");
+                        that.$baseWarn("请完善表单信息!");
+                        return false;
                     }
 
                     delete el.tempItem;
-
-                    // 联动代码 勿删
-                    // delete el.tempOrder;
                 }
             }
-
-            that.$baseConfirm(`确定${sure_text}吗？`, function() {
-                that.sendWorkplanData(tips);
-            });
+            return true
         },
 
         sendWorkplanData(tips) {
@@ -541,7 +507,7 @@ export default {
                 send_data = {};
 
             if (that.work_plan_id) {
-                send_data.workplanWeekId = that.work_plan_id;
+                send_data.id = that.work_plan_id;
                 send_data.operationType = "update";
             } else {
                 week = that.modal_week_date.week.match(/[^\(\)]+(?=\))/g)[0];
@@ -562,6 +528,7 @@ export default {
 
         sendWorkplanAjax(url, data, done) {
             let that = this;
+
             that.$ajaxWrap({
                 type: "post",
                 url: url,
@@ -596,55 +563,29 @@ export default {
         },
 
         createWorkplan() {
+
+
             let that = this,
                 plan_bill = null,
                 table_row_data = {};
+            if (that.isCompletion()) {
+                that.setModalWeekDate();
 
-            that.setModalWeekDate();
+                let index = that.modal_weekplan_table_data.length;
+                table_row_data.index = index;
 
-            let index = that.modal_weekplan_table_data.length;
-            table_row_data.index = index;
+                plan_bill = JSON.parse(JSON.stringify(that.modal_plan_bill));
+                that.modal_table_row_data.planBill = plan_bill;
 
-            plan_bill = JSON.parse(JSON.stringify(that.modal_plan_bill));
-            that.modal_table_row_data.planBill = plan_bill;
+                for (let key in that.modal_table_row_data) {
+                    table_row_data[key] = that.modal_table_row_data[key];
+                }
 
-            for (let key in that.modal_table_row_data) {
-                table_row_data[key] = that.modal_table_row_data[key];
+                that.modal_weekplan_table_data.push(table_row_data);
             }
-
-            that.modal_weekplan_table_data.push(table_row_data);
         },
 
-        // 联动代码 勿删
-        // getOrderDataList(val, index, done) {
-        //     let that = this;
-        //     that.$ajaxWrap({
-        //         type: "post",
-        //         url: "week/getWeekDetail",
-        //         data: {
-        //             custNo: val
-        //         },
-        //         success(res) {
-        //             if (typeof done === "function") {
-        //                 done(res.data, index);
-        //             } else {
-        //                 that.handleOrderData(res.data, index);
-        //             }
-        //         }
-        //     })
-        // },
-
-        handleOrderData(data, index) {
-            var that = this,
-                temp_modal_data = that.modal_weekplan_table_data[index];
-
-            // 联动代码 勿删
-            // temp_modal_data.tempOrder = data.orderList;
-
-            temp_modal_data.ordrNo = "";
-            Vue.set(that.modal_weekplan_table_data, index, temp_modal_data);
-        },
-
+        /* delete modal data */
         handleSelectionChange(item) {
             let temp_delete_array = [],
                 temp_delete_index = [];
@@ -751,10 +692,12 @@ export default {
             that.$ajaxWrap({
                 url: "week/queryWeekList",
                 data: {
-                    workplanWeekId: weekplan_id,
+                    id: weekplan_id,
                     indexOfWeek: week
                 },
                 success(res) {
+
+
                     that.loadModalTableData(res.data);
 
                     that.modal_show_tips = true;
@@ -790,13 +733,12 @@ export default {
 
                     let send_data = that.changeNextWeekdate(temp);
 
-                    console.log(send_data);
-
                     that.loadModalTableData(send_data);
                 }
             })
 
         },
+
         changeNextWeekdate(data) {
             let arr = data,
                 list = arr.dataList;
@@ -819,6 +761,105 @@ export default {
                 data.planBill.sunday.night.weekDate = arr.data.sundayDate
             }
             return arr;
+        },
+
+        /* BOM feature 2017-09-12 */
+        getProductValue(id, index) {
+            let that = this;
+
+            that.$ajaxWrap({
+                url: "week/getProductValue",
+                data: {
+                    id: id
+                },
+                success(res) {
+                    res.data.dataList[0].custProductNo = 'CG345';
+                    that.async_bom_number = res.data.dataList;
+                }
+            })
+        },
+
+        getAsyncBomData(num, index) {
+            let that = this,
+                async_data = that.async_bom_number,
+                len = async_data.length;
+
+            let data = that.modal_weekplan_table_data,
+                lens = data.length,
+                temp = data[index];
+
+            let other = Number(index + 1);
+
+            if (that.modal_weekplan_table_data[other] && that.modal_weekplan_table_data[other].sign) {
+                that.modal_weekplan_table_data.splice(0, lens);
+                that.modal_weekplan_table_data.push(temp);
+            }
+
+            for (let i = 0; i < len; i++) {
+                let el = async_data[i];
+                if (el.custProductNo === num) {
+
+                    that.setAsyncBomData(el, index);
+                }
+            }
+        },
+
+        setAsyncBomData(data, index) {
+
+            let that = this,
+                temp = that.modal_weekplan_table_data[index],
+                len = that.modal_weekplan_table_data.length;
+
+            let num = data.cavityCnt.split('');
+
+            temp.itemNo = data.custProductNo;
+            temp.machine = data.machine;
+            temp.secInv = data.secInv;
+            temp.mouldCode = data.mouldCode;
+            temp.mouldNo = data.mouldNo;
+            temp.itemName = data.productNm;
+            temp.materialGrade = data.materialGrade;
+            temp.moldingCycle = data.moldingCycl;
+            temp.scndProc = data.secdProc;
+
+            that.modal_weekplan_table_data.splice(index, 1, temp);
+
+            that.$ajaxWrap({
+                url: "week/getProductValueByMouldNo",
+                data: {
+                    mouldNo: temp.mouldNo
+                },
+                success(res) {
+                    console.log(res);
+                }
+            })
+
+            // for (let i = 0; i < num.length; i++) {
+            //     if (num[i] === "+") {
+            //         let ret = that.$deepCloneObject(that.modal_weekplan_table_data[index]);
+            //         let lv = ret.lv,
+            //             custNo = ret.custNo,
+            //             ordrNo = ret.ordrNo,
+            //             productNo = ret.productNo,
+            //             mouldNo = ret.mouldNo,
+            //             mouldCode = ret.mouldCode;
+
+            //         that.$clearObject(ret);
+
+            //         ret.lv = lv
+            //         ret.custNo = custNo;
+            //         ret.ordrNo = ordrNo;
+            //         ret.productNo = productNo;
+            //         ret.mouldCode = mouldCode;
+            //         ret.mouldNo = mouldNo;
+
+            //         ret.index = len++;
+
+            //         ret.planBill = JSON.parse(JSON.stringify(that.modal_plan_bill));
+            //         ret.sign = true
+            //         that.modal_weekplan_table_data.push(ret);
+            //     }
+            // }
         }
     }
 }

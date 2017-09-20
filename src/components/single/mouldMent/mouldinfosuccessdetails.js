@@ -7,37 +7,37 @@ export default {
     },
     data() {
         return {
-            first_data : [],
-            second_data : [],
-            third_data : [],
-            fourth_data : [],
-            fifth_data : [],
-            other_data : [],
+            first_data: [],
+            second_data: [],
+            third_data: [],
+            fourth_data: [],
+            fifth_data: [],
+            other_data: [],
 
-            show_table : {
-                first_show : true,
-                second_show : false,
-                third_show : false,
-                fourth_show : false,
-                fifth_show : false,
-                other_show : false,
+            show_table: {
+                first_show: true,
+                second_show: false,
+                third_show: false,
+                fourth_show: false,
+                fifth_show: false,
+                other_show: false,
             },
 
-            add_info : {
-            	oldMouldCode : undefined,
-                oldMouldNo : undefined,
-                chgCnt : undefined,
-                chgItm : undefined,
+            add_info: {
+                oldMouldCode: undefined,
+                oldMouldNo: undefined,
+                chgCnt: undefined,
+                chgItm: undefined,
             },
 
-            mould_no : [],
+            mould_no: [],
 
-            mould_id : undefined,
-            change_rec_id : undefined,
-            new_custom : false,
-            operation_type : "1",
-            sale_change_name : "first",
-            tab_name : undefined
+            mould_id: undefined,
+            change_rec_id: undefined,
+            new_custom: false,
+            operation_type: "1",
+            sale_change_name: "first",
+            tab_name: undefined
         }
     },
     methods: {
@@ -52,8 +52,8 @@ export default {
                 type: "post",
                 url: "/mould/detailMould",
                 data: {
-                    mouldId : that.mould_id,
-                    operationType : that.operation_type
+                    id: that.mould_id,
+                    operationType: that.operation_type
                 },
                 success(res) {
                     that.loadTable(res.data);
@@ -88,7 +88,7 @@ export default {
                 case "6":
                     that.other_data = data.acptList;
                     var _data = data.acptItemList
-                    for(var i = 0; i <  that.other_data.length; i++) {
+                    for (var i = 0; i < that.other_data.length; i++) {
                         var _name = _data[i].dicName;
                         var _value = _data[i].dicValue;
                         that.other_data[i].acptItm = _name;
@@ -97,7 +97,7 @@ export default {
                     }
 
                     break;
-                default :
+                default:
                     that.first_data = data.page.list;
                     break;
             }
@@ -114,44 +114,44 @@ export default {
                 type: "post",
                 url: "/change/initData",
                 data: {
-                    changeRecId : that.change_rec_id,
-                    mouldId : that.mould_id,
+                    changeRecId: that.change_rec_id,
+                    id: that.mould_id,
                 },
                 success(res) {
-                	that.mould_no = res.data.dataList;
-                	if(id) {
+                    that.mould_no = res.data.dataList;
+                    if (id) {
                         that.add_info = res.data.data;
-                	}
+                    }
                 }
             })
         },
 
         saveInfo() {
             let that = this;
-            
-            if(!that.add_info.oldMouldNo || !that.add_info.oldMouldCode || !that.add_info.chgCnt || !that.add_info.chgItm) {
-            	that.$message({
+
+            if (!that.add_info.oldMouldNo || !that.add_info.oldMouldCode || !that.add_info.chgCnt || !that.add_info.chgItm) {
+                that.$message({
                     message: "请将信息填写完整",
-                    type: "warning" 
+                    type: "warning"
                 });
-            	return;
+                return;
             }
 
             this.$ajaxWrap({
                 type: "post",
                 url: "/change/saveChange",
                 data: {
-                    changeRecId : that.change_rec_id,
-                    mouldId : that.mould_id,
-                    oldMouldNo : that.add_info.oldMouldNo,
-                    oldMouldCode : that.add_info.oldMouldCode,
-                    chgCnt : that.add_info.chgCnt,
-                    chgItm : that.add_info.chgItm,
+                    changeRecId: that.change_rec_id,
+                    id: that.mould_id,
+                    oldMouldNo: that.add_info.oldMouldNo,
+                    oldMouldCode: that.add_info.oldMouldCode,
+                    chgCnt: that.add_info.chgCnt,
+                    chgItm: that.add_info.chgItm,
                 },
                 success(res) {
                     that.$message({
                         message: res.tipMsg,
-                        type: "success" 
+                        type: "success"
                     });
                     that.new_custom = false;
                     that.getTableData();
@@ -160,10 +160,10 @@ export default {
         },
 
         changeShow(obj) {
-            if(obj.length == 0 ) {
+            if (obj.length == 0) {
                 return;
             };
-            for(var key in obj) {
+            for (var key in obj) {
                 obj[key] = false;
             }
         },
@@ -202,7 +202,7 @@ export default {
                     this.show_table.other_show = true;
                     this.getTableData();
                     break;
-                default :
+                default:
                     this.operation_type = "1";
                     this.show_table.first_show = true;
                     this.getTableData();
@@ -212,18 +212,18 @@ export default {
 
         changeOldRecId(val) {
             let that = this;
-            if(val){
-            	this.$ajaxWrap({
+            if (val) {
+                this.$ajaxWrap({
                     type: "post",
                     url: "/change/getOldMouldNo",
                     data: {
-                   	 oldMouldCode : val,
-                        mouldId : that.mould_id,
+                        oldMouldCode: val,
+                        id: that.mould_id,
                     },
                     success(res) {
-                   	 if(res.data.data.mouldNo) {
+                        if (res.data.data.mouldNo) {
                             that.add_info.oldMouldNo = res.data.data.mouldNo;
-                   	 }
+                        }
                     }
                 })
             }
@@ -239,9 +239,9 @@ export default {
                 that.new_custom = false;
             }).catch(function() {});
         },
-        comeBack(){
+        comeBack() {
             let that = this;
-            that.$goRoute('/home/mouldinfo',{ tab_name : that.tab_name})
+            that.$goRoute('/home/mouldinfo', { tab_name: that.tab_name })
         }
     },
 }

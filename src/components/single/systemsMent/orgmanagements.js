@@ -1,268 +1,342 @@
+import Qs from 'qs'
 export default {
     name: 'orgManagement',
+    created() {
+        this.init();
+    },
     data() {
 
         return {
-            table_data: [],
-            sys_organization: [],
-            child_organization: [],
-            commonorg_id: undefined,
-            search_pageNum: undefined,
-            search_pageSize: undefined,
-            new_organization: false,
-            add_info: {
-                org_name: undefined,
-                remarks: undefined,
+            sys_organization:[
+                {
+                    orgName:undefined,
+                    id:undefined
+                }
+            ],
+            //查询条件
+            form_data: {
+                empNo: undefined,
+                empNm: undefined,
+                jobTitle: undefined,
             },
-            select_op: [],
-            sel_val: undefined,
+            //员工改动弹窗
+            staff_vision:false,
 
-            // 删除提示框start
-            dialog_visible: false,
-            delete_msg: undefined,
-            tip_msg: undefined,
-            // 列表信息
-
-            // 分页
-            page: {
-                page_num: 1,
-                page_size: 15,
+            //分页
+            page_list: {
+                pageNum: 1,
+                pageSize: 10,
                 total: 0
             },
+            search_pageNum: undefined,
+            search_pageSize: undefined,
+            table_data: [{
+                empNm: undefined,
+                empNo: undefined,
+                gender: undefined,
+                jobTitle: undefined,
+                emailNo: undefined,
+                telephone: undefined,
+                roleName: undefined,
+            }],
+            modal_form_data:{
+                orgName:undefined,
+                roleName:undefined,
+                empNm:undefined,
+                gender:undefined,
+                empNo:undefined,
+                jobTitle:undefined,
+                telephone:undefined,
+                password:undefined,
+                emailNo:undefined,
+                autorityPad:'',
+                autorityPda:'',
+                autorityPc:'',
+                id:undefined,
+                sysOrgId:undefined
+            },
 
-            //表单数据开始start
-            staff_table_data: [],
+            table_btn_right : [{
+                show : true
+            }],
+
+            staff_org_data:undefined,
+            staff_role_data:undefined,
+            model_title:undefined,
+            role_data:[],
+            role_vision:undefined,
+            add_info:[],
+            change_status:true,
+            frozen_statue:false,
+            restart_status:false,
+
         }
     },
     methods: {
-        // 弹框显示
-        toAdd() {
-            this.new_custom = true;
-        },
+        handleOpen(key, keyPath) {},
 
-        // 加载部门架构数据
-        loadTable() {
-            var that = this;
-            this.$ajaxWrap({
+        handleClose(key, keyPath) {},
+        init() {
+            this.reset();
+            this.getPageData();
+        },
+        reset() {
+            let that = this;
+            that.$clearObject(that.form_data);
+        },
+        refresh() {
+            this.reset();
+            this.searchFormData();
+        },
+        getPageData() {
+            let that = this;
+            that.$ajaxWrap({
                 type: "post",
-                url: "sysOrganization/queryList",
-                data: {},
-                callback: function(data) {
-                    that.sys_organization = data.data.data;
+                url: "sysOrganization/index",
+                success(res) {
+                    console.log(res);
+                    that.loadPageDate(res.data);
                 }
             })
         },
+        loadPageDate(data) {
+            let that = this,
+                load_table_data = data.page.list,
+                load_orgData = data.dataList;
 
-        // 加载部门员工数据
-        loadStaffTable() {
-            var that = this;
-            this.$ajaxWrap({
-                type: "post",
-                url: "sysOrganization/queryStaffList",
-                data: {
-                    pageNum: that.search_pageNum || 1,
-                    pageSize: that.search_pageSize || 15,
-                    orgId: that.commonorg_id,
-                },
-                callback: function(data) {
-                    that.staff_table_data = data.data.page.list,
-                        that.page.total = data.data.page.total
-                    that.page.page_num = data.data.page.pageNum;
-                    that.page.page_size = data.data.page.pageSize;
-                }
-            })
+                that.table_btn_right = [];
+                for(var i = 0; i<load_table_data.length;i++){
+                    load_table_data[i].gender = load_table_data[i].gender === 1 ? "女":"男";
+                    let el = load_table_data[i];
+                    load_table_data[i].index = that.page_list.pageSize*(that.page_list.pageNum - 1) + i + 1;
+                    // if(el.empStatus === 11){
+                    //     that.table_btn_right.push()
+                    //     that.frozen_statue = true;
+                    //     that.restart_status = false;
+                    // }else if(el.empStatus === 10){
+                    //     that.frozen_statue = false;
+                    //     that.restart_status = true;
+                    // }
+                    
+                    that.table_btn_right.push({show: el.empStatus === 11 ? true : false})
+                };
+
+            that.table_data = load_table_data;
+            that.sys_organization = load_orgData;
+            that.page_list.pageNum = data.page.pageNum;
+            that.page_list.pageSize = data.page.pageSize;
+            that.page_list.total = data.page.total - 0;
         },
-
-        // 点击子元素显示
-        getObject(objectChild) {
-            var _data = [];
-            _data.push({
-                planNo: objectChild.orgName,
-                remarks: objectChild.remarks
-            });
-            this.commonorg_id = objectChild.orgId;
-            this.table_data = _data;
-            this.staff_table_data = null;
-        },
-
-        // 点击父元素显示
-        isDeleteParent(object) {
-            var objectChilds = object.childs;
-            var _data = [];
-            if (objectChilds.length == 1) {
-                if (objectChilds[0].orgId == null) {
-                    _data.push({
-                        planNo: object.orgName,
-                        remarks: object.remarks
-                    });
-                    this.commonorg_id = object.orgId;
-                    this.staff_table_data = null;
-                }
+        currentPageChange(val) {
+            if (this.table_data.length) {
+                this.searchFormData(val, "num");
             }
-            this.table_data = _data;
-            return false;
         },
 
-        // 预添加
-        toAdd() {
-            var that = this;
-            this.add_info.org_name = "";
-            this.sel_val = "";
-            this.add_info.remarks = "";
-            this.new_organization = true;
-            this.$ajaxWrap({
-                type: "post",
-                url: "/sysOrganization/toAddOrganization",
-                data: {},
-                callback: function(data) {
-                    that.select_op = data.data.dataList;
-                }
-            })
-        },
-
-        // 添加新数据
-        addNewOrganization() {
-            var that = this;
-            if (this.add_info.org_name == "") {
-                that.$message({
-                    message: '请填写组织名称',
-                    type: 'warning'
-                });
-                return;
+        currentSizeChange(val) {
+            if (this.table_data.length) {
+                this.searchFormData(val, "size");
             }
-            if (this.sel_val == "") {
-                that.$message({
-                    message: '请选择父级组织',
-                    type: 'warning'
-                });
-                return;
-            }
-            this.$ajaxWrap({
-                type: "post",
-                url: "/sysOrganization/addOrganization",
-                data: {
-                    orgName: that.add_info.org_name,
-                    parentId: that.sel_val,
-                    remarks: that.add_info.remarks,
-                },
-                callback: function(data) {
-                    that.$message({
-                        message: '添加成功',
-                        type: 'success'
-                    });
-                    that.new_organization = false;
-                    that.loadTable();
-                },
-                error(data) {
-
-                }
-            })
         },
-
-        // 删除员工弹框
-        deleteStaff(accountOrgid) {
-            this.delete_msg = "你确定要删除该会员？";
-            this.tip_msg = accountOrgid;
-            this.dialog_visible = true;
-        },
-
-        // 单条删除部门弹框
-        deletetab() {
-            this.delete_msg = "你确定要删除该条数据？";
-            this.tip_msg = this.commonorg_id;
-            this.dialog_visible = true;
-        },
-
-        // 删除
-        deleteObject() {
-            var that = this,
-                flag = undefined,
-                tips = false;
-            if (this.delete_msg.indexOf("会员") == -1) {
-                flag = "/sysOrganization/deleteById?orgId="
-                tips = true;
-
+        searchFormData(pageval, pagesize) {
+            let that = this,
+                search_data = that.form_data;
+            if (pagesize === "num") {
+                search_data.pageNum = pageval || that.page_list.pageNum;
+                search_data.pageSize = that.page_list.pageSize;
             } else {
-                flag = "/sysOrganization/deleteStaffById?accountOrgid="
+                search_data.pageNum = that.page_list.pageNum;
+                search_data.pageSize = pageval || that.page_list.pageSize;
             }
-            this.$ajaxWrap({
+
+            that.$ajaxWrap({
+                type: "post",
+                url: "sysOrganization/index",
+                data: search_data,
+                success(res) {
+                    that.loadPageDate(res.data);
+                }
+            });
+        },
+        openStaff(id){
+            console.log(id);
+            let that = this;
+            that.staff_vision= true;
+            that.$ajaxWrap({
                 type: "get",
-                url: flag + that.tip_msg,
-                data: {},
-                callback: function(data) {
+                url: "emp/addOrUpdateClick",
+                data: {
+                    empId: 0
+                },
+                success(res) {
+                    that.staff_org_data = res.data.ORG_LIST;
+                    that.staff_role_data = res.data.ROLE_LIST;
+                }
+            });
+            if(!id){
+                that.model_title = "增加员工";
+                that.change_status = false;
+            }else{
+                that.model_title = "修改员工";
+                that.change_status = true;
+                that.$ajaxWrap({
+                    type: "get",
+                    url: "emp/addOrUpdateClick",
+                    data: {
+                        empId: id
+                    },
+                    success(res) {
+                        let form_res = res.data.data;
+                        form_res.autorityPc = form_res.autorityPc == 0 ? false :true;
+                        form_res.autorityPda = form_res.autorityPda == 0 ? false :true;
+                        form_res.autorityPad = form_res.autorityPad == 0 ? false :true;
+                        that.modal_form_data = form_res;
+                        that.modal_form_data.password = "******"
+                    }
+                });
+            }
+        },
+        saveModelData(){
+            let that = this;
+            console.log(that.modal_form_data);
+            that.modal_form_data.autorityPad = that.modal_form_data.autorityPad === true ? 0 : 1;
+            that.modal_form_data.autorityPda = that.modal_form_data.autorityPda === true ? 0 : 1;
+            that.modal_form_data.autorityPc = that.modal_form_data.autorityPc === true ? 0 : 1;
+            if(that.change_status == false){
+                that.modal_form_data.id=0;};
+            if(that.modal_form_data.password == "******"){
+                that.modal_form_data.password = undefined;
+            }
+            that.$ajaxWrap({
+                type: "post",
+                url: "emp/save",
+                data: that.modal_form_data,
+                success(res) {
                     that.$message({
-                        message: '删除成功',
+                        message: res.tipMsg,
                         type: 'success'
                     });
-
-                    that.dialog_visible = false;
-                    that.table_data = null;
-                    that.staff_table_data = null;
-
-                    if (tips) {
-                        that.loadTable();
-                    } else {
-                        that.loadStaffTable();
-                    }
-                },
-                error(data) {
-
+                    that.staff_vision = false;
+                    that.getPageData();
                 }
-            })
-
+            });
         },
         // 点击关闭
         closeDialog() {
             var that = this;
+            this.$clearObject(this.modal_form_data);
             this.$confirm("你确定关闭么？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
             }).then(function() {
-                that.new_organization = false;
+                that.staff_vision = false;
             }).catch(function() {});
         },
-
-        // 查看员工信息
-        lookDetail() {
-            this.staff_list = true;
-            this.loadStaffTable();
+        deleteStaff(id){
+            let that = this;
+            this.$confirm("你确定删除这条数据吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+            }).then(function() {
+                that.$ajaxWrap({
+                    type: "get",
+                    url: "emp/deleteById",
+                    data: {
+                        empId: id
+                    },
+                    callback: function(data) {
+                        that.$message({
+                            message: "删除成功！",
+                            type: "success"
+                        });
+                        that.getPageData();
+                    }
+                })
+            }).catch(function() {});
         },
+        goAddDepartment(){
+            this.$goRoute("/home/addDepartment");
+        },
+        changeDepm(id){
+            console.log(id);
+            let that = this;
+            that.$ajaxWrap({
+                type: "post",
+                url: "sysOrganization/index",
+                data: {
+                    sysOrgId: id
+                },
+                success(res){
 
-        searchFormData(pageval, pagesize) {
-            var that = this;
-            if (pagesize === "num") {
-                that.search_pageNum = pageval || that.page.page_num;
-                that.search_pageSize = that.page.page_size;
-            } else {
-                that.search_pageNum = that.page.page_num;
-                that.search_pageSize = pageval || that.page.page_size;
+                    that.loadPageDate(res.data);
+                }
+            })
+
+        },
+        //分组弹窗
+        toAddRole() {
+            let that = this;
+            that.$ajaxWrap({
+                type: "get",
+                url: "emp/addOrUpdateClick",
+                data: {
+                    empId: 0
+                },
+                success(res) {
+                    that.role_data = res.data.ROLE_LIST;
+                }
+            })
+            this.role_vision = true;
+        },
+        // 复选框勾选
+        handleSelectionChange(val) {
+            var batch_ids = [];
+            var batch_names = [];
+            if (val.length > 0) {
+                for (var i = 0; i < val.length; i++) {
+                    batch_ids.push(val[i].id);
+                    batch_names.push(val[i].roleName);
+                }
+                this.batch_names = batch_names.join(",");
+                this.batch_ids = batch_ids.join(",");
             }
-            that.loadStaffTable();
         },
-
-        // 改变分页数目的时候调用
-        handleSizeChange(val) {
-            if (this.table_data.length) {
-                this.searchFormData(val, "size");
-            };
+        saveRoleInfo(){
+            this.modal_form_data.roleName = this.batch_names;
+            this.modal_form_data.roleIds = this.batch_ids;
+            this.role_vision = false;
         },
-
-        //改变页码的时候调用
-        handleCurrentChange(val) {
-            if (this.table_data.length) {
-                this.searchFormData(val, "num");
-            };
+        goAddDep(){
+            this.$goRoute("/home/addDepartment");
         },
-
-
-        handleOpen(key, keyPath) {},
-
-        handleClose(key, keyPath) {},
-
+        frozen(id){
+            let that = this;
+            that.$ajaxWrap({
+                type: "get",
+                url: "emp/frozenEmp",
+                data: {
+                    empId: id
+                },
+                success(res) {
+                    that.getPageData();
+                }
+            })
+        },
+        restart(id){
+            let that = this;
+            that.$ajaxWrap({
+                type: "get",
+                url: "memberAccount/addMemberAccount",
+                data: {
+                    empId: id
+                },
+                success(res) {
+                    that.getPageData();
+                }
+            })
+        },
     },
     //当加载页面的时候调用
     mounted() {
-        this.staffTableData = null;
-        this.loadTable();
     }
 }

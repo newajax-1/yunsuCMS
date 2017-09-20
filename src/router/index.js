@@ -30,6 +30,8 @@ import orgManagement from '@/components/single/systemsMent/orgManagement'
 import staffManagement from '@/components/single/systemsMent/staffManagement'
 import workLoadInfo from '@/components/single/systemsMent/workLoadInfo'
 
+import addDepartment from '@/components/single/systemsMent/addDepartment'
+
 // 生产作业管理
 import proMonitoring from '@/components/single/operationMent/proMonitoring'
 import workMonitoring from '@/components/single/operationMent/workMonitoring'
@@ -124,6 +126,10 @@ export default new Router({
                 {
                     path: 'orgmanagement',
                     component: orgManagement
+                },
+                {
+                    path: 'addDepartment',
+                    component: addDepartment
                 },
                 {
                     path: 'staffmanagement',

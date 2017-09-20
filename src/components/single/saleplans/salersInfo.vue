@@ -72,15 +72,17 @@
                                 <el-button
                                     type="text"
                                     size="small"
-                                    @click="showDetailed(scope.row.custId)">详情</el-button>
+                                    class="r-bd"
+                                    @click="showDetailed(scope.row.id)">详情</el-button>
                                 <el-button
                                     type="text"
                                     size="small"
-                                    @click="edittab(scope.row.custId)">修改</el-button>
+                                    class="r-bd"
+                                    @click="edittab(scope.row.id)">修改</el-button>
                                 <el-button
                                     type="text"
                                     size="small"
-                                    @click="deletetab(scope.row.custId)">删除</el-button>
+                                    @click="deletetab(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

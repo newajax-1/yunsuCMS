@@ -233,6 +233,8 @@ $default_bd_gray_hover = $default_bd_gray;
         .logo,
         .nav-title
             padding: 0 16px
+        .logo
+            padding-top: 3px
         .nav-title
             border-right: 1px solid $header_bdcolor
             border-left: 1px solid $header_bdcolor
@@ -245,11 +247,6 @@ $default_bd_gray_hover = $default_bd_gray;
             border-left: 1px solid $header_bdcolor;
             &:first-child
                 padding: 0 32px
-            &:nth-child(2)
-                padding: 0 25px
-                &:hover
-                    .member-list
-                        display: block
                 .work-id
                     padding-left: 16px
                     &::before
@@ -263,6 +260,9 @@ $default_bd_gray_hover = $default_bd_gray;
                         background-color: #717477                    
                 .header-text
                     padding-right: 16px
+                &:hover
+                    .member-list
+                        display: block
             
             &:last-child
                 padding: 0 35px

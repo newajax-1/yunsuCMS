@@ -80,7 +80,7 @@ export default {
                 type: "post",
                 url: "/mould/initData",
                 data: {
-                    mouldId: that.mould_id
+                    id: that.mould_id
                 },
                 success: function(res) {
                     that.loadTable(res.data)
@@ -90,7 +90,7 @@ export default {
 
         openMouldInfoModal(row) {
             let that = this,
-                tips = row.index || row.productId || row;
+                tips = row.index || row.id || row;
 
             that.new_custom = true;
             that.add_tips = tips;
@@ -125,10 +125,10 @@ export default {
 
         loadMouldInfoModal(tips) {
             let that = this;
-
+            console.log(tips);
             for (let i = 0; i < that.table_data.length; i++) {
                 let el = that.table_data[i];
-                if (el.index === tips || el.productId === tips) {
+                if (el.index === tips || el.id === tips) {
                     let clone_el = that.$cloneObject(el);
                     return that.dialog_form_data = clone_el;
                 }
@@ -208,7 +208,7 @@ export default {
                 } else {
                     for (let i = 0; i < len; i++) {
                         let el = that.table_data[i];
-                        if (el.productId === clone_modal_data.productId) {
+                        if (el.id === clone_modal_data.id) {
                             that.table_data.splice(i, 1, clone_modal_data);
                             that.$baseWarn("修改成功！", function() {
                                 that.clearFormData();
@@ -224,7 +224,7 @@ export default {
             let that = this;
             for (let i = 0; i < that.table_data.length; i++) {
                 let el = that.table_data[i];
-                if (el.productId === clone_data.productId) {
+                if (el.id === clone_data.id) {
                     Vue.set(that.table_data, i, clone_data);
                 }
                 if (el.index === clone_data.index) {
@@ -269,7 +269,7 @@ export default {
                     machine: that.batch_ids,
                     machineName: that.batch_code,
                     productList: that.table_data,
-                    mouldId: that.mould_id,
+                    id: that.mould_id,
                     mouldNo: that.add_info.mouldNo,
                     sourceType: that.source_type_tips
                 },
@@ -323,29 +323,33 @@ export default {
             }
         },
 
-        deleteId(id, val) {
+        deleteId(index, id) {
             let that = this;
 
             this.$confirm("你确定删除么？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
             }).then(function() {
-                if (val) {
+                if (id) {
                     for (var i = 0; i < that.table_data.length; i++) {
-                        if (that.table_data[i].productId === val) {
-                            that.table_data.splice(i, i + 1);
+                        if (that.table_data[i].id === id) {
+                            that.table_data.splice(i, 1);
                         }
                     }
+
                     that.$message({
                         message: "删除成功",
                         type: "success"
                     });
                 } else {
                     for (var i = 0; i < that.table_data.length; i++) {
-                        if (that.table_data[i].index === id) {
-                            that.table_data.splice(i, i + 1);
+                        if (that.table_data[i].index === index) {
+                            that.table_data.splice(i, 1);
+
+                            console.log(i)
                         }
                     }
+
                     that.$message({
                         message: "删除成功",
                         type: "success"

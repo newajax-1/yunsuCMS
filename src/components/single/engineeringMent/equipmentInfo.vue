@@ -61,20 +61,23 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="toAdd(scope.row.equipmentId)">修改</el-button>
+                                    class="r-bd"
+                                    @click="toAdd(scope.row.id)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="showDetail(scope.row.equipmentId,scope.row.eqpNo)">详情</el-button>
-                                <el-button  
-                                    type="text"
-                                    size="small"
-                                    @click="deleteId(scope.row.equipmentId)">删除</el-button>
+                                    class="r-bd"
+                                    @click="showDetail(scope.row.id,scope.row.eqpNo)">详情</el-button>
                                 <el-button  
                                     type="text"
                                     v-if="show_other"
                                     size="small"
+                                    class="r-bd"
                                     @click="toBinding(scope.row.eqpNo)">绑定</el-button>
+                                <el-button  
+                                    type="text"
+                                    size="small"
+                                    @click="deleteId(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -118,11 +121,10 @@
                                             v-model="add_info.eqpTyp" 
                                             @change="changeType(add_info.eqpTyp)">
                                             <el-option 
-                                            v-for="item in select_op"
-                                            :label="item.dicName"
-                                            :value="item.dicValue"
-                                            :key="item.dicValue"
-                                            ></el-option>
+                                                v-for="item in select_op"
+                                                :label="item.dicName"
+                                                :value="item.dicValue"
+                                                :key="item.dicValue"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -142,10 +144,10 @@
                                                 class="required" 
                                                 v-model="add_info.type">
                                                 <el-option 
-                                                v-for="item in select_type"
-                                                :label="item.dicName"
-                                                :value="item.dicName"
-                                                :key="item.dicName"
+                                                    v-for="item in select_type"
+                                                    :label="item.dicName"
+                                                    :value="item.dicName"
+                                                    :key="item.dicName"
                                                 ></el-option>
                                             </el-select>
                                             <!-- <el-input placeholder="请输入设备类型" class="required" v-model="add_info.type"></el-input> -->
