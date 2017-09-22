@@ -37,13 +37,13 @@
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="dsgnCnt" label="设计模数"></el-table-column>
                         <el-table-column prop="initCnt" label="初始模数"></el-table-column>
-                        <el-table-column prop="cavityCnt" label="模穴数"></el-table-column>
+                        <el-table-column prop="cavityCntName" label="模穴数"></el-table-column>
                         <el-table-column prop="moldingCycl" label="成型周期"></el-table-column>
-                        <el-table-column prop="mouldAscription" label="模具归属"></el-table-column>
-                        <el-table-column prop="mouldFactory" label="模具制造"></el-table-column>
-                        <el-table-column prop="custFactory" label="客户名称"></el-table-column>
+                        <el-table-column prop="mouldAscriptionName" label="模具归属"></el-table-column>
+                        <el-table-column prop="mouldFactoryName" label="模具制造"></el-table-column>
+                        <el-table-column prop="custFactoryName" label="客户名称"></el-table-column>
                         <el-table-column prop="machineName" label="可用机台"></el-table-column>
-                        <el-table-column prop="acptSts" label="验收状态"></el-table-column>
+                        <el-table-column prop="acptStsName" label="验收状态"></el-table-column>
                     </el-table>
 
                     <!-- 表格二 -->
@@ -55,7 +55,7 @@
                         <el-table-column prop="productNo" label="产品BOM编号"></el-table-column>
                         <el-table-column prop="productNm" label="产品BOM名称"></el-table-column>
                         <el-table-column prop="custProductNo" label="客户BOM编号"></el-table-column>
-                        <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
+                        <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="number" label="穴号"></el-table-column>
                         <el-table-column prop="materialGrade" label="材质&牌号"></el-table-column>
                         <el-table-column prop="color" label="色号&颜色"></el-table-column>

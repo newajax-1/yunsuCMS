@@ -34,7 +34,7 @@
                     <el-tab-pane label="注塑机" name="first" ></el-tab-pane>
                     <el-tab-pane label="集中供料" name="second"></el-tab-pane>
                     <el-tab-pane label="辅机" name="third"></el-tab-pane>
-                    <el-tab-pane label="5T行车" name="fourth"></el-tab-pane>
+                    <el-tab-pane label="行车" name="fourth"></el-tab-pane>
                     <el-tab-pane label="循环水系统" name="fifth"></el-tab-pane>
                     <el-tab-pane label="高低压开关柜" name="other"></el-tab-pane>
                 </el-tabs>              

@@ -6,7 +6,7 @@ export default {
     data() {
         return {
             //产品BOM表格数据
-            product_bom_table_data: [{}],
+            product_bom_table_data: [],
             //产品BOM查询条件
             product_bom_form_data: {
                 productNo: undefined,

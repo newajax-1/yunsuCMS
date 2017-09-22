@@ -5,40 +5,40 @@ export default {
     },
     data() {
         return {
+
             //产品SOP表格数据
-            product_sop_table_data: [{}],
+            product_sop_table_data: [],
             //产品SOP查询条件
             product_sop_form_data: {
                 productBomName: undefined,
             },
+
             //产品SOP分页
             product_sop_page_list: {
                 pageNum: 1,
                 pageSize: 15,
                 total: 0
             },
-            //
+
             batch_ids: undefined,
+
             //新增
             product_sop_add: false,
+
             product_sop_add_data_get: {
                 product_bom_select: [],
                 product_sop_select: [],
                 productBomId: undefined
             },
+
             product_sop_add_data_send: {
                 sopTyp: undefined,
                 sopTitl: undefined,
                 productBomId: undefined
             },
-            //修改
-            product_sop_modify: false,
-            modify: {
-                sopTitl: undefined,
-                BomSelect: [],
-                SopSelect: []
-            },
-            file_value: null,
+
+            modal_title: "",
+
             download_sop: "javascript:void(0);"
         }
     },
@@ -79,17 +79,19 @@ export default {
             that.product_sop_page_list.pageSize = data.page.pageSize;
             that.product_sop_page_list.total = data.page.total;
         },
+
         handleSelectionChange(val) {
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].productSopId);
+                    batch_ids.push(val[i].id);
                 }
                 this.batch_ids = batch_ids.join(",");
             } else {
                 this.batch_ids = undefined;
             }
         },
+
         currentPageChange(val) {
             if (this.product_sop_table_data.length) {
                 this.searchFormData(val, "num");
@@ -101,6 +103,7 @@ export default {
                 this.searchFormData(val, "size");
             }
         },
+
         searchFormData(pageval, pagesize) {
             let that = this,
                 search_data = that.product_sop_form_data;
@@ -122,21 +125,19 @@ export default {
                 }
             });
         },
+
         deleteIds() {
             let that = this;
 
-            if (!this.batch_ids) {
-                this.$message({
+            if (!that.batch_ids) {
+                that.$message({
                     message: "请选择删除的数据",
                     type: "warning"
                 });
                 return;
             };
 
-            this.$confirm("你确定删除么？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-            }).then(function() {
+            that.$baseConfirm("你确定删除么？", function() {
                 that.$ajaxWrap({
                     type: "get",
                     url: "productsop/deleteProductSop",
@@ -151,15 +152,14 @@ export default {
                         that.refresh();
                     }
                 })
-            }).catch(function() {});
+            });
         },
+
         // 删除
         deleteId(id) {
             let that = this;
-            this.$confirm("你确定删除么？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-            }).then(function() {
+
+            that.$baseConfirm("你确定删除么？", function() {
                 that.$ajaxWrap({
                     type: "get",
                     url: "productsop/deleteProductSop",
@@ -174,29 +174,53 @@ export default {
                         that.refresh();
                     }
                 })
-            }).catch(function() {});
+            });
         },
+
+        clearData() {
+            let that = this;
+
+            that.product_sop_add = false;
+            that.$clearObject(that.product_sop_add_data_send);
+            that.refresh();
+        },
+
         closeModal() {
             let that = this;
             that.$baseConfirm("确定关闭？", function() {
-                that.product_sop_add = false;
-                that.product_sop_modify = false;
-                that.refresh();
+                that.clearData();
             })
         },
-        toAddSop() {
+
+        openProductSopModal(id) {
             let that = this;
-            this.$clearObject(this.product_sop_add_data_send);
             that.product_sop_add = true;
-            that.$ajaxWrap({
-                type: "get",
-                url: "productsop/toInsertOrEditProductSop",
-                success(res) {
-                    that.product_sop_add_data_get.product_bom_select = res.data.dataList;
-                    that.product_sop_add_data_get.product_sop_select = res.data.dicData;
-                }
-            });
+            if (!id) {
+                that.modal_title = "新增产品SOP";
+                that.$ajaxWrap({
+                    url: "productsop/toInsertOrEditProductSop",
+                    success(res) {
+                        that.product_sop_add_data_get.product_bom_select = res.data.dataList;
+                        that.product_sop_add_data_get.product_sop_select = res.data.dicData;
+                    }
+                });
+
+            } else {
+                that.modal_title = "编辑产品SOP";
+                that.$ajaxWrap({
+                    url: "productsop/toInsertOrEditProductSop",
+                    data: {
+                        id: id
+                    },
+                    success(res) {
+                        that.product_sop_add_data_send = res.data.data;
+                        that.product_sop_add_data_get.product_bom_select = res.data.dataList;
+                        that.product_sop_add_data_get.product_sop_select = res.data.dicData;
+                    }
+                });
+            }
         },
+
         addSop() {
             let that = this,
                 send_data = that.product_sop_add_data_send;
@@ -209,59 +233,12 @@ export default {
                         message: res.tipMsg,
                         type: "success"
                     });
-                    that.product_sop_add = false;
-                    that.refresh();
+                    that.clearData();
                 }
             })
         },
-        toModifySop(id) {
-            let that = this;
-            that.product_sop_modify = true;
-            that.$ajaxWrap({
-                type: "get",
-                url: "productsop/toInsertOrEditProductSop",
-                data: {
-                    id: id
-                },
-                success(res) {
-                    that.product_sop_add_data_send = res.data.data;
-                    that.modify.BomSelect = res.data.dataList;
-                    that.modify.SopSelect = res.data.dicData;
-                }
-            });
-        },
-        modifySop() {
-            let that = this,
 
-                send_data = that.product_sop_add_data_send;
-
-            that.$ajaxWrap({
-                type: "post",
-                url: "productsop/insertOrEditProductSop",
-                data: send_data,
-                success(res) {
-                    that.$message({
-                        message: res.tipMsg,
-                        type: "success"
-                    });
-                    that.product_sop_modify = false;
-                    that.refresh();
-                }
-
-            })
-        },
-        update(ids) {
-            let that = this;
-            that.$ajaxWrap({
-                type: "get",
-                url: "productsop/download",
-                data: {
-                    productSopId: ids.row.productSopId
-                },
-                success(res) {}
-            })
-
-        },
+        // 重新上传
         upload(id, $event) {
             let that = this,
                 event = event || $event,
@@ -295,6 +272,7 @@ export default {
                 that.$baseWarn('文件格式只支持pdf!');
             }
         },
+
         submitFile(opt) {
             let that = this;
             that.$ajaxWrap({
@@ -307,6 +285,7 @@ export default {
                 }
             })
         },
+
         setRowProductSop(id) {
             if (BaseUrl === "/") {
                 this.download_sop = "/productsop/download?productSopId=" + id

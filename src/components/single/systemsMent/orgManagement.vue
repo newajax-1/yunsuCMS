@@ -143,7 +143,7 @@
 								</el-row>
 								<el-row>
                                     <el-col :span="12">
-                                        <el-form-item label="员工姓名：" >
+                                        <el-form-item label="员工姓名：" class="required">
                                             <el-input v-model="modal_form_data.empNm" placeholder="输入员工姓名"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -158,7 +158,7 @@
 								</el-row>
 								<el-row>
                                     <el-col :span="12">
-                                        <el-form-item label="　　工号：" >
+                                        <el-form-item label="　　工号：" class="required">
                                             <el-input v-model="modal_form_data.empNo" placeholder="输入员工工号"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -170,12 +170,12 @@
 								</el-row>
 								<el-row>
                                     <el-col :span="12">
-                                        <el-form-item label="　　电话：" >
+                                        <el-form-item label="　　电话：" class="required">
                                             <el-input v-model="modal_form_data.telephone" placeholder="输入电话号码"></el-input>
                                         </el-form-item>
                                     </el-col>
 									<el-col :span="12">
-                                        <el-form-item label="密码：" >
+                                        <el-form-item label="密码："class="required" >
                                             <el-input v-model="modal_form_data.password" placeholder="输入密码" type="password"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -203,7 +203,7 @@
             </el-row>
 
             <div class="message center mt-10">
-                <el-button class="btn btn-small btn-green" @click="saveModelData" >保 存</el-button>
+                <el-button class="btn btn-small btn-green" @click="saveModelData()" >保 存</el-button>
                 <el-button class="btn btn-small btn-gray" @click="closeDialog()">关 闭</el-button>
             </div>
 			<!--分组弹框-->

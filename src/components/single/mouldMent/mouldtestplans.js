@@ -110,8 +110,11 @@ export default {
             this.getTableData();
         },
 
-        deleteIds() {
-
+        clearData() {
+            let that = this;
+            that.$clearObject(that.select_op_one);
+            that.$clearObject(that.select_op_second);
+            that.$clearObject(that.add_info);
         },
 
         // 弹框
@@ -119,7 +122,6 @@ export default {
             let that = this;
             this.diag_title = (id ? "修改试模计划" : "新增试模计划");
             this.save_id = id;
-
             this.$ajaxWrap({
                 type: "get",
                 url: "/testMouldPlan/toInsertOrEdit",
@@ -279,6 +281,7 @@ export default {
                 cancelButtonText: "取消",
             }).then(function() {
                 that.new_custom = false;
+                that.clearData();
             }).catch(function() {});
         },
 
@@ -300,7 +303,7 @@ export default {
                 this.searchFormData(val, "size");
             };
         },
-        // -----------------------------------------------------------------------------------------------------------------------------------      
+
         handleCurrentChange(val) {
             if (this.table_data.length) {
                 this.searchFormData(val, "num");

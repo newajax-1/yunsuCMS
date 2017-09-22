@@ -7,12 +7,10 @@ export default {
     data() {
 
         return {
-            sys_organization:[
-                {
-                    orgName:undefined,
-                    id:undefined
-                }
-            ],
+            sys_organization: [{
+                orgName: undefined,
+                id: undefined
+            }],
             //查询条件
             form_data: {
                 empNo: undefined,
@@ -20,7 +18,7 @@ export default {
                 jobTitle: undefined,
             },
             //员工改动弹窗
-            staff_vision:false,
+            staff_vision: false,
 
             //分页
             page_list: {
@@ -39,41 +37,42 @@ export default {
                 telephone: undefined,
                 roleName: undefined,
             }],
-            modal_form_data:{
-                orgName:undefined,
-                roleName:undefined,
-                empNm:undefined,
-                gender:undefined,
-                empNo:undefined,
-                jobTitle:undefined,
-                telephone:undefined,
-                password:undefined,
-                emailNo:undefined,
-                autorityPad:'',
-                autorityPda:'',
-                autorityPc:'',
-                id:undefined,
-                sysOrgId:undefined
+            modal_form_data: {
+                orgName: undefined,
+                roleName: undefined,
+                empNm: undefined,
+                gender: undefined,
+                empNo: undefined,
+                jobTitle: undefined,
+                telephone: undefined,
+                password: undefined,
+                emailNo: undefined,
+                autorityPad: '',
+                autorityPda: '',
+                autorityPc: '',
+                id: undefined,
+                sysOrgId: undefined,
+                roleIds: ""
             },
 
-            table_btn_right : [{
-                show : true
+            table_btn_right: [{
+                show: true
             }],
 
-            staff_org_data:undefined,
-            staff_role_data:undefined,
-            model_title:undefined,
-            role_data:[],
-            role_vision:undefined,
-            add_info:[],
-            change_status:true,
-            frozen_statue:false,
-            restart_status:false,
-            form_res:undefined,
-            name_arr:[],
-            batch_ids:[],
-            batch_names:undefined,
-            org_arr:[],
+            staff_org_data: undefined,
+            staff_role_data: undefined,
+            model_title: undefined,
+            role_data: [],
+            role_vision: undefined,
+            add_info: [],
+            change_status: true,
+            frozen_statue: false,
+            restart_status: false,
+            form_res: undefined,
+            name_arr: [],
+            batch_ids: [],
+            batch_names: undefined,
+            org_arr: [],
         }
     },
     methods: {
@@ -107,22 +106,22 @@ export default {
                 load_table_data = data.page.list,
                 load_orgData = data.dataList;
 
-                that.table_btn_right = [];
-                for(var i = 0; i<load_table_data.length;i++){
-                    load_table_data[i].gender = load_table_data[i].gender === 1 ? "女":"男";
-                    let el = load_table_data[i];
-                    load_table_data[i].index = that.page_list.pageSize*(that.page_list.pageNum - 1) + i + 1;
-                    // if(el.empStatus === 11){
-                    //     that.table_btn_right.push()
-                    //     that.frozen_statue = true;
-                    //     that.restart_status = false;
-                    // }else if(el.empStatus === 10){
-                    //     that.frozen_statue = false;
-                    //     that.restart_status = true;
-                    // }
-                    
-                    that.table_btn_right.push({show: el.empStatus === 11 ? true : false})
-                };
+            that.table_btn_right = [];
+            for (var i = 0; i < load_table_data.length; i++) {
+                load_table_data[i].gender = load_table_data[i].gender === 1 ? "女" : "男";
+                let el = load_table_data[i];
+                load_table_data[i].index = that.page_list.pageSize * (that.page_list.pageNum - 1) + i + 1;
+                // if(el.empStatus === 11){
+                //     that.table_btn_right.push()
+                //     that.frozen_statue = true;
+                //     that.restart_status = false;
+                // }else if(el.empStatus === 10){
+                //     that.frozen_statue = false;
+                //     that.restart_status = true;
+                // }
+
+                that.table_btn_right.push({ show: el.empStatus === 11 ? true : false })
+            };
 
             that.table_data = load_table_data;
             that.sys_organization = load_orgData;
@@ -161,10 +160,10 @@ export default {
                 }
             });
         },
-        openStaff(id){
-            
+        openStaff(id) {
+
             let that = this;
-            that.staff_vision= true;
+            that.staff_vision = true;
             that.$ajaxWrap({
                 type: "get",
                 url: "emp/addOrUpdateClick",
@@ -177,40 +176,39 @@ export default {
                 }
             });
 
-            if(!id){
+            if (!id) {
                 that.model_title = "增加员工";
                 that.change_status = false;
-            }else{
+            } else {
                 that.model_title = "修改员工";
                 that.change_status = true;
                 that.$ajaxWrap({
-                    type: "get",
                     url: "emp/addOrUpdateClick",
                     data: {
                         empId: id
                     },
                     success(res) {
-                        // console.log(res.data.data.sysRoleList);
+
                         that.org_arr = [];
                         that.batch_ids = [];
                         that.form_res = res.data.data;
-                        that.form_res.autorityPc = that.form_res.autorityPc == 0 ? false :true;
-                        that.form_res.autorityPda = that.form_res.autorityPda == 0 ? false :true;
-                        that.form_res.autorityPad = that.form_res.autorityPad == 0 ? false :true;
+                        // that.form_res.autorityPc = that.form_res.autorityPc == 1 ? false : true;
+                        // that.form_res.autorityPda = that.form_res.autorityPda == 1 ? false : true;
+                        // that.form_res.autorityPad = that.form_res.autorityPad == 1 ? false : true;
                         that.role_data = that.form_res.sysRoleList;
                         that.modal_form_data = that.form_res;
                         that.modal_form_data.password = "******";
-                        if(that.form_res.sysOrgId === "0"){
-                            that.staff_org_data.push({orgName:"请选择",id : "0"})
+                        if (that.form_res.sysOrgId === "0") {
+                            that.staff_org_data.push({ orgName: "请选择", id: "0" })
                         };
 
-                        for(var i = 0; i < that.form_res.sysRoleList.length;i++){
+                        for (var i = 0; i < that.form_res.sysRoleList.length; i++) {
                             that.org_arr.push(that.form_res.sysRoleList[i].roleName)
                         };
                         that.org_arr = that.org_arr.join(",");
-                        
+
                         that.batch_names = that.org_arr;
-                        for(var i = 0; i < that.form_res.sysRoleList.length;i++){
+                        for (var i = 0; i < that.form_res.sysRoleList.length; i++) {
                             that.batch_ids.push(that.form_res.sysRoleList[i].id)
                         };
                         that.batch_ids = that.batch_ids.join(",");
@@ -219,17 +217,22 @@ export default {
             }
         },
 
-        saveModelData(){
+        saveModelData() {
             let that = this;
-            that.modal_form_data.autorityPad = that.modal_form_data.autorityPad === true ? 0 : 1;
-            that.modal_form_data.autorityPda = that.modal_form_data.autorityPda === true ? 0 : 1;
-            that.modal_form_data.autorityPc = that.modal_form_data.autorityPc === true ? 0 : 1;
-            if(that.change_status == false){
-                that.modal_form_data.id=0;};
-            if(that.modal_form_data.password == "******"){
+            // that.modal_form_data.autorityPad = that.modal_form_data.autorityPad === true ? 0 : 1;
+            // that.modal_form_data.autorityPda = that.modal_form_data.autorityPda === true ? 0 : 1;
+            // that.modal_form_data.autorityPc = that.modal_form_data.autorityPc === true ? 0 : 1;
+            if (that.change_status == false) {
+                that.modal_form_data.id = 0;
+            };
+            if (that.modal_form_data.password == "******") {
                 that.modal_form_data.password = undefined;
             };
-            that.modal_form_data.roleIds = that.batch_ids;
+
+            if (!that.$isArray(that.batch_ids)) {
+                that.modal_form_data.roleIds = that.batch_ids;
+            }
+
             that.$ajaxWrap({
                 type: "post",
                 url: "emp/save",
@@ -248,7 +251,7 @@ export default {
         closeDialog() {
             var that = this;
 
-            that.$baseConfirm("你确定关闭么？",function(){
+            that.$baseConfirm("你确定关闭么？", function() {
 
                 that.$clearObject(that.modal_form_data);
                 that.staff_vision = false;
@@ -258,7 +261,7 @@ export default {
         },
 
 
-        deleteStaff(id){
+        deleteStaff(id) {
             let that = this;
             this.$confirm("你确定删除这条数据吗？", "提示", {
                 confirmButtonText: "确定",
@@ -280,11 +283,11 @@ export default {
                 })
             }).catch(function() {});
         },
-        goAddDepartment(){
+        goAddDepartment() {
             this.$goRoute("/home/addDepartment");
         },
-        changeDepm(id){
-            console.log(id);
+        changeDepm(id) {
+
             let that = this;
             that.$ajaxWrap({
                 type: "post",
@@ -292,28 +295,30 @@ export default {
                 data: {
                     sysOrgId: id
                 },
-                success(res){
+                success(res) {
 
                     that.loadPageDate(res.data);
                 }
             })
 
         },
+
         //分组弹窗
         toAddRole() {
             let that = this;
-            
-            that.role_data = that.form_res.sysRoleList;
-            for( let i = 0; i<that.role_data.length; i++){
-                that.name_arr.push(that.role_data[i].roleName)
+            if (that.model_title === '修改员工') {
+                that.role_data = that.form_res.sysRoleList;
+                for (let i = 0; i < that.role_data.length; i++) {
+                    that.name_arr.push(that.role_data[i].roleName)
+                }
             }
-            
             this.role_vision = true;
         },
+
         // 复选框勾选
         handleSelectionChange(val) {
-            console.log(val);
-            let that= this;
+
+            let that = this;
             that.batch_ids = [];
             that.batch_names = [];
             if (val.length > 0) {
@@ -325,15 +330,15 @@ export default {
                 that.batch_ids = that.batch_ids.join(",");
             }
         },
-        saveRoleInfo(){
+        saveRoleInfo() {
             this.modal_form_data.roleName = this.batch_names;
             this.modal_form_data.roleIds = this.batch_ids;
             this.role_vision = false;
         },
-        goAddDep(){
+        goAddDep() {
             this.$goRoute("/home/addDepartment");
         },
-        frozen(id){
+        frozen(id) {
             let that = this;
             that.$ajaxWrap({
                 type: "get",
@@ -346,7 +351,7 @@ export default {
                 }
             })
         },
-        restart(id){
+        restart(id) {
             let that = this;
             that.$ajaxWrap({
                 type: "get",
@@ -361,6 +366,5 @@ export default {
         },
     },
     //当加载页面的时候调用
-    mounted() {
-    }
+    mounted() {}
 }

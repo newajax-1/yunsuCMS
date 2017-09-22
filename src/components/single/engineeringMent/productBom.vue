@@ -56,7 +56,7 @@
                 <el-table-column prop="productNo" label="产品BOM编号"></el-table-column>
                 <el-table-column prop="productNm" label="产品BOM名称"></el-table-column>
                 <el-table-column prop="custProductNo" label="客户BOM编号"></el-table-column>
-                <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
+                <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                 <el-table-column prop="number" label="穴号"></el-table-column>
                 <el-table-column prop="materialGrade" label="材质&牌号"></el-table-column>
                 <el-table-column prop="color" label="色号&颜色"></el-table-column>

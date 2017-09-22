@@ -161,35 +161,57 @@ export default {
         // 删除
         deleteId(id) {
             let that = this;
-            if (!id) {
-                if (!this.batch_ids) {
-                    this.$message({
-                        message: "请选择删除的数据",
-                        type: "warning"
-                    });
-                    return;
-                };
-            }
+            // if (id) {
+            //     _data = {
+            //         id: id
+            //     }
+            // } else {
+            //     _data = {
+            //         mouldMaintPlanIdList: this.batch_ids
+            //     }
+            // };
 
-            var _data = undefined;
-            if (id) {
-                _data = {
-                    id: id
-                }
-            } else {
-                _data = {
-                    mouldMaintPlanIdList: this.batch_ids
-                }
-            };
-
-            this.$confirm("你确定删除么？", "提示", {
+            this.$confirm("你确定删除吗？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
             }).then(function() {
                 that.$ajaxWrap({
                     type: "post",
                     url: "/mouldMaintPlan/deleteMaintPlan",
-                    data: _data,
+                    data: {
+                        id : id
+                    },
+                    success(res) {
+                        that.$message({
+                            message: res.tipMsg,
+                            type: "success"
+                        });
+                        that.refresh();
+                    }
+                })
+            }).catch(function() {});
+        },
+
+        deleteIds() {
+            let that = this;
+            if (!this.batch_ids) {
+                this.$message({
+                    message: "请选择删除的数据",
+                    type: "warning"
+                });
+                return;
+            };
+
+            this.$confirm("你确定删除吗？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+            }).then(function() {
+                that.$ajaxWrap({
+                    type: "get",
+                    url: "/mouldMaintPlan/deleteByIds",
+                    data: {
+                        ids : that.batch_ids
+                    },
                     success(res) {
                         that.$message({
                             message: res.tipMsg,

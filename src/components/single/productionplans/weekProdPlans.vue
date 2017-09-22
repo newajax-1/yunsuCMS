@@ -195,24 +195,24 @@
                                             <el-input
                                                 :disabled="modal_table_edit" 
                                                 v-model="scope.row.ordrNo"
-                                                @blur="getProductData(scope.row.ordrNo,scope.$index)">
+                                                @blur="getProductData(scope.row.ordrNo,scope.$index,scope.row.sign)">
                                             </el-input>
                                         </el-tooltip>
                                     </template>
                                 </el-table-column>
                                 
-                                <el-table-column width="60" prop="itemNo" label="客户BOM代号">
+                                <el-table-column width="60" prop="custProductNo" label="客户BOM代号">
                                     <template scope="scope">  
                                         <el-select 
                                             :disabled="scope.row.sign" 
-                                            v-model="scope.row.itemNo"
-                                            @change="getAsyncBomData(scope.row.itemNo,scope.$index)">
-                                            <el-option value="1">请选择</el-option>
+                                            v-model="scope.row.custProductNo"
+                                            @change="getAsyncBomData(scope.row.custProductNo,scope.$index)">
+                                            <el-option value="">请选择</el-option>
                                             <el-option 
                                                 v-for="item in scope.row.async_bom_number"
                                                 :label="item.custProductNo"
                                                 :value="item.custProductNo"
-                                                :key="item.custProductNo"></el-option>
+                                                :key="item.itemName"></el-option>
                                         </el-select>
                                     </template>
                                 </el-table-column>
@@ -268,7 +268,17 @@
                                             :disabled="!scope.row.machine" 
                                             :content="scope.row.machine" 
                                             placement="bottom-start"> 
-                                            <el-input :disabled="modal_table_edit" v-model="scope.row.machine"></el-input>
+                                            <el-select
+                                                :disabled="modal_table_edit" 
+                                                v-model="scope.row.machine">
+                                                <el-option
+                                                    v-for=" item in scope.row.machinelist"
+                                                    :label="item.machineName"
+                                                    :value="item.machine"
+                                                    :key="item.machine"
+                                                    ></el-option>
+                                            </el-select>
+                                            <!-- <el-input :disabled="modal_table_edit" v-model="scope.row.machine"></el-input> -->
                                         </el-tooltip>
                                     </template>
                                 </el-table-column>

@@ -73,16 +73,18 @@
                                     type="text"
                                     size="small"
                                     class="r-bd"
-                                    @click="showDetailed(scope.row.id)">详情</el-button>
-                                <el-button
-                                    type="text"
-                                    size="small"
-                                    class="r-bd"
+                                    v-if="scope.row.custType !== '平台'"
                                     @click="edittab(scope.row.id)">修改</el-button>
                                 <el-button
                                     type="text"
                                     size="small"
+                                    class="r-bd"
+                                    v-if="scope.row.custType !== '平台'"
                                     @click="deletetab(scope.row.id)">删除</el-button>
+                                <el-button
+                                    type="text"
+                                    size="small"
+                                    @click="showDetailed(scope.row.id)">详情</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

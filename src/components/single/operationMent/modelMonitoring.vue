@@ -40,7 +40,7 @@
                         >
                         <el-table-column prop="workplanNo" label="生产计划编号"></el-table-column>
                         <el-table-column prop="productNo" label="生产批号"></el-table-column>
-                        <el-table-column prop="machine" label="机台归属"></el-table-column>
+                        <el-table-column prop="eqpCode" label="机台归属"></el-table-column>
                         <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="installTm" label="上模时间"></el-table-column>

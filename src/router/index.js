@@ -27,7 +27,7 @@ import invWarning from '@/components/single/productionplans/invWarning'
 import userManagement from '@/components/single/systemsMent/userManagement'
 import roleManagement from '@/components/single/systemsMent/roleManagement'
 import orgManagement from '@/components/single/systemsMent/orgManagement'
-import staffManagement from '@/components/single/systemsMent/staffManagement'
+// import staffManagement from '@/components/single/systemsMent/staffManagement'
 import workLoadInfo from '@/components/single/systemsMent/workLoadInfo'
 import addDepartment from '@/components/single/systemsMent/addDepartment'
 
@@ -134,10 +134,10 @@ export default new Router({
                     path: 'addDepartment',
                     component: addDepartment
                 },
-                {
-                    path: 'staffmanagement',
-                    component: staffManagement
-                },
+                // {
+                //     path: 'staffmanagement',
+                //     component: staffManagement
+                // },
                 {
                     path: 'promonitoring',
                     component: proMonitoring

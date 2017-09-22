@@ -45,13 +45,9 @@ export default {
 
         getTableData(){
             let that = this;
-            that.empNo = this.$route.query.empNo
             that.$ajaxWrap({
                 type:"post",
                 url: "emp/queryEmpWorkDetail",
-                data:{
-                    empNo:that.empNo
-                },
                 success(res){
                     that.loadTable(res);
                 }

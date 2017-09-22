@@ -21,7 +21,7 @@
 
             <el-col :span="24" class="content-buttons">
                 <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷 新</el-button>
-                <el-button @click="deleteId()" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
+                <el-button @click="deleteIds()" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
                 <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 新增计划</el-button>
             </el-col>
 

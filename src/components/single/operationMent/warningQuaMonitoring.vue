@@ -56,7 +56,7 @@
                         style="width: 100%" 
                         border>
                         <el-table-column prop="alarmNo" label="质量报警编号"></el-table-column>
-                        <el-table-column prop="machine" label="机台归属"></el-table-column>
+                        <el-table-column prop="eqpCode" label="机台归属"></el-table-column>
                         <el-table-column prop="billNo" label="工单号"></el-table-column>
                         <el-table-column prop="alarmTyp" label="报警类型"></el-table-column>
                         <el-table-column prop="alarmTm" label="报警时间"></el-table-column>

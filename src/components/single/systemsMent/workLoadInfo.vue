@@ -38,6 +38,8 @@
             <el-table
                 :data="table_data"
                 border>
+                <el-table-column prop="empNo" label="工号"></el-table-column>
+                <el-table-column prop="empNm" label="姓名"></el-table-column>
                 <el-table-column prop="billNo" label="工单号"></el-table-column>
                 <el-table-column prop="week" label="周"></el-table-column>
                 <el-table-column prop="clas" label="班次"></el-table-column>

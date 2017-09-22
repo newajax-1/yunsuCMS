@@ -63,7 +63,9 @@ export default {
                 sign: false,
                 async_bom_number: [],
                 productWeight: "",
-                gapWeight: ""
+                gapWeight: "",
+                machinelist: [],
+                custProductNo: ""
             },
 
             // 周计划 模态框表格数据
@@ -424,19 +426,21 @@ export default {
         },
 
         /* product number */
-        getProductData(val, index) {
+        getProductData(val, index, sign) {
             let that = this;
+            if (!sign) {
+                that.$ajaxWrap({
+                    type: "post",
+                    url: "week/getWeekDetail",
+                    data: {
+                        orderNo: val
+                    },
+                    success(res) {
+                        that.handleProductData(res.data, index);
+                    }
+                });
 
-            that.$ajaxWrap({
-                type: "post",
-                url: "week/getWeekDetail",
-                data: {
-                    orderNo: val
-                },
-                success(res) {
-                    that.handleProductData(res.data, index);
-                }
-            });
+            }
         },
 
         handleProductData(data, index) {
@@ -536,6 +540,11 @@ export default {
 
             for (let i = 0; i < data.detailList.length; i++) {
                 delete data.detailList[i].async_bom_number;
+            }
+
+
+            for (let i = 0; i < data.detailList.length; i++) {
+                delete data.detailList[i].machinelist;
             }
 
             that.$ajaxWrap({
@@ -825,12 +834,14 @@ export default {
             let datas = temp.async_bom_number,
                 lens = datas.length;
 
-            temp.itemNo = data.custProductNo;
-            temp.machine = data.machine;
+            temp.machinelist = data.machinelist;
+            temp.custProductNo = data.custProductNo;
+
+            temp.itemNo = data.itemNo;
+            temp.itemName = data.itemName;
             temp.secInv = data.secInv;
             temp.mouldCode = data.mouldCode;
             temp.mouldNo = data.mouldNo;
-            temp.itemName = data.productNm;
             temp.materialGrade = data.materialGrade;
             temp.moldingCycle = data.moldingCycl;
             temp.scndProc = data.secdProc;
@@ -846,12 +857,14 @@ export default {
                     that.$clearObject(ret);
                     ret.async_bom_number.push(datas[i]);
 
-                    ret.itemNo = datas[i].custProductNo;
-                    ret.machine = datas[i].machine;
+                    ret.machinelist = datas[i].machinelist;
+
+                    ret.custProductNo = datas[i].custProductNo;
+                    ret.itemNo = datas[i].itemNo;
+                    ret.itemName = datas[i].itemName;
                     ret.secInv = datas[i].secInv;
                     ret.mouldCode = datas[i].mouldCode;
                     ret.mouldNo = datas[i].mouldNo;
-                    ret.itemName = datas[i].productNm;
                     ret.materialGrade = datas[i].materialGrade;
                     ret.moldingCycle = datas[i].moldingCycl;
                     ret.scndProc = datas[i].secdProc;
@@ -860,7 +873,6 @@ export default {
                     ret.productWeight = datas[i].productWeight || 0;
 
                     ret.sign = true
-
                     ret.index = temp.index++;
                     ret.lv = temp.lv;
                     ret.custNo = temp.custNo;

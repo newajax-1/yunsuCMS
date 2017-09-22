@@ -12,6 +12,7 @@ export default {
             search_pageNum: undefined,
             search_pageSize: undefined,
             show_detailed: true,
+            whold_id: undefined,
 
             // 设置城市三级联动参数
             dialog_visible: false,
@@ -95,12 +96,14 @@ export default {
             this.tip_msg = id;
             this.dialog_visible = true;
         },
+
         deleteObject() {
 
             var that = this;
             var _flag = undefined;
             var _data = undefined;
             var _flag_id = this.tip_msg.indexOf(",") != -1;
+            debugger
             if (_flag_id) {
                 _flag = "/cust/deleteByIds";
                 _data = { ids: that.tip_msg }
@@ -175,10 +178,12 @@ export default {
                 success: function(data) {
                     that.table_data = data.data.page.list;
                     that.page.total = data.data.page.total;
-                    that.table_data.every(function(el) {
-                        // return el.delivery.substring(0,16)
-                        return el.delivery = el.delivery.length > 16 ? el.delivery.substring(0, 16) + "..." : el.delivery;
-                    });
+                    if (that.table_data.length > 0) {
+                        for (var i = 0; i < that.table_data.length; i++) {
+                            that.table_data[i].custType = (that.table_data[i].custType === "00" ? "平台" : that.table_data[i].custType)
+                            that.table_data[i].delivery = (that.table_data[i].delivery.length > 16 ? that.table_data[i].delivery.substring(0, 16) + "..." : that.table_data[i].delivery);
+                        }
+                    }
                     that.page.page_num = data.data.page.pageNum;
                     that.page.page_size = data.data.page.pageSize;
                 },
@@ -246,6 +251,7 @@ export default {
         edittab(ids) {
             var that = this;
             this.show_detailed = false;
+            this.whold_id = ids;
             this.edit_custom = true;
             this.$ajaxWrap({
                 type: "get",
@@ -301,6 +307,7 @@ export default {
                     type: "post",
                     url: "/cust/save",
                     data: {
+                        id: that.whold_id,
                         custType: that.edit_table.custType,
                         custId: that.edit_table.custId,
                         memberType: that.edit_table.memberType,

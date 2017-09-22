@@ -53,7 +53,7 @@
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="dsgnCnt" label="设计模数"></el-table-column>
                         <el-table-column prop="initCnt" label="初始模数"></el-table-column>
-                        <el-table-column prop="cavityCnt" label="模穴数"></el-table-column>
+                        <el-table-column prop="cavityCntName" label="模穴数"></el-table-column>
                         <el-table-column prop="moldingCycl" label="成型周期"></el-table-column>
                         <el-table-column prop="mouldAscription" label="模具归属"></el-table-column>
                         <el-table-column prop="mouldFactory" label="模具制造"></el-table-column>
@@ -97,7 +97,7 @@
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="dsgnCnt" label="设计模数"></el-table-column>
                         <el-table-column prop="initCnt" label="初始模数"></el-table-column>
-                        <el-table-column prop="cavityCnt" label="模穴数"></el-table-column>
+                        <el-table-column prop="cavityCntName" label="模穴数"></el-table-column>
                         <el-table-column prop="moldingCycl" label="成型周期"></el-table-column>
                         <el-table-column prop="mouldAscription" label="模具归属"></el-table-column>
                         <el-table-column prop="mouldFactory" label="模具制造"></el-table-column>
@@ -139,7 +139,7 @@
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="dsgnCnt" label="设计模数"></el-table-column>
                         <el-table-column prop="initCnt" label="初始模数"></el-table-column>
-                        <el-table-column prop="cavityCnt" label="模穴数"></el-table-column>
+                        <el-table-column prop="cavityCntName" label="模穴数"></el-table-column>
                         <el-table-column prop="moldingCycl" label="成型周期"></el-table-column>
                         <el-table-column prop="mouldAscription" label="模具归属"></el-table-column>
                         <el-table-column prop="mouldFactory" label="模具制造"></el-table-column>

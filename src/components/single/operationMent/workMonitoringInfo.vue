@@ -28,9 +28,9 @@
                         <el-table-column width="60" prop="itemNo" label="产品型号"></el-table-column>
                         <el-table-column width="60" prop="itemName" label="产品名称"></el-table-column>
                         <el-table-column width="60" prop="productNo" label="生产批号"></el-table-column>
-                        <el-table-column width="60" prop="machine" label="机台归属"></el-table-column>
+                        <el-table-column width="60" prop="eqpCode" label="机台归属"></el-table-column>
                         <el-table-column width="60" prop="moldingCycle" label="单件周期"></el-table-column>
-                        <el-table-column width="60" prop="mouldNo" label="模具编号"></el-table-column>
+                        <el-table-column width="60" prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column width="45" prop="materialGrade" label="原材料"></el-table-column>
                         <el-table-column width="60" prop="scndProc" label="二次加工"></el-table-column>
 

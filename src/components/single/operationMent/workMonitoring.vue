@@ -102,8 +102,8 @@
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
                         <el-table-column prop="productNo" label="生产批号"></el-table-column>
                         <el-table-column prop="billNo" label="工单号"></el-table-column>
-                        <el-table-column prop="machine" label="机台归属"></el-table-column>
-                        <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
+                        <el-table-column prop="eqpCode" label="机台归属"></el-table-column>
+                        <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="materialGrade" label="原材料"></el-table-column>
                         <el-table-column prop="scndProc" label="二次加工"></el-table-column>
                         <el-table-column prop="updateTime" label="计划生产日期"></el-table-column>
@@ -148,8 +148,8 @@
                         <el-table-column prop="itemName" label="产品名称"></el-table-column>
                         <el-table-column prop="productNo" label="生产批号"></el-table-column>
                         <el-table-column prop="billNo" label="工单号"></el-table-column>
-                        <el-table-column prop="machine" label="机台归属"></el-table-column>
-                        <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
+                        <el-table-column prop="eqpCode" label="机台归属"></el-table-column>
+                        <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="materialGrade" label="原材料"></el-table-column>
                         <el-table-column prop="scndProc" label="二次加工"></el-table-column>
                         <el-table-column prop="updateTime" label="计划生产日期"></el-table-column>

@@ -22,7 +22,7 @@
     import userManagement from '../single/systemsMent/userManagement'
     import roleManagement from '../single/systemsMent/roleManagement'
     import orgManagement from '../single/systemsMent/orgManagement'
-    import staffManagement from '../single/systemsMent/staffManagement'
+    // import staffManagement from '../single/systemsMent/staffManagement'
 
     import proMonitoring from '../single/operationMent/proMonitoring'
     import workMonitoring from '../single/operationMent/workMonitoring'
@@ -49,6 +49,8 @@
     import mouldTestPlan from '../single/mouldMent/mouldTestPlan'
     import addMouldInfo from '../single/mouldMent/addMouldInfo'
 
+    import addDepartment from '../single/systemsMent/addDepartment'
+
     export default {
         name : "content",
         components : {
@@ -63,7 +65,7 @@
             invWarning,
             userManagement,
             orgManagement,
-            staffManagement,
+            // staffManagement,
             workLoadInfo,
             proMonitoring,
             workMonitoring,
@@ -85,6 +87,7 @@
             addMouldInfo,
             productSop,
             productBom,
+            addDepartment,
         }
     }
 </script>

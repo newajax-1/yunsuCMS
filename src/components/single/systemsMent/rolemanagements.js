@@ -127,11 +127,11 @@ export default {
         // 点击关闭
         closeDialog() {
             var that = this;
-            this.$clearObject(this.add_info);
             this.$confirm("你确定关闭么？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
             }).then(function() {
+                this.$clearObject(this.add_info);
                 that.add_group = false;
             }).catch(function() {});
         },
@@ -170,6 +170,8 @@ export default {
         addGroup(id) {
             let that = this;
             that.add_group = true;
+            
+            this.$clearObject(this.add_info);
             if (!id) {
                 that.model_title = "增加分组";
                 that.change_status = false;

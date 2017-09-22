@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="content-boder fl" :span="4">
-                    <p class="content-p">5T行车：</p>
+                    <p class="content-p">行车：</p>
                     <div class="content-table clearfix">
                         <div class="content-top right-border fl">
                             <span class="fl">全部</span>
