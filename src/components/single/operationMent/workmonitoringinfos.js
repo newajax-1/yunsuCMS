@@ -94,6 +94,8 @@ export default {
                                 that.detail_data[i].scndProc = "";
                                 break;
                         };
+
+                        that.detail_data[i].eqpCode = that.detail_data[i].machinelist[0].machineName;
                     }
 
                     if (that.detail_data.length === 0) {

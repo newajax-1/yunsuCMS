@@ -89,6 +89,7 @@
                             <el-button
                                 type="text"
                                 size="small"
+                                :class="saleplan_push_tips[scope.$index].show ? '' : 'r-bd'"
                                 @click="confirmOperation(scope.row.id,scope.$index,'下发')"
                                 v-show = "saleplan_push_tips[scope.$index].show">下发</el-button> 
                             <el-button 

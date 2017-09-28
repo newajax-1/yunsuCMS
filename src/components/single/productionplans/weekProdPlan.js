@@ -170,7 +170,10 @@ export default {
             new_workplan_index: [],
             edit_next_show_week: true,
 
-            async_bom_number: []
+            async_bom_number: [],
+            temp_week_year: {},
+
+            buttonsRightList: [true, true, true, true, true, true, true, true, ]
         }
     },
 
@@ -205,7 +208,6 @@ export default {
                 }
             })
         },
-
         loadWeekPlanTable(data) {
             let that = this,
                 load_table_data = data.page.list;
@@ -254,6 +256,7 @@ export default {
                 url: "week/loadTable",
                 data: search_data,
                 success(res) {
+                    // that.buttonsRightList = res.data.button;
                     that.loadWeekPlanTable(res.data);
                 }
             });
@@ -348,10 +351,7 @@ export default {
             this.new_week_date = true;
             this.edit_next_show_week = true;
 
-            that.$clearObject(that.modal_weekplan_table_data);
-
-            // that.$clearObject(that.async_bom_number);
-
+            this.$clearObject(that.modal_weekplan_table_data);
             this.refresh();
         },
 
@@ -415,9 +415,18 @@ export default {
         },
 
         loadModalTableData(data) {
-            this.modal_week_date = data.data;
-            this.modal_sync_data = data;
+            let week_data = data.data;
+            for (let key in week_data) {
+                let el = week_data[key];
 
+                if (el && typeof el === "string" && key != "week") {
+                    week_data[key] = el.substring(5, el.length);
+                    this.temp_week_year[key] = el.substring(0, 5);
+                }
+            }
+
+            this.modal_week_date = week_data;
+            this.modal_sync_data = data;
             if (data.dataList.length) {
                 this.modal_weekplan_table_data = data.dataList;
             } else {
@@ -439,7 +448,6 @@ export default {
                         that.handleProductData(res.data, index);
                     }
                 });
-
             }
         },
 
@@ -471,6 +479,7 @@ export default {
                 len = new_table_data.length;
             for (let i = 0; i < len; i++) {
                 let el = new_table_data[i]
+
                 for (let key in el) {
 
                     el.sum = (el.planBill.monday.day.quantity - 0) +
@@ -497,6 +506,7 @@ export default {
                         if (key === "itemNo" && el.sign) {
                             continue
                         }
+
                         // 显示 未填写数据
                         console.error(key + " is undefined!");
                         that.$baseWarn("请完善表单信息!");
@@ -547,6 +557,25 @@ export default {
                 delete data.detailList[i].machinelist;
             }
 
+            for (let i = 0; i < data.detailList.length; i++) {
+                let el = data.detailList[i];
+
+                el.planBill.monday.day.weekDate = that.temp_week_year.mondayDate + that.modal_week_date.mondayDate;
+                el.planBill.monday.night.weekDate = that.temp_week_year.mondayDate + that.modal_week_date.mondayDate;
+                el.planBill.tuesday.day.weekDate = that.temp_week_year.thursdayDate + that.modal_week_date.tuesdayDate;
+                el.planBill.tuesday.night.weekDate = that.temp_week_year.thursdayDate + that.modal_week_date.tuesdayDate;
+                el.planBill.wednesday.day.weekDate = that.temp_week_year.wednesdayDate + that.modal_week_date.wednesdayDate;
+                el.planBill.wednesday.night.weekDate = that.temp_week_year.wednesdayDate + that.modal_week_date.wednesdayDate;
+                el.planBill.thursday.day.weekDate = that.temp_week_year.thursdayDate + that.modal_week_date.thursdayDate;
+                el.planBill.thursday.night.weekDate = that.temp_week_year.thursdayDate + that.modal_week_date.thursdayDate;
+                el.planBill.friday.day.weekDate = that.temp_week_year.fridayDate + that.modal_week_date.fridayDate;
+                el.planBill.friday.night.weekDate = that.temp_week_year.fridayDate + that.modal_week_date.fridayDate;
+                el.planBill.saturday.day.weekDate = that.temp_week_year.saturdayDate + that.modal_week_date.saturdayDate;
+                el.planBill.saturday.night.weekDate = that.temp_week_year.saturdayDate + that.modal_week_date.saturdayDate;
+                el.planBill.sunday.day.weekDate = that.temp_week_year.sundayDate + that.modal_week_date.sundayDate;
+                el.planBill.sunday.night.weekDate = that.temp_week_year.sundayDate + that.modal_week_date.sundayDate;
+            }
+
             that.$ajaxWrap({
                 type: "post",
                 url: url,
@@ -564,20 +593,20 @@ export default {
 
         setModalWeekDate() {
             let that = this;
-            that.modal_plan_bill.monday.day.weekDate = that.modal_week_date.mondayDate
-            that.modal_plan_bill.monday.night.weekDate = that.modal_week_date.mondayDate
-            that.modal_plan_bill.tuesday.day.weekDate = that.modal_week_date.tuesdayDate
-            that.modal_plan_bill.tuesday.night.weekDate = that.modal_week_date.tuesdayDate
-            that.modal_plan_bill.wednesday.day.weekDate = that.modal_week_date.wednesdayDate
-            that.modal_plan_bill.wednesday.night.weekDate = that.modal_week_date.wednesdayDate
-            that.modal_plan_bill.thursday.day.weekDate = that.modal_week_date.thursdayDate
-            that.modal_plan_bill.thursday.night.weekDate = that.modal_week_date.thursdayDate
-            that.modal_plan_bill.friday.day.weekDate = that.modal_week_date.fridayDate
-            that.modal_plan_bill.friday.night.weekDate = that.modal_week_date.fridayDate
-            that.modal_plan_bill.saturday.day.weekDate = that.modal_week_date.saturdayDate
-            that.modal_plan_bill.saturday.night.weekDate = that.modal_week_date.saturdayDate
-            that.modal_plan_bill.sunday.day.weekDate = that.modal_week_date.sundayDate
-            that.modal_plan_bill.sunday.night.weekDate = that.modal_week_date.sundayDate
+            that.modal_plan_bill.monday.day.weekDate = that.modal_week_date.mondayDate;
+            that.modal_plan_bill.monday.night.weekDate = that.modal_week_date.mondayDate;
+            that.modal_plan_bill.tuesday.day.weekDate = that.modal_week_date.tuesdayDate;
+            that.modal_plan_bill.tuesday.night.weekDate = that.modal_week_date.tuesdayDate;
+            that.modal_plan_bill.wednesday.day.weekDate = that.modal_week_date.wednesdayDate;
+            that.modal_plan_bill.wednesday.night.weekDate = that.modal_week_date.wednesdayDate;
+            that.modal_plan_bill.thursday.day.weekDate = that.modal_week_date.thursdayDate;
+            that.modal_plan_bill.thursday.night.weekDate = that.modal_week_date.thursdayDate;
+            that.modal_plan_bill.friday.day.weekDate = that.modal_week_date.fridayDate;
+            that.modal_plan_bill.friday.night.weekDate = that.modal_week_date.fridayDate;
+            that.modal_plan_bill.saturday.day.weekDate = that.modal_week_date.saturdayDate;
+            that.modal_plan_bill.saturday.night.weekDate = that.modal_week_date.saturdayDate;
+            that.modal_plan_bill.sunday.day.weekDate = that.modal_week_date.sundayDate;
+            that.modal_plan_bill.sunday.night.weekDate = that.modal_week_date.sundayDate;
         },
 
         createWorkplan() {
@@ -587,7 +616,7 @@ export default {
                 plan_bill = null,
                 table_row_data = {};
             if (that.isCompletion()) {
-                that.setModalWeekDate();
+                // that.setModalWeekDate();
 
                 let index = that.modal_weekplan_table_data.length;
                 table_row_data.index = index;
@@ -610,8 +639,8 @@ export default {
 
             for (let i = 0; i < item.length; i++) {
                 let el = item[i];
-                if (el.workplanDetailId) {
-                    temp_delete_array.push(el.workplanDetailId);
+                if (el.id) {
+                    temp_delete_array.push(el.id);
                 }
 
                 if (!isNaN(el.index)) {
@@ -670,9 +699,9 @@ export default {
             for (let i = 0; i < len_modal_data; i++) {
                 let opt = res[i];
 
-                if (opt.workplanDetailId) {
+                if (opt.id) {
                     for (let j = 0; j < len_work_id; j++) {
-                        if (this.delete_work_array[j] === opt.workplanDetailId) {
+                        if (this.delete_work_array[j] === opt.id) {
                             res.splice(i, 1, "");
                         }
                     }
@@ -682,7 +711,7 @@ export default {
             for (let i = 0; i < len_modal_data; i++) {
                 let opt = res[i];
 
-                if (!isNaN(opt.index)) {
+                if (opt.index !== null) {
                     for (let k = 0; k < len_new_id; k++) {
                         if (this.new_workplan_index[k] === opt.index) {
                             res.splice(i, 1, "");
@@ -746,7 +775,6 @@ export default {
 
                     ret.dataList = that.modal_weekplan_table_data;
                     ret.data = res.data.data;
-
                     let temp = JSON.parse(JSON.stringify(ret));
 
                     let send_data = that.changeNextWeekdate(temp);
@@ -851,7 +879,7 @@ export default {
 
             that.modal_weekplan_table_data.splice(index, 1, temp);
             for (let i = 0; i < lens; i++) {
-                if (id !== datas[i].custProductNo) {
+                if (id !== datas[i].custProductNo && temp.itemNo === datas[i].itemNo) {
 
                     let ret = that.$deepCloneObject(temp);
                     that.$clearObject(ret);

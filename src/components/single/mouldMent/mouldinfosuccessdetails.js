@@ -142,7 +142,7 @@ export default {
                 url: "/change/saveChange",
                 data: {
                     changeRecId: that.change_rec_id,
-                    id: that.mould_id,
+                    mouldId: that.mould_id,
                     oldMouldNo: that.add_info.oldMouldNo,
                     oldMouldCode: that.add_info.oldMouldCode,
                     chgCnt: that.add_info.chgCnt,

@@ -148,7 +148,7 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <div class="bottom">
+                        <div class="bottoms">
                             <el-row>
                                 <el-col :span="3" :offset="1">
                                     <el-checkbox 
@@ -234,7 +234,7 @@
             border-radius 3px
             margin-bottom 8px
             padding-bottom 15px
-        .bottom
+        .bottoms
             width 98%
             height 100%
             border 1px solid #ccc

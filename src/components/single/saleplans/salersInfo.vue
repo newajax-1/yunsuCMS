@@ -303,7 +303,7 @@
                 <el-row :gutter="24">
                     <el-col :span="8">
                         <el-form-item label="客户类型：" prop="">
-                            <p v-html="edit_table.custValue"></p>
+                            <p v-html="edit_table.custType === '00' ? '平台' : edit_table.custType"></p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">

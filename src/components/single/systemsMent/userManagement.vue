@@ -39,6 +39,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"
+                                    :class="scope.row.isAdmin != '0' ? 'r-bd' : ''"
                                     @click="updateCustom(scope.row.accountId)">修改</el-button>
                                 <el-button 
                                     type="text"

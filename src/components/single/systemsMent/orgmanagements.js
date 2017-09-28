@@ -244,6 +244,11 @@ export default {
                     });
                     that.staff_vision = false;
                     that.getPageData();
+                    that.$clearObject(that.modal_form_data);
+                    that.batch_names = null;
+                    that.modal_form_data.autorityPad = false;
+                    that.modal_form_data.autorityPda = false;
+                    that.modal_form_data.autorityPc = false;
                 }
             });
         },

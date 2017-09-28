@@ -131,7 +131,7 @@ export default {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
             }).then(function() {
-                this.$clearObject(this.add_info);
+                that.$clearObject(that.add_info);
                 that.add_group = false;
             }).catch(function() {});
         },

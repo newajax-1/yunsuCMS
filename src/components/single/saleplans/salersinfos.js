@@ -103,7 +103,7 @@ export default {
             var _flag = undefined;
             var _data = undefined;
             var _flag_id = this.tip_msg.indexOf(",") != -1;
-            debugger
+
             if (_flag_id) {
                 _flag = "/cust/deleteByIds";
                 _data = { ids: that.tip_msg }
@@ -426,21 +426,22 @@ export default {
             this.result();
         },
         result: function() {
-            var re = {
+            let that = this;
+            let re = {
                 pro: {
-                    id: typeof this.pro[this.f.p] === "object" ? typeof this.pro[this.f.p].id : "",
-                    name: typeof this.pro[this.f.p] === "object" ? typeof this.pro[this.f.p].name : ""
+                    id: typeof that.pro[that.f.p] === "object" ? that.pro[that.f.p].id : "",
+                    name: typeof that.pro[that.f.p] === "object" ? that.pro[that.f.p].name : ""
                 },
                 city: {
-                    id: typeof this.pro[this.f.c] === "object" ? typeof this.pro[this.f.c].id : "",
-                    name: typeof this.pro[this.f.c] === "object" ? typeof this.pro[this.f.c].name : "",
+                    id: typeof that.pro[that.f.c] === "object" ? that.pro[that.f.c].id : "",
+                    name: typeof that.pro[that.f.c] === "object" ? that.pro[that.f.c].name : "",
                 },
                 county: {
-                    id: typeof this.pro[this.f.cc] === "object" ? typeof this.pro[this.f.cc].id : "",
-                    name: typeof this.pro[this.f.cc] === "object" ? typeof this.pro[this.f.cc].name : "",
+                    id: typeof that.pro[that.f.cc] === "object" ? that.pro[that.f.cc].id : "",
+                    name: typeof that.pro[that.f.cc] === "object" ? that.pro[that.f.cc].name : "",
                 }
             };
-            this.$emit("select", re);
+            that.$emit("select", re);
         },
 
         searchFormData(pageval, pagesize) {

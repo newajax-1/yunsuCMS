@@ -52,6 +52,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"
+                                    class="r-bd"
                                     @click="toAdd(scope.row.id)">修改</el-button>
                                 <el-button  
                                     type="text"

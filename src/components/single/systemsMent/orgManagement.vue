@@ -87,6 +87,7 @@
 								type="text"
 								size="small"
 								@click="frozen(scope.row.id)"
+								:class="table_btn_right[scope.$index].show ? '' : 'r-bd'"
 								v-show="table_btn_right[scope.$index].show">冻结</el-button>
 								<el-button
 								type="text"
@@ -100,7 +101,7 @@
 				<div class="table-page">
 					<el-pagination
 						layout="total, sizes, prev, pager, next, jumper"
-						:page-sizes="[10, 20, 30, 40]"
+						:page-sizes="[15, 20, 30, 40]"
 						:current-page.sync="page_list.pageNum"
 						:page-size="page_list.pageSize"
 						:total="page_list.total"
@@ -124,7 +125,7 @@
                                 <el-row>
 									<el-col :span="12">
 										<el-form-item label="所属部门：" prop="orgName" class="required">
-											<el-select placeholder="选择客户" v-model="modal_form_data.sysOrgId" >
+											<el-select placeholder="选择部门" v-model="modal_form_data.sysOrgId" >
 												<el-option v-for="item in staff_org_data" 
 												:label="item.orgName" 
 												:value="item.id" 
@@ -136,7 +137,7 @@
 								<el-row :gutter="24">
 									<el-col :span="24">
 										<el-form-item label="　　分组：">
-											<p class="role-text">{{batch_names}}</p>
+											<p class="role-text">{{modal_form_data.roleName}}</p>
 										</el-form-item>
 										<el-button class="btn btn-middle btn-blue" @click="toAddRole()" style="margin-top: 4px;">分组</el-button>
 									</el-col>

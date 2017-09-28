@@ -25,7 +25,7 @@
                         <el-table-column width="60" prop="lv" label="优先级"></el-table-column>
                         <el-table-column width="60" prop="custName" label="客户"></el-table-column>
                         <el-table-column width="60" prop="ordrNo" label="订单编号"></el-table-column>
-                        <el-table-column width="60" prop="itemNo" label="产品型号"></el-table-column>
+                        <el-table-column width="60" prop="custProductNo" label="产品型号"></el-table-column>
                         <el-table-column width="60" prop="itemName" label="产品名称"></el-table-column>
                         <el-table-column width="60" prop="productNo" label="生产批号"></el-table-column>
                         <el-table-column width="60" prop="eqpCode" label="机台归属"></el-table-column>

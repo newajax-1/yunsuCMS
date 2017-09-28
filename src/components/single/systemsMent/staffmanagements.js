@@ -4,7 +4,7 @@ export default {
     data() {
 
         return {
-            table_data: [],
+            table_data: [{}],
             work_table_data: [],
             search_pageNum: undefined,
             search_pageSize: undefined,

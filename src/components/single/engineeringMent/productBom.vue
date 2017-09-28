@@ -62,7 +62,7 @@
                 <el-table-column prop="color" label="色号&颜色"></el-table-column>
                 <el-table-column prop="productWeight" label="产品重量"></el-table-column>
                 <el-table-column prop="gapWeight" label="水口重量"></el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" width="130">
                     <template scope="scope">
                         <el-button
                             type="text"
@@ -236,7 +236,7 @@
                 </el-col>
             </el-row>
 
-            <div class="message center mt-10">
+            <div class="message center ">
                 <el-button class="btn btn-small btn-gray" @click="product_bom_info= false">关 闭</el-button>
             </div>
         </el-dialog>
@@ -375,7 +375,7 @@
                 </el-col>
             </el-row>
 
-            <div class="message center mt-10">
+            <div class="message center ">
                 <el-button class="btn btn-small btn-green" @click="updateProductBom()">提交</el-button>
                 <el-button class="btn btn-small btn-gray" @click="closeModal">关 闭</el-button>
             </div>
@@ -402,5 +402,6 @@
             width: 100% !important 
         .el-form-item__label
             width: 40%
-
+        .message
+            margin-top 30px
 </style>

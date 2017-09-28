@@ -44,6 +44,10 @@ export default {
             batch_ids: undefined,
             search_pageNum: undefined,
             search_pageSize: undefined,
+
+            show_list: [{
+                show: true
+            }]
         }
     },
     methods: {
@@ -102,6 +106,16 @@ export default {
                     that.first_data = data.page.list;
                     break;
                 case "02":
+
+                    that.show_list = [];
+                    for (let i = 0; i < data.page.list.length; i++) {
+                        let el = data.page.list[i];
+
+                        that.show_list.push({
+                            show: el.sourceType === "20" ? true : false
+                        });
+                    }
+
                     that.second_data = data.page.list;
                     break;
                 case "03":
@@ -203,11 +217,11 @@ export default {
                     that.check_data[i].startTm = that.$handleDateObject(that.check_data[i].startTm);
                 }
             }
-            if (_operationType == 2) {
-                if (this.checkSussess() == 0) {
-                    return;
-                };
-            };
+            // if (_operationType == 2) {
+            //     if (this.checkSussess() == 0) {
+            //         return;
+            //     };
+            // };
             this.$ajaxWrap({
                 type: "post",
                 url: "/mould/acptMould",
@@ -222,53 +236,11 @@ export default {
                         message: res.tipMsg,
                         type: "success"
                     });
+
                     that.new_custom = false;
                     that.getTableData();
-                },
-                error(res) {
-                    that.$message({
-                        message: res.tipMsg,
-                        type: "warning"
-                    });
                 }
             })
-        },
-
-        // 转成品验证
-        checkSussess() {
-            if (this.check_data.length == 0) {
-                return 0;
-            };
-            for (var i = 0; i < this.check_data.length; i++) {
-                if (!this.check_data[i].acptRslt) {
-                    this.$message({
-                        message: "请将信息填写完整后转成品",
-                        type: "warning"
-                    });
-                    return 0;
-                };
-                if (!this.check_data[i].acceptor) {
-                    this.$message({
-                        message: "请将信息填写完整后转成品",
-                        type: "warning"
-                    });
-                    return 0;
-                };
-                if (!this.check_data[i].startTm) {
-                    this.$message({
-                        message: "请将信息填写完整后转成品",
-                        type: "warning"
-                    });
-                    return;
-                };
-                if (!this.check_data[i].endTm) {
-                    this.$message({
-                        message: "请将信息填写完整后转成品",
-                        type: "warning"
-                    });
-                    return 0;
-                };
-            };
         },
 
         // 删除

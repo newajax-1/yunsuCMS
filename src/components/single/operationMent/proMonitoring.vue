@@ -10,8 +10,8 @@
                         <el-form-item label="生产批号：">
                             <el-input placeholder="输入生产批号" v-model="seach_info.product_no"></el-input>
                         </el-form-item>
-                        <el-form-item label="生产型号：">
-                            <el-input placeholder="输入生产型号" v-model="seach_info.item_no"></el-input>
+                        <el-form-item label="客户BOM编号：">
+                            <el-input placeholder="输入编号" v-model="seach_info.item_no"></el-input>
                         </el-form-item>
                         <el-form-item label="计划生产时间：">
                             <el-date-picker

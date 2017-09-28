@@ -154,8 +154,9 @@ export default {
         },
         // 重置
         reset() {
+            let that = this;
             var _seach_info_bill_sts = this.seach_info.bill_sts;
-            this.$clearObject(this.seach_info);
+            that.$clearObject(that.seach_info);
             this.seach_info.bill_sts = _seach_info_bill_sts;
         },
         // 刷新

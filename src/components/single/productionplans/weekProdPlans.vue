@@ -50,16 +50,16 @@
                         </el-form-item>
 
                         <el-form-item>
-                            <el-button class="btn btn-small btn-blue" @click="searchFormData()"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button class="btn btn-small btn-orange" @click="reset"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button class="btn btn-small btn-blue" @click="searchFormData()" v-if="buttonsRightList[2]"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button class="btn btn-small btn-orange" @click="reset"  v-if="buttonsRightList[3]"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
             
             <el-col :span="24" class="content-buttons">
-                <el-button class="btn btn-blue btn-samll" @click="refresh"><i class="fa fa-refresh "></i> 刷 新</el-button>
-                <el-button class="btn btn-blue btn-large" @click="openWeekplanModal('新建周计划')"><i class="fa fa-file-text-o"></i> 新建周计划</el-button>
+                <el-button class="btn btn-blue btn-samll" @click="refresh"  v-if="buttonsRightList[0]"><i class="fa fa-refresh "></i> 刷 新</el-button>
+                <el-button class="btn btn-blue btn-large" @click="openWeekplanModal('新建周计划')"  v-if="buttonsRightList[1]"><i class="fa fa-file-text-o"></i> 新建周计划</el-button>
             </el-col>
 
             <el-col :span="24">
@@ -86,23 +86,27 @@
                                 <el-button 
                                     @click="openWeekplanModal('修改周计划',scope.row.id,scope.row.week)"
                                     v-show="weekplan_push_tips[scope.$index].show"
+                                     v-if="buttonsRightList[4]"
                                     type="text"
                                     class="r-bd"
                                     size="small">修改</el-button>
                                 <el-button 
                                     @click="confirmOperation(scope.row.id,scope.$index,'下发')"
                                     v-show="weekplan_push_tips[scope.$index].show"
+                                     v-if="buttonsRightList[5]"
                                     type="text"
                                     class="r-bd"
                                     size="small">下发</el-button>
                                 <el-button 
                                     @click="confirmOperation(scope.row.id,'','删除')"
                                     v-show="weekplan_push_tips[scope.$index].show"
+                                     v-if="buttonsRightList[6]"
                                     type="text"
                                     size="small">删除</el-button>
                                 <el-button
                                     @click="openWeekplanInfo(scope.row.id,scope.row.week,'周计划详情')"
                                     v-show="!weekplan_push_tips[scope.$index].show"
+                                    v-if="buttonsRightList[7]"
                                     type="text"
                                     size="small">详情</el-button>
                             </template>
@@ -194,8 +198,7 @@
                                             placement="bottom-start">
                                             <el-input
                                                 :disabled="modal_table_edit" 
-                                                v-model="scope.row.ordrNo"
-                                                @blur="getProductData(scope.row.ordrNo,scope.$index,scope.row.sign)">
+                                                v-model="scope.row.ordrNo">
                                             </el-input>
                                         </el-tooltip>
                                     </template>
@@ -206,7 +209,7 @@
                                         <el-select 
                                             :disabled="scope.row.sign" 
                                             v-model="scope.row.custProductNo"
-                                            @change="getAsyncBomData(scope.row.custProductNo,scope.$index)">
+                                            @change="getProductData(scope.row.ordrNo,scope.$index,scope.row.sign)">
                                             <el-option value="">请选择</el-option>
                                             <el-option 
                                                 v-for="item in scope.row.async_bom_number"
@@ -226,7 +229,8 @@
                                             placement="bottom-start">
                                             <el-select
                                                 :disabled="modal_table_edit"
-                                                v-model="scope.row.mouldNo">
+                                                v-model="scope.row.mouldNo"
+                                                @change="getAsyncBomData(scope.row.custProductNo,scope.$index)">
                                                 <el-option 
                                                     :label="scope.row.mouldCode"
                                                     :value="scope.row.mouldNo"></el-option>
@@ -263,23 +267,16 @@
 
                                 <el-table-column width="60" prop="machine" label="机台归属">
                                     <template  scope="scope">
-                                        <el-tooltip class="item" 
-                                            effect="light" 
-                                            :disabled="!scope.row.machine" 
-                                            :content="scope.row.machine" 
-                                            placement="bottom-start"> 
-                                            <el-select
-                                                :disabled="modal_table_edit" 
-                                                v-model="scope.row.machine">
-                                                <el-option
-                                                    v-for=" item in scope.row.machinelist"
-                                                    :label="item.machineName"
-                                                    :value="item.machine"
-                                                    :key="item.machine"
-                                                    ></el-option>
-                                            </el-select>
-                                            <!-- <el-input :disabled="modal_table_edit" v-model="scope.row.machine"></el-input> -->
-                                        </el-tooltip>
+                                        <el-select
+                                            :disabled="modal_table_edit" 
+                                            v-model="scope.row.machine">
+                                            <el-option
+                                                v-for=" item in scope.row.machinelist"
+                                                :label="item.machineName"
+                                                :value="item.machine"
+                                                :key="item.machine"
+                                                ></el-option>
+                                        </el-select>
                                     </template>
                                 </el-table-column>
 

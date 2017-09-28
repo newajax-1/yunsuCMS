@@ -116,13 +116,14 @@
                                     @click="addMouldDetail(scope.row.id,scope.row.sourceType)">修改</el-button>
                                 <el-button  
                                     type="text"
-                                    size="small"  
+                                    size="small"
                                     class="r-bd"
-                                    @click="showDetail(scope.row.id)">详情</el-button>
+                                    v-show = "show_list[scope.$index].show"
+                                    @click="deleteIds(scope.row.id)">删除</el-button>
                                 <el-button  
                                     type="text"
-                                    size="small"    
-                                    @click="deleteIds(scope.row.id)">删除</el-button>
+                                    size="small"  
+                                    @click="showDetail(scope.row.id)">详情</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

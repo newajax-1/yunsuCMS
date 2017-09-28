@@ -37,6 +37,7 @@
         <div class="table-wrap">
             <el-table
                 :data="table_data"
+                :height="$tableHeight"
                 border>
                 <el-table-column prop="empNo" label="工号"></el-table-column>
                 <el-table-column prop="empNm" label="姓名"></el-table-column>
@@ -50,17 +51,17 @@
                 <el-table-column prop="actQuantity" label="实际产量"></el-table-column>
                 <el-table-column prop="endTm" label="下工时间"></el-table-column>
             </el-table>
-        </div>
-        <div class="table-page fr">
-            <el-pagination
-                layout="total, sizes, prev, pager, next, jumper"
-                :page-sizes="[10, 20, 30, 40]"
-                :current-page.sync="page_list.pageNum"
-                :page-size="page_list.pageSize"
-                :total="page_list.total"
-                @size-change="currentSizeChange"
-                @current-change="currentPageChange">
-            </el-pagination>
+            <div class="table-page" v-if="page_list.total === 0 ? false : true">
+                <el-pagination
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :page-sizes="[15, 20, 30, 40]"
+                    :current-page.sync="page_list.pageNum"
+                    :page-size="page_list.pageSize"
+                    :total="page_list.total"
+                    @size-change="currentSizeChange"
+                    @current-change="currentPageChange">
+                </el-pagination>
+            </div>
         </div>
     </el-row>
 </template>

@@ -46,7 +46,8 @@ export default {
             model_title: undefined,
             batch_names: undefined,
             dataList: [],
-            company_title: ""
+            company_title: "",
+            default_id:undefined,
         }
     },
     methods: {
@@ -74,6 +75,7 @@ export default {
                     }
                     that.table_data = that.dataList;
                     that.company_title = that.dataList[0].orgName;
+                    that.default_id = that.dataList[0].id;
                     that.main_title = that.company_title;
 
                     that.$ajaxWrap({
@@ -134,11 +136,20 @@ export default {
         },
         updataDepartment() {
             let that = this;
+
+            let ret = that.$deepCloneObject(that.form_data);
+            
+            for(var i = 0; i< ret.length;i++){
+                let el = ret[i];
+                if(!el.parentId){
+                    el.parentId = that.default_id;
+                }
+            }
             that.$ajaxWrap({
                 type: "POST",
                 url: "sysOrganization/addOrganization",
                 data: {
-                    childList: that.form_data
+                    childList: ret
                 },
                 success(res) {
                     that.$baseWarn("保存成功！");

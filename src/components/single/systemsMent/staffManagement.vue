@@ -42,6 +42,13 @@
                             <el-button  
                                 type="text"
                                 size="small"
+                                class="r-bd"
+                                @click="detailSearch(scope.row.empId)"
+                                >详情</el-button>
+                            <el-button  
+                                type="text"
+                                size="small"
+                                class="r-bd"
                                 @click="showDialog(scope.row.empId)"
                                 >修改</el-button>
                             <el-button  
@@ -49,11 +56,6 @@
                                 size="small"
                                 @click="deleteOneInfo(scope.row.empId)"
                                 >删除</el-button>
-                            <el-button  
-                                type="text"
-                                size="small"
-                                @click="detailSearch(scope.row.empId)"
-                                >详情</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

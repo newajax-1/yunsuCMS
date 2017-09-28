@@ -34,7 +34,7 @@
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="search()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click="reset" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -152,7 +152,7 @@
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="materialGrade" label="原材料"></el-table-column>
                         <el-table-column prop="scndProc" label="二次加工"></el-table-column>
-                        <el-table-column prop="updateTime" label="计划生产日期"></el-table-column>
+                        <el-table-column prop="weekDate" label="计划生产日期"></el-table-column>
                         <el-table-column prop="week" label="周"></el-table-column>
                         <el-table-column prop="clas" label="班次"></el-table-column>
                         <el-table-column prop="empName" label="班次工人"></el-table-column>
