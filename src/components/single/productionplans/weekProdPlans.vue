@@ -12,20 +12,20 @@
                             label="下发人：">
                             <el-input 
                                 placeholder="输入人员姓名" 
-                                v-model='search_form_data.issUsrName'></el-input>
+                                v-model.trim='search_form_data.issUsrName'></el-input>
                         </el-form-item>
 
                         <el-form-item 
                             label="生成时间：">
                             <el-date-picker
-                                v-model="search_form_data.creStartTime"
+                                v-model.trim="search_form_data.creStartTime"
                                 type="date"
                                 :editable=false
                                 placeholder="选择日期">
                             </el-date-picker>
                             <span class="pad-line-default">至</span>
                             <el-date-picker
-                                v-model="search_form_data.creEndTime"
+                                v-model.trim="search_form_data.creEndTime"
                                 type="date"
                                 :editable=false
                                 placeholder="选择日期">
@@ -207,14 +207,14 @@
                                 <el-table-column width="60" prop="custProductNo" label="客户BOM代号">
                                     <template scope="scope">  
                                         <el-select 
-                                            :disabled="scope.row.sign" 
+                                            :disabled="scope.row.sign || modal_table_edit"
                                             v-model="scope.row.custProductNo"
-                                            @change="getProductData(scope.row.ordrNo,scope.$index,scope.row.sign)">
+                                            @change="getProductData(scope.$index,scope.row.sign,scope.row.custProductNo); ">
                                             <el-option value="">请选择</el-option>
                                             <el-option 
                                                 v-for="item in scope.row.async_bom_number"
                                                 :label="item.custProductNo"
-                                                :value="item.custProductNo"
+                                                :value="item.itemNo"
                                                 :key="item.itemName"></el-option>
                                         </el-select>
                                     </template>
@@ -222,22 +222,17 @@
 
                                 <el-table-column width="60" prop="mouldNo" label="模具代号">
                                     <template  scope="scope">
-                                        <el-tooltip class="item" 
-                                            effect="light" 
-                                            :disabled="!scope.row.mouldNo" 
-                                            :content="scope.row.mouldCode" 
-                                            placement="bottom-start">
-                                            <el-select
-                                                :disabled="modal_table_edit"
-                                                v-model="scope.row.mouldNo"
-                                                @change="getAsyncBomData(scope.row.custProductNo,scope.$index)">
-                                                <el-option 
-                                                    :label="scope.row.mouldCode"
-                                                    :value="scope.row.mouldNo"></el-option>
-
-                                            </el-select>
-                                            <!-- <el-input :disabled="modal_table_edit" v-model="scope.row.mouldNo"></el-input> -->
-                                        </el-tooltip>
+                                        <el-select
+                                            :disabled="scope.row.sign || modal_table_edit"
+                                            v-model="scope.row.mouldNo"
+                                            @change="getAsyncModalNo(scope.row.mouldNo,scope.$index,scope.row.custProductNo)">
+                                            <el-option value="">请选择</el-option>
+                                            <el-option 
+                                                v-for="item in scope.row.ModalList"
+                                                :label="item.mouldCode"
+                                                :value="item.mouldNo"
+                                                :key="item.mouldCode"></el-option>
+                                        </el-select>
                                     </template>
                                 </el-table-column>
 
@@ -282,7 +277,7 @@
 
                                 <el-table-column width="60" prop="moldingCycle" label="单件周期">
                                     <template  scope="scope">
-                                        <el-input :disabled="modal_table_edit" v-model="scope.row.moldingCycle"></el-input>
+                                        <el-input disabled v-model="scope.row.moldingCycle"></el-input>
                                     </template>
                                 </el-table-column>
                                 
@@ -297,14 +292,14 @@
                                             :disabled="!scope.row.materialGrade" 
                                             :content="scope.row.materialGrade" 
                                             placement="bottom-start">
-                                            <el-input :disabled="modal_table_edit" v-model="scope.row.materialGrade"></el-input>
+                                            <el-input disabled v-model="scope.row.materialGrade"></el-input>
                                         </el-tooltip>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column width="60" prop="scndProc" label="二次加工">
                                     <template  scope="scope">
-                                        <el-select :disabled="modal_table_edit" placeholder="请选择" v-model="scope.row.scndProc">
+                                        <el-select disabled placeholder="请选择" v-model="scope.row.scndProc">
                                             <el-option value="">请选择</el-option>
                                             <el-option  
                                                 v-for="item in modal_sync_data.processList" 

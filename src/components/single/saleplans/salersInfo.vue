@@ -8,26 +8,26 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="客户编号：">
-                            <el-input placeholder="输入编号" v-model='info.cust_no'></el-input>
+                            <el-input placeholder="输入编号" v-model.trim='info.cust_no'></el-input>
                         </el-form-item>
                         <el-form-item label="客户名称：">
-                            <el-input placeholder="输入名称" v-model='info.cust_name'></el-input>
+                            <el-input placeholder="输入名称" v-model.trim='info.cust_name'></el-input>
                         </el-form-item>
                         <el-form-item label="联系人：">
-                            <el-input placeholder="输入联系人" v-model='info.contacts'></el-input>
+                            <el-input placeholder="输入联系人" v-model.trim='info.contacts'></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click='reset()' class="btn btn-orange"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue" v-if="buttonsRightList[3]"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click='reset()' class="btn btn-orange" v-if="buttonsRightList[4]"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button class="btn btn-small" @click="refresh()"><i class="fa fa-refresh "></i> 刷 新</el-button>
-                    <el-button class="btn btn-large" @click="batchDelete()"><i class="fa fa-trash-o"></i> 批量删除</el-button>
-                    <el-button class="btn btn-large" @click="toAdd()"><i class="fa fa-file-text-o"></i> 新建客户</el-button>
+                    <el-button class="btn btn-small" @click="refresh()" v-if="buttonsRightList[0]"><i class="fa fa-refresh "></i> 刷 新</el-button>
+                    <el-button class="btn btn-large" @click="batchDelete()" v-if="buttonsRightList[1]"><i class="fa fa-trash-o"></i> 批量删除</el-button>
+                    <el-button class="btn btn-large" @click="toAdd()" v-if="buttonsRightList[2]"><i class="fa fa-file-text-o"></i> 新建客户</el-button>
                 </el-col>
             </div>
 
@@ -73,17 +73,21 @@
                                     type="text"
                                     size="small"
                                     class="r-bd"
-                                    v-if="scope.row.custType !== '平台'"
-                                    @click="edittab(scope.row.id)">修改</el-button>
+                                    v-show="scope.row.custType !== '平台'"
+                                    v-if="buttonsRightList[5]"
+                                    @click="edittab(scope.row.id)"
+                                    >修改</el-button>
                                 <el-button
                                     type="text"
                                     size="small"
                                     class="r-bd"
-                                    v-if="scope.row.custType !== '平台'"
+                                    v-show="scope.row.custType !== '平台'"
+                                    v-if="buttonsRightList[6]"
                                     @click="deletetab(scope.row.id)">删除</el-button>
                                 <el-button
                                     type="text"
                                     size="small"
+                                    v-if="buttonsRightList[7]"
                                     @click="showDetailed(scope.row.id)">详情</el-button>
                             </template>
                         </el-table-column>

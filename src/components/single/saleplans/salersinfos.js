@@ -86,7 +86,8 @@ export default {
                 area: undefined,
                 address: undefined,
                 custType: undefined
-            }
+            },
+            buttonsRightList: []
         }
     },
     methods: {
@@ -173,7 +174,7 @@ export default {
             }
             this.$ajaxWrap({
                 type: "post",
-                url: "/cust/queryList",
+                url: "/cust/loadTable",
                 data: send_data,
                 success: function(data) {
                     that.table_data = data.data.page.list;
@@ -186,6 +187,7 @@ export default {
                     }
                     that.page.page_num = data.data.page.pageNum;
                     that.page.page_size = data.data.page.pageSize;
+                    that.buttonsRightList = data.data.button;
                 },
                 error() {
                     //do error function

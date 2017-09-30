@@ -6,8 +6,8 @@
                     <span>系统管理-角色管理</span>
                 </div>
                 <div class="content-buttons">
-                    <el-button  class="btn btn-blue btn-small" @click="refresh()"> 刷 新</el-button>
-                    <el-button  class="btn btn-blue btn-large" @click="addGroup()"> 增加分组</el-button>
+                    <el-button  class="btn btn-blue btn-small" @click="refresh()" v-if="buttonsRightList[0]"> 刷 新</el-button>
+                    <el-button  class="btn btn-blue btn-large" @click="addGroup()" v-if="buttonsRightList[1]"> 增加分组</el-button>
                 </div>
 		    </el-col>
 	        <!-- 数据表格 start -->
@@ -26,21 +26,25 @@
                                     type="text"
                                     size="small"
                                     class="r-bd"
-                                    @click="addGroup(scope.row.id)">修改</el-button>
+                                    @click="addGroup(scope.row.id)"
+                                    v-if="buttonsRightList[2]">修改</el-button>
                                 <el-button 
                                     type="text"
                                     size="small"
                                     class="r-bd"
-                                    @click="deleteRole(scope.row.id)">删除</el-button>
+                                    @click="deleteRole(scope.row.id)"
+                                    v-if="buttonsRightList[3]">删除</el-button>
                                 <el-button 
                                     type="text"
                                     size="small"
                                     class="r-bd"
-                                    @click="roleManage(scope.row.id)">成员维护</el-button>
+                                    @click="roleManage(scope.row.id)"
+                                    v-if="buttonsRightList[4]">成员维护</el-button>
                                 <el-button 
                                     type="text"
                                     size="small"
-                                    @click="openModal(scope.row.id)">权限</el-button>
+                                    @click="openModal(scope.row.id)"
+                                    v-if="buttonsRightList[5]">权限</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -48,7 +52,7 @@
                     <div class="table-page">
                         <el-pagination
                             layout="total, sizes, prev, pager, next, jumper"
-                            :page-sizes="[10, 20, 30, 40]"
+                            :page-sizes="[15, 20, 30, 40]"
                             :current-page.sync="page_list.pageNum"
                             :page-size="page_list.pageSize"
                             :total="page_list.total"

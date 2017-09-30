@@ -23,7 +23,7 @@
                             <el-form-item label="模具类型：">
                                 <el-select 
                                     :disabled="mould_type_tips"
-                                    placeholder="选择设备类型" 
+                                    placeholder="选择模具类型" 
                                     class="required" 
                                     v-model="add_info.mouldTyp">
                                     <el-option 
@@ -109,7 +109,7 @@
                     <el-row :gutter="24">
                         <el-col :span="12">
                             <el-form-item label="模具制造：">
-                                <el-input placeholder="请输入模具制造工厂" :disabled="source_type" class="required width-other" v-model="add_info.mouldFactory"></el-input>
+                                <el-input placeholder="请输入模具制造工厂" :disabled="source_type" class="required width-other" v-model="add_info.mouldFactoryName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">

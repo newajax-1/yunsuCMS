@@ -8,14 +8,14 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="设备编号：">
-                            <el-input placeholder="输入设备编号" v-model="search_info.eqp_no"></el-input>
+                            <el-input placeholder="输入设备编号" v-model.trim="search_info.eqp_no"></el-input>
                         </el-form-item>
                         <el-form-item label="设备代码：">
-                            <el-input placeholder="输入设备代码" v-model="search_info.eqp_code"></el-input>
+                            <el-input placeholder="输入设备代码" v-model.trim="search_info.eqp_code"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button v-if="buttonsRightList[3]" @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button v-if="buttonsRightList[4]" @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                        
                     </el-form>
@@ -23,9 +23,9 @@
             </el-col>
 
             <el-col :span="24" class="content-buttons">
-                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh "></i> 刷 新</el-button>
-                <el-button @click="deleteIds()" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
-                <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 增加设备</el-button>
+                <el-button v-if="buttonsRightList[0]" @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh "></i> 刷 新</el-button>
+                <el-button v-if="buttonsRightList[1]" @click="deleteIds()" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
+                <el-button v-if="buttonsRightList[2]" @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 增加设备</el-button>
             </el-col>
 
             <el-col :span="24">
@@ -62,21 +62,25 @@
                                     type="text"
                                     size="small"
                                     class="r-bd"
+                                    v-if="buttonsRightList[5]"
                                     @click="toAdd(scope.row.id)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
                                     class="r-bd"
+                                    v-if="buttonsRightList[6]"
                                     @click="showDetail(scope.row.id,scope.row.eqpNo)">详情</el-button>
                                 <el-button  
                                     type="text"
                                     v-if="show_other"
                                     size="small"
                                     class="r-bd"
+                                    v-show="buttonsRightList[7]"
                                     @click="toBinding(scope.row.eqpNo)">绑定</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
+                                    v-if="buttonsRightList[8]"
                                     @click="deleteId(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>

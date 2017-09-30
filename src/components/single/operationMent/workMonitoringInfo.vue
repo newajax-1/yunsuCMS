@@ -253,7 +253,7 @@
                                     <el-select 
                                         :disabled="!scope.row.quantity"
                                         v-model="scope.row.worker" 
-                                        @change="changeWeeker(scope.row.id, scope.row.worker)" 
+                                        @change="changeWeeker(scope.row.id, scope.row.worker, scope.row.billNo)" 
                                         :class="scope.row.quantity ? 'required' : ''">
                                         <el-option
                                             v-for="item in worker_list"

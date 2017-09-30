@@ -47,7 +47,9 @@ export default {
 
             show_list: [{
                 show: true
-            }]
+            }],
+
+            buttonsRightList : []
         }
     },
     methods: {
@@ -64,7 +66,7 @@ export default {
             let that = this;
             this.$ajaxWrap({
                 type: "post",
-                url: "/mould/queryList",
+                url: "/mould/loadTable",
                 data: {
                     mouldTyp: that.mould_typ,
                     pageNum: "1",
@@ -81,7 +83,7 @@ export default {
 
             this.$ajaxWrap({
                 type: "post",
-                url: "/mould/queryList",
+                url: "/mould/loadTable",
                 data: {
                     mouldTyp: that.mould_typ,
                     mouldNo: that.search_info.mould_no,
@@ -128,7 +130,7 @@ export default {
             that.page_list.page_num = data.page.pageNum;
             that.page_list.page_list = data.page.pageList;
             that.page_list.total = data.page.total;
-
+            that.buttonsRightList = data.button;
         },
 
         // 重置
@@ -142,39 +144,52 @@ export default {
             this.getTableData();
         },
 
-        deleteIds(id) {
+        deleteIds() {
             let that = this;
-            if (!this.batch_ids && !id) {
+            if (this.batch_ids.length === 0) {
                 this.$message({
                     message: "请选择删除的数据",
                     type: "warning"
                 });
                 return;
             };
-            var _data = {};
-            if (id) {
-                _data = { id: id }
-            } else {
-                _data = { ids: this.batch_ids }
-            };
+            var _data = [];
+            for(var i = 0;i < this.batch_ids.length; i++) {
+                _data.push(this.batch_ids[i].id)
+            }
+            _data = _data.join(",");
 
-            this.$confirm("你确定删除么？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-            }).then(function() {
-                that.$ajaxWrap({
-                    type: "get",
-                    url: "/mould/deleteMould",
-                    data: _data,
-                    success(res) {
-                        that.$message({
-                            message: res.tipMsg,
-                            type: "success"
-                        });
-                        that.searchTableData();
+            this.$ajaxWrap({
+                type: "get",
+                url: "/mould/queryProductByMouldId",
+                data: _data,
+                success(res) {
+                    var _dataListTitle = "";
+                    if(res.data.dataList && res.data.dataList.length > 0) {
+                        _dataListTitle = "模具已经关联产品";
                     }
-                })
-            }).catch(function() {});
+                    that.$confirm(_dataListTitle + "你确定删除吗？", "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                    }).then(function() {
+                        console.log(11,that.batch_ids)
+                        that.$ajaxWrap({
+                            type: "get",
+                            url: "/mould/batchDeleteMould",
+                            data: {
+                                mouldList : that.batch_ids
+                            },
+                            success(res) {
+                                that.$message({
+                                    message: res.tipMsg,
+                                    type: "success"
+                                });
+                                that.searchTableData();
+                            }
+                        })
+                    }).catch(function() {});
+                }
+            })     
         },
 
         // 弹框
@@ -245,7 +260,36 @@ export default {
 
         // 删除
         deleteId(id) {
+            let that = this;
 
+            this.$ajaxWrap({
+                type: "get",
+                url: "/mould/queryProductByMouldId",
+                data: id,
+                success(res) {
+                    var _dataListTitle = "";
+                    if(res.data.dataList && res.data.dataList.length > 0) {
+                        _dataListTitle = "模具已经关联产品";
+                    }
+                    that.$confirm(_dataListTitle + "你确定删除吗？", "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                    }).then(function() {
+                        that.$ajaxWrap({
+                            type: "get",
+                            url: "/mould/deleteMould",
+                            data: {id : id},
+                            success(res) {
+                                that.$message({
+                                    message: res.tipMsg,
+                                    type: "success"
+                                });
+                                that.searchTableData();
+                            }
+                        })
+                    }).catch(function() {});
+                }
+            })
         },
 
         // 详情
@@ -299,14 +343,18 @@ export default {
 
         // 复选框勾选
         handleSelectionChange(val) {
-            var batch_ids = [];
+            this.batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].id);
+                    this.batch_ids.push(
+                        {
+                            id : val[i].id,
+                            sourceType : val[i].sourceType
+                        }
+                    );
                 }
-                this.batch_ids = batch_ids.join(",");
             } else {
-                this.batch_ids = undefined;
+                this.batch_ids = [];
             }
         },
 

@@ -65,7 +65,8 @@ export default {
                 productWeight: "",
                 gapWeight: "",
                 machinelist: [],
-                custProductNo: ""
+                custProductNo: "",
+                ModalList: []
             },
 
             // 周计划 模态框表格数据
@@ -170,8 +171,8 @@ export default {
             new_workplan_index: [],
             edit_next_show_week: true,
 
-            async_bom_number: [],
             temp_week_year: {},
+            BomChangeFlag: false,
 
             buttonsRightList: [true, true, true, true, true, true, true, true, ]
         }
@@ -197,8 +198,7 @@ export default {
             let that = this;
 
             that.$ajaxWrap({
-                type: "post",
-                url: "week/index",
+                url: "week/loadTable",
                 data: {
                     pageNum: "1",
                     pageSize: "15"
@@ -208,11 +208,12 @@ export default {
                 }
             })
         },
+
         loadWeekPlanTable(data) {
             let that = this,
                 load_table_data = data.page.list;
-            that.weekplan_push_tips = [];
 
+            that.weekplan_push_tips = [];
             load_table_data.every(function(el) {
                 let is_tips;
                 if (el.issSts === "01") {
@@ -342,6 +343,7 @@ export default {
 
         clearModalForm() {
             let that = this;
+
             this.modal_show_tips = false;
             this.modal_table_edit = false;
             this.weekplan_info_show = false;
@@ -357,6 +359,7 @@ export default {
 
         confirmCloseModal() {
             let that = this;
+
             if (that.modal_title === "周计划详情") {
                 that.clearModalForm();
             } else {
@@ -371,7 +374,6 @@ export default {
         },
 
         openWeekplanModal(modal_title, plan_id, index_of_week) {
-
             let send_data = {};
 
             if (index_of_week) {
@@ -407,15 +409,17 @@ export default {
                     url: "week/queryWeekList",
                     data: datas,
                     success(res) {
-                        that.loadModalTableData(res.data);
+                        that.loadModalTableData(res.data, "modify");
                         that.modal_table_edit = false;
                     }
                 })
             }
         },
 
-        loadModalTableData(data) {
-            let week_data = data.data;
+        loadModalTableData(data, tips) {
+            let week_data = data.data,
+                that = this;
+
             for (let key in week_data) {
                 let el = week_data[key];
 
@@ -427,27 +431,31 @@ export default {
 
             this.modal_week_date = week_data;
             this.modal_sync_data = data;
-            if (data.dataList.length) {
+
+            if (data.dataList.length && tips !== "modify") {
                 this.modal_weekplan_table_data = data.dataList;
+
             } else {
                 this.createWorkplan();
             }
-        },
 
-        /* product number */
-        getProductData(val, index, sign) {
-            let that = this;
-            if (!sign) {
-                that.$ajaxWrap({
-                    type: "post",
-                    url: "week/getWeekDetail",
-                    data: {
-                        orderNo: val
-                    },
-                    success(res) {
-                        that.handleProductData(res.data, index);
-                    }
+            if (tips === "modify") {
+                let temp = data.dataList,
+                    len = temp.length;
+                this.getProductValue(data.dataList[0].custNo, 0, function(res) {
+                    that.getAsyncBomData(data.dataList[0].itemNo, 0, function(ret) {
+                        for (let i = 0; i < len; i++) {
+                            let el = temp[i];
+
+                            el.async_bom_number = res.dataList;
+                            el.ModalList = ret.dataList;
+                        }
+                        console.log(temp);
+                        that.modal_weekplan_table_data = temp;
+                    })
                 });
+
+
             }
         },
 
@@ -455,9 +463,7 @@ export default {
             let that = this,
                 temp_workplan_data = that.modal_weekplan_table_data[index];
 
-            temp_workplan_data.tempItem = data.bomList;
-            temp_workplan_data.productNo = data.productNo;
-
+            temp_workplan_data.productNo = data.data;
             that.modal_weekplan_table_data.splice(index, 1, temp_workplan_data);
         },
 
@@ -465,6 +471,7 @@ export default {
         confirmSendPlan(tips) {
             let that = this,
                 sure_text = tips === "save" ? "保存" : "下发";
+
             if (that.isCompletion()) {
                 that.$baseConfirm(`确定${sure_text}吗？`, function() {
                     that.sendWorkplanData(tips);
@@ -473,15 +480,14 @@ export default {
         },
 
         isCompletion() {
-
             let that = this,
                 new_table_data = that.modal_weekplan_table_data,
                 len = new_table_data.length;
+
             for (let i = 0; i < len; i++) {
                 let el = new_table_data[i]
 
                 for (let key in el) {
-
                     el.sum = (el.planBill.monday.day.quantity - 0) +
                         (el.planBill.monday.night.quantity - 0) +
                         (el.planBill.tuesday.day.quantity - 0) +
@@ -498,11 +504,11 @@ export default {
                         (el.planBill.sunday.night.quantity - 0)
 
                     el.picking = ((el.gapWeight - 0) + (el.productWeight - 0)) * el.sum / 1000;
+
                     if (key === "scndProc") {
                         continue
                     }
                     if ((el[key] === "" || el[key] === undefined) && el[key] !== null) {
-
                         if (key === "itemNo" && el.sign) {
                             continue
                         }
@@ -512,8 +518,6 @@ export default {
                         that.$baseWarn("请完善表单信息!");
                         return false;
                     }
-
-                    delete el.tempItem;
                 }
             }
             return true
@@ -552,9 +556,12 @@ export default {
                 delete data.detailList[i].async_bom_number;
             }
 
-
             for (let i = 0; i < data.detailList.length; i++) {
                 delete data.detailList[i].machinelist;
+            }
+
+            for (let i = 0; i < data.detailList.length; i++) {
+                delete data.detailList[i].ModalList;
             }
 
             for (let i = 0; i < data.detailList.length; i++) {
@@ -582,6 +589,7 @@ export default {
                 data: data,
                 success(res) {
                     if (typeof done === "function") done();
+
                     that.clearModalForm();
                     that.work_plan_id = undefined;
                 },
@@ -591,34 +599,14 @@ export default {
             });
         },
 
-        setModalWeekDate() {
-            let that = this;
-            that.modal_plan_bill.monday.day.weekDate = that.modal_week_date.mondayDate;
-            that.modal_plan_bill.monday.night.weekDate = that.modal_week_date.mondayDate;
-            that.modal_plan_bill.tuesday.day.weekDate = that.modal_week_date.tuesdayDate;
-            that.modal_plan_bill.tuesday.night.weekDate = that.modal_week_date.tuesdayDate;
-            that.modal_plan_bill.wednesday.day.weekDate = that.modal_week_date.wednesdayDate;
-            that.modal_plan_bill.wednesday.night.weekDate = that.modal_week_date.wednesdayDate;
-            that.modal_plan_bill.thursday.day.weekDate = that.modal_week_date.thursdayDate;
-            that.modal_plan_bill.thursday.night.weekDate = that.modal_week_date.thursdayDate;
-            that.modal_plan_bill.friday.day.weekDate = that.modal_week_date.fridayDate;
-            that.modal_plan_bill.friday.night.weekDate = that.modal_week_date.fridayDate;
-            that.modal_plan_bill.saturday.day.weekDate = that.modal_week_date.saturdayDate;
-            that.modal_plan_bill.saturday.night.weekDate = that.modal_week_date.saturdayDate;
-            that.modal_plan_bill.sunday.day.weekDate = that.modal_week_date.sundayDate;
-            that.modal_plan_bill.sunday.night.weekDate = that.modal_week_date.sundayDate;
-        },
-
         createWorkplan() {
-
-
             let that = this,
                 plan_bill = null,
                 table_row_data = {};
-            if (that.isCompletion()) {
-                // that.setModalWeekDate();
 
+            if (that.isCompletion()) {
                 let index = that.modal_weekplan_table_data.length;
+
                 table_row_data.index = index;
 
                 plan_bill = JSON.parse(JSON.stringify(that.modal_plan_bill));
@@ -639,6 +627,7 @@ export default {
 
             for (let i = 0; i < item.length; i++) {
                 let el = item[i];
+
                 if (el.id) {
                     temp_delete_array.push(el.id);
                 }
@@ -656,7 +645,6 @@ export default {
             let that = this;
 
             if (that.delete_work_array.length || that.new_workplan_index.length) {
-
                 that.$baseConfirm("您确定要删除这些数据吗？", function() {
                     if (that.delete_work_array.length) {
                         that.deleteWorkplanArray();
@@ -664,18 +652,14 @@ export default {
                     that.reloadModalTableData();
                 });
             } else {
-                that.$alert("请选择要删除的数据！", '提示', {
-                    confirmButtonText: '确定',
-                    callback() {
-                        return
-                    }
-                });
+                that.$baseWarn("请选择要删除的数据！");
             }
         },
 
         deleteWorkplanArray() {
             let that = this,
                 send_data = that.delete_work_array;
+
             that.$ajaxWrap({
                 type: 'post',
                 url: "/week/operationWeek",
@@ -731,11 +715,11 @@ export default {
 
         openWeekplanInfo(weekplan_id, index_of_week, title) {
             let that = this;
-
             let week = index_of_week.match(/[1-9][0-9]*/g);
-            week = week[0];
 
+            week = week[0];
             that.modal_title = title;
+
             that.$ajaxWrap({
                 url: "week/queryWeekList",
                 data: {
@@ -743,8 +727,6 @@ export default {
                     indexOfWeek: week
                 },
                 success(res) {
-
-
                     that.loadModalTableData(res.data);
 
                     that.modal_show_tips = true;
@@ -765,6 +747,7 @@ export default {
             }
 
             that.new_week_date = !that.new_week_date;
+
             that.$ajaxWrap({
                 url: "week/queryWeekList",
                 data: {
@@ -775,14 +758,12 @@ export default {
 
                     ret.dataList = that.modal_weekplan_table_data;
                     ret.data = res.data.data;
+
                     let temp = JSON.parse(JSON.stringify(ret));
-
                     let send_data = that.changeNextWeekdate(temp);
-
                     that.loadModalTableData(send_data);
                 }
             })
-
         },
 
         changeNextWeekdate(data) {
@@ -810,51 +791,105 @@ export default {
         },
 
         /* BOM feature 2017-09-12 */
-        getProductValue(id, index) {
+
+
+        /* product number */
+        getProductData(index, sign, productNo) {
+
+            let that = this;
+
+            if (!that.BomChangeFlag && that.create_new_plan === "create") {
+
+                that.$ajaxWrap({
+                    url: "sequenceNo/getSequenceNo",
+                    success(res) {
+                        that.BomChangeFlag = true;
+                        that.handleProductData(res.data, index);
+                    }
+                });
+            }
+
+            if (productNo) {
+                that.getAsyncBomData(productNo, index);
+            }
+        },
+
+        getProductValue(id, index, done) {
+            let that = this;
+
+            if (id) {
+                that.$ajaxWrap({
+                    url: "week/getProductValue",
+                    data: {
+                        id: id
+                    },
+                    success(res) {
+                        if (typeof done === "function") {
+                            done(res.data);
+                        } else {
+
+                            that.modal_weekplan_table_data[index].async_bom_number = res.data.dataList
+
+                            that.modal_weekplan_table_data.splice(index, 1, that.modal_weekplan_table_data[index]);
+
+                        }
+
+                    }
+                })
+            }
+        },
+
+        getAsyncBomData(num, index, done) {
             let that = this;
 
             that.$ajaxWrap({
-                url: "week/getProductValue",
+                url: "week/getMouldNoByProductNo",
                 data: {
-                    id: id
+                    itemNo: num
                 },
                 success(res) {
+                    if (typeof done === "function") {
+                        done(res.data);
+                    } else {
+                        let temp = that.modal_weekplan_table_data[index];
 
-                    that.modal_weekplan_table_data[index].async_bom_number = res.data.dataList
-
-                    that.async_bom_number = res.data.dataList;
+                        temp.ModalList = res.data.dataList;
+                        that.modal_weekplan_table_data.splice(index, 1, temp);
+                    }
                 }
             })
         },
 
-        getAsyncBomData(num, index) {
-            let that = this,
-                async_data = that.modal_weekplan_table_data[index].async_bom_number,
-                len = async_data.length;
+        getAsyncModalNo(num, index, productNo) {
+            let that = this;
 
-            let data = that.modal_weekplan_table_data,
-                lens = data.length,
-                temp = data[index];
-
-            let other = Number(index + 1);
-
-            if (that.modal_weekplan_table_data[other] && that.modal_weekplan_table_data[other].sign) {
-                that.modal_weekplan_table_data.splice(0, lens);
-                that.modal_weekplan_table_data.push(temp);
-
+            if (num) {
+                that.$ajaxWrap({
+                    url: "week/getProductValueByMouldNo",
+                    data: {
+                        mouldNo: num
+                    },
+                    success(res) {
+                        that.handleModalNo(res.data.dataList, productNo, index);
+                    }
+                })
             }
+        },
 
-            for (let i = 0; i < len; i++) {
-                let el = async_data[i];
-                if (el.custProductNo === num) {
 
+        handleModalNo(data, num, index) {
+
+            let that = this;
+
+            for (let i = 0; i < data.length; i++) {
+                let el = data[i];
+                if (el.itemNo === num) {
                     that.setAsyncBomData(el, index, num);
                 }
             }
         },
 
         setAsyncBomData(data, index, id) {
-
             let that = this,
                 temp = that.modal_weekplan_table_data[index],
                 len = that.modal_weekplan_table_data.length;
@@ -864,7 +899,6 @@ export default {
 
             temp.machinelist = data.machinelist;
             temp.custProductNo = data.custProductNo;
-
             temp.itemNo = data.itemNo;
             temp.itemName = data.itemName;
             temp.secInv = data.secInv;
@@ -877,9 +911,9 @@ export default {
             temp.gapWeight = data.gapWeight || 0;
             temp.productWeight = data.productWeight || 0;
 
-            that.modal_weekplan_table_data.splice(index, 1, temp);
             for (let i = 0; i < lens; i++) {
-                if (id !== datas[i].custProductNo && temp.itemNo === datas[i].itemNo) {
+
+                if (id !== datas[i].itemNo) {
 
                     let ret = that.$deepCloneObject(temp);
                     that.$clearObject(ret);
@@ -891,8 +925,10 @@ export default {
                     ret.itemNo = datas[i].itemNo;
                     ret.itemName = datas[i].itemName;
                     ret.secInv = datas[i].secInv;
+
                     ret.mouldCode = datas[i].mouldCode;
                     ret.mouldNo = datas[i].mouldNo;
+
                     ret.materialGrade = datas[i].materialGrade;
                     ret.moldingCycle = datas[i].moldingCycl;
                     ret.scndProc = datas[i].secdProc;
@@ -900,13 +936,16 @@ export default {
                     ret.gapWeight = datas[i].gapWeight || 0;
                     ret.productWeight = datas[i].productWeight || 0;
 
-                    ret.sign = true
+                    ret.sign = true;
+
+                    ret.ModalList = temp.ModalList;
+
                     ret.index = temp.index++;
                     ret.lv = temp.lv;
                     ret.custNo = temp.custNo;
                     ret.productNo = temp.productNo;
 
-                    ret.planBill = that.$deepCloneObject(that.modal_plan_bill)
+                    ret.planBill = that.$deepCloneObject(that.modal_plan_bill);
                     ret.sum = 0;
 
                     that.modal_weekplan_table_data.push(ret);

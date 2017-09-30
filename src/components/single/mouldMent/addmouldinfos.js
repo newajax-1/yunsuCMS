@@ -7,7 +7,7 @@ export default {
         this.mould_type_tips = this.mould_id ? true : false;
         this.mould_path = this.$route.query.mould_path;
         this.source_type = (this.$route.query.source_type == "10" ? true : false);
-        this.source_type_tips = this.$route.query.source_type;
+        this.source_type_tips = this.$route.query.source_type || "20";
         this.init();
     },
     data() {
@@ -30,7 +30,7 @@ export default {
                 cavityCnt: undefined,
                 moldingCycl: undefined,
                 mouldAscription: undefined,
-                mouldFactory: undefined,
+                mouldFactoryName: undefined,
                 custFactory: undefined,
                 machine: undefined,
                 machineName: "请添加可用机台",
@@ -243,7 +243,7 @@ export default {
                 !that.add_info.moldingCycl ||
                 !that.add_info.mouldSts ||
                 !that.add_info.mouldAscription ||
-                !that.add_info.mouldFactory ||
+                !that.add_info.mouldFactoryName ||
                 !that.add_info.custFactory ||
                 !that.add_info.initCnt ||
                 !that.batch_ids) {
@@ -263,7 +263,7 @@ export default {
                     moldingCycl: that.add_info.moldingCycl,
                     mouldSts: that.add_info.mouldSts,
                     mouldAscription: that.add_info.mouldAscription,
-                    mouldFactory: that.add_info.mouldFactory,
+                    mouldFactory: that.add_info.mouldFactoryName,
                     custFactory: that.add_info.custFactory,
                     initCnt: that.add_info.initCnt,
                     machine: that.batch_ids,
@@ -287,7 +287,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "/equipment/queryList",
+                url: "/equipment/loadTable",
                 data: {
                     eqpTyp: "01",
                     pageNum: "1",

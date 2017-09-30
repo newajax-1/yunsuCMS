@@ -104,6 +104,7 @@
             background #c3c9d2
             position fixed
             bottom 0
+            z-index 999
             p
                 color #333
                 font-size 14px

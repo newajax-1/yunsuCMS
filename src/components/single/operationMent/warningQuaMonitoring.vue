@@ -8,13 +8,13 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="机台归属：">
-                            <el-input placeholder="输入机台归属" v-model="seach_info.machine"></el-input>
+                            <el-input placeholder="输入机台归属" v-model.trim="seach_info.machine"></el-input>
                         </el-form-item>
                         <el-form-item label="工单号：">
-                            <el-input placeholder="输入工单号" v-model="seach_info.bill_no"></el-input>
+                            <el-input placeholder="输入工单号" v-model.trim="seach_info.bill_no"></el-input>
                         </el-form-item>
                         <el-form-item label="报警人：">
-                            <el-input placeholder="输入报警人" v-model="seach_info.rpter"></el-input>
+                            <el-input placeholder="输入报警人" v-model.trim="seach_info.rpter"></el-input>
                         </el-form-item>
                         <el-form-item label="报警时间：">
                             <el-date-picker
@@ -30,15 +30,15 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-blue"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-blue btn-small" v-if="buttonsRightList[1]"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-orange btn-blue" v-if="buttonsRightList[2]"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
 
             <div class="content-buttons fl">
-                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷新</el-button>
+                <el-button @click="refresh()" class="btn btn-blue btn-small" v-if="buttonsRightList[0]"><i class="fa fa-refresh"></i> 刷新</el-button>
             </div>
 
             <el-col :span="24">

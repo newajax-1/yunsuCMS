@@ -50,7 +50,8 @@ export default {
             dialog_title: "",
 
             sync_product_data: {},
-            bom_id: undefined
+            bom_id: undefined,
+            buttonsRightList: []
         }
     },
     methods: {
@@ -71,7 +72,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "product/queryList",
+                url: "product/loadTable",
                 success(res) {
                     that.loadProductBomTable(res.data);
                 }
@@ -86,6 +87,7 @@ export default {
             that.product_bom_page_list.pageNum = data.page.pageNum;
             that.product_bom_page_list.pageSize = data.page.pageSize;
             that.product_bom_page_list.total = data.page.total;
+            that.buttonsRightList = data.button;
         },
         currentPageChange(val) {
             if (this.product_bom_table_data.length) {
@@ -113,7 +115,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "product/queryList",
+                url: "product/loadTable",
                 data: search_data,
                 success(res) {
                     that.loadProductBomTable(res.data);
@@ -122,7 +124,6 @@ export default {
         },
 
         handleSelectionChange(val) {
-            console.log(val);
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {

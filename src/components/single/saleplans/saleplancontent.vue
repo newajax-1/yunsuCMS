@@ -10,7 +10,7 @@
                     <el-form-item label="下发人：">
                         <el-input 
                             placeholder="输入人员姓名" 
-                            v-model='search_form_data.operUserName'></el-input>
+                            v-model.trim='search_form_data.operUserName'></el-input>
                     </el-form-item>
 
                     <el-form-item label="生成时间：">
@@ -46,15 +46,15 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button class="btn btn-small btn-blue" @click="searchFormData()"><i class="fa fa-search"></i> 查 询</el-button>
-                        <el-button class="btn btn-small btn-orange" @click="reset"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                        <el-button class="btn btn-small btn-blue" @click="searchFormData()" v-if="buttonsRightList[2]"><i class="fa fa-search"></i> 查 询</el-button>
+                        <el-button class="btn btn-small btn-orange" @click="reset" v-if="buttonsRightList[3]"><i class="fa fa-window-restore"></i> 重 置</el-button>
                     </el-form-item>
                 </el-form>
             </div>
         </el-col>
         <el-col :span="24" class="content-buttons">
-            <el-button class="btn btn-small" @click="refresh"><i class="fa fa-refresh "></i> 刷 新</el-button>
-            <el-button class="btn btn-large" @click="gotoCreateSalePlan()"><i class="fa fa-file-text-o"></i> 新建计划</el-button>
+            <el-button class="btn btn-small" @click="refresh" v-if="buttonsRightList[0]"><i class="fa fa-refresh "></i> 刷 新</el-button>
+            <el-button class="btn btn-large" @click="gotoCreateSalePlan()" v-if="buttonsRightList[1]"><i class="fa fa-file-text-o"></i> 新建计划</el-button>
         </el-col>
         <!-- sale_plan_form end  -->
 
@@ -85,18 +85,21 @@
                                 size="small"
                                 class="r-bd"
                                 @click="gotoCreateSalePlan(scope.row.id)"
-                                v-show = "saleplan_push_tips[scope.$index].show">修改</el-button> 
+                                v-show = "saleplan_push_tips[scope.$index].show"
+                                v-if="buttonsRightList[4]">修改</el-button> 
                             <el-button
                                 type="text"
                                 size="small"
                                 :class="saleplan_push_tips[scope.$index].show ? '' : 'r-bd'"
                                 @click="confirmOperation(scope.row.id,scope.$index,'下发')"
-                                v-show = "saleplan_push_tips[scope.$index].show">下发</el-button> 
+                                v-show = "saleplan_push_tips[scope.$index].show"
+                                v-if="buttonsRightList[5]">下发</el-button> 
                             <el-button 
                                 type="text"
                                 size="small"
                                 v-show="!saleplan_push_tips[scope.$index].show"
-                                @click="gotoCreateSalePlan(scope.row.id,true)">详情</el-button>
+                                @click="gotoCreateSalePlan(scope.row.id,true)"
+                                v-if="buttonsRightList[6]">详情</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

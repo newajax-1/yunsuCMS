@@ -1,4 +1,4 @@
-// const BaseUrl = window.BaseUrl = 'http://192.168.3.96:8080/ybs_mes_01';
+//const BaseUrl = window.BaseUrl = 'http://192.168.3.96:8080/ybs_mes_01';
 // const BaseUrl = window.BaseUrl = 'http://192.168.3.148:8080/ybs_mes';
 // const BaseUrl = window.BaseUrl = 'http://192.168.3.51:8080/';
 const BaseUrl = window.BaseUrl = "http://localhost:8080/"

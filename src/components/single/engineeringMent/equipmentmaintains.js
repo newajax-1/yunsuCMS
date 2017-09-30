@@ -37,6 +37,8 @@ export default {
             is_disabled: false,
             sale_change_name: "first",
             new_custom: false,
+
+            buttonsRightList: [],
         }
     },
     methods: {
@@ -50,7 +52,7 @@ export default {
 
             this.$ajaxWrap({
                 type: "post",
-                url: "/equipmentmaintpaln/queryList",
+                url: "/equipmentmaintpaln/loadTable",
                 data: {
                     type: that.type,
                     pageNum: "1",
@@ -67,7 +69,7 @@ export default {
 
             this.$ajaxWrap({
                 type: "post",
-                url: "/equipmentmaintpaln/queryList",
+                url: "/equipmentmaintpaln/loadTable",
                 data: {
                     type: that.type,
                     maintItm: that.search_info.maint_itm,
@@ -87,6 +89,7 @@ export default {
             that.page_list.page_size = data.page.pageSize;
             that.page_list.page_num = data.page.pageNum;
             that.page_list.total = data.page.total;
+            that.buttonsRightList = data.button;
         },
 
         // 重置

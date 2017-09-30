@@ -19,7 +19,8 @@ export default {
                 page_num: 1,
                 page_size: 15,
                 total: 0
-            }
+            },
+            buttonsRightList: []
         }
     },
     methods: {
@@ -28,7 +29,7 @@ export default {
             var that = this;
             this.$ajaxWrap({
                 type: "post",
-                url: "/workPlanContrl/queryList",
+                url: "/workPlanContrl/loadTable",
                 data: {
                     productNo: that.seach_info.product_no,
                     itemNo: that.seach_info.item_no,
@@ -42,6 +43,7 @@ export default {
                     that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
                     that.page_list.page_size = data.data.page.pageSize;
+                    that.buttonsRightList = data.data.button;
                 },
                 error(res) {
                     //do error function
@@ -61,7 +63,7 @@ export default {
                 type: "post",
                 url: "/workPlanContrl/queryRjctList",
                 data: {
-                    productNo: obj.productNo,
+                    productNo: obj.itemNo,
                     billNo: obj.billNo
                 },
                 callback: function(data) {

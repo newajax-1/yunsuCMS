@@ -23,6 +23,7 @@ export default {
             },
             alarm_source: "01",
             sale_change_name: "first",
+            buttonsRightList: []
         }
     },
     methods: {
@@ -31,7 +32,7 @@ export default {
             var that = this;
             this.$ajaxWrap({
                 type: "post",
-                url: "/machineAlarm/queryList",
+                url: "/machineAlarm/loadTable",
                 data: {
                     alarmSource: that.alarm_source,
                     oprtType: that.seach_info.oprt_type,
@@ -48,6 +49,7 @@ export default {
                     that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
                     that.page_list.page_size = data.data.page.pageSize;
+                    that.buttonsRightList = data.data.button;
                 },
                 error() {
                     //do error function

@@ -129,7 +129,8 @@ export default {
                 deliveryDate: [
                     { validator: validatepublishDate, trigger: 'blur' }
                 ],
-            }
+            },
+            buttonsRightList: []
         }
     },
 
@@ -142,7 +143,8 @@ export default {
 
             that.sale_change_name = that.$route.query.tab_name;
             temp.name = that.sale_change_name;
-            temp.name ? that.changeTableActive(temp) : that.getSalePlanData();
+
+            temp.name ? that.changeTableActive(temp) : that.searchFormData();
         },
 
         reset() {
@@ -153,17 +155,6 @@ export default {
         refresh() {
             this.reset();
             this.searchFormData();
-        },
-
-        getSalePlanData() {
-            let that = this;
-            that.sale_change_name = "all";
-            that.$ajaxWrap({
-                url: "plan/index",
-                success(res) {
-                    that.loadSaleTable(res.data);
-                }
-            })
         },
 
         loadSaleTable(data) {
@@ -200,11 +191,12 @@ export default {
                     search_data[key] = (search_data[key].toLocaleDateString()).replace(/\//g, "-");
                 }
             }
-
+            that.sale_change_name = that.sale_change_name ? that.sale_change_name : "all";
             that.$ajaxWrap({
                 url: "plan/loadTable",
                 data: search_data,
                 success(res) {
+                    that.buttonsRightList = res.data.button;
                     that.loadSaleTable(res.data);
                 }
             });

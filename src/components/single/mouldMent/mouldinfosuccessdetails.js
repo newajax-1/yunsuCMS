@@ -84,6 +84,9 @@ export default {
                     break;
                 case "5":
                     that.fifth_data = data.recList;
+                    that.fifth_data.every(function(el) {
+                        el.chgTm = el.chgTm.split(" ")[0];
+                    })
                     break;
                 case "6":
                     that.other_data = data.acptList;
@@ -105,7 +108,6 @@ export default {
 
         toAdd(id) {
             let that = this;
-            debugger
             this.change_rec_id = id;
             this.$clearObject(this.add_info)
             this.new_custom = true;
@@ -114,8 +116,8 @@ export default {
                 type: "post",
                 url: "/change/initData",
                 data: {
-                    changeRecId: that.change_rec_id,
-                    id: that.mould_id,
+                    id: that.change_rec_id,
+                    mouldId: that.mould_id,
                 },
                 success(res) {
                     that.mould_no = res.data.dataList;
@@ -141,7 +143,7 @@ export default {
                 type: "post",
                 url: "/change/saveChange",
                 data: {
-                    changeRecId: that.change_rec_id,
+                    id: that.change_rec_id,
                     mouldId: that.mould_id,
                     oldMouldNo: that.add_info.oldMouldNo,
                     oldMouldCode: that.add_info.oldMouldCode,
@@ -218,7 +220,7 @@ export default {
                     url: "/change/getOldMouldNo",
                     data: {
                         oldMouldCode: val,
-                        id: that.mould_id,
+                        mouldId: that.mould_id,
                     },
                     success(res) {
                         if (res.data.data.mouldNo) {

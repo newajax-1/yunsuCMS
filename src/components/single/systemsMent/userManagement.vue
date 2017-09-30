@@ -8,10 +8,10 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="手机号：">
-                            <el-input placeholder="输入手机号" v-model="info.info_phone"></el-input>
+                            <el-input placeholder="输入手机号" v-model.trim="info.info_phone"></el-input>
                         </el-form-item>
                         <el-form-item label="工号：">
-                            <el-input placeholder="输入工号" v-model="info.info_num"></el-input>
+                            <el-input placeholder="输入工号" v-model.trim="info.info_num"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
@@ -51,7 +51,7 @@
                     </el-table>
 
                     <!--分页 start-->
-                    <div class="table-page">
+                    <div class="table-page" v-if="page_list.total === 0 ? false : true">
                         <el-pagination
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"

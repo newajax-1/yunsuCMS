@@ -8,16 +8,16 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="排产计划编号：" v-if="first_table_show">
-                            <el-input placeholder="输入排产计划编号" v-model="seach_info.workplan_no"></el-input>
+                            <el-input placeholder="输入排产计划编号" v-model.trim="seach_info.workplan_no"></el-input>
                         </el-form-item>
                         <el-form-item label="周：" v-if="first_table_show">
-                            <el-input placeholder="输入周" v-model="seach_info.week"></el-input>
+                            <el-input placeholder="输入周" v-model.trim="seach_info.week"></el-input>
                         </el-form-item>
                         <el-form-item label="生产批号：" v-if="second_table_show || second_table_text_show || other_table_show">
-                            <el-input placeholder="输入生产批号" v-model="seach_info.product_no"></el-input>
+                            <el-input placeholder="输入生产批号" v-model.trim="seach_info.product_no"></el-input>
                         </el-form-item>
                         <el-form-item label="产品型号：" v-if="second_table_show || second_table_text_show || other_table_show">
-                            <el-input placeholder="输入产品型号" v-model="seach_info.item_no"></el-input>
+                            <el-input placeholder="输入产品型号" v-model.trim="seach_info.item_no"></el-input>
                         </el-form-item>
                         <el-form-item label="计划生产时间：">
                             <el-date-picker
@@ -33,8 +33,8 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="search()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click="search()" class="btn btn-blue btn-small" v-if="buttonsRightList[1]"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset" class="btn btn-orange btn-small" v-if="buttonsRightList[2]"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -42,7 +42,7 @@
 
             <div class="content-buttons fl">
                 <el-col :span="24">
-                    <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh "></i> 刷 新</el-button>
+                    <el-button @click="refresh()" class="btn btn-blue btn-small" v-if="buttonsRightList[0]"><i class="fa fa-refresh "></i> 刷 新</el-button>
                 </el-col>
             </div>
 
@@ -71,7 +71,8 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="showDetail(scope.row.id,scope.row.week)">详情</el-button>
+                                    @click="showDetail(scope.row.id,scope.row.week)"
+                                    v-if="buttonsRightList[3]">详情</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -106,7 +107,7 @@
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="materialGrade" label="原材料"></el-table-column>
                         <el-table-column prop="scndProc" label="二次加工"></el-table-column>
-                        <el-table-column prop="updateTime" label="计划生产日期"></el-table-column>
+                        <el-table-column prop="weekDate" label="计划生产日期"></el-table-column>
                         <el-table-column prop="week" label="周"></el-table-column>
                         <el-table-column prop="clas" label="班次"></el-table-column>
                         <el-table-column prop="empName" label="班次工人"></el-table-column>
@@ -119,7 +120,8 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="stopWorkInfo(scope.row.id)">终止</el-button>
+                                    @click="stopWorkInfo(scope.row.id)"
+                                    v-if="buttonsRightList[4]">终止</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

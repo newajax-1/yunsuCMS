@@ -38,6 +38,7 @@ export default {
             is_disabled: false,
             sale_change_name: "first",
             new_custom: false,
+            buttonsRightList: []
         }
     },
     methods: {
@@ -51,7 +52,7 @@ export default {
 
             this.$ajaxWrap({
                 type: "post",
-                url: "/spare/queryList",
+                url: "/spare/loadTable",
                 data: {
                     pageNum: "1",
                     pageSize: "15"
@@ -66,7 +67,7 @@ export default {
             let that = this;
             this.$ajaxWrap({
                 type: "post",
-                url: "/spare/queryList",
+                url: "/spare/loadTable",
                 data: {
                     spareNm: that.search_info.spare_nm,
                     invSts: that.search_info.inv_sts,
@@ -85,6 +86,7 @@ export default {
             this.page_list.page_num = data.page.pageNum;
             this.page_list.page_size = data.page.pageSize;
             this.page_list.total = data.page.total;
+            this.buttonsRightList = data.button;
         },
 
         // 重置

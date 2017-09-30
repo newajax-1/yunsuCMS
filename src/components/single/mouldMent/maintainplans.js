@@ -36,6 +36,7 @@ export default {
             plan_id: undefined,
             new_custom: false,
             diag_title: undefined,
+            buttonsRightList : []
         }
     },
     methods: {
@@ -49,7 +50,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "/mouldMaintPlan/queryList",
+                url: "/mouldMaintPlan/loadTable",
                 data: {
                     pageNum: "1",
                     pageSize: "15"
@@ -65,7 +66,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "/mouldMaintPlan/queryList",
+                url: "/mouldMaintPlan/loadTable",
                 data: {
                     maintItm: that.search_info.maint_itm,
                     pageNum: that.search_pageNum || "1",
@@ -83,6 +84,7 @@ export default {
             that.page_list.page_num = data.page.pageNum;
             that.page_list.page_list = data.page.pageList;
             that.page_list.total = data.page.total;
+            that.buttonsRightList = data.button;
         },
 
         // 重置

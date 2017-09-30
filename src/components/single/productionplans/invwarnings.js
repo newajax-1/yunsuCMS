@@ -200,7 +200,7 @@ export default {
             (this.active_name == "first") ? (_warning_name = "原材料") : (_warning_name = "成品");
             this.$ajaxWrap({
                 type: "post",
-                url: "/invWarning/queryList",
+                url: "/invWarning/loadTable",
                 data: {
                     pageNum: that.search_pageNum || 1,
                     pageSize: that.search_pageSize || 15,

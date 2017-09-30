@@ -8,7 +8,7 @@
 
                 <el-form-item label="工单号：">
                     <el-input 
-                        v-model="form_data.billNo"
+                        v-model.trim="form_data.billNo"
                         placeholder="输入工号" 
                         >
                     </el-input>
@@ -16,21 +16,21 @@
 
                 <el-form-item label="周：">
                     <el-input 
-                        v-model="form_data.week"
+                        v-model.trim="form_data.week"
                         placeholder="输入周" >
                     </el-input>
                 </el-form-item>
 
 
                 <el-form-item>
-                    <el-button class="btn btn-small btn-blue"@click="searchFormData()" ><i class="fa fa-search"></i> 查 询</el-button>
-                    <el-button class="btn btn-small btn-orange"@click="reset()" > <i class="fa fa-window-restore"></i> 重 置</el-button>
+                    <el-button class="btn btn-small btn-blue"@click="searchFormData()" v-if="buttonsRightList[2]"><i class="fa fa-search"></i> 查 询</el-button>
+                    <el-button class="btn btn-small btn-orange"@click="reset()" v-if="buttonsRightList[3]"> <i class="fa fa-window-restore"></i> 重 置</el-button>
                 </el-form-item>
             </el-form>
         </div> 
         <el-col :span="24" class="content-buttons">
-            <el-button class="btn btn-blue btn-small" @click="refresh()"><i class="fa fa-refresh "></i> 刷 新</el-button>
-            <a class="btn btn-blue btn-small link-normal" target="_blank" :href="download_url" @click="_export"><i class="fa fa-external-link"></i> 导出</a>
+            <el-button class="btn btn-blue btn-small" @click="refresh()" v-if="buttonsRightList[0]"><i class="fa fa-refresh "></i> 刷 新</el-button>
+            <a class="btn btn-blue btn-small link-normal" target="_blank" :href="download_url" @click="_export" v-if="buttonsRightList[1]"><i class="fa fa-external-link"></i> 导出</a>
         </el-col>
         
         <!-- @table-wrap {必须存在} 正文表格父类 属性border必选 -->

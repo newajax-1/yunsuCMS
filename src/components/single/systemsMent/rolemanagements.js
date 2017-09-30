@@ -63,7 +63,8 @@ export default {
             ,
             jurisdiction: false,
             button_list: [],
-            cache_list: null
+            cache_list: null,
+            buttonsRightList: []
         }
     },
     methods: {
@@ -79,9 +80,10 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "role/index",
+                url: "role/loadTable",
                 success(res) {
                     that.loadPageDate(res.data.page);
+                    that.buttonsRightList = res.data.button;
                 }
             })
         },
@@ -147,7 +149,7 @@ export default {
             }
             that.$ajaxWrap({
                 type: "post",
-                url: "role/index",
+                url: "role/loadTable",
                 data: that.search_data,
                 success(res) {
                     that.loadPageDate(res.data.page);
@@ -170,7 +172,7 @@ export default {
         addGroup(id) {
             let that = this;
             that.add_group = true;
-            
+
             this.$clearObject(this.add_info);
             if (!id) {
                 that.model_title = "增加分组";
@@ -214,15 +216,17 @@ export default {
         selectedMian(event) {
             let that = this;
             this.selectedChecked = event.target.checked ? this.selectedEmpList : [];
+
+            // that.isIndeterminate = event.target.checked ? false : true
             this.isSelected = false;
-            if (!event.target.checked) {
-                that.selectedChecked = [];
-                that.selectedEmpList = [];
-                that.isCheckedList = [];
-                that.isIndeterminate = false;
-            } else {
-                that.isIndeterminate = true;
-            }
+            // if (!event.target.checked) {
+            //     that.isIndeterminate = false;
+            // } else {
+            //     that.isIndeterminate = true;
+            // }
+            that.selectedChecked = [];
+            that.selectedEmpList = [];
+            that.isCheckedList = [];
         },
         selecteList(value, event) {
             let selectedCount = value.length;
@@ -239,12 +243,12 @@ export default {
                 that.selectedChecked = [];
                 that.selectedEmpList = [];
                 that.isCheckedList = [];
-                that.isSelected = false;
+                that.isSelected = true;
             } else {
                 that.selectedChecked = that.allEmpList;
                 that.selectedEmpList = that.allEmpList;
                 that.isCheckedList = that.allEmpList;
-                that.isSelected = true;
+                that.isSelected = false;
             }
         },
         AllList(value, event) {
@@ -317,12 +321,12 @@ export default {
                 for (let j = 0; j < that.Emp.length; j++) {
                     if (that.selectedChecked[i] === that.Emp[j].empNm) {
                         that.saveData.empIds.push(that.Emp[j].id);
-                        that.saveData.id = that.out_row_id;
-
                     }
                 }
             }
             that.saveData.empIds = that.saveData.empIds.join(",");
+
+            that.saveData.id = that.out_row_id;
             that.$ajaxWrap({
                 type: "post",
                 url: "/role/saveMaintain",

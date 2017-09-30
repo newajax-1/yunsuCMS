@@ -8,10 +8,10 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="生产批号：">
-                            <el-input placeholder="输入生产批号" v-model="seach_info.product_no"></el-input>
+                            <el-input placeholder="输入生产批号" v-model.trim="seach_info.product_no"></el-input>
                         </el-form-item>
                         <el-form-item label="客户BOM编号：">
-                            <el-input placeholder="输入编号" v-model="seach_info.item_no"></el-input>
+                            <el-input placeholder="输入编号" v-model.trim="seach_info.item_no"></el-input>
                         </el-form-item>
                         <el-form-item label="计划生产时间：">
                             <el-date-picker
@@ -27,8 +27,8 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-small btn-blue"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-small btn-orange"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button @click="loadTable()" class="btn btn-small btn-blue" v-if="buttonsRightList[0]"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button @click="reset()" class="btn btn-small btn-orange" v-if="buttonsRightList[1]"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -60,7 +60,8 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="showDetail(scope.row)">不良记录</el-button>
+                                    @click="showDetail(scope.row)"
+                                    v-if="buttonsRightList[2]">不良记录</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

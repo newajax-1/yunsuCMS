@@ -25,7 +25,8 @@ export default {
                 pageSize: 10,
                 total: 0
             },
-            download_url:""
+            download_url:"",
+            buttonsRightList: []
         }
     },
     methods: {
@@ -50,6 +51,7 @@ export default {
                 url: "emp/queryEmpWorkDetail",
                 success(res){
                     that.loadTable(res);
+                    that.buttonsRightList = res.data.button;
                 }
             })
         },

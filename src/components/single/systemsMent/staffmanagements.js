@@ -45,7 +45,7 @@ export default {
             var that = this;
             this.$ajaxWrap({
                 type: "post",
-                url: "/emp/queryList",
+                url: "/emp/loadTable",
                 data: {
                     pageNum: that.search_pageNum || 1,
                     pageSize: that.search_pageSize || 10,

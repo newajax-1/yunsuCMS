@@ -8,13 +8,13 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="生产批号：">
-                            <el-input placeholder="输入生产批号" v-model="seach_info.product_no"></el-input>
+                            <el-input placeholder="输入生产批号" v-model.trim="seach_info.product_no"></el-input>
                         </el-form-item>
                         <el-form-item label="机台归属：">
-                            <el-input placeholder="输入机台归属" v-model="seach_info.machine"></el-input>
+                            <el-input placeholder="输入机台归属" v-model.trim="seach_info.machine"></el-input>
                         </el-form-item>
                         <el-form-item label="模具代码：">
-                            <el-input placeholder="输入模具代码" v-model="seach_info.mould_code"></el-input>
+                            <el-input placeholder="输入模具代码" v-model.trim="seach_info.mould_code"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
@@ -52,12 +52,12 @@
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="changeMould(scope.row.mouldOptId, scope.row.oprtTyp)"
+                                    @click="changeMould(scope.row.id, scope.row.oprtTyp)"
                                     v-if="scope.row.oprtTyp == '01'">上模</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
-                                    @click="changeMould(scope.row.mouldOptId, scope.row.oprtTyp)"
+                                    @click="changeMould(scope.row.id, scope.row.oprtTyp)"
                                     v-if="scope.row.oprtTyp == '02'">下模</el-button>
                             </template>
                         </el-table-column>

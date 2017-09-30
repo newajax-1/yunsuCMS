@@ -44,6 +44,7 @@ export default {
 
             sale_change_name: "first",
             new_custom: false,
+            buttonsRightList : []
         }
     },
     methods: {
@@ -57,7 +58,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "/testMouldPlan/queryList",
+                url: "/testMouldPlan/loadTable",
                 data: {
                     planSts: that.plan_sts,
                     pageNum: "1",
@@ -74,7 +75,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "/testMouldPlan/queryList",
+                url: "/testMouldPlan/loadTable",
                 data: {
                     planSts: that.plan_sts,
                     mouldNo: that.search_info.mould_no,
@@ -97,6 +98,7 @@ export default {
             that.page_list.page_size = data.page.pageSize;
             that.page_list.page_list = data.page.pageList;
             that.page_list.total = data.page.total;
+            that.buttonsRightList = data.button;
         },
 
         // 重置
@@ -148,7 +150,7 @@ export default {
                 type: "post",
                 url: "/testMouldPlan/insertOrEdit",
                 data: {
-                    testMouldPlanId: that.save_id,
+                    id: that.save_id,
                     testMouldTyp: that.add_info.testMouldTyp,
                     manager: that.add_info.manager,
                     mouldNo: that.add_info.mouldNo,
@@ -243,7 +245,7 @@ export default {
             var batch_ids = [];
             if (val.length > 0) {
                 for (var i = 0; i < val.length; i++) {
-                    batch_ids.push(val[i].testMouldPlanId);
+                    batch_ids.push(val[i].id);
                 }
                 this.batch_ids = batch_ids.join(",");
             } else {

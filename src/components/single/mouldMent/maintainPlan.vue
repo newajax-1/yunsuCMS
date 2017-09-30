@@ -8,11 +8,11 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="保养内容：">
-                            <el-input placeholder="输入保养内容" v-model="search_info.maint_itm"></el-input>
+                            <el-input placeholder="输入保养内容" v-model.trim="search_info.maint_itm"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button v-if="buttonsRightList[3]" @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button v-if="buttonsRightList[4]" @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                        
                     </el-form>
@@ -20,9 +20,9 @@
             </el-col>
 
             <el-col :span="24" class="content-buttons">
-                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷 新</el-button>
-                <el-button @click="deleteIds()" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
-                <el-button @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 新增计划</el-button>
+                <el-button v-if="buttonsRightList[0]" @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷 新</el-button>
+                <el-button v-if="buttonsRightList[1]" @click="deleteIds()" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
+                <el-button v-if="buttonsRightList[2]" @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 新增计划</el-button>
             </el-col>
 
             <el-col :span="24">
@@ -43,10 +43,12 @@
                                     type="text"
                                     class="r-bd"
                                     size="small"
+                                    v-if="buttonsRightList[5]"
                                     @click="toAdd(scope.row.id)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
+                                    v-if="buttonsRightList[6]"
                                     @click="deleteId(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>

@@ -98,7 +98,7 @@ export default {
                         that.detail_data[i].eqpCode = that.detail_data[i].machinelist[0].machineName;
                     }
 
-                    if (that.detail_data.length === 0) {
+                    if (that.detail_data && that.detail_data.length === 0) {
                         that.$goRoute("/home/workmonitoring");
                     }
                 }
@@ -127,7 +127,8 @@ export default {
                     that.update_data.every(function(el) {
                         return that.worker.push({
                             id: el.id,
-                            worker: el.worker || "",
+                            billNo: el.billNo,
+                            worker: el.worker || undefined,
                             quantity: el.quantity
                         });
                     });
@@ -181,7 +182,7 @@ export default {
         // 单条下发
         operationWeek(id) {
             var that = this;
-
+            console.log("id :", id)
             that.$baseConfirm("确定下发吗？", function() {
                 if (!id) {
                     that.saveUpdateInfo(id, true);
@@ -208,6 +209,7 @@ export default {
 
         // 改变事件
         changeWeeker(id, workerName) {
+            console.log(workerName)
             for (var i = 0; i < this.worker.length; i++) {
                 if (this.worker[i].id == id) {
                     this.worker[i].worker = workerName;

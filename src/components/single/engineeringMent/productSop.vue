@@ -8,21 +8,21 @@
                 <el-form-item label="产品名称：">
                     <el-input 
                         placeholder="输入参数编号" 
-                         v-model="product_sop_form_data.productBomName">
+                         v-model.trim="product_sop_form_data.productBomName">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button class="btn btn-small btn-blue" @click="searchFormData()"> <i class="fa fa-search"></i>查 询</el-button>
-                    <el-button class="btn btn-small btn-orange" @click="reset()"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                    <el-button v-if="buttonsRightList[3]" class="btn btn-small btn-blue" @click="searchFormData()"> <i class="fa fa-search"></i>查 询</el-button>
+                    <el-button v-if="buttonsRightList[4]" class="btn btn-small btn-orange" @click="reset()"><i class="fa fa-window-restore"></i> 重 置</el-button>
                 </el-form-item>
             </el-form>
         </div> 
 
         <el-col :span="24" class="content-buttons">
-            <el-button class="btn btn-blue btn-small" @click="refresh()" ><i class="fa fa-refresh "></i> 刷 新</el-button>
-            <el-button class="btn btn-blue btn-small" @click="deleteIds()" ><i class="fa fa-trash-o"></i> 删除</el-button>
-            <el-button class="btn btn-blue btn-small" @click="openProductSopModal()"><i class="fa fa-file-text-o"></i> 新增</el-button>
+            <el-button v-if="buttonsRightList[0]" class="btn btn-blue btn-small" @click="refresh()" ><i class="fa fa-refresh "></i> 刷 新</el-button>
+            <el-button v-if="buttonsRightList[1]" class="btn btn-blue btn-small" @click="deleteIds()" ><i class="fa fa-trash-o"></i> 删除</el-button>
+            <el-button v-if="buttonsRightList[2]" class="btn btn-blue btn-small" @click="openProductSopModal()"><i class="fa fa-file-text-o"></i> 新增</el-button>
         </el-col>
         
         <div class="table-wrap">
@@ -43,14 +43,16 @@
                             type="text"
                             size="small"
                             class="r-bd"
+                            v-if="buttonsRightList[5]"
                             @click="openProductSopModal(scope.row.id)">修改</el-button>
                         <el-button
                             type="text"
                             size="small"
                             class="r-bd"
+                            v-if="buttonsRightList[6]"
                             @click="deleteId(scope.row.id)">删除</el-button>
-                        <a class="link-normal r-bd" :href="download_sop" @click.stop="setRowProductSop(scope.row.id)"><span>下载</span></a>
-                        <a class="link-normal">
+                        <a v-if="buttonsRightList[7]" class="link-normal r-bd" :href="download_sop" @click.stop="setRowProductSop(scope.row.id)"><span>下载</span></a>
+                        <a v-if="buttonsRightList[8]" class="link-normal">
                             <label>重新上传
                                 <input type="file" class="hidden abs" @change="upload(scope.row.id,$event)" accept=".pdf">
                             </label>

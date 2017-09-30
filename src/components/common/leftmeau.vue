@@ -72,7 +72,7 @@ $gf = #fff;
     .el-menu
         height 100%
         border-radius 0 
-        color $gf
+        color $gf !important
         .left-item
             font-size 12px
             color $gf

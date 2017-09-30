@@ -112,7 +112,7 @@
                                 <el-button  
                                     type="text"
                                     size="small"    
-                                    @click="toAdd(scope.row.changeRecId)">修改</el-button>
+                                    @click="toAdd(scope.row.id)">修改</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

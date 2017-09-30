@@ -9,35 +9,35 @@
                 <el-form-item label="员工工号：">
                     <el-input 
                         placeholder="输入工号" 
-						v-model="form_data.empNo">
+						v-model.trim="form_data.empNo">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item label="员工姓名：">
                     <el-input 
                         placeholder="输入姓名" 
-						v-model="form_data.empNm">
+						v-model.trim="form_data.empNm">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item label="职位：">
                     <el-input 
                         placeholder="输入职位" 
-						v-model="form_data.jobTitle">
+						v-model.trim="form_data.jobTitle">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button class="btn btn-small btn-blue" @click="searchFormData()"> <i class="fa fa-search"></i> 查 询</el-button>
-                    <el-button class="btn btn-small btn-orange" @click="reset()" > <i class="fa fa-window-restore"></i>重 置</el-button>
+                    <el-button class="btn btn-small btn-blue" @click="searchFormData()" v-if="buttonsRightList[4]"> <i class="fa fa-search"></i> 查 询</el-button>
+                    <el-button class="btn btn-small btn-orange" @click="reset()" v-if="buttonsRightList[5]"> <i class="fa fa-window-restore"></i>重 置</el-button>
                 </el-form-item>
             </el-form>
         </div> 
 		<el-col :span="24" class="content-buttons">
-            <el-button class="btn btn-blue btn-small" @click="refresh()"><i class="fa fa-refresh "></i> 刷 新</el-button>
-            <el-button class="btn btn-blue btn-small" @click="goAddDepartment()"> 增加部门</el-button>
-			<el-button class="btn btn-blue btn-small" @click="openStaff()"> 增加员工</el-button>
-			<el-button class="btn btn-blue btn-small"> 导入员工</el-button>
+            <el-button class="btn btn-blue btn-small" @click="refresh()" v-if="buttonsRightList[0]"><i class="fa fa-refresh "></i> 刷 新</el-button>
+            <el-button class="btn btn-blue btn-small" @click="goAddDepartment()" v-if="buttonsRightList[1]"> 增加部门</el-button>
+			<el-button class="btn btn-blue btn-small" @click="openStaff()" v-if="buttonsRightList[2]"> 增加员工</el-button>
+			<el-button class="btn btn-blue btn-small" v-if="buttonsRightList[3]"> 导入员工</el-button>
         </el-col>
 		<!-- 下拉部门 -->
 		<el-col :span="3">
@@ -77,28 +77,30 @@
 								type="text"
 								size="small"
 								class="r-bd"
-								@click="openStaff(scope.row.id)">修改</el-button>
+								@click="openStaff(scope.row.id)" v-if="buttonsRightList[6]">修改</el-button>
 							<el-button
 								type="text"
 								size="small"
 								class="r-bd"
-								@click="deleteStaff(scope.row.id)">删除</el-button>
+								@click="deleteStaff(scope.row.id)" v-if="buttonsRightList[7]">删除</el-button>
 							<el-button
 								type="text"
 								size="small"
 								@click="frozen(scope.row.id)"
 								:class="table_btn_right[scope.$index].show ? '' : 'r-bd'"
-								v-show="table_btn_right[scope.$index].show">冻结</el-button>
+								v-show="table_btn_right[scope.$index].show" 
+								v-if="buttonsRightList[8]">冻结</el-button>
 								<el-button
 								type="text"
 								size="small"
 								@click="restart(scope.row.id)"
-								v-show="!table_btn_right[scope.$index].show">启用</el-button>
+								v-show="!table_btn_right[scope.$index].show" 
+								v-if="buttonsRightList[9]">启用</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 				<!-- @table-page {必须存在} 正文表格分页 -->
-				<div class="table-page">
+				<div class="table-page" v-if="page_list.total === 0 ? false : true">
 					<el-pagination
 						layout="total, sizes, prev, pager, next, jumper"
 						:page-sizes="[15, 20, 30, 40]"

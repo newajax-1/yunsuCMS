@@ -37,6 +37,8 @@ export default {
                 productBomId: undefined
             },
 
+            buttonsRightList: [],
+
             modal_title: "",
 
             download_sop: "javascript:void(0);"
@@ -63,7 +65,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "productsop/queryList",
+                url: "productsop/loadTable",
                 success(res) {
                     that.loadProductSopTable(res.data);
                 }
@@ -78,6 +80,7 @@ export default {
             that.product_sop_page_list.pageNum = data.page.pageNum;
             that.product_sop_page_list.pageSize = data.page.pageSize;
             that.product_sop_page_list.total = data.page.total;
+            that.buttonsRightList = data.button;
         },
 
         handleSelectionChange(val) {
@@ -118,7 +121,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "productsop/queryList",
+                url: "productsop/loadTable",
                 data: search_data,
                 success(res) {
                     that.loadProductSopTable(res.data);

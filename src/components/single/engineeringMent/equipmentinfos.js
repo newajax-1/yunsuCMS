@@ -22,6 +22,7 @@ export default {
 
             select_op: [],
             eqp_sts_list: [],
+            buttonsRightList: [],
 
             add_info: {
                 dicName: undefined,
@@ -82,7 +83,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "/equipment/queryList",
+                url: "/equipment/loadTable",
                 data: {
                     eqpTyp: that.eqp_typ,
                     pageNum: "1",
@@ -99,7 +100,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "/equipment/queryList",
+                url: "/equipment/loadTable",
                 data: {
                     eqpTyp: that.eqp_typ,
                     eqpNo: that.search_info.eqp_no,
@@ -135,6 +136,8 @@ export default {
                         break;
                 }
             }
+
+            that.buttonsRightList = data.button;
         },
 
         // 重置

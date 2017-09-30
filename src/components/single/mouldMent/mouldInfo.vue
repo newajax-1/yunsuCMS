@@ -8,26 +8,26 @@
                 <div class="content-search">
                     <el-form :inline="true" class="">
                         <el-form-item label="模具编号：">
-                            <el-input placeholder="输入模具编号" v-model="search_info.mould_no"></el-input>
+                            <el-input placeholder="输入模具编号" v-model.trim="search_info.mould_no"></el-input>
                         </el-form-item>
                         <el-form-item label="模具制造厂：">
-                            <el-input placeholder="输入模具制造厂" v-model="search_info.mould_factory"></el-input>
+                            <el-input placeholder="输入模具制造厂" v-model.trim="search_info.mould_factory"></el-input>
                         </el-form-item>
                         <el-form-item label="客户名称：">
-                            <el-input placeholder="输入客户名称" v-model="search_info.cust_factory"></el-input>
+                            <el-input placeholder="输入客户名称" v-model.trim="search_info.cust_factory"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button v-if="buttonsRightList[3]" @click="searchTableData()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button v-if="buttonsRightList[4]" @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
 
             <el-col :span="24" class="content-buttons">
-                <el-button @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷 新</el-button>
-                <el-button @click="deleteIds()" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
-                <el-button @click="addMouldDetail()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 增加模具</el-button>
+                <el-button v-if="buttonsRightList[0]" @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-refresh"></i> 刷 新</el-button>
+                <el-button v-if="buttonsRightList[1]" @click="deleteIds()" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
+                <el-button v-if="buttonsRightList[2]" @click="addMouldDetail()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 增加模具</el-button>
             </el-col>
 
             <el-col :span="24">
@@ -66,21 +66,25 @@
                                     type="text"
                                     size="small" 
                                     class="r-bd"
+                                    v-if="buttonsRightList[5]"
                                     @click="addMouldDetail(scope.row.id,scope.row.sourceType)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
                                     class="r-bd"
+                                    v-if="buttonsRightList[6]"
                                     @click="toAdd(scope.row.id)">验收</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"  
-                                    class="r-bd"  
+                                    class="r-bd"
+                                    v-if="buttonsRightList[7]"  
                                     @click="showDetail(scope.row.id, 'new')">详情</el-button>
                                 <el-button  
                                     type="text"
-                                    size="small"    
-                                    @click="deleteIds(scope.row.id)">删除</el-button>
+                                    size="small"
+                                    v-if="buttonsRightList[8]"     
+                                    @click="deleteId(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -113,16 +117,19 @@
                                     type="text"
                                     size="small"
                                     class="r-bd"
+                                    v-if="buttonsRightList[5]"
                                     @click="addMouldDetail(scope.row.id,scope.row.sourceType)">修改</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
                                     class="r-bd"
+                                    v-if="buttonsRightList[8]" 
                                     v-show = "show_list[scope.$index].show"
                                     @click="deleteIds(scope.row.id)">删除</el-button>
                                 <el-button  
                                     type="text"
-                                    size="small"  
+                                    size="small" 
+                                    v-if="buttonsRightList[7]"  
                                     @click="showDetail(scope.row.id)">详情</el-button>
                             </template>
                         </el-table-column>

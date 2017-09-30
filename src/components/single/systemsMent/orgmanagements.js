@@ -73,6 +73,7 @@ export default {
             batch_ids: [],
             batch_names: undefined,
             org_arr: [],
+            buttonsRightList: [],
         }
     },
     methods: {
@@ -95,9 +96,10 @@ export default {
             let that = this;
             that.$ajaxWrap({
                 type: "post",
-                url: "sysOrganization/index",
+                url: "sysOrganization/loadTable",
                 success(res) {
                     that.loadPageDate(res.data);
+                    that.buttonsRightList = res.data.button;
                 }
             })
         },
@@ -153,7 +155,7 @@ export default {
 
             that.$ajaxWrap({
                 type: "post",
-                url: "sysOrganization/index",
+                url: "sysOrganization/loadTable",
                 data: search_data,
                 success(res) {
                     that.loadPageDate(res.data);
@@ -296,7 +298,7 @@ export default {
             let that = this;
             that.$ajaxWrap({
                 type: "post",
-                url: "sysOrganization/index",
+                url: "sysOrganization/loadTable",
                 data: {
                     sysOrgId: id
                 },

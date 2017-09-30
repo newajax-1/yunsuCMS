@@ -35,6 +35,7 @@ export default {
             stop_show: false,
             sale_change_name: "first",
             iss_sts: "02",
+            buttonsRightList: []
         }
     },
     methods: {
@@ -73,6 +74,9 @@ export default {
                 },
                 callback: function(data) {
                     that.first_table_data = data.data.page.list;
+                    that.first_table_data.every(function(el) {
+                        return el.planIssSts = el.planIssSts + "%"
+                    })
                     that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
                     that.page_list.page_size = data.data.page.pageSize;
@@ -88,8 +92,7 @@ export default {
             this.second_table_data = [];
             this.first_table_data = [];
             this.$ajaxWrap({
-                type: "post",
-                url: "/week/index",
+                url: "/week/loadTable",
                 data: {
                     issSts: "02",
                     planIssSts: "100",
@@ -104,6 +107,7 @@ export default {
                     that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
                     that.page_list.page_size = data.data.page.pageSize;
+                    that.buttonsRightList = data.data.button;
                 },
                 error() {
                     //do error function
@@ -131,20 +135,20 @@ export default {
                     if (that.seach_info.bill_sts == 1) {
                         that.second_table_data = data.data.page.list;
 
-                        for (let i = 0; i < that.second_table_data.length; i++) {
-                            let el = that.second_table_data[i];
-                            if (el.updateTime) {
-                                el.updateTime = el.updateTime.slice(0, 5) + el.weekDate;
-                            }
-                        }
+                        // for (let i = 0; i < that.second_table_data.length; i++) {
+                        //     let el = that.second_table_data[i];
+                        //     if (el.updateTime) {
+                        //         el.updateTime = el.updateTime.slice(0, 5) + el.weekDate;
+                        //     }
+                        // }
                     } else {
                         that.other_table_data = data.data.page.list;
-                        for (let i = 0; i < that.other_table_data.length; i++) {
-                            let el = that.other_table_data[i];
-                            if (el.updateTime) {
-                                el.updateTime = el.updateTime.slice(0, 5) + el.weekDate;
-                            }
-                        }
+                        // for (let i = 0; i < that.other_table_data.length; i++) {
+                        //     let el = that.other_table_data[i];
+                        //     if (el.updateTime) {
+                        //         el.updateTime = el.updateTime.slice(0, 5) + el.weekDate;
+                        //     }
+                        // }
                     }
                     that.page_list.total = data.data.page.total || 0;
                     that.page_list.page_num = data.data.page.pageNum || 1;

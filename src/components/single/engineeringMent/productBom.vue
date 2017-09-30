@@ -9,28 +9,28 @@
                 <el-form-item label="产品BOM编号：">
                     <el-input 
                         placeholder="输入参数编号" 
-                        v-model="product_bom_form_data.productNo">
+                        v-model.trim="product_bom_form_data.productNo">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item label="产品BOM名称：">
                     <el-input 
                         placeholder="输入参数编号" 
-                            v-model="product_bom_form_data.productNm">
+                            v-model.trim="product_bom_form_data.productNm">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item label="客户BOM编号：">
                     <el-input 
-                        placeholder="输入参数编号" 
+                        placeholder.trim="输入参数编号" 
                             v-model="product_bom_form_data.custProductNo">
                     </el-input>
                 </el-form-item>
 
 
                 <el-form-item>
-                    <el-button class="btn btn-small btn-blue" @click="searchFormData()"> <i class="fa fa-search"></i> 查 询</el-button>
-                    <el-button class="btn btn-small btn-orange" @click="reset"> <i class="fa fa-window-restore"></i>重 置</el-button>
+                    <el-button v-if="buttonsRightList[2]" class="btn btn-small btn-blue" @click="searchFormData()"> <i class="fa fa-search"></i> 查 询</el-button>
+                    <el-button v-if="buttonsRightList[3]" class="btn btn-small btn-orange" @click="reset"> <i class="fa fa-window-restore"></i>重 置</el-button>
                 </el-form-item>
             </el-form>
         </div> 
@@ -41,8 +41,8 @@
             @btn-large {必须存在} 四字带icon 按钮，默认颜色为 btn-blue
         -->
         <el-col :span="24" class="content-buttons">
-            <el-button class="btn btn-blue btn-small" @click="refresh" ><i class="fa fa-refresh "></i> 刷 新</el-button>
-            <el-button class="btn btn-blue btn-small" @click="gotoAddpage()"><i class="fa fa-file-text-o"></i> 新增</el-button>
+            <el-button v-if="buttonsRightList[0]" class="btn btn-blue btn-small" @click="refresh" ><i class="fa fa-refresh "></i> 刷 新</el-button>
+            <el-button v-if="buttonsRightList[1]" class="btn btn-blue btn-small" @click="gotoAddpage()"><i class="fa fa-file-text-o"></i> 新增</el-button>
         </el-col>
         
         <!-- @table-wrap {必须存在} 正文表格父类 属性border必选 -->
@@ -68,6 +68,7 @@
                             type="text"
                             size="small"
                             class="r-bd"
+                            v-if="buttonsRightList[4]"
                             @click="openProductBomModify(scope.row.id,2)">
                             修改
                         </el-button>
@@ -75,6 +76,7 @@
                             type="text"
                             size="small"
                             class="r-bd"
+                            v-if="buttonsRightList[5]"
                             v-show="(scope.row.count - 0) > 0 ? false : true"
                             @click="deleteId(scope.row.id)">
                             删除
@@ -82,6 +84,7 @@
                         <el-button 
                             type="text"
                             size="small"
+                            v-if="buttonsRightList[6]"
                             @click="openProductBomInfo(scope.row.id,2)">
                             详情
                         </el-button>
