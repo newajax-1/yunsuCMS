@@ -146,23 +146,20 @@ export default {
 
         deleteIds() {
             let that = this;
-            if (this.batch_ids.length === 0) {
+            if (!this.batch_ids.length) {
                 this.$message({
                     message: "请选择删除的数据",
                     type: "warning"
                 });
                 return;
             };
-            var _data = [];
-            for(var i = 0;i < this.batch_ids.length; i++) {
-                _data.push(this.batch_ids[i].id)
-            }
-            _data = _data.join(",");
 
             this.$ajaxWrap({
                 type: "get",
                 url: "/mould/queryProductByMouldId",
-                data: _data,
+                data: {
+                    ids : that.batch_ids
+                },
                 success(res) {
                     var _dataListTitle = "";
                     if(res.data.dataList && res.data.dataList.length > 0) {
@@ -172,12 +169,11 @@ export default {
                         confirmButtonText: "确定",
                         cancelButtonText: "取消",
                     }).then(function() {
-                        console.log(11,that.batch_ids)
                         that.$ajaxWrap({
                             type: "get",
                             url: "/mould/batchDeleteMould",
                             data: {
-                                mouldList : that.batch_ids
+                                ids : that.batch_ids
                             },
                             success(res) {
                                 that.$message({
@@ -265,7 +261,9 @@ export default {
             this.$ajaxWrap({
                 type: "get",
                 url: "/mould/queryProductByMouldId",
-                data: id,
+                data: {
+                    id : id
+                },
                 success(res) {
                     var _dataListTitle = "";
                     if(res.data.dataList && res.data.dataList.length > 0) {
@@ -343,18 +341,15 @@ export default {
 
         // 复选框勾选
         handleSelectionChange(val) {
-            this.batch_ids = [];
+            this.batch_ids = undefined;
             if (val.length > 0) {
+                var _batch_ids = [];
                 for (var i = 0; i < val.length; i++) {
-                    this.batch_ids.push(
-                        {
-                            id : val[i].id,
-                            sourceType : val[i].sourceType
-                        }
-                    );
+                    _batch_ids.push(val[i].id);
                 }
+                this.batch_ids = _batch_ids.join(",")
             } else {
-                this.batch_ids = [];
+                this.batch_ids = undefined;
             }
         },
 

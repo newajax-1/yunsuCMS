@@ -10,7 +10,7 @@ export default {
             seach_info: {
                 oprt_typ: "01",
                 product_no: undefined,
-                machine: undefined,
+                machineName: undefined,
                 mould_code: undefined,
             },
             page_list: {
@@ -18,6 +18,7 @@ export default {
                 page_num: 1,
                 total: 0
             },
+            buttonsRightList : []
         }
     },
     methods: {
@@ -30,7 +31,7 @@ export default {
                 data: {
                     oprtTyp: that.seach_info.oprt_typ,
                     productNo: that.seach_info.product_no,
-                    machine: that.seach_info.machine,
+                    machineName: that.seach_info.machineName,
                     mouldCode: that.seach_info.mould_code,
                     pageSize: that.search_pageSize || 15,
                     pageNum: that.search_pageNum || 1
@@ -40,6 +41,7 @@ export default {
                     that.page_list.total = data.data.page.total;
                     that.page_list.page_num = data.data.page.pageNum;
                     that.page_list.page_size = data.data.page.pageSize;
+                    that.buttonsRightList = data.data.button;
                 },
                 error(res) {
                     //do error function
@@ -67,7 +69,7 @@ export default {
                     type: "post",
                     url: "/mouldopt/operationMouldOpt",
                     data: {
-                        mouldOptId: id,
+                        id: id,
                         oprtTyp: _oprtTyp,
                     },
                     success: function(data) {
@@ -86,7 +88,9 @@ export default {
 
         // 重置
         reset() {
-            this.$clearObject(this.seach_info)
+            var _oprt_typ = this.seach_info.oprt_typ;
+            this.$clearObject(this.seach_info);
+            this.seach_info.oprt_typ = _oprt_typ;
         },
 
         searchFormData(pageval, pagesize) {

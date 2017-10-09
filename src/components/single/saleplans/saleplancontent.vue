@@ -86,20 +86,20 @@
                                 class="r-bd"
                                 @click="gotoCreateSalePlan(scope.row.id)"
                                 v-show = "saleplan_push_tips[scope.$index].show"
-                                v-if="buttonsRightList[4]">修改</el-button> 
+                                v-if="buttonsRightList[5]">修改</el-button> 
                             <el-button
                                 type="text"
                                 size="small"
                                 :class="saleplan_push_tips[scope.$index].show ? '' : 'r-bd'"
                                 @click="confirmOperation(scope.row.id,scope.$index,'下发')"
                                 v-show = "saleplan_push_tips[scope.$index].show"
-                                v-if="buttonsRightList[5]">下发</el-button> 
+                                v-if="buttonsRightList[6]">下发</el-button> 
                             <el-button 
                                 type="text"
                                 size="small"
                                 v-show="!saleplan_push_tips[scope.$index].show"
                                 @click="gotoCreateSalePlan(scope.row.id,true)"
-                                v-if="buttonsRightList[6]">详情</el-button>
+                                v-if="buttonsRightList[4]">详情</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

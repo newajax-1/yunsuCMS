@@ -193,7 +193,7 @@
                             <el-row :gutter="24">
                                 <el-col :span="24">
                                     <el-form-item label="　　　变更描述：">
-                                        <el-input type="textarea" class="required" v-model="add_info.chgItm"></el-input>
+                                        <el-input type="textarea" class="required input-textarea" v-model="add_info.chgItm"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -213,7 +213,7 @@
     </div>
 </template>
 <script src="./mouldinfosuccessdetails.js"></script>
-<style lang="stylus" scoped>
+<style lang="stylus">
 .mould_info_success_detail
     .tab-title
         margin-top 10px
@@ -221,4 +221,7 @@
         120px !important
     .other—top
         margin-top 20px
+    .input-textarea
+        .el-textarea__inner
+            font-family "Microsoft Yahei"
 </style>

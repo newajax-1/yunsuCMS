@@ -7,7 +7,7 @@
             <el-form :inline="true">
                 <el-form-item label="产品名称：">
                     <el-input 
-                        placeholder="输入参数编号" 
+                        placeholder="输入产品名称" 
                          v-model.trim="product_sop_form_data.productBomName">
                     </el-input>
                 </el-form-item>

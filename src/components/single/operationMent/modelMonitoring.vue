@@ -11,14 +11,14 @@
                             <el-input placeholder="输入生产批号" v-model.trim="seach_info.product_no"></el-input>
                         </el-form-item>
                         <el-form-item label="机台归属：">
-                            <el-input placeholder="输入机台归属" v-model.trim="seach_info.machine"></el-input>
+                            <el-input placeholder="输入机台归属" v-model.trim="seach_info.machineName"></el-input>
                         </el-form-item>
                         <el-form-item label="模具代码：">
                             <el-input placeholder="输入模具代码" v-model.trim="seach_info.mould_code"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
-                            <el-button @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
+                            <el-button v-show="buttonsRightList[0]" @click="loadTable()" class="btn btn-blue btn-small"><i class="fa fa-search"></i> 查 询</el-button>
+                            <el-button v-show="buttonsRightList[1]" @click="reset()" class="btn btn-orange btn-small"><i class="fa fa-window-restore"></i> 重 置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -40,7 +40,7 @@
                         >
                         <el-table-column prop="workplanNo" label="生产计划编号"></el-table-column>
                         <el-table-column prop="productNo" label="生产批号"></el-table-column>
-                        <el-table-column prop="eqpCode" label="机台归属"></el-table-column>
+                        <el-table-column prop="machineName" label="机台归属"></el-table-column>
                         <el-table-column prop="mouldNo" label="模具编号"></el-table-column>
                         <el-table-column prop="mouldCode" label="模具代码"></el-table-column>
                         <el-table-column prop="installTm" label="上模时间"></el-table-column>
@@ -52,11 +52,13 @@
                                 <el-button  
                                     type="text"
                                     size="small"
+                                    v-show="buttonsRightList[2]"
                                     @click="changeMould(scope.row.id, scope.row.oprtTyp)"
                                     v-if="scope.row.oprtTyp == '01'">上模</el-button>
                                 <el-button  
                                     type="text"
                                     size="small"
+                                    v-show="buttonsRightList[3]"
                                     @click="changeMould(scope.row.id, scope.row.oprtTyp)"
                                     v-if="scope.row.oprtTyp == '02'">下模</el-button>
                             </template>

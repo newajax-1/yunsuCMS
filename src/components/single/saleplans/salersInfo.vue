@@ -74,7 +74,7 @@
                                     size="small"
                                     class="r-bd"
                                     v-show="scope.row.custType !== '平台'"
-                                    v-if="buttonsRightList[5]"
+                                    v-if="buttonsRightList[6]"
                                     @click="edittab(scope.row.id)"
                                     >修改</el-button>
                                 <el-button
@@ -82,12 +82,12 @@
                                     size="small"
                                     class="r-bd"
                                     v-show="scope.row.custType !== '平台'"
-                                    v-if="buttonsRightList[6]"
+                                    v-if="buttonsRightList[7]"
                                     @click="deletetab(scope.row.id)">删除</el-button>
                                 <el-button
                                     type="text"
                                     size="small"
-                                    v-if="buttonsRightList[7]"
+                                    v-if="buttonsRightList[5]"
                                     @click="showDetailed(scope.row.id)">详情</el-button>
                             </template>
                         </el-table-column>
@@ -307,7 +307,7 @@
                 <el-row :gutter="24">
                     <el-col :span="8">
                         <el-form-item label="客户类型：" prop="">
-                            <p v-html="edit_table.custType === '00' ? '平台' : edit_table.custType"></p>
+                            <p v-html="edit_table.custType"></p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">

@@ -249,6 +249,7 @@ export default {
             var that = this;
             that.$baseConfirm("确定关闭吗？", function() {
                 that.update_custom = false;
+                that.loadTable();
             });
         },
     },

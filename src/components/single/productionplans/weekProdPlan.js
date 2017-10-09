@@ -170,11 +170,12 @@ export default {
             weekplan_info_show: false,
             new_workplan_index: [],
             edit_next_show_week: true,
+            modal_table_mouldNo: false,
 
             temp_week_year: {},
             BomChangeFlag: false,
 
-            buttonsRightList: [true, true, true, true, true, true, true, true, ]
+            buttonsRightList: []
         }
     },
 
@@ -257,7 +258,7 @@ export default {
                 url: "week/loadTable",
                 data: search_data,
                 success(res) {
-                    // that.buttonsRightList = res.data.button;
+                    that.buttonsRightList = res.data.button;
                     that.loadWeekPlanTable(res.data);
                 }
             });
@@ -386,8 +387,11 @@ export default {
             this.modal_show_tips = true;
 
             this.create_new_plan = modal_title === "新建周计划" ? "create" : "modify";
+            console.log("111",this.create_new_plan)
             this.modal_btn_show = modal_title === "新建周计划" ? true : false;
             this.edit_next_show_week = modal_title === "新建周计划" ? true : false;
+            this.modal_table_mouldNo = modal_title === "新建周计划" ? false : true;
+            this.BomChangeFlag = false;
 
             this.getModalData(send_data);
         },
@@ -450,7 +454,6 @@ export default {
                             el.async_bom_number = res.dataList;
                             el.ModalList = ret.dataList;
                         }
-                        console.log(temp);
                         that.modal_weekplan_table_data = temp;
                     })
                 });
@@ -797,7 +800,7 @@ export default {
         getProductData(index, sign, productNo) {
 
             let that = this;
-
+            console.log("222", that.create_new_plan)
             if (!that.BomChangeFlag && that.create_new_plan === "create") {
 
                 that.$ajaxWrap({
@@ -880,22 +883,21 @@ export default {
         handleModalNo(data, num, index) {
 
             let that = this;
-
             for (let i = 0; i < data.length; i++) {
                 let el = data[i];
                 if (el.itemNo === num) {
-                    that.setAsyncBomData(el, index, num);
+                    that.setAsyncBomData(el, index, num, data);
                 }
             }
         },
 
-        setAsyncBomData(data, index, id) {
+        setAsyncBomData(data, index, id, datas) {
             let that = this,
                 temp = that.modal_weekplan_table_data[index],
                 len = that.modal_weekplan_table_data.length;
 
-            let datas = temp.async_bom_number,
-                lens = datas.length;
+            
+            let lens = datas.length;
 
             temp.machinelist = data.machinelist;
             temp.custProductNo = data.custProductNo;

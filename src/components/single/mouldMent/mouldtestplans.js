@@ -180,7 +180,7 @@ export default {
 
             if (!_ids) {
                 this.$message({
-                    message: "请选择删除的数据",
+                    message: "请选择" +  _name + "的数据",
                     type: "warning"
                 });
                 return;

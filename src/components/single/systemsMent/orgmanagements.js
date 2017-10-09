@@ -190,6 +190,7 @@ export default {
                         empId: id
                     },
                     success(res) {
+                    console.log(res)
 
                         that.org_arr = [];
                         that.batch_ids = [];
@@ -209,7 +210,7 @@ export default {
                         };
                         that.org_arr = that.org_arr.join(",");
 
-                        that.batch_names = that.org_arr;
+                        that.modal_form_data.roleName = that.batch_names = that.org_arr;
                         for (var i = 0; i < that.form_res.sysRoleList.length; i++) {
                             that.batch_ids.push(that.form_res.sysRoleList[i].id)
                         };

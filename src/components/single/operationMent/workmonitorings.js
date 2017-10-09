@@ -61,7 +61,7 @@ export default {
             this.first_table_data = [];
             this.$ajaxWrap({
                 type: "get",
-                url: "/week/loadTable",
+                url: "/workOrder/loadTable",
                 data: {
                     issSts: that.iss_sts,
                     planIssSts: "100",
@@ -92,7 +92,7 @@ export default {
             this.second_table_data = [];
             this.first_table_data = [];
             this.$ajaxWrap({
-                url: "/week/loadTable",
+                url: "/workOrder/loadTable",
                 data: {
                     issSts: "02",
                     planIssSts: "100",

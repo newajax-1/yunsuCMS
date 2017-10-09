@@ -37,7 +37,6 @@ export default {
 
             that.tab_name = that.$route.query.tab_name;
             that.plan_id = that.$route.query.plan_id || "";
-            debugger
             if (that.plan_id) {
                 that.getSalePlanData(that.plan_id);
             } else {
@@ -77,7 +76,7 @@ export default {
                     planId: plan_id
                 },
                 success(res) {
-                    that.sale_plan_data = res.data.dataList;
+                    that.sale_plan_data = res.data.data.planDetailList;
                     if (!that.guest_name_data) {
                         that.guest_name_data = res.data.dataList;
                         that.table_data_length = that.sale_plan_data.length;

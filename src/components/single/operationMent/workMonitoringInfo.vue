@@ -21,7 +21,7 @@
                         :data="detail_data"
                         @selection-change="handleSelectionChange">
                         <el-table-column type="selection" width="45"></el-table-column>
-                        <el-table-column width="60" prop="type" label="类型"></el-table-column>
+                        <!-- <el-table-column width="60" prop="type" label="类型"></el-table-column> -->
                         <el-table-column width="60" prop="lv" label="优先级"></el-table-column>
                         <el-table-column width="60" prop="custName" label="客户"></el-table-column>
                         <el-table-column width="60" prop="ordrNo" label="订单编号"></el-table-column>

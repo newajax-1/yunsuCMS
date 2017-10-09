@@ -8,22 +8,22 @@
 
                 <el-form-item label="产品BOM编号：">
                     <el-input 
-                        placeholder="输入参数编号" 
+                        placeholder="输入产品BOM编号" 
                         v-model.trim="product_bom_form_data.productNo">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item label="产品BOM名称：">
                     <el-input 
-                        placeholder="输入参数编号" 
+                        placeholder="输入产品BOM名称" 
                             v-model.trim="product_bom_form_data.productNm">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item label="客户BOM编号：">
                     <el-input 
-                        placeholder.trim="输入参数编号" 
-                            v-model="product_bom_form_data.custProductNo">
+                        placeholder="输入客户BOM编号" 
+                            v-model.trim="product_bom_form_data.custProductNo">
                     </el-input>
                 </el-form-item>
 

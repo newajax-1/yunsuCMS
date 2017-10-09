@@ -1,7 +1,7 @@
 <template>
 	<el-row class="org-management">
 		<div class="content-title">
-			<span>员工管理-组织架构</span>
+			<span>系统管理-组织管理</span>
 		</div>
 		<div class="content-search">
             <el-form :inline="true">

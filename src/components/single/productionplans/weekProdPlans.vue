@@ -86,27 +86,27 @@
                                 <el-button 
                                     @click="openWeekplanModal('修改周计划',scope.row.id,scope.row.week)"
                                     v-show="weekplan_push_tips[scope.$index].show"
-                                     v-if="buttonsRightList[4]"
+                                     v-if="buttonsRightList[6]"
                                     type="text"
                                     class="r-bd"
                                     size="small">修改</el-button>
                                 <el-button 
                                     @click="confirmOperation(scope.row.id,scope.$index,'下发')"
                                     v-show="weekplan_push_tips[scope.$index].show"
-                                     v-if="buttonsRightList[5]"
+                                     v-if="buttonsRightList[7]"
                                     type="text"
                                     class="r-bd"
                                     size="small">下发</el-button>
                                 <el-button 
                                     @click="confirmOperation(scope.row.id,'','删除')"
                                     v-show="weekplan_push_tips[scope.$index].show"
-                                     v-if="buttonsRightList[6]"
+                                     v-if="buttonsRightList[8]"
                                     type="text"
                                     size="small">删除</el-button>
                                 <el-button
                                     @click="openWeekplanInfo(scope.row.id,scope.row.week,'周计划详情')"
                                     v-show="!weekplan_push_tips[scope.$index].show"
-                                    v-if="buttonsRightList[7]"
+                                    v-if="buttonsRightList[5]"
                                     type="text"
                                     size="small">详情</el-button>
                             </template>
@@ -223,7 +223,7 @@
                                 <el-table-column width="60" prop="mouldNo" label="模具代号">
                                     <template  scope="scope">
                                         <el-select
-                                            :disabled="scope.row.sign || modal_table_edit"
+                                            :disabled="scope.row.sign || modal_table_edit || modal_table_mouldNo"
                                             v-model="scope.row.mouldNo"
                                             @change="getAsyncModalNo(scope.row.mouldNo,scope.$index,scope.row.custProductNo)">
                                             <el-option value="">请选择</el-option>
@@ -240,7 +240,7 @@
                                     <template  scope="scope">
                                         <el-tooltip class="item" 
                                             effect="light" 
-                                            :disabled="!scope.row.itemName" 
+                                            disabled 
                                             :content="scope.row.itemName" 
                                             placement="bottom-start">
                                             <el-input :disabled="modal_table_edit" v-model="scope.row.itemName"></el-input>
@@ -252,7 +252,7 @@
                                     <template  scope="scope">
                                         <el-tooltip class="item" 
                                             effect="light" 
-                                            :disabled="!scope.row.productNo" 
+                                            disabled
                                             :content="scope.row.productNo" 
                                             placement="bottom-start">
                                             <el-input disabled v-model="scope.row.productNo"></el-input>

@@ -161,11 +161,14 @@
                         password:that.login_form.password
                     },
                     success(data){
-                        sessionStorage.setItem("name",data.data.data.name);
-                        sessionStorage.setItem("jobNumber",data.data.data.jobNumber);
+                        var _name = data.data.data.name || " ";
+                        var _jobNumber = data.data.data.jobNumber || " ";
+                        sessionStorage.setItem("name",_name);
+                        sessionStorage.setItem("jobNumber",_jobNumber);
 
                         if(data.success === true){
-                            sessionStorage.setItem("useName",that.login_form.username);
+                            var _useName = that.login_form.username || " ";
+                            sessionStorage.setItem("useName",_useName);
                             that.$goRoute("/home");
                         }
 

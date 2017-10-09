@@ -125,7 +125,7 @@ export default {
                     that.loadTable();
                 },
                 error() {
-
+                    that.dialog_visible = false;
                 }
             })
         },
@@ -241,6 +241,13 @@ export default {
                 },
                 success: function(data) {
                     var _data_arr = data.data.data;
+                    if(_data_arr.custType === "00") {
+                        _data_arr.custType = "平台";
+                    }else if(_data_arr.custType === "01") {
+                        _data_arr.custType = "整机厂";
+                    }else {
+                        _data_arr.custType = "注塑厂";
+                    }
                     that.edit_table = _data_arr;
                     that.f.p = _data_arr.province;
                     that.f.c = _data_arr.city;

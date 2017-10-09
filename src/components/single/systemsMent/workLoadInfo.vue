@@ -1,7 +1,7 @@
 <template>
     <el-row class="template-name">
         <div class="content-title">
-            <span>员工管理-员工信息</span>
+            <span>员工管理-蓝领工作量记录</span>
         </div>
         <div class="content-search">
              <el-form :inline="true">

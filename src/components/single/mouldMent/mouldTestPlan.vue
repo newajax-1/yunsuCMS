@@ -40,8 +40,8 @@
 
             <el-col :span="24" class="content-buttons">
                 <el-button v-if="buttonsRightList[0]" @click="refresh()" class="btn btn-blue btn-small"><i class="fa fa-repeat"></i> 刷 新</el-button>
-                <el-button v-if="buttonsRightList[1]" @click="deleteId(2)" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
-                <el-button v-if="buttonsRightList[2]" @click="deleteId(1)" class="btn btn-blue btn-small"><i class="fa fa-sign-in"></i> 下 发</el-button>
+                <el-button v-if="buttonsRightList[1]" v-show="table_show" @click="deleteId(2)" class="btn btn-blue btn-small"><i class="fa fa-trash-o"></i> 删 除</el-button>
+                <el-button v-if="buttonsRightList[2]" v-show="table_show" @click="deleteId(1)" class="btn btn-blue btn-small"><i class="fa fa-sign-in"></i> 下 发</el-button>
                 <el-button v-if="buttonsRightList[3]" @click="toAdd()" class="btn btn-blue btn-large"><i class="fa fa-file-text-o"></i> 新建计划</el-button>
             </el-col>
 

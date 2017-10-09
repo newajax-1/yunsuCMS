@@ -48,7 +48,7 @@ export default {
             let that = this;
             that.$ajaxWrap({
                 type:"post",
-                url: "emp/queryEmpWorkDetail",
+                url: "emp/loadTable",
                 success(res){
                     that.loadTable(res);
                     that.buttonsRightList = res.data.button;
@@ -98,10 +98,9 @@ export default {
             }
             that.$ajaxWrap({
                 type :"post",
-                url: "emp/queryEmpWorkDetail",
+                url: "emp/loadTable",
                 data: search_data,
                 success(res) {
-                    console.log(res);
                     that.loadTable(res);
                 }
             });

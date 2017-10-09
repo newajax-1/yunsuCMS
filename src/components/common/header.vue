@@ -79,8 +79,8 @@
         name:"header",
 
         created() {
-            this.user_name = sessionStorage.getItem("name");
-            this.job_number = sessionStorage.getItem("jobNumber");
+            this.user_name = sessionStorage.getItem("name") || "";
+            this.job_number = sessionStorage.getItem("jobNumber") || "";
         },
 
         data() {

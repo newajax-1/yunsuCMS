@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="24">
             	<div class="content-title">
-                    <span>系统管理-角色管理</span>
+                    <span>系统管理-角色分组管理</span>
                 </div>
                 <div class="content-buttons">
                     <el-button  class="btn btn-blue btn-small" @click="refresh()" v-if="buttonsRightList[0]"> 刷 新</el-button>
